@@ -15,7 +15,7 @@ prog   : exp SEMIC                 #singleExp
        | let exp SEMIC             #letInExp
        ;
 
-let       : LET (dec SEMIC)+ IN ;
+let    : LET (dec SEMIC)+ IN ;
 
 vardec  : type ID ;
 
@@ -37,19 +37,35 @@ exp    :  ('-')? left=term ((PLUS | MINUS) right=exp)?
    
 term   : left=factor ((TIMES | DIV) right=term)?
       ;
-   
-factor : left=value (EQ right=value)?
-      ;     
-   
-value  :  INTEGER                           #intVal
+
+factor : left=atom ((EQ | LEQ | GEQ | OR | AND) right=atom)?
+      ;
+/* this works fot both integers and bool */
+atom : (NOT)? operand=value ;
+
+
+value  :  INTEGER                          #intVal
       | ( TRUE | FALSE )                   #boolVal
       | LPAR exp RPAR                      #baseExp
       | IF cond=exp THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
       | ID                                             #varExp
       | ID ( LPAR (exp (COMMA exp)* )? RPAR )?         #funExp
-      ; 
+      ;
 
-   
+
+/* stm is splitted in two rules to avoid errors:
+stm : IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR #ifStat
+    | varasm  ERR--> this has no label, antlr complains! to add a label we should redefine varAssignment
+    ;
+
+*/
+ifstat : IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR ;
+
+stm : varasm
+    | ifstat
+    ;
+stms : ( stm )+  ;
+
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
@@ -57,6 +73,11 @@ SEMIC  : ';' ;
 COLON  : ':' ;
 COMMA  : ',' ;
 EQ     : '==' ;
+LEQ    : '<=' ;
+GEQ    : '>=' ;
+OR     : '||' ;
+AND    : '&&' ;
+NOT    : '!' ; /* using ! instead of 'not' to avoid conflict when declaring new vars */
 ASM    : '=' ;
 PLUS   : '+' ;
 MINUS  : '-' ;
@@ -68,7 +89,7 @@ LPAR   : '(' ;
 RPAR   : ')' ;
 CLPAR  : '{' ;
 CRPAR  : '}' ;
-IF        : 'if' ;
+IF     : 'if' ;
 THEN   : 'then' ;
 ELSE   : 'else' ;
 //PRINT : 'print' ; 
@@ -95,8 +116,14 @@ LINECOMENTS    : '//' (~('\n'|'\r'))* -> skip;
 BLOCKCOMENTS    : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMENTS)* '*/' -> skip;
 
 
-
-
  //VERY SIMPLISTIC ERROR CHECK FOR THE LEXING PROCESS, THE OUTPUT GOES DIRECTLY TO THE TERMINAL
  //THIS IS WRONG!!!!
+
+ /*
+ this moves lexer errors to the parser:
+ https://stackoverflow.com/questions/18782388/antlr4-lexer-error-reporting-length-of-offending-characters
+ to handle errors:
+ https://stackoverflow.com/questions/39533809/antlr4-how-to-detect-unrecognized-token-and-given-sentence-is-invalid
+ ANTLR Reference guide, chapter 9
+ */
 ERR     : . { System.out.println("Invalid char: "+ getText()); lexicalErrors++; } -> channel(HIDDEN); 
