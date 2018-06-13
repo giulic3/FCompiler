@@ -14,9 +14,9 @@ public class VarNode implements Node {
   private Node exp;
   
   public VarNode (String i, Node t, Node v) {
-    id=i;
-    type=t;
-    exp=v;
+    id = i;
+    type = t;
+    exp = v;
   }
   
   	@Override

@@ -12,8 +12,8 @@ public class MultNode implements Node {
   private Node right;
   
   public MultNode (Node l, Node r) {
-    left=l;
-    right=r;
+    left = l;
+    right = r;
   }
   
   @Override

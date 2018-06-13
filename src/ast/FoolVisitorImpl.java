@@ -23,8 +23,8 @@ import parser.FOOLParser.VarasmContext;
 import parser.FOOLParser.VardecContext;
 import util.SemanticError;
 
+/* CLASSE DA MODIFICARE */
 public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
-	
 	
 	
 	@Override
@@ -51,7 +51,7 @@ public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		return res;
 	}
-	
+
 	@Override
 	public Node visitSingleExp(SingleExpContext ctx) {
 		
@@ -59,7 +59,6 @@ public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
 		return visit(ctx.exp());
 		
 	}
-	
 	
 	@Override
 	public Node visitVarasm(VarasmContext ctx) {
@@ -76,7 +75,7 @@ public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
 		//build the varNode
 		return new VarNode(ctx.vardec().ID().getText(), typeNode, expNode);
 	}
-	
+	/* type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (let)? exp */
 	@Override
 	public Node visitFun(FunContext ctx) {
 		
@@ -109,7 +108,7 @@ public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
 		return res;		
 		
 	}
-	
+	/* INT | BOOL */
 	@Override
 	public Node visitType(TypeContext ctx) {
 		if(ctx.getText().equals("int"))
@@ -239,9 +238,10 @@ public class FoolVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		//especial check for stdlib func
-		//this is WRONG, THIS SHOULD BE DONE IN A DIFFERENT WAY
-		//JUST IMAGINE THERE ARE 800 stdlib functions...
+		// special check for stdlib func
+		// TODO
+		// this is WRONG, THIS SHOULD BE DONE IN A DIFFERENT WAY
+		// JUST IMAGINE THERE ARE 800 stdlib functions...
 		if(ctx.ID().getText().equals("print"))
 			res = new PrintNode(args.get(0));
 		

@@ -25,17 +25,19 @@ public class Test {
         ANTLRInputStream input = new ANTLRInputStream(is);
         FOOLLexer lexer = new FOOLLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        
+
+        // TODO
         //SIMPLISTIC BUT WRONG CHECK OF THE LEXER ERRORS
         if(lexer.lexicalErrors > 0){
         	System.out.println("The program was not in the right format. Exiting the compilation process now");
         }else{
         
 	        FOOLParser parser = new FOOLParser(tokens);
-	        
+	        // create an instance of the visitor class
 	        FoolVisitorImpl visitor = new FoolVisitorImpl();
-	        
-	        Node ast = visitor.visit(parser.prog()); //generazione AST 
+
+	        // AST generation
+	        Node ast = visitor.visit(parser.prog());
 
 	        Environment env = new Environment();
 	        ArrayList<SemanticError> err = ast.checkSemantics(env);
