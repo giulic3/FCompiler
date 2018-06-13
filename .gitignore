@@ -1,4 +1,5 @@
 .DS_Store
+.directory
 
 # Compiled class file
 *.class
