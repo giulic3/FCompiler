@@ -11,22 +11,29 @@ grammar FOOL;
  * PARSER RULES
  *------------------------------------------------------------------*/
   
-prog   : exp SEMIC                 #singleExp
-       | let exp SEMIC             #letInExp
+prog : (block SEMIC)+ ;
+
+block  : exp                  #singleExp
+       | let exp              #letInExp
+       | classdec             #classDec
        ;
+
+/* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha almeno un metodo,
+ ogni dichiarazione di f è seguita da un ;
+ */
+classdec : CLASS ID ( SLPAR EXTENDS ID SRPAR )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fun SEMIC)+ CRPAR ;
 
 let    : LET (dec SEMIC)+ IN ;
 
 vardec  : type ID ;
 
-varasm     : vardec ASM exp ;
+varasm  : vardec ASM exp ;
 
 fun    : type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (let)? exp ;
 
-dec   : varasm           #varAssignment
+dec   : varasm           #varDecAssignment
       | fun              #funDeclaration
       ;
-         
    
 type   : INT  
         | BOOL 
@@ -43,26 +50,20 @@ factor : left=atom ((EQ | LEQ | GEQ | OR | AND) right=atom)?
 /* this works fot both integers and bool */
 atom : (NOT)? operand=value ;
 
-
+/* una funzione senza param viene chiamata senza () */
 value  :  INTEGER                          #intVal
       | ( TRUE | FALSE )                   #boolVal
+      | NULL                               #nullVal
       | LPAR exp RPAR                      #baseExp
       | IF cond=exp THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
       | ID                                             #varExp
       | ID ( LPAR (exp (COMMA exp)* )? RPAR )?         #funExp
+      | ID DOT ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
+      | NEW ID (LPAR (exp (COMMA exp)* )? RPAR)?       #newExp
       ;
 
-
-/* stm is splitted in two rules to avoid errors:
-stm : IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR #ifStat
-    | varasm  ERR--> this has no label, antlr complains! to add a label we should redefine varAssignment
-    ;
-
-*/
-ifstat : IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR ;
-
-stm : varasm
-    | ifstat
+stm : ID ASM exp SEMIC #varStmAssignment
+    | IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR  #ifStm
     ;
 stms : ( stm )+  ;
 
@@ -77,7 +78,7 @@ LEQ    : '<=' ;
 GEQ    : '>=' ;
 OR     : '||' ;
 AND    : '&&' ;
-NOT    : '!' ; /* using ! instead of 'not' to avoid conflict when declaring new vars */
+NOT    : 'not' ;
 ASM    : '=' ;
 PLUS   : '+' ;
 MINUS  : '-' ;
@@ -87,6 +88,8 @@ TRUE   : 'true' ;
 FALSE  : 'false' ;
 LPAR   : '(' ;
 RPAR   : ')' ;
+SLPAR  : '[' ;
+SRPAR  : ']' ;
 CLPAR  : '{' ;
 CRPAR  : '}' ;
 IF     : 'if' ;
@@ -99,8 +102,12 @@ VAR    : 'var' ;
 FUN    : 'fun' ;
 INT    : 'int' ;
 BOOL   : 'bool' ;
-
-
+VOID   : 'void' ;
+CLASS  : 'class' ;
+EXTENDS : 'extends' ;
+NULL : 'null' | 'NULL' ;
+NEW : 'new' ;
+DOT : '.' ;
 
 //Numbers
 fragment DIGIT : '0'..'9';    
