@@ -10,18 +10,18 @@ grammar FOOL;
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
-  
-prog : (block SEMIC)+ ;
+prog : (block SEMIC)+  ; // il parser riconosce solo un sottoinsieme dell'input senza dare errori se la parte che segue è sbagliata
 
-block  : exp                  #singleExp
-       | let exp              #letInExp
+block  : let exp              #letInExp
+       | let stms             #letInStms
+       | exp                  #singleExp
        | classdec             #classDecBlock // sembra che ad ANTLR non piacciono label che hanno lo stesso nome di una regola del parser
        ;
 
-/* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha almeno un metodo,
+/* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha sempre almeno un metodo,
  ogni dichiarazione di f è seguita da un ;
  */
-classdec : CLASS ID ( SLPAR EXTENDS ID SRPAR )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fun SEMIC)+ CRPAR ;
+classdec : CLASS ID ( EXTENDS ID )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
 
 let    : LET (dec SEMIC)+ IN ;
 
@@ -29,20 +29,22 @@ vardec  : type ID ;
 
 varasm  : vardec ASM exp ;
 
-fun    : type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (let)? exp ;
+fundec    : type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (LET (varasm SEMIC)+ IN )? (exp | stms) ;
 
 dec   : varasm           #varDecAssignment
-      | fun              #funDeclaration
+      | fundec           #funDeclaration
       ;
    
 type   : INT  
-        | BOOL 
+       | BOOL
+       | VOID
+       | ID
       ;  
     
-exp    :  ('-')? left=term ((PLUS | MINUS) right=exp)?
+exp   :  ('-')? left=term ((PLUS | MINUS) right=exp)?
       ;
    
-term   : left=factor ((TIMES | DIV) right=term)?
+term  : left=factor ((TIMES | DIV) right=term)?
       ;
 
 factor : left=atom ((EQ | LEQ | GEQ | OR | AND) right=atom)?
@@ -62,9 +64,12 @@ value  :  INTEGER                          #intVal
       | NEW ID (LPAR (exp (COMMA exp)* )? RPAR)?       #newExp
       ;
 
-stm : ID ASM exp SEMIC #varStmAssignment
+stm : ID ASM exp #varStmAssignment
     | IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR  #ifStm
+    | ID DOT ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
+    | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
     ;
+
 stms : ( stm )+  ;
 
 /*------------------------------------------------------------------
@@ -88,14 +93,14 @@ TRUE   : 'true' ;
 FALSE  : 'false' ;
 LPAR   : '(' ;
 RPAR   : ')' ;
-SLPAR  : '[' ;
-SRPAR  : ']' ;
+//SLPAR  : '[' ;
+//SRPAR  : ']' ;
 CLPAR  : '{' ;
 CRPAR  : '}' ;
 IF     : 'if' ;
 THEN   : 'then' ;
 ELSE   : 'else' ;
-//PRINT : 'print' ; 
+PRINT : 'print' ;
 LET    : 'let' ;
 IN     : 'in' ;
 VAR    : 'var' ;
