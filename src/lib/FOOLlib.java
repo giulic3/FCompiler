@@ -4,16 +4,20 @@ import ast.*;
 
 public class FOOLlib {
   
-  private static int labCount=0; 
+  private static int labCount = 0;
   
-  private static int funLabCount=0; 
+  private static int funLabCount = 0;
 
-  private static String funCode=""; 
+  private static String funCode = "";
 
   //valuta se il tipo "a" <= al tipo "b", dove "a" e "b" sono tipi di base: int o bool
+  // modificare
+  // aggiungere controllo sottotipi metode e classi
   public static boolean isSubtype (Node a, Node b) {
     return a.getClass().equals(b.getClass()) ||
-    	   ( (a instanceof BoolTypeNode) && (b instanceof IntTypeNode) ); //
+    	   ( (a instanceof BoolTypeNode) && (b instanceof IntTypeNode) )
+
+            ; //
   } 
   
   public static String freshLabel() { 
