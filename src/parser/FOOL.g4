@@ -15,7 +15,7 @@ prog : (block SEMIC)+ ;
 
 block  : exp                  #singleExp
        | let exp              #letInExp
-       | classdec             #classDec
+       | classdec             #classDecBlock // sembra che ad ANTLR non piacciono label che hanno lo stesso nome di una regola del parser
        ;
 
 /* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha almeno un metodo,
