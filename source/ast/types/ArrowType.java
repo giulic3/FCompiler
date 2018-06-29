@@ -5,7 +5,7 @@ import util.Environment;
 import util.SemanticError;
 
 /* function type */
-public class ArrowTypeNode implements Node {
+public class ArrowTypeNode implements BaseType {
 	
 	private ArrayList<Node> parlist;
 	private Node ret;
@@ -38,14 +38,5 @@ public class ArrowTypeNode implements Node {
 		return new ArrayList<SemanticError>();
 	}
 	
-	//non utilizzato
-	public Node typeCheck () {
-		return null;
-	}
-	
-	//non utilizzato
-	public String codeGeneration() {
-		return "";
-	}
 	
 }  

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class IntType implements Node {
+public class IntType implements BaseType {
 	
 	public IntType() {
 	}
@@ -14,20 +14,10 @@ public class IntType implements Node {
 		return s + "IntType\n";
 	}
 	
-	//non utilizzato
-	public Node typeCheck() {
-		return null;
-	}
-	
-	//non utilizzato
-	public String codeGeneration() {
-		return "";
-	}
 	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		
 		return new ArrayList<SemanticError>();
 	}
-	
 }  

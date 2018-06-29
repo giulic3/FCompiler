@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
 
-public class BoolType implements Node {
+public class BoolType implements BaseType {
 	
 	public BoolType() {
 	}
@@ -14,10 +14,6 @@ public class BoolType implements Node {
 		return s + "BoolType\n";
 	}
 	
-	//non utilizzato
-	public Node typeCheck() {
-		return null;
-	}
 	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
@@ -25,10 +21,6 @@ public class BoolType implements Node {
 		return new ArrayList<SemanticError>();
 	}
 	
-	//non utilizzato
-	public String codeGeneration() {
-		return "";
-	}
 	
 	
 }  
