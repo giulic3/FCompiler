@@ -73,7 +73,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		// notice that this method is not actually a rule but a named production #intVal
 		
 		//there is no need to perform a check here, the lexer ensures this text is an int
-		return new IntNode(Integer.parseInt(ctx.INTEGER().getText()));
+		return new IntValNode(Integer.parseInt(ctx.INTEGER().getText()));
 	}
 	
 	
