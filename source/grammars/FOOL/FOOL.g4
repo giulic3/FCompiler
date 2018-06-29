@@ -1,4 +1,4 @@
-//grammar FOOL;
+grammar FOOL;
 
 @lexer::members {
    //there is a much better way to do this, check the ANTLR guide
