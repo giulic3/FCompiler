@@ -10,10 +10,13 @@ public class IntType implements BaseType {
 	public IntType() {
 	}
 	
-	public String toPrint(String s) {
-		return s + "IntType\n";
+	public String toPrint() {
+		return "IntType";
 	}
-	
+
+	public TypeEnum getType() {
+		return TypeEnum.INT;
+	}
 	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {

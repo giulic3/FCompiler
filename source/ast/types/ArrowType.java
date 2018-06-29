@@ -5,38 +5,38 @@ import util.Environment;
 import util.SemanticError;
 
 /* function type */
-public class ArrowTypeNode implements BaseType {
+public class ArrowType implements BaseType {
 	
-	private ArrayList<Node> parlist;
-	private Node ret;
+	private ArrayList<BaseType> parlist;
+	private BaseType ret;
 	
-	public ArrowTypeNode (ArrayList<Node> p, Node r) {
+	public ArrowType (ArrayList<BaseType> p, BaseType r) {
 		parlist = p;
 		ret = r;
 	}
 	
-	public String toPrint(String s) {
+	public String toPrint() {
 		String parlstr = "";
 		
-		for (Node par:parlist)
-			parlstr += par.toPrint(s + " ");
+		for (BaseType par:parlist)
+			parlstr += par.toPrint();
 		
-		return s + "ArrowType\n" + parlstr + ret.toPrint(s + " ->") ;
+		return "ArrowType\n" + parlstr + ret.toPrint(" ->") ;
 	}
 	
-	public Node getRet() {
+	public BaseType getRet() {
 		return ret;
 	}
 	
-	public ArrayList<Node> getParList () {
+	public ArrayList<BaseType> getParList () {
 		return parlist;
 	}
-	
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO Auto-generated method stub
-		return new ArrayList<SemanticError>();
+
+
+	public TypeEnum getType() {
+		return TypeEnum.ARROW;
 	}
-	
+
+
 	
 }  

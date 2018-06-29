@@ -3,5 +3,7 @@ package ast;
 public enum TypeEnum {
 	INT,
 	BOOL,
-	VOID
+	VOID,
+	ARROW,
+	CLASS
 }

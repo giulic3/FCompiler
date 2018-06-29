@@ -6,19 +6,23 @@ import util.Environment;
 import util.SemanticError;
 
 public class ClassType implements BaseType {
-	
+
+	// tipo
+	// supertipo
+	// campi
+	// metodi
+
 	public ClassType() {
 	}
 	
-	public String toPrint(String s) {
-		return s + "ClassType\n";
+	public String toPrint() {
+		return "ClassType";
 	}
-	
-	
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		
-		return new ArrayList<SemanticError>();
+
+	public TypeEnum getType() {
+		return TypeEnum.CLASS;
 	}
-	
+
+
+
 }

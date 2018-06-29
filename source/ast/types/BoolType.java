@@ -10,17 +10,14 @@ public class BoolType implements BaseType {
 	public BoolType() {
 	}
 	
-	public String toPrint(String s) {
-		return s + "BoolType\n";
+	public String toPrint() {
+		return "BoolType";
 	}
-	
-	
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		
-		return new ArrayList<SemanticError>();
+
+	public TypeEnum getType() {
+		return TypeEnum.BOOL;
 	}
-	
+
 	
 	
 }  

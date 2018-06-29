@@ -10,17 +10,12 @@ public class VoidType implements BaseType {
 	public VoidType() {
 	}
 	
-	public String toPrint(String s) {
-		return s + "VoidType\n";
+	public String toPrint() {
+		return "VoidType";
 	}
-	
-	
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		
-		return new ArrayList<SemanticError>();
+
+	public TypeEnum getType() {
+		return TypeEnum.VOID;
 	}
-	
-	
 	
 }
