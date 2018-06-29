@@ -5,5 +5,5 @@ import ast.TypeEnum;
 public interface BaseType {
 	
 	public TypeEnum getType();
-	public String toPrint(String s);
+	public String toPrint();
 }
