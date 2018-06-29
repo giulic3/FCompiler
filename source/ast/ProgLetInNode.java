@@ -15,6 +15,6 @@ public class ProgLetInNode implements Node {
 	
 	String codeGeneration();
 	
-	ArrayList<SemanticError> checkSemantics(Environment env);
+	//ArrayList<SemanticError> checkSemantics(Environment env);
 	
 }
