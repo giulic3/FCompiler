@@ -1,13 +1,15 @@
 package ast;
 
-import ast.types.*;
-import utils.*;
+import ast.types.BaseType;
+import ast.types.IntType;
+import utils.Environment;
+import utils.SemanticError;
 
 import java.util.ArrayList;
 
-public class IntValNode implements Node {
+public class BlockSingleExpNode implements Node {
 	
-	private Integer value;
+	private Node exp;
 
 //	Serve avere il contesto come parametro del costruttore?
 //	public IntNode(FOOLParser.IntValContext ctx, int val) {
@@ -15,16 +17,16 @@ public class IntValNode implements Node {
 //		this.val = val;
 //	}
 	
-	public IntValNode(Integer n) {
-		value = n;
+	public BlockSingleExpNode(Node exp) {
+		this.exp=exp;
 	}
 	
 	public String toPrint(String s) {
-		return s + "Integer value: " + Integer.toString(value)+"\n";
+		return s + "Block Single exp value: \n" + exp.toPrint(s+"\t");
 	}
 	@Override
 	public BaseType typeCheck() {
-		return new IntType();
+		return null;
 	}
 	
 	public String codeGeneration() {
@@ -36,5 +38,5 @@ public class IntValNode implements Node {
 		// TODO: da implementare
 		return null;
 	}
-
+	
 }

@@ -1,19 +1,27 @@
 package ast;
+
 import ast.types.BaseType;
 import utils.Environment;
 import utils.SemanticError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+public class ProgNode  implements Node {
 
-public class ProgLetInNode implements Node {
+	private ArrayList<Node> blocks;
 	
-	public ProgLetInNode (ArrayList<Node> d, Node e) {
-	
+	public ProgNode (ArrayList<Node> d) {
+		this.blocks=d;
 	}
 	
-	public String toPrint(String indent){return null;};
+	public String toPrint(String indent){
+		String msg = "Prog Node:\n";
+		
+		for (Node b:this.blocks) {
+			msg += b.toPrint("\t");
+		}
+		return  msg;
+	}
 	
 	public BaseType typeCheck(){return null;};
 	

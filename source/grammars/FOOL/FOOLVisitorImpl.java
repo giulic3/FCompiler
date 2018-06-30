@@ -1,19 +1,32 @@
-package FOOL;
+package grammars.FOOL;
 
-import FOOLBaseVisitor;
-import FOOLLexer;
-import FOOLParser;
+import grammars.FOOL.FOOLBaseVisitor.*;
+import grammars.FOOL.FOOLLexer.*;
+import grammars.FOOL.FOOLParser.*;
 import ast.*;
-import ast.type.*
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
+	
+	public Node visitProg(ProgContext ctx) {
+		
+		ArrayList<Node> blocks = new ArrayList<Node>();
+		
+		for (int i=0; i < ctx.block().size(); i++) {
+			blocks.add(visit(ctx.block(i)));
+		}
+		
+		//simply return the result of the visit to the inner exp
+		return new ProgNode(blocks);
+		
+	}
 	
 	public Node visitSingleExp(SingleExpContext ctx) {
 		
 		//simply return the result of the visit to the inner exp
-		return visit(ctx.exp());
+		return new BlockSingleExpNode(visit(ctx.exp()));
 		
 	}
 	
@@ -26,10 +39,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}else{
+		}/*else{
 			//it is a binary expression, you should visit left and right
-			//return new PlusNode(visit(ctx.left), visit(ctx.right));
-		}
+			return new PlusNode(visit(ctx.left), visit(ctx.right));
+		}*/
+		return null;
 		
 	}
 	
@@ -39,10 +53,12 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}else{
+		}/*else{
 			//it is a binary expression, you should visit left and right
-			//return new MultNode(visit(ctx.left), visit(ctx.right));
-		}
+			return new MultNode(visit(ctx.left), visit(ctx.right));
+		}*/
+		return null;
+		
 	}
 	
 	public Node visitFactor(FactorContext ctx) {
@@ -51,10 +67,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}else{
+		}/*else{
 			//it is a binary expression, you should visit left and right
-			//return new EqualNode(visit(ctx.left), visit(ctx.right));
-		}
+			return new EqualNode(visit(ctx.left), visit(ctx.right));
+		}*/
+		return null;
 	}
 	
 	public Node visitAtom(FactorContext ctx) {
@@ -63,10 +80,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}else{
+		}/*else{
 			//it is a binary expression, you should visit left and right
 			//return new EqualNode(visit(ctx.left), visit(ctx.right));
-		}
+		}*/
+		return null;
 	}
 	
 	public Node visitIntVal(IntValContext ctx) {

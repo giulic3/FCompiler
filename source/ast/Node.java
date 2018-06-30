@@ -2,8 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
-import util.Environment;
-import util.SemanticError;
+import ast.types.BaseType;
+import utils.*;
 
 public interface Node {
    
@@ -12,7 +12,7 @@ public interface Node {
   //  fa il type checking e ritorna:
   //  per una espressione, il suo tipo (oggetto BoolType o IntType)
   //  per una dichiarazione, "null"
-  Node typeCheck();
+  BaseType typeCheck();
   
   String codeGeneration();
   
