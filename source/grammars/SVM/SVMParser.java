@@ -1,5 +1,6 @@
 // Generated from SVM.g4 by ANTLR 4.7.1
 
+package grammars.SVM;
 import java.util.HashMap;
 
 import org.antlr.v4.runtime.atn.*;

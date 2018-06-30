@@ -1,6 +1,7 @@
 grammar SVM;
 
 @header {
+package grammars.SVM;
 import java.util.HashMap;
 }
 

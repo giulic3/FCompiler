@@ -1,5 +1,9 @@
 grammar FOOL;
 
+@header {
+package grammars.FOOL;
+}
+
 @lexer::members {
    //there is a much better way to do this, check the ANTLR guide
    //I will leave it like this for now just because it is quick
