@@ -1,6 +1,6 @@
 package utils;
 
-import ast.BaseType;
+import ast.types.*;
 
 public class SymbolTableEntry {
 	
@@ -30,9 +30,9 @@ public class SymbolTableEntry {
 		this.type = type;
 	}
 	
-	public toPrint(String s) {
+	public String toPrint(String s) {
 		return s + ": STEntry = {\n" +
-				"\tnesting level: " + Integer.toString(nl) + "\n" +
+				"\tnesting level: " + Integer.toString(nestingLevel) + "\n" +
 				"\ttype: " + type.toPrint() + "\n" +
 				"\toffset: " + Integer.toString(offset) + "\n}\n";
 	}

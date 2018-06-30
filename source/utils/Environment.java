@@ -13,7 +13,7 @@ public class Environment {
 	private int offset;
 	
 	public Environment() {
-		symTable = new ArrayList<HashMap<String, SymbolTableEntry>>;
+		symTable = new ArrayList<HashMap<String, SymbolTableEntry>>();
 		nestingLevel = -1;
 		offset = 0;
 	}
