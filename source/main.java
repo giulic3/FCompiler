@@ -1,20 +1,16 @@
-import grammar.FOOLLexer;
-import grammar.FOOLParser;
-import org.antlr.v4.runtime.CommonTokenStream;
+import ast.*;
+import grammars.FOOLLexer;
+import grammars.FOOLParser;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import org.antlr.v4.runtime.*;
 
-public class main(){
+public class main{
 
 private static Node lexicalAndSyntacticAnalysis(CharStream input) throws LexerException {
 		FOOLLexer lexer = new FOOLLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		if (lexer.errors.size() > 0) {
+		if (lexer.LexicalErrors > 0) {
 		throw new LexerException(lexer.errors);
 		}
 		FOOLParser parser = new FOOLParser(tokens);
