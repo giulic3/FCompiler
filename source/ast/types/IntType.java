@@ -1,9 +1,9 @@
-package ast;
+package ast.types;
 
 import java.util.ArrayList;
 
-import util.Environment;
-import util.SemanticError;
+import utils.Environment;
+//import utils.SemanticError;
 
 public class IntType implements BaseType {
 	
@@ -18,9 +18,9 @@ public class IntType implements BaseType {
 		return TypeEnum.INT;
 	}
 	
-	@Override
+	/*@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		
 		return new ArrayList<SemanticError>();
-	}
-}  
+	}*/
+}

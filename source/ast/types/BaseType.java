@@ -1,6 +1,5 @@
-package ast;
+package ast.types;
 
-import ast.TypeEnum;
 
 public interface BaseType {
 	

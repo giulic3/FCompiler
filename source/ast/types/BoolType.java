@@ -1,9 +1,8 @@
-package ast;
+package ast.types;
 
 import java.util.ArrayList;
 
-import util.Environment;
-import util.SemanticError;
+import utils.Environment;
 
 public class BoolType implements BaseType {
 	

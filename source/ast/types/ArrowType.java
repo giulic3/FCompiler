@@ -1,8 +1,7 @@
-package ast;
+package ast.types;
 import java.util.ArrayList;
 
-import util.Environment;
-import util.SemanticError;
+import utils.Environment;
 
 /* function type */
 public class ArrowType implements BaseType {
@@ -21,7 +20,7 @@ public class ArrowType implements BaseType {
 		for (BaseType par:parlist)
 			parlstr += par.toPrint();
 		
-		return "ArrowType\n" + parlstr + ret.toPrint(" ->") ;
+		return "ArrowType\n" + parlstr;// + ret.toPrint(" ->") ;
 	}
 	
 	public BaseType getRet() {
