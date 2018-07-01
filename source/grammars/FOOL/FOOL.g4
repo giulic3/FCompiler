@@ -45,20 +45,20 @@ type   : INT
        | ID
       ;  
     
-exp   :  ('-')? left=term ((PLUS | MINUS) right=exp)?
+exp   :  ('-')? left=term (oprator=(PLUS | MINUS) right=exp)?
       ;
    
-term  : left=factor ((TIMES | DIV) right=term)?
+term  : left=factor (operator=(TIMES | DIV) right=term)?
       ;
 
-factor : left=atom ((EQ | LEQ | GEQ | OR | AND) right=atom)?
+factor : left=atom (operator=(EQ | LEQ | GEQ | OR | AND) right=atom)?
       ;
 /* this works fot both integers and bool */
 atom : (NOT)? operand=value ;
 
 /* una funzione senza param viene chiamata senza () */
 value  :  INTEGER                          #intVal
-      | ( TRUE | FALSE )                   #boolVal
+      | BOOLVAL                            #boolVal
       | NULL                               #nullVal
       | LPAR exp RPAR                      #baseExp
       | IF cond=exp THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
@@ -117,6 +117,7 @@ EXTENDS : 'extends' ;
 NULL : 'null' | 'NULL' ;
 NEW : 'new' ;
 DOT : '.' ;
+BOOLVAL: (TRUE|FALSE);
 
 //Numbers
 fragment DIGIT : '0'..'9';    

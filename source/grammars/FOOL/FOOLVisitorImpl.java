@@ -97,8 +97,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new IntValNode(Integer.parseInt(ctx.INTEGER().getText()));
 	}
 	
+	public Node visitIfExp(FOOLParser.IfExpContext ctx){
+		return new IfNode();
+	}
 	
-	
+	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
+		return new BoolValNode(Boolean.parseBoolean(ctx.BOOL().getText()));
+	}
 	
 	
 }
