@@ -110,7 +110,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
-		return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+		
+		if (ctx.elseBranch == null)
+			return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch));
+		else
+			return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
 	}
 	
 	public Node visitBoolVal(FOOLParser.BoolValContext ctx){

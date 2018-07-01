@@ -15,6 +15,12 @@ public class IfExpNode implements Node {
 	private Node th;
 	private Node el;
 	
+	public IfExpNode(Node cond, Node th) {
+		this.cond = cond;
+		this.th = th;
+		this.el = null;
+	}
+	
 	public IfExpNode(Node cond, Node th, Node el) {
 		this.cond = cond;
 		this.th = th;
@@ -24,7 +30,13 @@ public class IfExpNode implements Node {
 	
 	@Override
 	public String toPrint(String s) {
-		return s + "if:\n" + cond.toPrint(s+"\t")+th.toPrint(s+"\t")+el.toPrint(s+"\t");
+		String ifThen = s + "If Node:\n" +
+				cond.toPrint(s+"\tCond: ") + "\n" +
+				s + "\tThen Branch:\n" + th.toPrint(s+"\t\t");
+		if (this.el != null)
+			ifThen += "\n" + s + "\tElse Branch:\n" + el.toPrint(s+"\t\t");
+		
+		return ifThen;
 	}
 	
 	@Override

@@ -25,7 +25,7 @@ block  : let exp              #letInExp
 /* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha sempre almeno un metodo,
  ogni dichiarazione di f è seguita da un ;
  */
-classdec : CLASS ID ( EXTENDS ID )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
+classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
 
 let    : LET (dec SEMIC)+ IN ;
 
@@ -61,16 +61,16 @@ value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal
       | NULL                               #nullVal
       | LPAR exp RPAR                      #baseExp
-      | IF cond=exp THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
+      | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR (ELSE CLPAR elseBranch=exp CRPAR)?  #ifExp
       | ID                                             #varExp
       | ID ( LPAR (exp (COMMA exp)* )? RPAR )?         #funExp
-      | ID DOT ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
-      | NEW ID (LPAR (exp (COMMA exp)* )? RPAR)?       #newExp
+      | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
+      | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)?       #newExp
       ;
 
 stm : ID ASM exp #varStmAssignment
     | IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR  #ifStm
-    | ID DOT ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
+    | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
     | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
     ;
 
@@ -93,6 +93,7 @@ PLUS   : '+' ;
 MINUS  : '-' ;
 TIMES  : '*' ;
 DIV    : '/' ;
+BOOLVAL: (TRUE|FALSE);
 TRUE   : 'true' ;
 FALSE  : 'false' ;
 LPAR   : '(' ;
@@ -117,7 +118,6 @@ EXTENDS : 'extends' ;
 NULL : 'null' | 'NULL' ;
 NEW : 'new' ;
 DOT : '.' ;
-BOOLVAL: (TRUE|FALSE);
 
 //Numbers
 fragment DIGIT : '0'..'9';    

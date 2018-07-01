@@ -22,7 +22,7 @@ public class BoolValNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Boolean value: " + Boolean.toString(value)+"\n";
+		return s + "Boolean value: " + Boolean.toString(value);
 	}
 	@Override
 	public BaseType typeCheck() {
