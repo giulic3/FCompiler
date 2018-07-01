@@ -142,7 +142,59 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new IdNode(ctx.ID().getText());
 
 	}
-
-
-
+	
+	
+	@Override
+	public Node visitFunExp(FunExpContext ctx) {
+		//this corresponds to a function invocation
+		
+		//declare the result
+		Node res;
+		
+		//get the invocation arguments
+		ArrayList<Node> args = new ArrayList<Node>();
+		
+		for(ExpContext exp : ctx.exp())
+			args.add(visit(exp));
+		
+		res = new FunExpNode(ctx.ID().getText(), args);
+		
+		return res;
+	}
+	
+	@Override
+	public Node visitMethodExp(MethodExpContext ctx) {
+		//this corresponds to a function invocation
+		
+		//declare the result
+		Node res;
+		
+		//get the invocation arguments
+		ArrayList<Node> args = new ArrayList<Node>();
+		
+		for(ExpContext exp : ctx.exp())
+			args.add(visit(exp));
+		
+		res = new MethodExpNode(ctx.object.getText(), ctx.methodName.getText(), args);
+		
+		return res;
+	}
+	
+	@Override
+	public Node visitNewExp(NewExpContext ctx) {
+		//this corresponds to a function invocation
+		
+		//declare the result
+		Node res;
+		
+		//get the invocation arguments
+		ArrayList<Node> args = new ArrayList<Node>();
+		
+		for(ExpContext exp : ctx.exp())
+			args.add(visit(exp));
+		
+		res = new NewExpNode(ctx.className.getText(), args);
+		
+		return res;
+	}
 }

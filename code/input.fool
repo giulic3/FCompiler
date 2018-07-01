@@ -15,3 +15,6 @@ if (2) then {
         90
     }
 };
+
+new  pinco (1,5,z);
+Giulia.saluta("ciao");
