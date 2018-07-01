@@ -1,12 +1,9 @@
 package grammars.FOOL;
 
-import grammars.FOOL.FOOLBaseVisitor.*;
-import grammars.FOOL.FOOLLexer.*;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
@@ -98,10 +95,10 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//there is no need to perform a check here, the lexer ensures this text is an int
 		return new IntValNode(Integer.parseInt(ctx.INTEGER().getText()));
 	}
-	/*
+	
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
-		return new IfNode();
-	}*/
+		return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+	}
 	
 	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
 		return new BoolValNode(Boolean.parseBoolean(ctx.BOOLVAL().getText()));
