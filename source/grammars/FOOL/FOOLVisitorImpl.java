@@ -50,15 +50,18 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	public Node visitTerm(TermContext ctx) {
 		//check whether this is a simple or binary expression
 		//notice here the necessity of having named elements in the grammar
-		if(ctx.right == null){
+		if (ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}/*else{
+		} else{
 			//it is a binary expression, you should visit left and right
-			return new MultNode(visit(ctx.left), visit(ctx.right));
-		}*/
-		return null;
-		
+			if (ctx.operator.getType() == FOOLLexer.TIMES)
+				return new TimesNode(visit(ctx.left), visit(ctx.right));
+			else
+				return new DivNode(visit(ctx.left), visit(ctx.right));
+
+		}
+
 	}
 	
 	public Node visitFactor(FactorContext ctx) {
