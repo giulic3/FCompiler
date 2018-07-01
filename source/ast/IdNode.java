@@ -20,7 +20,17 @@ public class IdNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s+"Id:" + id + " at nestlev " + nestinglevel +"\n" + entry.toPrint(s+"  ") ;
+
+		/*
+		commento temporaneo: la toPrint viene eseguita dopo la fase di checkSemantics quando
+		nestingLevel è già inizializzato
+
+		return s+"Id:" + id
+				+ " at nestlev " + nestinglevel +"\n"
+				+ entry.toPrint(s+"  ") ;
+		*/
+
+		return s + "Id:" + id;
 	}
 
 	@Override

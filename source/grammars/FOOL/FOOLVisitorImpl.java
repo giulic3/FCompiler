@@ -69,11 +69,24 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}/*else{
-			//it is a binary expression, you should visit left and right
-			return new EqualNode(visit(ctx.left), visit(ctx.right));
-		}*/
-		return null;
+		}
+		else {
+
+			switch (ctx.operator.getType()) {
+				case FOOLLexer.EQ:
+					return new EqNode(visit(ctx.left), visit(ctx.right));
+				case FOOLLexer.LEQ:
+					return new LeqNode(visit(ctx.left), visit(ctx.right));
+				case FOOLLexer.GEQ:
+					return new GeqNode(visit(ctx.left), visit(ctx.right));
+				case FOOLLexer.AND:
+					return new AndNode(visit(ctx.left), visit(ctx.right));
+				case FOOLLexer.OR:
+					return new OrNode(visit(ctx.left), visit(ctx.right));
+				default:
+					return null; // TODO: temporary
+			}
+		}
 	}
 	
 	public Node visitAtom(FactorContext ctx) {
