@@ -10,12 +10,6 @@ import java.util.ArrayList;
 public class BlockSingleExpNode implements Node {
 	
 	private Node exp;
-
-//	Serve avere il contesto come parametro del costruttore?
-//	public IntNode(FOOLParser.IntValContext ctx, int val) {
-//		super(ctx);
-//		this.val = val;
-//	}
 	
 	public BlockSingleExpNode(Node exp) {
 		this.exp=exp;

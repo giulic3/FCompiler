@@ -8,12 +8,6 @@ import java.util.ArrayList;
 public class IntValNode implements Node {
 	
 	private Integer value;
-
-//	Serve avere il contesto come parametro del costruttore?
-//	public IntNode(FOOLParser.IntValContext ctx, int val) {
-//		super(ctx);
-//		this.val = val;
-//	}
 	
 	public IntValNode(Integer n) {
 		value = n;
