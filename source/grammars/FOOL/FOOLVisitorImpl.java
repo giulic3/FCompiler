@@ -40,7 +40,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			//it is a simple expression
 			return visit( ctx.left );
 		}else{
-			if (ctx.oprator.getType() == FOOLLexer.PLUS)
+			if (ctx.operator.getType() == FOOLLexer.PLUS)
 				return new PlusNode(visit(ctx.left), visit(ctx.right));
 			else
 				return new SubNode(visit(ctx.left), visit(ctx.right));
