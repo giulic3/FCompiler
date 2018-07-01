@@ -7,26 +7,23 @@ import utils.SemanticError;
 
 import java.util.ArrayList;
 
-public class BlockSingleExpNode implements Node {
+public class PlusNode implements Node {
 	
-	private Node exp;
-
-//	Serve avere il contesto come parametro del costruttore?
-//	public IntNode(FOOLParser.IntValContext ctx, int val) {
-//		super(ctx);
-//		this.val = val;
-//	}
+	private Node leftOperand;
+	private Node rightOperand;
 	
-	public BlockSingleExpNode(Node exp) {
-		this.exp=exp;
+	public PlusNode(Node l, Node r) {
+		leftOperand = l;
+		rightOperand = r;
 	}
 	
 	public String toPrint(String s) {
-		return "\n" + s + "Block Single exp value:\n" + exp.toPrint(s+"\t");
+		return s + "Plus Node:\n" + leftOperand.toPrint(s+"\t") + " + " + rightOperand.toPrint("");
 	}
+	
 	@Override
 	public BaseType typeCheck() {
-		return null;
+		return new IntType();
 	}
 	
 	public String codeGeneration() {
@@ -38,5 +35,4 @@ public class BlockSingleExpNode implements Node {
 		// TODO: da implementare
 		return null;
 	}
-	
 }

@@ -45,7 +45,7 @@ type   : INT
        | ID
       ;  
     
-exp   :  ('-')? left=term (oprator=(PLUS | MINUS) right=exp)?
+exp   :  ('-')? left=term (operator=(PLUS | MINUS) right=exp)?
       ;
    
 term  : left=factor (operator=(TIMES | DIV) right=term)?

@@ -805,7 +805,7 @@ public class FOOLParser extends Parser {
 
 	public static class ExpContext extends ParserRuleContext {
 		public TermContext left;
-		public Token oprator;
+		public Token operator;
 		public ExpContext right;
 		public TermContext term() {
 			return getRuleContext(TermContext.class,0);
@@ -851,10 +851,10 @@ public class FOOLParser extends Parser {
 			if (_la==PLUS || _la==MINUS) {
 				{
 				setState(134);
-				((ExpContext)_localctx).oprator = _input.LT(1);
+				((ExpContext)_localctx).operator = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==PLUS || _la==MINUS) ) {
-					((ExpContext)_localctx).oprator = (Token)_errHandler.recoverInline(this);
+					((ExpContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 				}
 				else {
 					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;

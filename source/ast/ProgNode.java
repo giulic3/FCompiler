@@ -15,7 +15,7 @@ public class ProgNode  implements Node {
 	}
 	
 	public String toPrint(String indent){
-		String msg = "Prog Node:\n";
+		String msg = "Prog Node:";
 		
 		for (Node b:this.blocks) {
 			msg += b.toPrint("\t");

@@ -20,7 +20,7 @@ public class IntValNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Integer value: " + Integer.toString(value)+"\n";
+		return s + "Integer value: " + Integer.toString(value);
 	}
 	@Override
 	public BaseType typeCheck() {

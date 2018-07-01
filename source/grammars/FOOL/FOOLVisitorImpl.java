@@ -39,11 +39,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if(ctx.right == null){
 			//it is a simple expression
 			return visit( ctx.left );
-		}/*else{
-			//it is a binary expression, you should visit left and right
-			return new PlusNode(visit(ctx.left), visit(ctx.right));
-		}*/
-		return null;
+		}else{
+			if (ctx.oprator.getType() == FOOLLexer.PLUS)
+				return new PlusNode(visit(ctx.left), visit(ctx.right));
+			else
+				return new SubNode(visit(ctx.left), visit(ctx.right));
+		}
+		//return null;
 		
 	}
 	
@@ -93,13 +95,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//there is no need to perform a check here, the lexer ensures this text is an int
 		return new IntValNode(Integer.parseInt(ctx.INTEGER().getText()));
 	}
-	
+	/*
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
 		return new IfNode();
-	}
+	}*/
 	
 	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
-		return new BoolValNode(Boolean.parseBoolean(ctx.BOOL().getText()));
+		return new BoolValNode(Boolean.parseBoolean(ctx.BOOLVAL().getText()));
 	}
 	
 	

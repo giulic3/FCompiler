@@ -1,4 +1,4 @@
-package ast;
+/*package ast;
 
 
 import grammars.FOOL.FOOLParser;
@@ -16,3 +16,4 @@ public class IfNode extends Node {
 	}
 }{
 }
+*/
