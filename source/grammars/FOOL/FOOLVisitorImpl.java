@@ -107,6 +107,29 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
 		return new BoolValNode(Boolean.parseBoolean(ctx.BOOLVAL().getText()));
 	}
-	
-	
+
+	@Override
+	public Node visitBaseExp(BaseExpContext ctx) {
+
+		//this is actually nothing in the sense that for the ast the parenthesis are not relevant
+		//the thing is that the structure of the ast will ensure the operational order by giving
+		//a larger depth (closer to the leafs) to those expressions with higher importance
+
+		//this is actually the default implementation for this method in the FOOLBaseVisitor class
+		//therefore it can be safely removed here
+
+		return visit (ctx.exp());
+
+	}
+
+	@Override
+	public Node visitVarExp(VarExpContext ctx) {
+
+		//this corresponds to a variable access
+		return new IdNode(ctx.ID().getText());
+
+	}
+
+
+
 }
