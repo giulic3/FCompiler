@@ -275,13 +275,15 @@ public class FOOLParser extends Parser {
 	}
 
 	public static class ClassdecContext extends ParserRuleContext {
+		public Token className;
+		public Token superName;
 		public TerminalNode CLASS() { return getToken(FOOLParser.CLASS, 0); }
+		public TerminalNode CLPAR() { return getToken(FOOLParser.CLPAR, 0); }
+		public TerminalNode CRPAR() { return getToken(FOOLParser.CRPAR, 0); }
 		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(FOOLParser.ID, i);
 		}
-		public TerminalNode CLPAR() { return getToken(FOOLParser.CLPAR, 0); }
-		public TerminalNode CRPAR() { return getToken(FOOLParser.CRPAR, 0); }
 		public TerminalNode EXTENDS() { return getToken(FOOLParser.EXTENDS, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
@@ -322,7 +324,7 @@ public class FOOLParser extends Parser {
 			setState(49);
 			match(CLASS);
 			setState(50);
-			match(ID);
+			((ClassdecContext)_localctx).className = match(ID);
 			setState(53);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -331,7 +333,7 @@ public class FOOLParser extends Parser {
 				setState(51);
 				match(EXTENDS);
 				setState(52);
-				match(ID);
+				((ClassdecContext)_localctx).superName = match(ID);
 				}
 			}
 
@@ -1115,11 +1117,13 @@ public class FOOLParser extends Parser {
 		}
 	}
 	public static class MethodExpContext extends ValueContext {
+		public Token object;
+		public Token methodName;
+		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
 		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(FOOLParser.ID, i);
 		}
-		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
 		public List<ExpContext> exp() {
@@ -1140,6 +1144,7 @@ public class FOOLParser extends Parser {
 		}
 	}
 	public static class NewExpContext extends ValueContext {
+		public Token className;
 		public TerminalNode NEW() { return getToken(FOOLParser.NEW, 0); }
 		public TerminalNode ID() { return getToken(FOOLParser.ID, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
@@ -1363,11 +1368,11 @@ public class FOOLParser extends Parser {
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(191);
-				match(ID);
+				((MethodExpContext)_localctx).object = match(ID);
 				setState(192);
 				match(DOT);
 				setState(193);
-				match(ID);
+				((MethodExpContext)_localctx).methodName = match(ID);
 				setState(206);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1415,7 +1420,7 @@ public class FOOLParser extends Parser {
 				setState(208);
 				match(NEW);
 				setState(209);
-				match(ID);
+				((NewExpContext)_localctx).className = match(ID);
 				setState(222);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1481,11 +1486,13 @@ public class FOOLParser extends Parser {
 		}
 	}
 	public static class MethodStmContext extends StmContext {
+		public Token object;
+		public Token methodName;
+		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
 		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(FOOLParser.ID, i);
 		}
-		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
 		public List<ExpContext> exp() {
@@ -1622,11 +1629,11 @@ public class FOOLParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(240);
-				match(ID);
+				((MethodStmContext)_localctx).object = match(ID);
 				setState(241);
 				match(DOT);
 				setState(242);
-				match(ID);
+				((MethodStmContext)_localctx).methodName = match(ID);
 				setState(255);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
