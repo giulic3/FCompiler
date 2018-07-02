@@ -8,24 +8,27 @@ import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
 
-public class MethodExpNode implements Node {
+/* method call */
+public class MethodNode implements Node {
 	
 	
-	protected String obj;
-	protected String id;
-	protected ArrayList<Node> args;
-	protected SymbolTableEntry entry = null;
-	protected int callNestingLevel;
-	
-	public MethodExpNode(String OBJ, String ID, ArrayList<Node> args){
-		this.obj = OBJ;
+	private String obj;
+	private String id;
+	private ArrayList<Node> args;
+	private SymbolTableEntry entry = null;
+	private int callNestingLevel;
+	private boolean isExp;
+
+	public MethodNode(String obj, String ID, ArrayList<Node> args, boolean isExp){
+		this.obj = obj;
 		this.id = ID;
-		this.args=args;
+		this.args = args;
+		this.isExp = isExp;
 	}
 	
 	
 	public String toPrint(String s) {
-		String msg = s+"method call: " + this.obj+"."+this.id +" (";
+		String msg = s+"Method call: " + this.obj+"."+this.id +" (";
 		for (Node b:this.args) {
 			msg += "\n "+ s+b.toPrint("\t");
 		}
