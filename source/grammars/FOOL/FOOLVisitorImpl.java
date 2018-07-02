@@ -164,6 +164,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	@Override
 	public Node visitMethodExp(MethodExpContext ctx) {
+		
+		/* control LPAR if is class field */
+		
 		//this corresponds to a function invocation
 		
 		//declare the result

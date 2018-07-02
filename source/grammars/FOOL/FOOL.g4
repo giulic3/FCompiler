@@ -56,20 +56,19 @@ factor : left=atom (operator=(EQ | LEQ | GEQ | OR | AND) right=atom)?
 /* this works fot both integers and bool */
 atom : (NOT)? operand=value ;
 
-/* una funzione senza param viene chiamata senza () */
 value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal
       | NULL                               #nullVal
       | LPAR exp RPAR                      #baseExp
       | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR (ELSE CLPAR elseBranch=exp CRPAR)?  #ifExp
       | ID                                             #varExp
-      | ID ( LPAR (exp (COMMA exp)* )? RPAR )?         #funExp
+      | ID ( LPAR (exp (COMMA exp)* )? RPAR )         #funExp
       | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
-      | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)?       #newExp
+      | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)       #newExp
       ;
 
 stm : ID ASM exp #varStmAssignment
-    | IF cond=exp THEN CLPAR thenBranch=stms CRPAR ELSE CLPAR elseBranch=stms CRPAR  #ifStm
+    | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
     | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
     | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
     ;
