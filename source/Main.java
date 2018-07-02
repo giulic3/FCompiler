@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.*;
 
 import java.io.File;
 
-public class main{
+public class Main {
 	
 	private static Node lexicalAndSyntacticAnalysis(CharStream input) /*throws LexerException*/ {
 		FOOLLexer lexer = new FOOLLexer(input);
