@@ -36,7 +36,7 @@ public class EqNode implements Node {
 		return res;
 	}
 
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		/*
 		BaseType l = left.typeCheck();
 		BaseType r = right.typeCheck();

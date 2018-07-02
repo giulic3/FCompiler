@@ -25,7 +25,7 @@ public class BoolValNode implements Node {
 		return s + "Boolean value: " + Boolean.toString(value);
 	}
 	@Override
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return new IntType();
 	}
 	

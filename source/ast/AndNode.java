@@ -36,7 +36,7 @@ public class AndNode implements Node {
 		return res;
 	}
 
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 
 		return new BoolType();
 	}

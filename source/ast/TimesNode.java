@@ -33,7 +33,7 @@ public class TimesNode implements Node {
 				+ right.toPrint("") ;
 	}
 
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		/*
 		if (! ( FOOLlib.isSubtype(left.typeCheck(),new IntType()) &&
 				FOOLlib.isSubtype(right.typeCheck(),new IntType()) ) ) {

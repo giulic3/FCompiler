@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ast.types.ArrowType;
 import ast.types.BaseType;
+import ast.types.IntType;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
@@ -54,14 +55,18 @@ public class IdNode implements Node {
 		return res;
 	}
 
-	public BaseType typeCheck () {
+	public Node typeCheck () {
 		/*
 		if (entry.getType() instanceof ArrowType) { //
 			System.out.println("Wrong usage of function identifier");
 			System.exit(0);
 		}
 		*/
+		
+		/* da cambiare anche il tipo in STEntry*/
 		return entry.getType();
+		//return new IntType();
+		
 	}
 
 	public String codeGeneration() {

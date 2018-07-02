@@ -1,5 +1,8 @@
 package grammars.FOOL;
 
+import ast.types.BaseType;
+import ast.types.BoolType;
+import ast.types.IntType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
 
@@ -212,14 +215,19 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		Node res;
 		
-		res = new BlockLetInStmsNode(visit(ctx.stms()), visit(ctx.let()));
+		ArrayList<Node> decs = new ArrayList<Node>();
+		
+		for(DecContext dec : ctx.let().dec())
+			decs.add(visit(dec));
+			
+		res = new BlockLetInStmsNode(decs, visit(ctx.stms()));
 		
 		return res;
 		
 	}
 	
 	
-
+	@Override
 	public Node visitIfStm(FOOLParser.IfStmContext ctx){
 
 		if (ctx.elseBranch == null)
@@ -227,5 +235,27 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		else
 			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
 	}
-
+	
+	@Override
+	public Node visitVarasm(FOOLParser.VarasmContext ctx){
+		
+		Node typeNode = visit(ctx.vardec().type());
+		
+		//visit the exp
+		Node expNode = visit(ctx.exp());
+		
+		//build the varNode
+		return new VarNode(ctx.vardec().ID().getText(), typeNode, expNode);
+	}
+	
+	@Override
+	public Node visitType(FOOLParser.TypeContext ctx){
+		if(ctx.getText().equals("int"))
+			return new IntType();
+		else if(ctx.getText().equals("bool"))
+			return new BoolType();
+		
+		//this will never happen thanks to the parser
+		return null;
+	}
 }

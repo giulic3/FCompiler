@@ -17,7 +17,7 @@ public class IntValNode implements Node {
 		return s + "Integer value: " + Integer.toString(value);
 	}
 	@Override
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return new IntType();
 	}
 	

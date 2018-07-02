@@ -100,7 +100,7 @@ public class IfNode implements Node {
 	}
 	
 	@Override
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return new BoolType();
 	}
 	

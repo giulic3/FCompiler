@@ -18,12 +18,12 @@ public class AssignmentNode implements Node {
 	}
 	
 	public String toPrint(String s){
-		return s + "Assignment: \n" + exp.toPrint(s+"\t");
+		return s + "Assignment: \n" + s + " Var: "+id+ "\n"+ exp.toPrint(s+"\t");
 	};
 	
-	public BaseType typeCheck(){return new VoidType();};
+	public Node typeCheck(){return new VoidType();}
 	
-	public String codeGeneration(){return null;};
+	public String codeGeneration(){return null;}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env){return null;};
 }

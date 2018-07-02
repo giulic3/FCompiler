@@ -6,7 +6,7 @@ import utils.Environment;
 import utils.SemanticError;
 
 /* function type */
-public class ArrowType implements Node {
+public class ArrowType implements BaseType {
 	
 	private ArrayList<Node> parList;
 	private Node ret;
