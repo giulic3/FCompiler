@@ -112,9 +112,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
 		
 		if (ctx.elseBranch == null)
-			return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch));
+			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch));
 		else
-			return new IfExpNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
 	}
 	
 	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
@@ -178,7 +178,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new MethodExpNode(ctx.object.getText(), ctx.methodName.getText(), args);
+		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args);
 		
 		return res;
 	}
@@ -200,4 +200,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		return res;
 	}
+
+	public Node visitIfStm(FOOLParser.IfStmContext ctx){
+
+		if (ctx.elseBranch == null)
+			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch));
+		else
+			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+	}
+
 }
