@@ -200,4 +200,23 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		return res;
 	}
+	
+	@Override
+	public Node visitVarStmAssignment(FOOLParser.VarStmAssignmentContext ctx){
+		Node res = new AssignmentNode(ctx.ID().toString(), visit(ctx.exp()));
+		return res;
+	}
+	
+	@Override
+	public Node visitLetInStms(FOOLParser.LetInStmsContext ctx){
+		
+		Node res;
+		
+		res = new BlockLetInStmsNode(visit(ctx.stms()), visit(ctx.let()));
+		
+		return res;
+		
+	}
+	
+	
 }

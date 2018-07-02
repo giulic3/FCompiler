@@ -29,6 +29,8 @@ classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR (varasm SEMIC)+ RP
 
 let    : LET (dec SEMIC)+ IN ;
 
+/* le variabili vanno inizializzate alla dichiarazione */
+
 vardec  : type ID ;
 
 varasm  : vardec ASM exp ;
