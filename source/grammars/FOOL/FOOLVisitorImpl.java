@@ -178,7 +178,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args);
+		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, true);
 		
 		return res;
 	}
