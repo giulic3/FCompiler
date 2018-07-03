@@ -19,8 +19,8 @@ public class GeqNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s+"Geq\n" + left.toPrint(s+"  ")
-				+ right.toPrint(s+"  ") ;
+		return s + "Greater/Equal Node:\n" + left.toPrint(s+"\t") + "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	@Override

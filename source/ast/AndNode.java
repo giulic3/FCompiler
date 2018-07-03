@@ -19,8 +19,8 @@ public class AndNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s+"And\n" + left.toPrint(s+"  ")
-				+ right.toPrint(s+"  ") ;
+		return s + "AND Node\n" + left.toPrint(s+"\t") + "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	@Override

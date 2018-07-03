@@ -19,8 +19,8 @@ public class EqNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s+"Eq\n" + left.toPrint(s+"  ")
-				+ right.toPrint(s+"  ") ;
+		return s + "Equal Node:\n" + left.toPrint(s+"\t") + "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	@Override

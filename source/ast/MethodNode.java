@@ -28,11 +28,14 @@ public class MethodNode implements Node {
 	
 	
 	public String toPrint(String s) {
-		String msg = s+"Method call: " + this.obj+"."+this.id +" (";
-		for (Node b:this.args) {
-			msg += "\n "+ s+b.toPrint("\t");
-		}
-		msg += "\n"+s+")";
+		String msg = s+"Method Call Node:\n" + s + "\tObject: " + this.obj + "\n" + s + "\tMethod: " + this.id +"(";
+		if (this.args != null && !this.args.isEmpty()) {
+			for (Node p : this.args) {
+				msg += "\n " + s + p.toPrint("\t\t");
+			}
+			msg += "\n" + s + "\t)";
+		} else
+			msg += ")";
 		return msg;
 	}
 	
