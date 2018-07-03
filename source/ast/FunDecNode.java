@@ -8,6 +8,7 @@ public class FunDecNode implements Node {
 
 	private String id;
 	private Node type;
+
 	private ArrayList<Node> parlist = new ArrayList<Node>();
 	private ArrayList<Node> declist;
 	private Node body;
@@ -36,18 +37,20 @@ public class FunDecNode implements Node {
 		return res;
 	}
 
-
+	// TODO: fix indentation
 	public String toPrint(String s) {
 
 		String parlstr = "";
 		String declstr = "";
 
-		for (Node par : parlist)
-			parlstr += par.toPrint(s+"  ");
+		if (parlist != null)
+			for (Node par : parlist)
+				parlstr += par.toPrint(s+"  ");
 
 		if (declist != null)
 			for (Node dec : declist)
 				declstr += dec.toPrint(s+"  ");
+
 		return s+"Fun:" + id +"\n"
 				+type.toPrint(s+"  ")
 				+parlstr

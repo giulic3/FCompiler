@@ -21,6 +21,20 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new ProgNode(blocks);
 		
 	}
+
+	public Node visitLetInExp(LetInExpContext ctx) {
+
+		Node res;
+
+		ArrayList<Node> decs = new ArrayList<>();
+
+		for(DecContext dec : ctx.let().dec())
+			decs.add(visit(dec));
+
+		res = new BlockLetInExpNode(decs, visit(ctx.exp()));
+
+		return res;
+	}
 	
 	public Node visitSingleExp(SingleExpContext ctx) {
 		
@@ -48,17 +62,16 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if (ctx.varasm() != null){
 			//if there are visit each dec and add it to the @innerDec list
 			for(VarasmContext dc : ctx.varasm())
-				innerDec.add(visit(dc.vardec()));
+				innerDec.add(visit(dc));
 		}
 
-		Node body = null;
+		Node body;
 		//get the exp body or the stms body
 		if (ctx.exp() != null)
 			body = visit(ctx.exp());
 
 		else
 			body = visit(ctx.stms());
-
 
 		//add the body and the inner declarations to the function
 		res.addDecBody(innerDec, body);
@@ -172,7 +185,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
 	}
 	
-	public Node visitBoolVal(FOOLParser.BoolValContext ctx){
+	public Node visitBoolVal(BoolValContext ctx){
 		return new BoolValNode(Boolean.parseBoolean(ctx.BOOLVAL().getText()));
 	}
 
@@ -257,13 +270,14 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	@Override
-	public Node visitVarStmAssignment(FOOLParser.VarStmAssignmentContext ctx){
+	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
+
 		Node res = new AssignmentNode(ctx.ID().toString(), visit(ctx.exp()));
 		return res;
 	}
 	
 	@Override
-	public Node visitLetInStms(FOOLParser.LetInStmsContext ctx){
+	public Node visitLetInStms(LetInStmsContext ctx){
 		
 		Node res;
 		
@@ -280,7 +294,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	
 	@Override
-	public Node visitIfStm(FOOLParser.IfStmContext ctx){
+	public Node visitIfStm(IfStmContext ctx){
 
 		if (ctx.elseBranch == null)
 			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch));
@@ -289,7 +303,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	@Override
-	public Node visitVarasm(FOOLParser.VarasmContext ctx){
+	public Node visitVarasm(VarasmContext ctx){
 		
 		Node typeNode = visit(ctx.vardec().type());
 		
@@ -301,7 +315,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	@Override
-	public Node visitType(FOOLParser.TypeContext ctx){
+	public Node visitType(TypeContext ctx){
 		if(ctx.getText().equals("int"))
 			return new IntType();
 		else if(ctx.getText().equals("bool"))
