@@ -17,12 +17,11 @@ public class BlockLetInExpNode implements Node {
 		exp = e;
 	}
 	public String toPrint(String s){
-
-		String msg = "\n"+s+"    BlockLetInExp: " ;
-		for (Node b : decs) {
-			msg += "\n "+ s+b.toPrint("\t");
+		String msg = "\n" + s + "BlockLetInExp:\n" + s + "\tDecs:";
+		for (Node b:decs) {
+			msg += "\n" + s + b.toPrint("\t\t");
 		}
-		msg += "\n"+ exp.toPrint(s+"    ");
+		msg += "\n" + s + "\tIn:\n" + exp.toPrint(s+"\t\t");
 		return msg;
 	}
 

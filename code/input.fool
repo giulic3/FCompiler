@@ -1,8 +1,19 @@
 let
     int f(int a, int b)  let
-        bool y = 0;
+        int y = 0;
     in
 
+        y = y + 1;
+in
+    f(3);
+
+let
+    int f()  let
+        int y = 0;
+    in
+        y = y + 1;
+in
+    f(3);
 new pinco(1,5,z);
 Giulia.saluta(ciao);
 Giulia.nonSaluta();
@@ -23,3 +34,5 @@ class ciao extends super (int x, int y){
     bool f(int g, int h) let int x=1; in x+1;
     int z() 0;
 };
+
+if (not x==1) then{ x=3} ; else{ x=4 }; //problematico

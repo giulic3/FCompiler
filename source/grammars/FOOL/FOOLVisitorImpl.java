@@ -4,6 +4,7 @@ import ast.types.BoolType;
 import ast.types.IntType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 
@@ -48,11 +49,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	public Node visitFundec(FundecContext ctx) {
 
 		//initialize @res with the visits to the type and its ID
-		FunDecNode res = new FunDecNode(ctx.ID().getText(), visit(ctx.type()));
-
+		// res = new FunDecNode(ctx.ID().getText(), visit(ctx.type()));
+		ArrayList<Node> pars = new ArrayList<>();
+		
 		//add argument declarations
-		for(VardecContext vc : ctx.vardec())
-			res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));
+		for(VardecContext par : ctx.vardec())
+			pars.add(visit(par));
+			//res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));
 
 		//add body
 		//create a list for the nested var declarations
@@ -69,14 +72,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//get the exp body or the stms body
 		if (ctx.exp() != null)
 			body = visit(ctx.exp());
-
 		else
 			body = visit(ctx.stms());
+		
 
-		//add the body and the inner declarations to the function
-		res.addDecBody(innerDec, body);
-
-		return res;
+		return new FunDecNode(ctx.ID().getText(), visit(ctx.type()), innerDec, pars, body);
 
 
 	}
@@ -323,5 +323,31 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		//this will never happen thanks to the parser
 		return null;
+	}
+	
+	@Override
+	public Node visitClassDecBlock(FOOLParser.ClassDecBlockContext ctx) {
+		return visit(ctx.classdec());
+	}
+	
+	public Node visitClassdec(FOOLParser.ClassdecContext ctx) {
+		String id=ctx.className.getText();
+		ArrayList<Node> pars = new ArrayList<Node>();
+		ArrayList<Node> methods = new ArrayList<Node>();
+		String exp = (ctx.superName!=null) ? ctx.superName.getText() : null;
+		
+		for (VardecContext par : ctx.vardec()) {
+			pars.add(visit(par));
+		}
+		
+		for(FundecContext dec : ctx.fundec())
+			methods.add(visit(dec));
+		
+		return new BlockClassDecNode(id,exp,pars,methods);
+		
+	}
+	
+	public Node visitVardec(FOOLParser.VardecContext ctx) {
+		return new VarNode(ctx.ID().getText(), visit(ctx.type()));
 	}
 }

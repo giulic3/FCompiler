@@ -13,20 +13,14 @@ public class FunDecNode implements Node {
 	private ArrayList<Node> declist;
 	private Node body;
 
-	public FunDecNode (String id, Node type) {
+	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, Node body) {
 		this.id = id;
 		this.type = type;
-	}
-
-	public void addDecBody (ArrayList<Node> declist, Node body) {
 		this.declist = declist;
+		this.parlist=parlist;
 		this.body = body;
 	}
-
-	public void addPar (Node p) {
-		parlist.add(p);
-	}
-
+	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 
@@ -37,25 +31,27 @@ public class FunDecNode implements Node {
 		return res;
 	}
 
-	// TODO: fix indentation
 	public String toPrint(String s) {
 
 		String parlstr = "";
 		String declstr = "";
 
-		if (parlist != null)
+		if (parlist!=null && !parlist.isEmpty()) {
 			for (Node par : parlist)
-				parlstr += par.toPrint(s+"  ");
+				parlstr += "\n" + par.toPrint(s + "\t\t");
+			parlstr+="\n"+s+"\t";
+		}
 
-		if (declist != null)
+		if (declist != null) {
+			declstr = s+"\tFun Decs:";
 			for (Node dec : declist)
-				declstr += dec.toPrint(s+"  ");
+				declstr += "\n" + dec.toPrint(s + "\t\t");
+		}
 
-		return s+"Fun:" + id +"\n"
-				+type.toPrint(s+"  ")
-				+parlstr
-				+declstr
-				+body.toPrint(s+"  ") ;
+		return s+"Fun Dec Node: " +type.toPrint("") + " " + id +"("
+				+parlstr+")\n"
+				+declstr;
+				//+body.toPrint(s+"  ") ;
 	}
 
 	//valore di ritorno non utilizzato
