@@ -13,16 +13,23 @@ public class VarNode implements Node {
 	private Node type;
 	private Node exp;
 	
-	public VarNode (String i, Node t, Node v) {
+	public VarNode(String i, Node t) {
+		id = i;
+		type = t;
+		exp = null;
+	}
+	
+	public VarNode(String i, Node t, Node v) {
 		id = i;
 		type = t;
 		exp = v;
 	}
 	
 	public String toPrint(String s){
-		return s+"Var:" + id +"\n"+s+"        "
-				+type.toPrint(s+"  ")+"\n"
-				+s+"  "+exp.toPrint(s+"    ");
+		if (exp != null)
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ") = " + exp.toPrint("");
+		else
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
 	
 	public Node typeCheck(){return null;};
