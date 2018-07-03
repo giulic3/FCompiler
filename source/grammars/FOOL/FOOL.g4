@@ -47,16 +47,20 @@ type   : INT
        | ID
       ;  
     
-exp   :  ('-')? left=term (operator=(PLUS | MINUS) right=exp)?
+exp   : left=operand (operator=(EQ | LEQ | GEQ ) right=exp)?
       ;
+
+operand: ('-')? left=term (operator=(PLUS | MINUS) right=operand)?
+    ;
+
    
 term  : left=factor (operator=(TIMES | DIV) right=term)?
       ;
 
-factor : left=atom (operator=(EQ | LEQ | GEQ | OR | AND) right=atom)?
+factor : left=atom (operator=( OR | AND) right=factor)?
       ;
 /* this works fot both integers and bool */
-atom : (NOT)? operand=value ;
+atom : (NOT)? val=value ;
 
 value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal

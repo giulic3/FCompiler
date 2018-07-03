@@ -103,6 +103,12 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExp(FOOLParser.ExpContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FOOLParser#operand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperand(FOOLParser.OperandContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FOOLParser#term}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
