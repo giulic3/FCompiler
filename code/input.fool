@@ -1,20 +1,7 @@
-if (2) then {
-    if (true) then {
-        7
-    }
-} else {
-    if (true) then {
-        if (60) then {
-            if (70) then {
-                false
-            } else {
-                100
-            }
-        }
-    } else {
-        90
-    }
-};
+let
+    int f(int a, int b)  let
+        bool y = 0;
+    in
 
 new pinco(1,5,z);
 Giulia.saluta(ciao);

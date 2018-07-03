@@ -1,0 +1,8 @@
+let
+    int f(int a, int b)  let
+        bool y = 0;
+    in
+
+        y = y + 1;
+in
+    f(3);

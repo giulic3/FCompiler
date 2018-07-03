@@ -1,8 +1,6 @@
 package ast;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import ast.types.BaseType;
 import utils.Environment;
 import utils.SemanticError;
 
@@ -32,7 +30,7 @@ public class FunDecNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 
 		//create result list
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> res = new ArrayList<>();
 
 
 		return res;
@@ -58,7 +56,7 @@ public class FunDecNode implements Node {
 	}
 
 	//valore di ritorno non utilizzato
-	public BaseType typeCheck () {
+	public Node typeCheck () {
 
 		return null;
 	}

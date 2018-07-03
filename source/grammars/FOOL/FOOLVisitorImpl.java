@@ -1,11 +1,9 @@
 package grammars.FOOL;
 
-import ast.types.BaseType;
 import ast.types.BoolType;
 import ast.types.IntType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
-import sun.jvm.hotspot.asm.Operand;
 
 import java.util.ArrayList;
 
@@ -13,7 +11,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	public Node visitProg(ProgContext ctx) {
 		
-		ArrayList<Node> blocks = new ArrayList<Node>();
+		ArrayList<Node> blocks = new ArrayList<>();
 		
 		for (int i=0; i < ctx.block().size(); i++) {
 			blocks.add(visit(ctx.block(i)));
@@ -31,8 +29,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 	}
 
-	/*
-	// TODO finire
+
 	@Override
 	public Node visitFundec(FundecContext ctx) {
 
@@ -40,33 +37,37 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		FunDecNode res = new FunDecNode(ctx.ID().getText(), visit(ctx.type()));
 
 		//add argument declarations
-		//we are getting a shortcut here by constructing directly the ParNode
-		//this could be done differently by visiting instead the VardecContext
 		for(VardecContext vc : ctx.vardec())
-			res.addPar( new ParNode(vc.ID().getText(), visit( vc.type() )) );
+			res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));
 
 		//add body
-		//create a list for the nested declarations
-		ArrayList<Node> innerDec = new ArrayList<Node>();
+		//create a list for the nested var declarations
+		ArrayList<Node> innerDec = new ArrayList<>();
 
 		//check whether there are actually nested decs
-		if(ctx.let() != null){
+		if (ctx.varasm() != null){
 			//if there are visit each dec and add it to the @innerDec list
-			for(DecContext dc : ctx.let().dec())
-				innerDec.add(visit(dc));
+			for(VarasmContext dc : ctx.varasm())
+				innerDec.add(visit(dc.vardec()));
 		}
 
-		//get the exp body
-		Node exp = visit(ctx.exp());
+		Node body = null;
+		//get the exp body or the stms body
+		if (ctx.exp() != null)
+			body = visit(ctx.exp());
+
+		else
+			body = visit(ctx.stms());
+
 
 		//add the body and the inner declarations to the function
-		res.addDecBody(innerDec, exp);
+		res.addDecBody(innerDec, body);
 
 		return res;
 
 
 	}
-	*/
+
 
 	public Node visitExp(ExpContext ctx) {
 		
@@ -206,7 +207,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node res;
 		
 		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<Node>();
+		ArrayList<Node> args = new ArrayList<>();
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
@@ -227,7 +228,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node res;
 		
 		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<Node>();
+		ArrayList<Node> args = new ArrayList<>();
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
@@ -245,7 +246,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node res;
 		
 		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<Node>();
+		ArrayList<Node> args = new ArrayList<>();
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
@@ -266,7 +267,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		Node res;
 		
-		ArrayList<Node> decs = new ArrayList<Node>();
+		ArrayList<Node> decs = new ArrayList<>();
 		
 		for(DecContext dec : ctx.let().dec())
 			decs.add(visit(dec));
