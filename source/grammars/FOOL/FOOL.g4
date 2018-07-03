@@ -25,7 +25,7 @@ block  : let exp              #letInExp
 /* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha sempre almeno un metodo,
  ogni dichiarazione di f è seguita da un ;
  */
-classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR (varasm SEMIC)+ RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
+classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR vardec (COMMA vardec)* RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
 
 let    : LET (dec SEMIC)+ IN ;
 
@@ -50,7 +50,7 @@ type   : INT
 exp   : left=operand (operator=(EQ | LEQ | GEQ ) right=exp)?
       ;
 
-operand: ('-')? left=term (operator=(PLUS | MINUS) right=operand)?
+operand:  left=term (operator=(PLUS | MINUS) right=operand)?
     ;
 
    
@@ -60,7 +60,7 @@ term  : left=factor (operator=(TIMES | DIV) right=term)?
 factor : left=atom (operator=( OR | AND) right=factor)?
       ;
 /* this works fot both integers and bool */
-atom : (NOT)? val=value ;
+atom : (NOT | MINUS)? val=value ;
 
 value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal
