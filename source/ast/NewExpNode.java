@@ -22,11 +22,16 @@ public class NewExpNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		String msg = s+"create instance:  new " + this.id +" (";
-		for (Node b:this.args) {
-			msg += "\n "+ s+b.toPrint("\t");
-		}
-		msg += "\n"+s+")";
+		String msg = s + "New Instance Node: " + this.id + "(";
+		
+		if (this.args != null && !this.args.isEmpty()) {
+			for (Node b : this.args) {
+				msg += "\n " + s + b.toPrint("\t");
+			}
+			msg += "\n" + s + ")";
+		} else
+			msg += ")";
+		
 		return msg;
 	}
 	

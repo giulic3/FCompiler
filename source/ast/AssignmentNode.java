@@ -18,7 +18,7 @@ public class AssignmentNode implements Node {
 	}
 	
 	public String toPrint(String s){
-		return s + "Assignment: \n" + s + " Var: "+id+ "\n"+ exp.toPrint(s+"\t");
+		return s + "Assignment Node: " + id + " (type: '') = " + exp.toPrint("");
 	};
 	
 	public Node typeCheck(){return new VoidType();}

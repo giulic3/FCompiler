@@ -19,8 +19,8 @@ public class OrNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s+"Or\n" + left.toPrint(s+"  ")
-				+ right.toPrint(s+"  ") ;
+		return s + "OR Node:\n" + left.toPrint(s+"\t") + "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import ast.types.BoolType;
 import ast.types.IntType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
+import sun.jvm.hotspot.asm.Operand;
 
 import java.util.ArrayList;
 
@@ -77,13 +78,26 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			//it is a simple expression
 			return visit( ctx.left );
 		}else{
+			if (ctx.operator.getType() == FOOLLexer.EQ)
+				return new EqNode(visit(ctx.left), visit(ctx.right));
+			else if (ctx.operator.getType() == FOOLLexer.LEQ)
+				return new LeqNode(visit(ctx.left), visit(ctx.right));
+			else
+				return new GeqNode(visit(ctx.left), visit(ctx.right));
+		}
+		//return null;
+		
+	}
+	
+	public Node visitOperand(OperandContext ctx) {
+		if (ctx.right == null)
+			return visit(ctx.left);
+		else {
 			if (ctx.operator.getType() == FOOLLexer.PLUS)
 				return new PlusNode(visit(ctx.left), visit(ctx.right));
 			else
 				return new SubNode(visit(ctx.left), visit(ctx.right));
 		}
-		//return null;
-		
 	}
 	
 	public Node visitTerm(TermContext ctx) {

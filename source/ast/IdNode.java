@@ -31,7 +31,7 @@ public class IdNode implements Node {
 				+ entry.toPrint(s+"  ") ;
 		*/
 
-		return s + "Id:" + id;
+		return s + "ID: " + id;
 	}
 
 	@Override

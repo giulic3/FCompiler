@@ -17,11 +17,11 @@ public class BlockLetInStmsNode implements Node {
 	}
 	public String toPrint(String s){
 		
-		String msg = "\n"+s+"    BlockLetInStms: " ;
+		String msg = "\n" + s + "BlockLetInStms:\n" + s + "\tDecs:";
 		for (Node b:decs) {
-			msg += "\n "+ s+b.toPrint("\t");
+			msg += "\n" + s + b.toPrint("\t\t");
 		}
-		msg += "\n"+ stms.toPrint(s+"    ");
+		msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
 		return msg;
 		
 		
