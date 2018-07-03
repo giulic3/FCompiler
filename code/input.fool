@@ -17,6 +17,6 @@ if (2) then {
 };
 
 new  pinco (1,5,z);
-Giulia.saluta("ciao");
+Giulia.saluta(ciao);
 f();
 let int x=1; in x=1;

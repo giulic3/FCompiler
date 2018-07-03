@@ -33,7 +33,7 @@ public class PrintNode implements Node {
 		return printMsg;
 	}
 	
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return new VoidType();
 	}
 	

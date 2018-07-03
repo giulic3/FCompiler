@@ -6,39 +6,40 @@ import utils.Environment;
 import utils.SemanticError;
 
 /* function type */
-public class ArrowType implements Node {
+public class ArrowType implements BaseType {
 	
-	private ArrayList<Node> parlist;
-	private BaseType ret;
+	private ArrayList<Node> parList;
+	private Node ret;
 	
-	public ArrowType (ArrayList<Node> p, BaseType r) {
-		parlist = p;
+	public ArrowType (ArrayList<Node> p, Node r) {
+		parList = p;
 		ret = r;
 	}
 	
+	// TODO: this toPrint() should be checked
 	public String toPrint(String indent) {
 		String parlstr = "";
 		
-		for (BaseType par:parlist)
-			parlstr += par.toPrint();
+		for (Node par:parList)
+			parlstr += par.toPrint("");
 		
 		return "ArrowType\n" + parlstr;// + ret.toPrint(" ->") ;
 	}
 	
-	public BaseType getRet() {
+	public Node getRet() {
 		return ret;
 	}
 	
-	public ArrayList<BaseType> getParList () {
-		return parlist;
+	public ArrayList<Node> getParList () {
+		return parList;
 	}
 
-
+/*
 	public TypeEnum getType() {
 		return TypeEnum.ARROW;
-	}
+	}*/
 	
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return null;
 	}
 	

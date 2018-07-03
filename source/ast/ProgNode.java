@@ -23,7 +23,7 @@ public class ProgNode  implements Node {
 		return  msg;
 	}
 	
-	public BaseType typeCheck(){return null;};
+	public Node typeCheck(){return null;};
 	
 	public String codeGeneration(){return null;};
 	

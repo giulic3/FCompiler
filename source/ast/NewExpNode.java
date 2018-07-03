@@ -32,7 +32,7 @@ public class NewExpNode implements Node {
 	
 	
 	@Override
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return new IntType();
 	}
 	

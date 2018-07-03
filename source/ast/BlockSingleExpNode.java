@@ -19,7 +19,7 @@ public class BlockSingleExpNode implements Node {
 		return "\n" + s + "Block Single exp value:\n" + exp.toPrint(s+"\t");
 	}
 	@Override
-	public BaseType typeCheck() {
+	public Node typeCheck() {
 		return null;
 	}
 	

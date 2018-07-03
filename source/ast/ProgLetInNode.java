@@ -15,7 +15,7 @@ public class ProgLetInNode implements Node {
 	
 	public String toPrint(String indent){return null;};
 	
-	public BaseType typeCheck(){return null;};
+	public Node typeCheck(){return null;};
 	
 	public String codeGeneration(){return null;};
 	
