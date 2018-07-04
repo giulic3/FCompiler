@@ -288,6 +288,26 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 	}
 	
+	public Node visitPrintStm(PrintStmContext ctx) {
+		
+		ArrayList<Node> exps = new ArrayList<>();
+		for (ExpContext exp: ctx.exp())
+			exps.add(visit(exp));
+		
+		return new PrintNode(exps);
+	}
+	
+	public Node visitMethodStm(MethodStmContext ctx) {
+		
+		//get the invocation arguments
+		ArrayList<Node> args = new ArrayList<>();
+		
+		for(ExpContext exp : ctx.exp())
+			args.add(visit(exp));
+		
+		return new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, false);
+	}
+	
 	
 	@Override
 	public Node visitIfStm(IfStmContext ctx){

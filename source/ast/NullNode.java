@@ -10,7 +10,7 @@ public class NullNode implements Node {
 	public NullNode() {}
 	
 	public String toPrint(String indent) {
-		return "NullNode";
+		return indent + "Null Node";
 	}
 	
 	public Node typeCheck() {

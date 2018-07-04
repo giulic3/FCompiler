@@ -1,1 +1,1 @@
-let pippo x = null; in x;
+let int x = 2; in print(2,true,null,3+2);

@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.VoidType;
 import utils.Environment;
 import utils.SemanticError;
@@ -9,24 +8,16 @@ import java.util.ArrayList;
 
 public class PrintNode implements Node {
 	
-	private Node exp;
-	private ArrayList<Node> otherExps;
+	private ArrayList<Node> exps;
 	
-	PrintNode(Node exp) {
-		this.exp = exp;
-		this.otherExps = null;
-	}
-	
-	PrintNode(Node exp, ArrayList<Node> otherExps) {
-		this.exp = exp;
-		this.otherExps = otherExps;
+	public PrintNode(ArrayList<Node> exps) {
+		this.exps = exps;
 	}
 	
 	public String toPrint(String indent) {
-		String printMsg = indent + "Print Node:\n" +
-				exp.toPrint(indent + "\t");
+		String printMsg = indent + "Print Node:";
 		
-		for (Node e:otherExps) {
+		for (Node e:this.exps) {
 			printMsg += "\n" + e.toPrint(indent + "\t");
 		}
 		
