@@ -1,0 +1,17 @@
+if (2) then {
+    if (true) then {
+        7
+    }
+} else {
+    if (true) then {
+        if (60) then {
+            if (70) then {
+                false
+            } else {
+                100
+            }
+        }
+    } else {
+        90
+    }
+};

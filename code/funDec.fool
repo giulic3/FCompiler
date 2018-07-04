@@ -2,7 +2,13 @@ let
     int f(int a, int b)  let
         int y = 0;
     in
-
+        y = y + 1;
+in
+    f(3);
+let
+    int f()  let
+        int y = 0;
+    in
         y = y + 1;
 in
     f(3);
