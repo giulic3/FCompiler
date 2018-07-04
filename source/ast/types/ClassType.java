@@ -9,16 +9,19 @@ import utils.SemanticError;
 
 public class ClassType implements Node {
 
-	// tipo
-	// supertipo
-	// campi
+
+	private String id;
+	private ClassType supertype;
+	// campi TODO : arraylist? hashmap?
 	// metodi
 
-	public ClassType() {
+	public ClassType(String id) {
+		this.id = id;
 	}
 	
 	public String toPrint(String indent) {
-		return "ClassType";
+
+		return id+" (ClassType)";
 	}
 
 	/*public TypeEnum getType() {

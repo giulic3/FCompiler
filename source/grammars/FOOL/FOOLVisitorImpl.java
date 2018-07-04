@@ -1,7 +1,9 @@
 package grammars.FOOL;
 
 import ast.types.BoolType;
+import ast.types.ClassType;
 import ast.types.IntType;
+import ast.types.VoidType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -150,7 +152,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//check whether this is a simple or binary expression
 		//notice here the necessity of having named elements in the grammar
 		
-		if (ctx.NOT() != null)
+		if ((ctx.NOT() != null) && (ctx.MINUS() != null))
+			return new NotNode(new MinusNode(visit(ctx.val)));
+		else if (ctx.NOT() != null)
 			return new NotNode(visit(ctx.val));
 		else if (ctx.MINUS() != null)
 			return new MinusNode(visit(ctx.val));
@@ -314,13 +318,16 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	@Override
 	public Node visitType(TypeContext ctx){
-		if(ctx.getText().equals("int"))
+
+		if (ctx.getText().equals("int"))
 			return new IntType();
-		else if(ctx.getText().equals("bool"))
+		else if (ctx.getText().equals("bool"))
 			return new BoolType();
-		
-		//this will never happen thanks to the parser
-		return null;
+		else if (ctx.getText().equals("void"))
+			return new VoidType();
+		else
+			return new ClassType(ctx.getText());
+
 	}
 	
 	@Override
