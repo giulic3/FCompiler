@@ -59,7 +59,7 @@ public class IfNode implements Node {
 		/* ifExp */
 		if (th != null) {
 
-			String ifExp = s + "If Node:\n" +
+			String ifExp = s + "If Exp Node:\n" +
 					cond.toPrint(s + "\tCond: ") + "\n" +
 					s + "\tThen Branch:\n" + th.toPrint(s + "\t\t");
 			if (el != null)
@@ -81,7 +81,7 @@ public class IfNode implements Node {
 				elStmsString += stm.toPrint("")+"\n";
 			}
 
-			String ifStm = s + "If Node:\n" +
+			String ifStm = s + "If Stms Node:\n" +
 					cond.toPrint(s + "\tCond: ") + "\n" +
 					s + "\tThen Branch:\n" + thStmsString;
 			if (elStms != null)

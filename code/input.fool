@@ -35,4 +35,5 @@ class ciao extends super (int x, int y){
     int z() 0;
 };
 
-if (not x==1) then{ x=3} ; else{ x=4 }; //problematico
+let int x = 0 ; in
+if (not x==1) then {x = 3} ; else { x = 4 };
