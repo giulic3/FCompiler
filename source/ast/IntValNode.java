@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class IntValNode implements Node {
 	
-	private Integer value;
+	private int value;
 	
-	public IntValNode(Integer n) {
+	public IntValNode(int n) {
 		value = n;
 	}
 	
 	public String toPrint(String s) {
-		return s + "Integer value: " + Integer.toString(value);
+		return s + "Integer value: " + value;
 	}
 	@Override
 	public Node typeCheck() {

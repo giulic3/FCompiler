@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ast.types.BaseType;
 import ast.types.BoolType;
 import utils.Environment;
+import utils.Helpers;
 import utils.SemanticError;
 //import lib.FOOLlib;
 
@@ -36,8 +37,10 @@ public class AndNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-
+	public Node typeCheck() throws Exception {
+		if (!(Helpers.subtypeOf(left.typeCheck(), new BoolType()) && Helpers.subtypeOf(right.typeCheck(), new BoolType())))
+			throw new Exception("And Node typeCheck exception");
+		
 		return new BoolType();
 	}
 

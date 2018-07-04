@@ -8,7 +8,7 @@ public interface Node {
    
   String toPrint(String indent);
   
-  Node typeCheck();
+  Node typeCheck() throws Exception;
   
   String codeGeneration();
   

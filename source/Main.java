@@ -3,6 +3,7 @@ import grammars.FOOL.FOOLLexer;
 import grammars.FOOL.FOOLLexer.*;
 import grammars.FOOL.FOOLParser;
 import grammars.FOOL.FOOLVisitorImpl;
+import ast.BoolValNode;
 
 
 import org.antlr.v4.runtime.*;
@@ -50,6 +51,14 @@ public class Main {
 		
 		
 		Node ast = lexicalAndSyntacticAnalysis(input);
+		
+		/*ast.typeCheck();
+		
+		Node boolNode = new BoolValNode(true);
+		Node intNode = new IntValNode(2);
+		
+		Node prova = new AndNode(boolNode, intNode);
+		prova.typeCheck();*/
 		
 		System.out.println("Visualizing AST...");
 		String res = ast.toPrint("");
