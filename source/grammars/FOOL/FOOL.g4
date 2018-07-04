@@ -60,7 +60,7 @@ term  : left=factor (operator=(TIMES | DIV) right=term)?
 factor : left=atom (operator=( OR | AND) right=factor)?
       ;
 /* this works fot both integers and bool */
-atom : (NOT | MINUS)? val=value ;
+atom : (NOT)? (MINUS)? val=value ;
 
 value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal
