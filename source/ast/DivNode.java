@@ -29,8 +29,8 @@ public class DivNode implements Node {
 
 	public String toPrint(String s) {
 		return s+"Div Node\n" + left.toPrint(s+"\t")
-				+ " / "
-				+ right.toPrint("") ;
+				+ "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	public Node typeCheck() {

@@ -18,7 +18,7 @@ public class PlusNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Plus Node:\n" + leftOperand.toPrint(s+"\t") + " + " + rightOperand.toPrint("");
+		return s + "Plus Node:\n" + leftOperand.toPrint(s+"\t") + "\n" + rightOperand.toPrint(s+"\t");
 	}
 	
 	@Override

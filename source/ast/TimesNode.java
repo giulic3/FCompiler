@@ -29,8 +29,8 @@ public class TimesNode implements Node {
 	public String toPrint(String s) {
 		return s+"Times Node\n"
 				+ left.toPrint(s+"\t")
-				+ " * "
-				+ right.toPrint("") ;
+				+ "\n"
+				+ right.toPrint(s+"\t") ;
 	}
 
 	public Node typeCheck() {

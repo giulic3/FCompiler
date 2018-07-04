@@ -59,8 +59,8 @@ public class IfNode implements Node {
 		/* ifExp */
 		if (th != null) {
 
-			String ifExp = s + "If Node:\n" +
-					cond.toPrint(s + "\tCond: ") + "\n" +
+			String ifExp = s + "If Exp Node:\n" + s + "\tCond:\n" +
+					cond.toPrint(s + "\t\t") + "\n" +
 					s + "\tThen Branch:\n" + th.toPrint(s + "\t\t");
 			if (el != null)
 				ifExp += "\n" + s + "\tElse Branch:\n" + el.toPrint(s + "\t\t");
@@ -71,21 +71,23 @@ public class IfNode implements Node {
 		else {
 
 			String thStmsString = "";
-			String elStmsString = "";
 
 			for (Node stm : thStms) {
-				thStmsString += stm.toPrint("")+"\n";
+				thStmsString += "\n" + stm.toPrint(s+"\t\t");
 			}
 
-			for (Node stm : elStms) {
-				elStmsString += stm.toPrint("")+"\n";
+			String ifStm = s + "If Stms Node:\n" + s + "\tCond:\n" +
+					cond.toPrint(s+"\t\t") + "\n" +
+					s + "\tThen Branch:" + thStmsString;
+			
+			if (elStms != null) {
+				String elStmsString = "";
+				
+				for (Node stm : elStms) {
+					elStmsString += "\n" + stm.toPrint(s + "\t\t");
+				}
+				ifStm += "\n" + s + "\tElse Branch:" + elStmsString;
 			}
-
-			String ifStm = s + "If Node:\n" +
-					cond.toPrint(s + "\tCond: ") + "\n" +
-					s + "\tThen Branch:\n" + thStmsString;
-			if (elStms != null)
-				ifStm += "\n" + s + "\tElse Branch:\n" + elStmsString;
 
 			return ifStm;
 		}

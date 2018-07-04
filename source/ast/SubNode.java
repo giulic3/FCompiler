@@ -18,7 +18,7 @@ public class SubNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Sub Node:\n" + leftOperand.toPrint(s+"\t") + " - " + rightOperand.toPrint("");
+		return s + "Sub Node:\n" + leftOperand.toPrint(s+"\t") + "\n" + rightOperand.toPrint(s+"\t");
 	}
 	
 	@Override

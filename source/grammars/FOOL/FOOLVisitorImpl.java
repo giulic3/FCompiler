@@ -139,35 +139,23 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return visit( ctx.left );
 		}
 		else {
-
-			switch (ctx.operator.getType()) {
-				case FOOLLexer.EQ:
-					return new EqNode(visit(ctx.left), visit(ctx.right));
-				case FOOLLexer.LEQ:
-					return new LeqNode(visit(ctx.left), visit(ctx.right));
-				case FOOLLexer.GEQ:
-					return new GeqNode(visit(ctx.left), visit(ctx.right));
-				case FOOLLexer.AND:
-					return new AndNode(visit(ctx.left), visit(ctx.right));
-				case FOOLLexer.OR:
-					return new OrNode(visit(ctx.left), visit(ctx.right));
-				default:
-					return null; // TODO: temporary
-			}
+			if (ctx.operator.getType() == FOOLLexer.AND)
+				return new AndNode(visit(ctx.left), visit(ctx.right));
+			else
+				return new OrNode(visit(ctx.left), visit(ctx.right));
 		}
 	}
 	
-	public Node visitAtom(FactorContext ctx) {
+	public Node visitAtom(AtomContext ctx) {
 		//check whether this is a simple or binary expression
 		//notice here the necessity of having named elements in the grammar
-		if(ctx.right == null){
-			//it is a simple expression
-			return visit( ctx.left );
-		}/*else{
-			//it is a binary expression, you should visit left and right
-			//return new EqualNode(visit(ctx.left), visit(ctx.right));
-		}*/
-		return null;
+		
+		if (ctx.NOT() != null)
+			return new NotNode(visit(ctx.val));
+		else if (ctx.MINUS() != null)
+			return new MinusNode(visit(ctx.val));
+		else
+			return visit(ctx.val);
 	}
 	
 	public Node visitIntVal(IntValContext ctx) {
@@ -295,11 +283,21 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	@Override
 	public Node visitIfStm(IfStmContext ctx){
+		
+		ArrayList<Node> thenStms = new ArrayList<>();
+		
+		for (StmContext stm: ctx.thenBranch.stm())
+			thenStms.add(visit(stm));
 
 		if (ctx.elseBranch == null)
-			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch));
-		else
-			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+			return new IfNode(visit(ctx.cond), thenStms);
+		else {
+			ArrayList<Node> elseStms = new ArrayList<>();
+			for (StmContext stm: ctx.elseBranch.stm())
+				elseStms.add(visit(stm));
+			
+			return new IfNode(visit(ctx.cond), thenStms, elseStms);
+		}
 	}
 	
 	@Override

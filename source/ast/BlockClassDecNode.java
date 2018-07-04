@@ -33,7 +33,7 @@ public class BlockClassDecNode implements Node {
 				msg += "\n " + s + b.toPrint("\t\t");
 			}
 		}
-		msg += "\n"+s+"\tMethods: \n";
+		msg += "\n"+s+"\tMethods:";
 		for (Node b : methods) {
 			msg += "\n " + s + b.toPrint("\t\t");
 		}
