@@ -1,2 +1,4 @@
-Giulia.saluta(ciao);
-Giulia.nonSaluta();
+let int x = 1; in print(
+Giulia.saluta(ciao),
+Giulia.nonSaluta()
+);

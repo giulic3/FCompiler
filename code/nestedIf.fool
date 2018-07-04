@@ -1,17 +1,18 @@
+let int x = 1; in
 if (2) then {
     if (true) then {
-        7
+        print(7)
     }
 } else {
     if (true) then {
         if (60) then {
             if (70) then {
-                false
+                pippo.f(false)
             } else {
-                100
+                x = 100
             }
         }
     } else {
-        90
+        print(90)
     }
 };
