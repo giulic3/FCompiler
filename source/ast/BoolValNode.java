@@ -36,8 +36,8 @@ public class BoolValNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return new ArrayList<>();
 	}
 	
 }

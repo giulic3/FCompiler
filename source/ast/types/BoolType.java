@@ -20,7 +20,7 @@ public class BoolType implements Node {
 	}*/
 	
 	public Node typeCheck() {
-		return new BoolType();
+		return new BoolType(); // TODO: decidere se Bool <= Int
 	}
 	
 	public String codeGeneration() {
@@ -29,8 +29,8 @@ public class BoolType implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return new ArrayList<>();
 	}
 	
 }  

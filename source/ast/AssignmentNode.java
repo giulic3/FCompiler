@@ -21,9 +21,15 @@ public class AssignmentNode implements Node {
 		return s + "Assignment Node: " + id + " (type: '') = " + exp.toPrint("");
 	};
 	
-	public Node typeCheck(){return new VoidType();}
+	public Node typeCheck() {
+		return new VoidType();
+	}
 	
-	public String codeGeneration(){return null;}
+	public String codeGeneration() {
+		return null;
+	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){return null;};
+	public ArrayList<SemanticError> checkSemantics(Environment env) {
+		return null;
+	}
 }

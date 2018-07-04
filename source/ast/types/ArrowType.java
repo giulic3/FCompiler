@@ -48,7 +48,7 @@ public class ArrowType implements BaseType {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	

@@ -21,7 +21,7 @@ public class IntType implements Node {
 	}*/
 	
 	public Node typeCheck() {
-		return new IntType(); // TODO: da controllare
+		return new IntType();
 	}
 	
 	public String codeGeneration() {
@@ -31,7 +31,7 @@ public class IntType implements Node {
 	
 	@Override
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return new ArrayList<>();
 	}
 }

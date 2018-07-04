@@ -17,9 +17,9 @@ public class NotNode implements Node {
 		return indent + "Not Node:\n" + value.toPrint(indent+"\t");
 	}
 	
-	public Node typeCheck() {
-		// TODO: da implementare
-		return null;
+	public Node typeCheck() throws Exception {
+		// TODO: da controllare
+		return value.typeCheck();
 	}
 	
 	public String codeGeneration() {
@@ -28,7 +28,7 @@ public class NotNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return value.checkSemantics(env);
 	}
 }

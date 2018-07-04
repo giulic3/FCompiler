@@ -29,7 +29,7 @@ public class MinusNode implements Node {
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		// TODO: da implementare
-		return null;
+		return value.checkSemantics(env);
 	}
 	
 }

@@ -34,7 +34,12 @@ public class PrintNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		for (Node exp: exps)
+			res.addAll(exp.checkSemantics(env));
+		
+		return res;
 	}
 }
