@@ -169,6 +169,10 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new IntValNode(Integer.parseInt(ctx.INTEGER().getText()));
 	}
 	
+	public Node visitNullVal(NullValContext ctx) {
+		return new NullNode();
+	}
+	
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
 		
 		if (ctx.elseBranch == null)

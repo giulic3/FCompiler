@@ -1,1 +1,1 @@
-let pippo x = new pippo(); in x;
+let pippo x = null; in x;
