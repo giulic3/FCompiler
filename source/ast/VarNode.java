@@ -27,7 +27,7 @@ public class VarNode implements Node {
 	
 	public String toPrint(String s){
 		if (exp != null)
-			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ") = " + exp.toPrint("");
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t\t");
 		else
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}

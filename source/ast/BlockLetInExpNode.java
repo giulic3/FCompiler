@@ -5,7 +5,7 @@ import utils.Environment;
 import utils.SemanticError;
 
 import java.util.ArrayList;
-
+/*
 public class BlockLetInExpNode implements Node {
 
 	private ArrayList<Node> decs;
@@ -31,6 +31,6 @@ public class BlockLetInExpNode implements Node {
 
 	public ArrayList<SemanticError> checkSemantics(Environment env){return null;}
 
-}
+}*/
 
 

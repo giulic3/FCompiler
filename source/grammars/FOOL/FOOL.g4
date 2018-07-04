@@ -16,9 +16,7 @@ package grammars.FOOL;
  *------------------------------------------------------------------*/
 prog : (block SEMIC)+  ; // il parser riconosce solo un sottoinsieme dell'input senza dare errori se la parte che segue è sbagliata
 
-block  : let exp              #letInExp
-       | let stms             #letInStms
-       | exp                  #singleExp
+block  : let stms             #letInStms
        | classdec             #classDecBlock // sembra che ad ANTLR non piacciono label che hanno lo stesso nome di una regola del parser
        ;
 
@@ -35,7 +33,7 @@ vardec  : type ID ;
 
 varasm  : vardec ASM exp ;
 
-fundec    : type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (LET (varasm SEMIC)+ IN )? (exp | stms) ;
+fundec    : type ID LPAR ( vardec ( COMMA vardec)* )? RPAR (LET (varasm SEMIC)+ IN )? (stms | ((stms)? RETURN exp));
 
 dec   : varasm           #varDecAssignment
       | fundec           #funDeclaration
@@ -68,7 +66,7 @@ value  :  INTEGER                          #intVal
       | LPAR exp RPAR                      #baseExp
       | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR (ELSE CLPAR elseBranch=exp CRPAR)?  #ifExp
       | ID                                             #varExp
-      | ID ( LPAR (exp (COMMA exp)* )? RPAR )         #funExp
+      | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funExp
       | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
       | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)       #newExp
       ;
@@ -77,6 +75,7 @@ stm : ID ASM exp #varStmAssignment
     | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
     | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
     | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
+    | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funStm
     ;
 
 stms : ( stm )+  ;
@@ -123,6 +122,7 @@ EXTENDS : 'extends' ;
 NULL : 'null' | 'NULL' ;
 NEW : 'new' ;
 DOT : '.' ;
+RETURN: 'return';
 
 //Numbers
 fragment DIGIT : '0'..'9';    

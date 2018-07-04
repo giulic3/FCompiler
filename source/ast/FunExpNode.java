@@ -2,6 +2,7 @@ package ast;
 
 import ast.types.BaseType;
 import ast.types.IntType;
+import ast.types.VoidType;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
@@ -14,10 +15,12 @@ public class FunExpNode implements Node {
 	protected ArrayList<Node> args;
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
+	private boolean isExp;
 	
-	public FunExpNode(String ID, ArrayList<Node> args){
+	public FunExpNode(String ID, ArrayList<Node> args, boolean isExp){
 		this.id = ID;
 		this.args=args;
+		this.isExp = isExp;
 	}
 	
 	
@@ -38,7 +41,10 @@ public class FunExpNode implements Node {
 	
 	@Override
 	public Node typeCheck() {
-		return new IntType();
+		if (!isExp)
+			return new VoidType();
+		else
+			return new IntType();
 	}
 	
 	public String codeGeneration() {

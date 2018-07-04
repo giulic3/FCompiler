@@ -9,11 +9,11 @@ public class FunDecNode implements Node {
 	private String id;
 	private Node type;
 
-	private ArrayList<Node> parlist = new ArrayList<Node>();
+	private ArrayList<Node> parlist;
 	private ArrayList<Node> declist;
-	private Node body;
+	private ArrayList<Node> body;
 
-	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, Node body) {
+	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body) {
 		this.id = id;
 		this.type = type;
 		this.declist = declist;
