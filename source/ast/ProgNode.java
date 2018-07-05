@@ -23,10 +23,17 @@ public class ProgNode  implements Node {
 		return  msg;
 	}
 	
-	public Node typeCheck(){return null;};
+	public Node typeCheck(){return null;}
 	
 	public String codeGeneration(){return null;};
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){return null;};
+	public ArrayList<SemanticError> checkSemantics(Environment env){
+		
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		for(Node b:blocks){
+			res.addAll(b.checkSemantics(env));
+		}
+		return res;
+	}
 	
 }

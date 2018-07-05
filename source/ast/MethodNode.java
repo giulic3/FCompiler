@@ -51,8 +51,30 @@ public class MethodNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		
+		/*
+		 *  spudoratamente copiato dalla funexp ma in questo caso è più complesso.
+		 *  Va cercata la definizione dell'oggetto, la classe con cui è definito
+		 *  e va cercato il metodo all'interno della classe in esame
+		 */
+		
+		
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		int j=env.getNestingLevel();
+		SymbolTableEntry tmp=null;
+		while (j>=0 && tmp==null)
+			tmp=(env.getSymTable().get(j--)).get(id);
+		if (tmp==null)
+			res.add(new SemanticError("Id "+id+" not declared"));
+		else{
+			this.entry = tmp;
+			this.callNestingLevel = env.getNestingLevel();
+			
+			for(Node arg : args)
+				res.addAll(arg.checkSemantics(env));
+		}
+		return res;
 	}
 }
 

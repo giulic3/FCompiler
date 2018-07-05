@@ -1,8 +1,10 @@
 package ast;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import utils.Environment;
 import utils.SemanticError;
+import utils.SymbolTableEntry;
 
 public class FunDecNode implements Node {
 
@@ -26,7 +28,39 @@ public class FunDecNode implements Node {
 
 		//create result list
 		ArrayList<SemanticError> res = new ArrayList<>();
-
+		
+		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
+		env.setOffset(env.getOffset()-1);
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
+		
+		if ( hm.put(id,entry) != null )
+			res.add(new SemanticError("Fun id "+id+" already declared"));
+		else {
+			HashMap<String, SymbolTableEntry> fun_hm = new HashMap<String, SymbolTableEntry>();
+			env.setNestingLevel(env.getNestingLevel()+1);
+			env.getSymTable().add(fun_hm);
+			
+			ArrayList<Node> parTypes = new ArrayList<Node>();
+			int paroffset=1;
+			
+			for (Node par : parlist) {
+				VarNode arg = (VarNode) par;
+				parTypes.add(arg.getType());
+				if ( fun_hm.put(arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
+					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared"));
+				
+				res.addAll(par.checkSemantics(env));
+			}
+			for (Node dec : declist) {
+				env.setOffset(env.getOffset()-2);
+				res.addAll(dec.checkSemantics(env));
+			}
+			for (Node b : body) {
+				res.addAll(b.checkSemantics(env));
+			}
+		}
+		
+		
 
 		return res;
 	}

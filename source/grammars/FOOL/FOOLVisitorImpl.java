@@ -277,11 +277,16 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node res;
 		
 		ArrayList<Node> decs = new ArrayList<>();
+		ArrayList<Node> stms = new ArrayList<>();
+		
+		for(StmContext stm : ctx.stms().stm())
+			stms.add(visit(stm));
 		
 		for(DecContext dec : ctx.let().dec())
 			decs.add(visit(dec));
 			
-		res = new BlockLetInStmsNode(decs, visit(ctx.stms()));
+		
+		res = new BlockLetInStmsNode(decs,stms); //new BlockLetInStmsNode(decs, visit(ctx.stms()));
 		
 		return res;
 		

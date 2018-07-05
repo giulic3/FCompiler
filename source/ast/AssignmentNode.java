@@ -22,6 +22,18 @@ public class AssignmentNode implements Node {
 	};
 	
 	public Node typeCheck() {
+		/*
+		
+			1 - risalire la symbol table fino al primo id uguale a quello in esame.
+			2 - recuperare il tipo dichiarato
+			3 - recuperare il tipo dell'espressione a destra dell'uguale
+			4 - confrontarli provocando un errore nel caso di incompatibilità
+			5 - per le classi non basta risalire la symbol table ma è necessario anche
+				controllare che la classe a DESTRA dell'uguale sia sottotipo di quella a SINISTRA
+		        DX <: SX
+		 
+		 */
+		
 		return new VoidType();
 	}
 	
@@ -30,6 +42,11 @@ public class AssignmentNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
+		
+		/*
+		* controllare che la definizione non esista già nella symbol table
+		*
+		* */
 		return null;
 	}
 }

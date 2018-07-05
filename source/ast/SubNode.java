@@ -32,7 +32,13 @@ public class SubNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		//check semantics in the left and in the right exp
+		
+		res.addAll(leftOperand.checkSemantics(env));
+		res.addAll(rightOperand.checkSemantics(env));
+		
+		return res;
 	}
 }

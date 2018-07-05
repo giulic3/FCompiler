@@ -7,8 +7,11 @@ import ast.BoolValNode;
 
 
 import org.antlr.v4.runtime.*;
+import utils.Environment;
+import utils.SemanticError;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Main {
 	
@@ -27,6 +30,22 @@ public class Main {
 		return visitor.visit(res); //generazione AST
 	}
 	
+	private static Node semanticAnalysis(Node ast, boolean visualizeAST){
+		Environment env = new Environment();
+		ArrayList<SemanticError> err = ast.checkSemantics(env);
+	
+		
+		if (err.size() > 0) {
+			System.exit(-1);
+		}
+		
+		if(visualizeAST) {
+			System.out.println("Abstract Syntax Tree:");
+			System.out.println(ast.toPrint(""));
+		}
+		return ast; //type-checking bottom-up
+	}
+	
 	
 	public static String run(CharStream input) {
 		String result = "";
@@ -39,6 +58,8 @@ public class Main {
 		System.out.println("Visualizing AST...");
 		System.out.println(ast.toPrint(""));
 		
+		ast = semanticAnalysis(ast, true);
+		
 		return result;
 	}
 	
@@ -46,11 +67,7 @@ public class Main {
 		
 		File inputFile = new File("code/input.fool");
 		CharStream input=CharStreams.fromFileName(inputFile.getAbsolutePath());
-		//String output = run(input);
-		System.out.println("Lexer & parser...");
-		
-		
-		Node ast = lexicalAndSyntacticAnalysis(input);
+		String output = run(input);
 		
 		/*ast.typeCheck();
 		
@@ -59,10 +76,6 @@ public class Main {
 		
 		Node prova = new AndNode(boolNode, intNode);
 		prova.typeCheck();*/
-		
-		System.out.println("Visualizing AST...");
-		String res = ast.toPrint("");
-		System.out.println(res);
 		
 	}
 }

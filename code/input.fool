@@ -1,1 +1,1 @@
-let bool x = true; int y = 1; in print(x&&y);
+let bool x = true; int y = 1; in x=1 y=3;

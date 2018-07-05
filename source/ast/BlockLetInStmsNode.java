@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class BlockLetInStmsNode implements Node {
 	
-	private Node stms;
+	private ArrayList<Node> stms;
 	private ArrayList<Node> decs;
 	
-	public BlockLetInStmsNode(ArrayList<Node> d, Node s){
+	public BlockLetInStmsNode(ArrayList<Node> d, ArrayList<Node> s){
 		stms=s;
 		decs=d;
 	}
@@ -21,7 +21,11 @@ public class BlockLetInStmsNode implements Node {
 		for (Node b:decs) {
 			msg += "\n" + s + b.toPrint("\t\t");
 		}
-		msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
+		msg += "\n" + s + "\tIn:";
+		for (Node b:stms) {
+			msg += "\n" + s + b.toPrint("\t\t");
+		}
+		//msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
 		return msg;
 		
 		
@@ -32,7 +36,22 @@ public class BlockLetInStmsNode implements Node {
 	
 	public String codeGeneration(){return null;}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){return null;}
+	public ArrayList<SemanticError> checkSemantics(Environment env){
+		
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		for(Node dec : decs){
+			res.addAll(dec.checkSemantics(env));
+			
+		}
+		
+		for(Node stm : stms){
+			res.addAll(stm.checkSemantics(env));
+		}
+		
+		return res;
+	
+	}
 	
 }
 

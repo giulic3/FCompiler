@@ -45,6 +45,16 @@ public class FunExpNode implements Node {
 			return new VoidType();
 		else
 			return new IntType();
+		
+		// TODO: da implementare
+		/*
+		 *
+		 * 1 - cercare la funzione nella symbol table, se non la trovo errore
+		 * 2 - se trovo l'identificatore devo controllare che sia una funzione
+		 * 3 - controllo che il numero di parametri sia uguale
+		 * 4 - controllo i tipi di tutti i parametri
+		 *
+		 * */
 	}
 	
 	public String codeGeneration() {
@@ -53,8 +63,22 @@ public class FunExpNode implements Node {
 	}
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		
+		int j=env.getNestingLevel();
+		SymbolTableEntry tmp=null;
+		while (j>=0 && tmp==null)
+			tmp=(env.getSymTable().get(j--)).get(id);
+		if (tmp==null)
+			res.add(new SemanticError("Id "+id+" not declared"));
+		else{
+			this.entry = tmp;
+			this.callNestingLevel = env.getNestingLevel();
+			
+			for(Node arg : args)
+				res.addAll(arg.checkSemantics(env));
+		}
+		return res;
 	}
 	
 	
