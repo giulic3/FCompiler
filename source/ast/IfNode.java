@@ -98,6 +98,24 @@ public class IfNode implements Node {
 		//create the result
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
+		res.addAll(cond.checkSemantics(env));
+		
+		// IfExp
+		if (th != null)
+			res.addAll(th.checkSemantics(env));
+		// IfStms
+		else {
+			for (Node stm: thStms)
+				res.addAll(stm.checkSemantics(env));
+		}
+		
+		if (el != null)
+			res.addAll(el.checkSemantics(env));
+		
+		if (elStms != null)
+			for (Node stm: elStms)
+				res.addAll(stm.checkSemantics(env));
+		
 		return res;
 	}
 	

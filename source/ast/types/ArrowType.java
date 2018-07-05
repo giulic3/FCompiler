@@ -6,13 +6,13 @@ import utils.Environment;
 import utils.SemanticError;
 
 /* function type */
-public class ArrowType implements BaseType {
+public class ArrowType implements Node {
 	
-	private ArrayList<Node> parList;
+	private ArrayList<Node> parTypesList;
 	private Node ret;
 	
 	public ArrowType (ArrayList<Node> p, Node r) {
-		parList = p;
+		parTypesList = p;
 		ret = r;
 	}
 	
@@ -20,10 +20,10 @@ public class ArrowType implements BaseType {
 	public String toPrint(String indent) {
 		String parlstr = "";
 		
-		for (Node par:parList)
+		for (Node par:parTypesList)
 			parlstr += par.toPrint("");
 		
-		return "ArrowType\n" + parlstr;// + ret.toPrint(" ->") ;
+		return "Arrow Type\n" + parlstr;// + ret.toPrint(" ->") ;
 	}
 	
 	public Node getRet() {
@@ -31,13 +31,8 @@ public class ArrowType implements BaseType {
 	}
 	
 	public ArrayList<Node> getParList () {
-		return parList;
+		return parTypesList;
 	}
-
-/*
-	public TypeEnum getType() {
-		return TypeEnum.ARROW;
-	}*/
 	
 	public Node typeCheck() {
 		return null;
