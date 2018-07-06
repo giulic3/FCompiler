@@ -1,7 +1,6 @@
 package ast;
 
 import ast.types.BaseType;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;

@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import ast.types.ArrowType;
 import ast.types.BaseType;
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
+
+import javax.swing.text.html.parser.Parser;
 
 /* corresponds to var */
 public class IdNode implements Node {
@@ -15,8 +18,10 @@ public class IdNode implements Node {
 	private String id;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
+	private ParserRuleContext ctx;
 
-	public IdNode (String i) {
+	public IdNode (String i, ParserRuleContext ctx) {
+		this.ctx=ctx;
 		id = i;
 	}
 	
@@ -26,16 +31,7 @@ public class IdNode implements Node {
 
 	public String toPrint(String s) {
 
-		/*
-		commento temporaneo: la toPrint viene eseguita dopo la fase di checkSemantics quando
-		nestingLevel è già inizializzato
-
-		return s+"Id:" + id
-				+ " at nestlev " + nestinglevel +"\n"
-				+ entry.toPrint(s+"  ") ;
-		*/
-
-		return s + "ID Node: " + id;
+		return s + "ID Node: " + id + ", cur nestinglevel: " + nestinglevel + (entry != null ? entry.toPrint(", ") : "");
 	}
 
 	@Override
@@ -44,10 +40,12 @@ public class IdNode implements Node {
 		//create result list
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
+		nestinglevel=env.getNestingLevel();
 		SymbolTableEntry entry = env.getActiveDec(id);
 		if (entry == null)
-			res.add(new SemanticError("Variable " + id + " not declared\n"));
+			res.add(new SemanticError("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		
+		this.entry=entry;
 		return res;
 	}
 

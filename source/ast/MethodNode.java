@@ -2,6 +2,7 @@ package ast;
 
 import ast.types.BaseType;
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
@@ -18,8 +19,10 @@ public class MethodNode implements Node {
 	private SymbolTableEntry entry = null;
 	private int callNestingLevel;
 	private boolean isExp;
+	private ParserRuleContext ctx;
 
-	public MethodNode(String obj, String ID, ArrayList<Node> args, boolean isExp){
+	public MethodNode(String obj, String ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
+		this.ctx=ctx;
 		this.obj = obj;
 		this.id = ID;
 		this.args = args;
@@ -64,9 +67,9 @@ public class MethodNode implements Node {
 		int j=env.getNestingLevel();
 		SymbolTableEntry tmp=null;
 		while (j>=0 && tmp==null)
-			tmp=(env.getSymTable().get(j--)).get(id);
+			tmp=(env.getSymTable().get(j--)).get(obj);
 		if (tmp==null)
-			res.add(new SemanticError("Id "+id+" not declared"));
+			res.add(new SemanticError("Id "+obj+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else{
 			this.entry = tmp;
 			this.callNestingLevel = env.getNestingLevel();

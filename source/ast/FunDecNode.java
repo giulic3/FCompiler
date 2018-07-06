@@ -2,6 +2,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
@@ -14,8 +15,10 @@ public class FunDecNode implements Node {
 	private ArrayList<Node> parlist;
 	private ArrayList<Node> declist;
 	private ArrayList<Node> body;
+	private ParserRuleContext ctx;
 
-	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body) {
+	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body, ParserRuleContext ctx) {
+		this.ctx=ctx;
 		this.id = id;
 		this.type = type;
 		this.declist = declist;
@@ -34,7 +37,7 @@ public class FunDecNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		if ( hm.put(id,entry) != null )
-			res.add(new SemanticError("Fun id "+id+" already declared"));
+			res.add(new SemanticError("Fun id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else {
 			HashMap<String, SymbolTableEntry> fun_hm = new HashMap<String, SymbolTableEntry>();
 			env.setNestingLevel(env.getNestingLevel()+1);
@@ -47,14 +50,14 @@ public class FunDecNode implements Node {
 				VarNode arg = (VarNode) par;
 				parTypes.add(arg.getType());
 				if ( fun_hm.put(arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
-					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared"));
-				
-				res.addAll(par.checkSemantics(env));
+					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n"));
 			}
+			
 			for (Node dec : declist) {
 				env.setOffset(env.getOffset()-2);
 				res.addAll(dec.checkSemantics(env));
 			}
+			
 			for (Node b : body) {
 				res.addAll(b.checkSemantics(env));
 			}

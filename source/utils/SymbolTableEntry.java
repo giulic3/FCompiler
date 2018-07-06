@@ -32,10 +32,7 @@ public class SymbolTableEntry {
 	}
 	
 	public String toPrint(String s) {
-		return s + ": STEntry = {\n" +
-				"\tnesting level: " + Integer.toString(nestingLevel) + "\n" +
-				"\ttype: " + type.toPrint(s+"\t") + "\n" +
-				"\toffset: " + Integer.toString(offset) + "\n}\n";
+		return s + "Associated STEntry = { type: " + type.toPrint("") + ", nesting level: " + nestingLevel + ", offset: " + offset + " }";
 	}
 	
 	public String toString() {

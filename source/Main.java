@@ -38,7 +38,7 @@ public class Main {
 			for(SemanticError e:err){
 				System.out.print(e.toString());
 			}
-			System.exit(2);
+			//System.exit(2);
 		}
 		
 		if(visualizeAST) {

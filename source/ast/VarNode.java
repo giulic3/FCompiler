@@ -4,26 +4,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ast.types.BaseType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
 
 public class VarNode implements Node {
-	
+	private ParserRuleContext ctx;
 	private String id;
 	private Node type;
 	private Node exp;
 	
-	public VarNode(String i, Node t) {
+	public VarNode(String i, Node t, ParserRuleContext ctx) {
+		this.ctx=ctx;
 		id = i;
 		type = t;
 		exp = null;
 	}
 	
-	public VarNode(String i, Node t, Node v) {
+	public VarNode(String i, Node t, ParserRuleContext ctx , Node v) {
+		this.ctx=ctx;
 		id = i;
 		type = t;
 		exp = v;
+	}
+	
+	public ParserRuleContext getCtx(){
+		return ctx;
 	}
 	
 	public String toPrint(String s){
@@ -54,9 +61,9 @@ public class VarNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		if ( hm.put(id,entry) != null )
-			res.add(new SemanticError("Var or Par id "+id+" already declared"));
+			res.add(new SemanticError("Var or Par id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		
-		res.addAll(exp.checkSemantics(env));
+		if(exp!=null) res.addAll(exp.checkSemantics(env));
 		
 		return res;
 	}

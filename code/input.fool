@@ -1,1 +1,1 @@
-let int pippo = 1; pippo pluto = new pippo(); in print(pluto);      // NB: doesn't work because unique key management is necessary
+let pippo x = new pippo(); in x.m();

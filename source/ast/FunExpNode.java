@@ -3,6 +3,7 @@ package ast;
 import ast.types.BaseType;
 import ast.types.IntType;
 import ast.types.VoidType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
@@ -16,8 +17,10 @@ public class FunExpNode implements Node {
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
 	private boolean isExp;
+	private ParserRuleContext ctx;
 	
-	public FunExpNode(String ID, ArrayList<Node> args, boolean isExp){
+	public FunExpNode(String ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
+		this.ctx=ctx;
 		this.id = ID;
 		this.args=args;
 		this.isExp = isExp;
@@ -70,7 +73,7 @@ public class FunExpNode implements Node {
 		while (j>=0 && tmp==null)
 			tmp=(env.getSymTable().get(j--)).get(id);
 		if (tmp==null)
-			res.add(new SemanticError("Id "+id+" not declared"));
+			res.add(new SemanticError("Id "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else{
 			this.entry = tmp;
 			this.callNestingLevel = env.getNestingLevel();

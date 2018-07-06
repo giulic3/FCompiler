@@ -79,7 +79,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		if (ctx.exp() != null)
 			body.add(visit(ctx.exp()));
 		
-		return new FunDecNode(ctx.ID().getText(), visit(ctx.type()), innerDec, pars, body);
+		return new FunDecNode(ctx.ID().getText(), visit(ctx.type()), innerDec, pars, body, ctx);
 	}
 
 
@@ -218,7 +218,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new FunExpNode(ctx.ID().getText(), args, true);
+		res = new FunExpNode(ctx.ID().getText(), args, true, ctx);
 		
 		return res;
 	}
@@ -239,7 +239,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, true);
+		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, true, ctx);
 		
 		return res;
 	}
@@ -269,7 +269,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	public Node visitVar(VarContext ctx) {
-		return new IdNode(ctx.ID().getText());
+		return new IdNode(ctx.ID().getText(), ctx);
 	}
 	
 	@Override
@@ -310,7 +310,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		return new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, false);
+		return new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, false, ctx);
 	}
 	
 	
@@ -342,7 +342,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node expNode = visit(ctx.exp());
 		
 		//build the varNode
-		return new VarNode(ctx.vardec().ID().getText(), typeNode, expNode);
+		return new VarNode(ctx.vardec().ID().getText(), typeNode, ctx, expNode);
 	}
 	
 	@Override
@@ -382,7 +382,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	}
 	
 	public Node visitVardec(FOOLParser.VardecContext ctx) {
-		return new VarNode(ctx.ID().getText(), visit(ctx.type()));
+		return new VarNode(ctx.ID().getText(), visit(ctx.type()), ctx);
 	}
 	
 	public Node visitFunStm(FunStmContext ctx) {
@@ -397,7 +397,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new FunExpNode(ctx.ID().getText(), args, false);
+		res = new FunExpNode(ctx.ID().getText(), args, false, ctx);
 		
 		return res;
 	}
