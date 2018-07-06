@@ -21,7 +21,7 @@ public class ClassType implements Node {
 	
 	public String toPrint(String indent) {
 
-		return id+" (ClassType)";
+		return id;
 	}
 
 	/*public TypeEnum getType() {
@@ -40,7 +40,7 @@ public class ClassType implements Node {
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		// TODO: da implementare
-		return null;
+		return new ArrayList<>();
 	}
 
 }

@@ -7,6 +7,7 @@ import utils.SemanticError;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewExpNode implements Node {
 	
@@ -38,7 +39,7 @@ public class NewExpNode implements Node {
 	
 	@Override
 	public Node typeCheck() {
-		return new IntType();
+		return null;
 	}
 	
 	public String codeGeneration() {
@@ -48,7 +49,18 @@ public class NewExpNode implements Node {
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		// TODO: da implementare
-		return null;
+		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		// TODO: handle offset
+		// TODO: IMPORTANT: define unique key management for classes
+		SymbolTableEntry entry = env.getActiveDec(id);
+		if (entry == null)
+			res.add(new SemanticError("Class " + id + " not declared\n"));
+		
+		for (Node a: args)
+			res.addAll(a.checkSemantics(env));
+		
+		return res;
 	}
 	
 	
