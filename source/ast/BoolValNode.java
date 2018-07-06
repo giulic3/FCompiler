@@ -11,12 +11,6 @@ import java.util.ArrayList;
 public class BoolValNode implements Node {
 	
 	private boolean value;
-
-//	Serve avere il contesto come parametro del costruttore?
-//	public IntNode(FOOLParser.IntValContext ctx, int val) {
-//		super(ctx);
-//		this.val = val;
-//	}
 	
 	public BoolValNode(boolean n) {
 		value = n;

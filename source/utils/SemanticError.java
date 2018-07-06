@@ -2,7 +2,7 @@ package utils;
 
 public class SemanticError {
 	
-	public final String msg;
+	private final String msg;
 	
 	public SemanticError(String msg) {
 		this.msg = msg;

@@ -2,7 +2,9 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 
+import sun.awt.Symbol;
 import utils.SymbolTableEntry;
 
 
@@ -40,5 +42,17 @@ public class Environment {
 	
 	public void setSymTable(ArrayList<HashMap<String, SymbolTableEntry>> symTable) {
 		this.symTable = symTable;
+	}
+	
+	public SymbolTableEntry getActiveDec(String id) {
+		int index = symTable.size();
+		SymbolTableEntry res = null;
+		
+		while(index > 0 && res == null){
+			index--;
+			res = symTable.get(index).get(id);
+		}
+		
+		return res;
 	}
 }

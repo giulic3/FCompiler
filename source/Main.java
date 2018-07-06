@@ -33,10 +33,12 @@ public class Main {
 	private static Node semanticAnalysis(Node ast, boolean visualizeAST){
 		Environment env = new Environment();
 		ArrayList<SemanticError> err = ast.checkSemantics(env);
-	
 		
 		if (err.size() > 0) {
-			System.exit(-1);
+			for(SemanticError e:err){
+				System.out.print(e.toString());
+			}
+			System.exit(2);
 		}
 		
 		if(visualizeAST) {

@@ -3,8 +3,10 @@ package ast;
 import ast.types.BaseType;
 import utils.Environment;
 import utils.SemanticError;
+import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BlockLetInStmsNode implements Node {
 	
@@ -40,6 +42,12 @@ public class BlockLetInStmsNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
+		env.setNestingLevel(env.getNestingLevel()+1);
+		// TODO: handle offset
+		
+		HashMap<String, SymbolTableEntry> hm = new HashMap<>();
+		env.getSymTable().add(hm);
+		
 		for(Node dec : decs){
 			res.addAll(dec.checkSemantics(env));
 			
@@ -48,6 +56,9 @@ public class BlockLetInStmsNode implements Node {
 		for(Node stm : stms){
 			res.addAll(stm.checkSemantics(env));
 		}
+		
+		env.getSymTable().remove(env.getNestingLevel());
+		env.setNestingLevel(env.getNestingLevel()-1);
 		
 		return res;
 	

@@ -37,4 +37,8 @@ public class SymbolTableEntry {
 				"\ttype: " + type.toPrint(s+"\t") + "\n" +
 				"\toffset: " + Integer.toString(offset) + "\n}\n";
 	}
+	
+	public String toString() {
+		return toPrint("");
+	}
 }

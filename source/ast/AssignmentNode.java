@@ -4,6 +4,7 @@ import ast.types.BaseType;
 import ast.types.VoidType;
 import utils.Environment;
 import utils.SemanticError;
+import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,15 @@ public class AssignmentNode implements Node {
 		* controllare che la definizione non esista già nella symbol table
 		*
 		* */
-		return null;
+		
+		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		SymbolTableEntry entry = env.getActiveDec(id);
+		if (entry == null)
+			res.add(new SemanticError("Variable " + id + " not declared\n"));
+		
+		res.addAll(exp.checkSemantics(env));
+		
+		return res;
 	}
 }
