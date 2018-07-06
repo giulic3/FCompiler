@@ -19,6 +19,10 @@ public class IdNode implements Node {
 	public IdNode (String i) {
 		id = i;
 	}
+	
+	/*public String getID() {
+		return id;
+	}*/
 
 	public String toPrint(String s) {
 
@@ -31,7 +35,7 @@ public class IdNode implements Node {
 				+ entry.toPrint(s+"  ") ;
 		*/
 
-		return s + "ID: " + id;
+		return s + "ID Node: " + id;
 	}
 
 	@Override
@@ -39,19 +43,11 @@ public class IdNode implements Node {
 
 		//create result list
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-		/*
-		int j = env.getNestingLevel();
-		SymbolTableEntry tmp = null;
-		while (j>=0 && tmp==null)
-			tmp = (env.getSymTable().get(j--)).get(id);
-		if (tmp==null)
-			res.add(new SemanticError("Id "+id+" not declared"));
-
-		else{
-			entry = tmp;
-			nestinglevel = env.getNestingLevel();
-		}
-		*/
+		
+		SymbolTableEntry entry = env.getActiveDec(id);
+		if (entry == null)
+			res.add(new SemanticError("Variable " + id + " not declared\n"));
+		
 		return res;
 	}
 

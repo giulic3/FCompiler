@@ -10,16 +10,16 @@ import java.util.ArrayList;
 
 public class AssignmentNode implements Node {
 	
-	private String id;
+	private Node id;
 	private Node exp;
 	
-	public AssignmentNode(String id, Node exp){
+	public AssignmentNode(Node id, Node exp){
 		this.id=id;
 		this.exp=exp;
 	}
 	
 	public String toPrint(String s){
-		return s + "Assignment Node: " + id + " (type: '') = " + exp.toPrint("");
+		return s + "Assignment Node:\n" + id.toPrint(s+"\t\t") + "\n" + exp.toPrint(s+"\t\t");
 	};
 	
 	public Node typeCheck() {
@@ -51,10 +51,7 @@ public class AssignmentNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		SymbolTableEntry entry = env.getActiveDec(id);
-		if (entry == null)
-			res.add(new SemanticError("Variable " + id + " not declared\n"));
-		
+		res.addAll(id.checkSemantics(env));
 		res.addAll(exp.checkSemantics(env));
 		
 		return res;

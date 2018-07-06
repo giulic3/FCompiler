@@ -194,16 +194,14 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//this is actually the default implementation for this method in the FOOLBaseVisitor class
 		//therefore it can be safely removed here
 
-		return visit (ctx.exp());
-
+		return visit(ctx.exp());
 	}
 
 	@Override
 	public Node visitVarExp(VarExpContext ctx) {
 
 		//this corresponds to a variable access
-		return new IdNode(ctx.ID().getText());
-
+		return visit(ctx.var());
 	}
 	
 	
@@ -267,8 +265,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
 
-		Node res = new AssignmentNode(ctx.ID().toString(), visit(ctx.exp()));
-		return res;
+		return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()));
+	}
+	
+	public Node visitVar(VarContext ctx) {
+		return new IdNode(ctx.ID().getText());
 	}
 	
 	@Override
