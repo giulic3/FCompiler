@@ -2,7 +2,6 @@ package ast;
 
 import java.util.ArrayList;
 
-import ast.types.BaseType;
 import ast.types.BoolType;
 import utils.Environment;
 import utils.SemanticError;
@@ -45,5 +44,10 @@ public class LeqNode implements Node {
 
 		return "";
 	}
-
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

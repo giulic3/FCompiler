@@ -1,12 +1,9 @@
 package ast;
 
-import ast.types.BaseType;
 import utils.Environment;
 import utils.SemanticError;
-import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BlockLetInStmsNode implements Node {
 	
@@ -60,6 +57,11 @@ public class BlockLetInStmsNode implements Node {
 	
 	}
 	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }
 
 

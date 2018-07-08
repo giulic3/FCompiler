@@ -86,5 +86,9 @@ public class BlockClassDecNode implements Node {
 		}
 		return res;
 	}
+	
+	public String getID() {
+		return id;
+	}
 }
 

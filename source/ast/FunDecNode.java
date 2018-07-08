@@ -68,8 +68,6 @@ public class FunDecNode implements Node {
 			env.popScope();
 		}
 		
-		
-
 		return res;
 	}
 
@@ -97,7 +95,7 @@ public class FunDecNode implements Node {
 	}
 	
 	public void setInsideClass(String val) {
-		this.classID = "Class$" + val + "$";
+		this.classID = "Class$" + val;
 	}
 
 	//valore di ritorno non utilizzato
@@ -109,6 +107,10 @@ public class FunDecNode implements Node {
 	public String codeGeneration() {
 
 		return "";
+	}
+	
+	public String getID() {
+		return id;
 	}
 
 }

@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.IntType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -84,5 +83,8 @@ public class FunExpNode implements Node {
 		return res;
 	}
 	
+	public String getID() {
+		return id;
+	}
 	
 }

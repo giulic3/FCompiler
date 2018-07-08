@@ -33,4 +33,9 @@ public class BoolType implements Node {
 		return new ArrayList<>();
 	}
 	
-}  
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID(){
+		return null;
+	}
+}

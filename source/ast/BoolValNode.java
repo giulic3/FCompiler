@@ -1,8 +1,6 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.BoolType;
-import ast.types.IntType;
 import utils.Environment;
 import utils.SemanticError;
 
@@ -34,4 +32,9 @@ public class BoolValNode implements Node {
 		return new ArrayList<>();
 	}
 	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

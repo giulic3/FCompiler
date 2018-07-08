@@ -1,10 +1,8 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.VoidType;
 import utils.Environment;
 import utils.SemanticError;
-import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
 
@@ -55,5 +53,11 @@ public class AssignmentNode implements Node {
 		res.addAll(exp.checkSemantics(env));
 		
 		return res;
+	}
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
 	}
 }

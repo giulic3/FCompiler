@@ -1,13 +1,10 @@
 package ast;
 
-import ast.types.BaseType;
-import ast.types.IntType;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class NewExpNode implements Node {
 	
@@ -53,7 +50,7 @@ public class NewExpNode implements Node {
 		
 		// TODO: handle offset
 		// TODO: IMPORTANT: define unique key management for classes
-		SymbolTableEntry entry = env.getActiveDec(id+"$Class");
+		SymbolTableEntry entry = env.getActiveDec("Class$"+id);
 		if (entry == null)
 			res.add(new SemanticError("Class " + id + " not declared\n"));
 		
@@ -64,4 +61,9 @@ public class NewExpNode implements Node {
 	}
 	
 	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return id;
+	}
 }

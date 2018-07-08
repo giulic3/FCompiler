@@ -46,5 +46,8 @@ public class ArrowType implements Node {
 		return new ArrayList<>();
 	}
 
+	public String getID() {
+		return null;
+	}
 	
 }  

@@ -1,9 +1,7 @@
 package ast;
 
 
-import ast.types.BaseType;
 import ast.types.BoolType;
-import grammars.FOOL.FOOLParser;
 import utils.Environment;
 import utils.SemanticError;
 
@@ -129,4 +127,9 @@ public class IfNode implements Node {
 		return null;
 	}
 	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

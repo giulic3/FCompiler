@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.IntType;
 import utils.Environment;
 import utils.SemanticError;
@@ -40,5 +39,11 @@ public class SubNode implements Node {
 		res.addAll(rightOperand.checkSemantics(env));
 		
 		return res;
+	}
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
 	}
 }

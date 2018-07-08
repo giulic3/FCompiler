@@ -1,12 +1,9 @@
 package ast;
 
-import ast.types.BaseType;
 import utils.Environment;
 import utils.SemanticError;
-import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProgNode  implements Node {
 
@@ -39,9 +36,14 @@ public class ProgNode  implements Node {
 			res.addAll(b.checkSemantics(env));
 		}
 		
-		env.popScope();
+		// QUI NON SERVE LA POPSCOPE!!!
 		
 		return res;
 	}
 	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

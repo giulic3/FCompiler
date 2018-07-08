@@ -2,15 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 
-import ast.types.ArrowType;
-import ast.types.BaseType;
-import ast.types.IntType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
 import utils.SymbolTableEntry;
-
-import javax.swing.text.html.parser.Parser;
 
 /* corresponds to var */
 public class IdNode implements Node {
@@ -25,9 +20,9 @@ public class IdNode implements Node {
 		id = i;
 	}
 	
-	/*public String getID() {
+	public String getID() {
 		return id;
-	}*/
+	}
 
 	public String toPrint(String s) {
 

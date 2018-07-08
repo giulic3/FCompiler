@@ -41,6 +41,10 @@ public class ClassType implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		// TODO: da implementare
 		return new ArrayList<>();
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return id;
 	}
 
 }
