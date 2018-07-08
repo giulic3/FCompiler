@@ -67,7 +67,7 @@ value  :  INTEGER                          #intVal
       | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR (ELSE CLPAR elseBranch=exp CRPAR)?  #ifExp
       | var     #varExp
       | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funExp
-      | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
+      | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
       | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)       #newExp
       ;
 
@@ -75,7 +75,7 @@ var: ID;
 
 stm : var ASM exp #varStmAssignment
     | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
-    | object=ID DOT methodName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
+    | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
     | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
     | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funStm
     ;

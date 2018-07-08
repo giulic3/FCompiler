@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.IntType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
@@ -9,11 +8,8 @@ import utils.SymbolTableEntry;
 import java.util.ArrayList;
 
 /* method call */
-public class MethodNode implements Node {
+public class ClassMethodNode implements Node {
 	
-	
-	//private String obj;
-	//private String id;
 	private Node obj;
 	private Node id;
 	
@@ -23,31 +19,21 @@ public class MethodNode implements Node {
 	private boolean isExp;
 	private ParserRuleContext ctx;
 
-	public MethodNode(Node obj, Node ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
-		this.ctx=ctx;
+	public ClassMethodNode(Node obj, Node ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
+		this.ctx = ctx;
 		this.obj = obj;
 		this.id = ID;
 		this.args = args;
 		this.isExp = isExp;
 	}
 	
-	
 	public String toPrint(String s) {
-		String msg = s+"Method Call/Field Node:\n" + s + "\t\tObject: " + this.obj.toPrint("") + "\n" + s + "\t\tMethod: " + this.id.toPrint("");/* +"(";
-		if (this.args != null && !this.args.isEmpty()) {
-			for (Node p : this.args) {
-				msg += "\n " + s + p.toPrint("\t\t");
-			}
-			msg += "\n" + s + "\t)";
-		} else
-			msg += ")";*/   // Not needed anymore because id is now a FunExpNode and we use its toPrint method
-		return msg;
+		return s+"Class Method Node:\n" + s + "\t\tObject:\n" + this.obj.toPrint(s+"\t\t\t") + "\n" + s + "\t\tMethod:\n" + this.id.toPrint(s+"\t\t\t");
 	}
-	
 	
 	@Override
 	public Node typeCheck() {
-		return new IntType();
+		return null;
 	}
 	
 	public String codeGeneration() {
@@ -62,7 +48,6 @@ public class MethodNode implements Node {
 		 *  Va cercata la definizione dell'oggetto, la classe con cui è definito
 		 *  e va cercato il metodo all'interno della classe in esame
 		 */
-		
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
@@ -83,7 +68,8 @@ public class MethodNode implements Node {
 			}
 			
 			if (foundMethod == null) {
-				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + "; " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + "; "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
 			}
 			
 			this.entry = entry;

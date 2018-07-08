@@ -1166,13 +1166,13 @@ public class FOOLParser extends Parser {
 		}
 	}
 	public static class MethodExpContext extends ValueContext {
-		public Token object;
-		public Token methodName;
+		public VarContext object;
+		public Token memberName;
 		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
-		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(FOOLParser.ID, i);
+		public VarContext var() {
+			return getRuleContext(VarContext.class,0);
 		}
+		public TerminalNode ID() { return getToken(FOOLParser.ID, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
 		public List<ExpContext> exp() {
@@ -1411,11 +1411,11 @@ public class FOOLParser extends Parser {
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(199);
-				((MethodExpContext)_localctx).object = match(ID);
+				((MethodExpContext)_localctx).object = var();
 				setState(200);
 				match(DOT);
 				setState(201);
-				((MethodExpContext)_localctx).methodName = match(ID);
+				((MethodExpContext)_localctx).memberName = match(ID);
 				setState(214);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1557,13 +1557,13 @@ public class FOOLParser extends Parser {
 		}
 	}
 	public static class MethodStmContext extends StmContext {
-		public Token object;
-		public Token methodName;
+		public VarContext object;
+		public Token memberName;
 		public TerminalNode DOT() { return getToken(FOOLParser.DOT, 0); }
-		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(FOOLParser.ID, i);
+		public VarContext var() {
+			return getRuleContext(VarContext.class,0);
 		}
+		public TerminalNode ID() { return getToken(FOOLParser.ID, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
 		public List<ExpContext> exp() {
@@ -1731,11 +1731,11 @@ public class FOOLParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(251);
-				((MethodStmContext)_localctx).object = match(ID);
+				((MethodStmContext)_localctx).object = var();
 				setState(252);
 				match(DOT);
 				setState(253);
-				((MethodStmContext)_localctx).methodName = match(ID);
+				((MethodStmContext)_localctx).memberName = match(ID);
 				setState(266);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1980,8 +1980,8 @@ public class FOOLParser extends Parser {
 		"\7\24\2\2\u00be\u00c3\5\24\13\2\u00bf\u00c0\7\5\2\2\u00c0\u00c2\5\24\13"+
 		"\2\u00c1\u00bf\3\2\2\2\u00c2\u00c5\3\2\2\2\u00c3\u00c1\3\2\2\2\u00c3\u00c4"+
 		"\3\2\2\2\u00c4\u00c7\3\2\2\2\u00c5\u00c3\3\2\2\2\u00c6\u00be\3\2\2\2\u00c6"+
-		"\u00c7\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8\u00e9\7\25\2\2\u00c9\u00ca\7"+
-		"*\2\2\u00ca\u00cb\7\'\2\2\u00cb\u00d8\7*\2\2\u00cc\u00d5\7\24\2\2\u00cd"+
+		"\u00c7\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8\u00e9\7\25\2\2\u00c9\u00ca\5"+
+		" \21\2\u00ca\u00cb\7\'\2\2\u00cb\u00d8\7*\2\2\u00cc\u00d5\7\24\2\2\u00cd"+
 		"\u00d2\5\24\13\2\u00ce\u00cf\7\5\2\2\u00cf\u00d1\5\24\13\2\u00d0\u00ce"+
 		"\3\2\2\2\u00d1\u00d4\3\2\2\2\u00d2\u00d0\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3"+
 		"\u00d6\3\2\2\2\u00d4\u00d2\3\2\2\2\u00d5\u00cd\3\2\2\2\u00d5\u00d6\3\2"+
@@ -1999,7 +1999,7 @@ public class FOOLParser extends Parser {
 		"\2\u00f2\u00f3\7\31\2\2\u00f3\u00f4\7\26\2\2\u00f4\u00f5\5$\23\2\u00f5"+
 		"\u00fb\7\27\2\2\u00f6\u00f7\7\32\2\2\u00f7\u00f8\7\26\2\2\u00f8\u00f9"+
 		"\5$\23\2\u00f9\u00fa\7\27\2\2\u00fa\u00fc\3\2\2\2\u00fb\u00f6\3\2\2\2"+
-		"\u00fb\u00fc\3\2\2\2\u00fc\u0128\3\2\2\2\u00fd\u00fe\7*\2\2\u00fe\u00ff"+
+		"\u00fb\u00fc\3\2\2\2\u00fc\u0128\3\2\2\2\u00fd\u00fe\5 \21\2\u00fe\u00ff"+
 		"\7\'\2\2\u00ff\u010c\7*\2\2\u0100\u0109\7\24\2\2\u0101\u0106\5\24\13\2"+
 		"\u0102\u0103\7\5\2\2\u0103\u0105\5\24\13\2\u0104\u0102\3\2\2\2\u0105\u0108"+
 		"\3\2\2\2\u0106\u0104\3\2\2\2\u0106\u0107\3\2\2\2\u0107\u010a\3\2\2\2\u0108"+

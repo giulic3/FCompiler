@@ -18,7 +18,7 @@ public class PrintNode implements Node {
 		String printMsg = indent + "Print Node:";
 		
 		for (Node e:this.exps) {
-			printMsg += "\n" + e.toPrint(indent + "\t");
+			printMsg += "\n" + e.toPrint(indent + "\t\t");
 		}
 		
 		return printMsg;

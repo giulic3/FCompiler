@@ -6,7 +6,6 @@ import ast.types.IntType;
 import ast.types.VoidType;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 
@@ -226,20 +225,20 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitMethodExp(MethodExpContext ctx) {
 		
-		/* control LPAR if is class field */
-		
-		//this corresponds to a function invocation
-		
 		ArrayList<Node> args = new ArrayList<>();
 		
-		if (ctx.LPAR() == null)
-			return new MethodNode(new IdNode(ctx.object.getText(), ctx), new IdNode(ctx.methodName.getText(), ctx), args, false, ctx);
+		IdNode objectNode = new IdNode(ctx.object.getText(), ctx);
+		
+		if (ctx.LPAR() == null) {
+			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
+			return new ClassFieldNode(objectNode, fieldNode, true, ctx);
+		}
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		
-		return new MethodNode(new IdNode(ctx.object.getText(), ctx), new FunExpNode(ctx.methodName.getText(), args, false, ctx), args, false, ctx);
+		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, true, ctx);
+		return new ClassMethodNode(new IdNode(ctx.object.getText(), ctx), methodNode, args, true, ctx);
 	}
 	
 	@Override
@@ -285,7 +284,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			decs.add(visit(dec));
 			
 		
-		res = new BlockLetInStmsNode(decs,stms); //new BlockLetInStmsNode(decs, visit(ctx.stms()));
+		res = new BlockLetInStmsNode(decs,stms);
 		
 		return res;
 		
@@ -305,14 +304,18 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//get the invocation arguments
 		ArrayList<Node> args = new ArrayList<>();
 		
-		if (ctx.LPAR() == null)
-			return new MethodNode(new IdNode(ctx.object.getText(), ctx), new IdNode(ctx.methodName.getText(), ctx), args, false, ctx);
+		Node objectNode = visit(ctx.object);
+		
+		if (ctx.LPAR() == null) {
+			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
+			return new ClassFieldNode(objectNode, fieldNode, false, ctx);
+		}
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		
-		return new MethodNode(new IdNode(ctx.object.getText(), ctx), new FunExpNode(ctx.methodName.getText(), args, false, ctx), args, false, ctx);
+		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx);
+		return new ClassMethodNode(objectNode, methodNode, args, false, ctx);
 		
 	}
 	

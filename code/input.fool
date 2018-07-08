@@ -2,4 +2,4 @@ class ciao extends super (int x, int y){
     bool f(int x, int h) let int z=1; in z=1;
     void z() return 0;
 };
-let ciao x = new ciao(); in x.f();
+let ciao x = new ciao(); in x.m() x.ciao;
