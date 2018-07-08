@@ -55,4 +55,15 @@ public class Environment {
 		
 		return res;
 	}
+	
+	public void pushScope() {
+		HashMap<String, SymbolTableEntry> scope = new HashMap<>();
+		nestingLevel+=1;
+		symTable.add(scope);
+	}
+	
+	public void popScope() {
+		symTable.remove(nestingLevel);
+		nestingLevel-=1;
+	}
 }

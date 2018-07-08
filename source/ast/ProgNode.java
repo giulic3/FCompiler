@@ -33,18 +33,13 @@ public class ProgNode  implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		HashMap<String, SymbolTableEntry> hm = new HashMap<>();
-		env.setNestingLevel(0);
-		env.getSymTable().add(hm);
-		
-		//env.setOffset(-2);
+		env.pushScope();
 		
 		for(Node b:blocks){
 			res.addAll(b.checkSemantics(env));
 		}
 		
-		env.getSymTable().remove(env.getNestingLevel());
-		env.setNestingLevel(env.getNestingLevel()-1);
+		env.popScope();
 		
 		return res;
 	}

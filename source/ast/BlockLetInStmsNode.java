@@ -42,11 +42,8 @@ public class BlockLetInStmsNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		env.setNestingLevel(env.getNestingLevel()+1);
 		// TODO: handle offset
-		
-		HashMap<String, SymbolTableEntry> hm = new HashMap<>();
-		env.getSymTable().add(hm);
+		env.pushScope();
 		
 		for(Node dec : decs){
 			res.addAll(dec.checkSemantics(env));
@@ -57,8 +54,7 @@ public class BlockLetInStmsNode implements Node {
 			res.addAll(stm.checkSemantics(env));
 		}
 		
-		env.getSymTable().remove(env.getNestingLevel());
-		env.setNestingLevel(env.getNestingLevel()-1);
+		env.popScope();
 		
 		return res;
 	
