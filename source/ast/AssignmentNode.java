@@ -10,13 +10,22 @@ public class AssignmentNode implements Node {
 	
 	private Node id;
 	private Node exp;
+	private Node object;
 	
 	public AssignmentNode(Node id, Node exp){
 		this.id=id;
 		this.exp=exp;
+		this.object = null;
+	}
+	
+	public AssignmentNode(Node id, Node exp, Node object){
+		this.id=id;
+		this.exp=exp;
+		this.object = object;
 	}
 	
 	public String toPrint(String s){
+		// TODO: handle object printing
 		return s + "Assignment Node:\n" + id.toPrint(s+"\t\t") + "\n" + exp.toPrint(s+"\t\t");
 	};
 	
@@ -48,6 +57,9 @@ public class AssignmentNode implements Node {
 		* */
 		
 		ArrayList<SemanticError> res = new ArrayList<>();
+		
+		if (object != null)
+			res.addAll(object.checkSemantics(env));
 		
 		res.addAll(id.checkSemantics(env));
 		res.addAll(exp.checkSemantics(env));

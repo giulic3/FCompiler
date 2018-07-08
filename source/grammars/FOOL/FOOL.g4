@@ -73,7 +73,7 @@ value  :  INTEGER                          #intVal
 
 var: ID;
 
-stm : var ASM exp #varStmAssignment
+stm : (var | object=var DOT fieldName=ID) ASM exp #varStmAssignment
     | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
     | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
     | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
