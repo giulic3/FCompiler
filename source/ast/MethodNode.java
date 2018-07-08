@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.BaseType;
 import ast.types.IntType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -13,15 +12,18 @@ import java.util.ArrayList;
 public class MethodNode implements Node {
 	
 	
-	private String obj;
-	private String id;
+	//private String obj;
+	//private String id;
+	private Node obj;
+	private Node id;
+	
 	private ArrayList<Node> args;
 	private SymbolTableEntry entry = null;
 	private int callNestingLevel;
 	private boolean isExp;
 	private ParserRuleContext ctx;
 
-	public MethodNode(String obj, String ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
+	public MethodNode(Node obj, Node ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
 		this.ctx=ctx;
 		this.obj = obj;
 		this.id = ID;
@@ -31,14 +33,14 @@ public class MethodNode implements Node {
 	
 	
 	public String toPrint(String s) {
-		String msg = s+"Method Call Node:\n" + s + "\tObject: " + this.obj + "\n" + s + "\tMethod: " + this.id +"(";
+		String msg = s+"Method Call/Field Node:\n" + s + "\t\tObject: " + this.obj.toPrint("") + "\n" + s + "\t\tMethod: " + this.id.toPrint("");/* +"(";
 		if (this.args != null && !this.args.isEmpty()) {
 			for (Node p : this.args) {
 				msg += "\n " + s + p.toPrint("\t\t");
 			}
 			msg += "\n" + s + "\t)";
 		} else
-			msg += ")";
+			msg += ")";*/   // Not needed anymore because id is now a FunExpNode and we use its toPrint method
 		return msg;
 	}
 	
@@ -64,19 +66,33 @@ public class MethodNode implements Node {
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 		
-		int j=env.getNestingLevel();
-		SymbolTableEntry tmp=null;
-		while (j>=0 && tmp==null)
-			tmp=(env.getSymTable().get(j--)).get(obj);
-		if (tmp==null)
-			res.add(new SemanticError("Id "+obj+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
-		else{
-			this.entry = tmp;
+		SymbolTableEntry entry = env.getActiveDec(obj.getID());
+		if (entry == null)
+			res.add(new SemanticError("Object " + obj.getID() + " not declared\n"));
+		else {
+			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
+			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();
+			ArrayList<Node> methods = classDef.getMethods();
+			
+			int i = 0;
+			FunDecNode foundMethod = null;
+			while (foundMethod == null && i<methods.size()) {
+				FunDecNode m = (FunDecNode)methods.get(i);
+				if (m.getID().equals(id.getID())) foundMethod = m;
+				i++;
+			}
+			
+			if (foundMethod == null) {
+				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + "; " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+			}
+			
+			this.entry = entry;
 			this.callNestingLevel = env.getNestingLevel();
 			
-			for(Node arg : args)
+			for (Node arg : args)
 				res.addAll(arg.checkSemantics(env));
 		}
+		
 		return res;
 	}
 	

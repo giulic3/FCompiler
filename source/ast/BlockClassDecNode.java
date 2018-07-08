@@ -1,6 +1,5 @@
 package ast;
 
-import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
@@ -10,23 +9,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BlockClassDecNode implements Node {
-	String id;
-	String ext;
-	ArrayList<Node> pars;
-	ArrayList<Node> methods;
-	ParserRuleContext ctx;
-	Node type;
+	private String id;
+	private String ext;
+	private ArrayList<Node> fields;
+	private ArrayList<Node> methods;
+	private ParserRuleContext ctx;
 	
 	
 	/* se non ci sono parametri par sarà null, se non è estesa ext sarà null */
 	
-	public BlockClassDecNode(String id, String ext, ArrayList<Node> pars, ArrayList<Node> methods, ParserRuleContext ctx) {
+	public BlockClassDecNode(String id, String ext, ArrayList<Node> fields, ArrayList<Node> methods, ParserRuleContext ctx) {
 		this.id=id;
 		this.ext=ext;
-		this.pars=pars;
+		this.fields=fields;
 		this.methods=methods;
 		this.ctx=ctx;
-		this.type = new ClassType(id);
 	}
 	
 	public String toPrint(String s){
@@ -35,9 +32,9 @@ public class BlockClassDecNode implements Node {
 			msg+=" extends " + ext;
 		}
 		msg+=" {";
-		if(pars!=null) {
+		if(fields!=null) {
 			msg+="\n"+s+"\tParams:";
-			for (Node b : pars) {
+			for (Node b : fields) {
 				msg += "\n " + s + b.toPrint("\t\t");
 			}
 		}
@@ -47,6 +44,14 @@ public class BlockClassDecNode implements Node {
 		}
 		msg+="\n"+s+"}";
 		return msg;
+	}
+	
+	public ArrayList<Node> getMethods() {
+		return methods;
+	}
+	
+	public ArrayList<Node> getFields() {
+		return fields;
 	}
 	
 	public Node typeCheck(){return null;}
@@ -60,10 +65,10 @@ public class BlockClassDecNode implements Node {
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),this); //separo introducendo "entry"
 		
 		if ( hm.put("Class$"+id,entry) != null )
-			res.add(new SemanticError("Class id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+			res.add(new SemanticError("Class id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else {
 			env.pushScope();
 			
@@ -71,7 +76,7 @@ public class BlockClassDecNode implements Node {
 			ArrayList<Node> parTypes = new ArrayList<Node>();
 			int paroffset=1;
 			
-			for (Node par : pars) {
+			for (Node par : fields) {
 				VarNode arg = (VarNode) par;
 				parTypes.add(arg.getType());
 				if ( fun_hm.put("Class$"+id+"$"+arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )

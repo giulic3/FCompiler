@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ast.types.BaseType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SemanticError;
@@ -35,7 +34,7 @@ public class VarNode implements Node {
 	
 	public String toPrint(String s){
 		if (exp != null)
-			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t\t");
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
 		else
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
@@ -63,6 +62,7 @@ public class VarNode implements Node {
 		if ( hm.put(id,entry) != null )
 			res.add(new SemanticError("Var or Par id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		
+		res.addAll(type.checkSemantics(env));
 		if(exp!=null) res.addAll(exp.checkSemantics(env));
 		
 		return res;

@@ -230,18 +230,16 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		//this corresponds to a function invocation
 		
-		//declare the result
-		Node res;
-		
-		//get the invocation arguments
 		ArrayList<Node> args = new ArrayList<>();
+		
+		if (ctx.LPAR() == null)
+			return new MethodNode(new IdNode(ctx.object.getText(), ctx), new IdNode(ctx.methodName.getText(), ctx), args, false, ctx);
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, true, ctx);
 		
-		return res;
+		return new MethodNode(new IdNode(ctx.object.getText(), ctx), new FunExpNode(ctx.methodName.getText(), args, false, ctx), args, false, ctx);
 	}
 	
 	@Override
@@ -307,10 +305,15 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//get the invocation arguments
 		ArrayList<Node> args = new ArrayList<>();
 		
+		if (ctx.LPAR() == null)
+			return new MethodNode(new IdNode(ctx.object.getText(), ctx), new IdNode(ctx.methodName.getText(), ctx), args, false, ctx);
+		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		return new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, false, ctx);
+		
+		return new MethodNode(new IdNode(ctx.object.getText(), ctx), new FunExpNode(ctx.methodName.getText(), args, false, ctx), args, false, ctx);
+		
 	}
 	
 	
@@ -356,7 +359,6 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return new VoidType();
 		else
 			return new ClassType(ctx.getText());
-
 	}
 	
 	@Override

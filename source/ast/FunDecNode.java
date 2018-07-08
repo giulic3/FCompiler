@@ -82,14 +82,14 @@ public class FunDecNode implements Node {
 			parlstr+="\n"+s+"\t";
 		}
 
-		if (declist != null) {
-			declstr = s+"\tFun Decs:";
+		if (parlist!=null && !parlist.isEmpty()) {
+			declstr = "\n"+s+"\tFun Decs:";
 			for (Node dec : declist)
 				declstr += "\n" + dec.toPrint(s + "\t\t");
 		}
 
 		return s+"Fun Dec Node: " +type.toPrint("") + " " + id +"("
-				+parlstr+")\n"
+				+parlstr+")"
 				+declstr;
 				//+body.toPrint(s+"  ") ;
 	}
@@ -105,7 +105,6 @@ public class FunDecNode implements Node {
 	}
 
 	public String codeGeneration() {
-
 		return "";
 	}
 	
