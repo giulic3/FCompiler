@@ -16,6 +16,7 @@ public class FunDecNode implements Node {
 	private ArrayList<Node> declist;
 	private ArrayList<Node> body;
 	private ParserRuleContext ctx;
+	private String classID = "";
 
 	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -36,7 +37,9 @@ public class FunDecNode implements Node {
 		env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
-		if ( hm.put(id,entry) != null )
+		String funID = this.classID + id;
+		
+		if ( hm.put(funID,entry) != null )
 			res.add(new SemanticError("Fun id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else {
 			HashMap<String, SymbolTableEntry> fun_hm = new HashMap<String, SymbolTableEntry>();
@@ -89,6 +92,10 @@ public class FunDecNode implements Node {
 				+parlstr+")\n"
 				+declstr;
 				//+body.toPrint(s+"  ") ;
+	}
+	
+	public void setInsideClass(String val) {
+		this.classID = "Class$" + val + "$";
 	}
 
 	//valore di ritorno non utilizzato
