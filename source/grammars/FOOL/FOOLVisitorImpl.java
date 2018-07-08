@@ -374,10 +374,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			pars.add(visit(par));
 		}
 		
-		for(FundecContext dec : ctx.fundec())
-			methods.add(visit(dec));
+		for(FundecContext dec : ctx.fundec()){
+			FunDecNode tmp = (FunDecNode)visit(dec);
+			tmp.setInsideClass(ctx.className.getText());
+			methods.add(tmp);
+		}
 		
-		return new BlockClassDecNode(id,exp,pars,methods);
+		return new BlockClassDecNode(id,exp,pars,methods, ctx);
 		
 	}
 	

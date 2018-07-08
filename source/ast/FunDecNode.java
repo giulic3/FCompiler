@@ -42,9 +42,9 @@ public class FunDecNode implements Node {
 		if ( hm.put(funID,entry) != null )
 			res.add(new SemanticError("Fun id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else {
-			HashMap<String, SymbolTableEntry> fun_hm = new HashMap<String, SymbolTableEntry>();
-			env.setNestingLevel(env.getNestingLevel()+1);
-			env.getSymTable().add(fun_hm);
+			env.pushScope();
+			
+			HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
 			
 			ArrayList<Node> parTypes = new ArrayList<Node>();
 			int paroffset=1;
@@ -64,6 +64,8 @@ public class FunDecNode implements Node {
 			for (Node b : body) {
 				res.addAll(b.checkSemantics(env));
 			}
+			
+			env.popScope();
 		}
 		
 		
