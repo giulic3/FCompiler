@@ -237,6 +237,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
+		// TODO: check passed context for error line numbers
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, true, ctx);
 		return new ClassMethodNode(new IdNode(ctx.object.getText(), ctx), methodNode, args, true, ctx);
 	}
@@ -266,6 +267,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()));
 		
 		// TODO: improve class field assignment
+		// TODO: check passed context for error line numbers
 		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
 		ClassFieldNode objectNode = new ClassFieldNode(visit(ctx.var()), fieldNode, false, ctx);
 		return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()), objectNode);
@@ -320,7 +322,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx);
+		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx); // TODO: check passed context for error line numbers
 		return new ClassMethodNode(objectNode, methodNode, args, false, ctx);
 		
 	}

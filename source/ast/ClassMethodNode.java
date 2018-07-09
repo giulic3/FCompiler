@@ -68,7 +68,7 @@ public class ClassMethodNode implements Node {
 			}
 			
 			if (foundMethod == null) {
-				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + "; "
+				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
 						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
 			}
 			

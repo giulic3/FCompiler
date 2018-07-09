@@ -2,4 +2,17 @@ class ciao extends super (int x, int y){
     bool f(int x, int h) let int z=1; in z=1;
     void z() return 0;
 };
+
+class super () {
+    void g() return 0;
+};
+
+class pippo() {
+    void h() return 0;
+};
+
+class pippo() {
+    void u() return 0;
+};
+
 let ciao x = new ciao(); in x.m() x.ciao x.y=2;

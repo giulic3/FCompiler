@@ -13,11 +13,13 @@ public class Environment {
 	private ArrayList<HashMap<String, SymbolTableEntry>> symTable;
 	private int nestingLevel;
 	private int offset;
+	private boolean secondCheck;
 	
 	public Environment() {
 		symTable = new ArrayList<HashMap<String, SymbolTableEntry>>();
 		nestingLevel = -1;
 		offset = 0;
+		secondCheck = false;
 	}
 	
 	public ArrayList<HashMap<String, SymbolTableEntry>> getSymTable() {
@@ -65,5 +67,13 @@ public class Environment {
 	public void popScope() {
 		symTable.remove(nestingLevel);
 		nestingLevel-=1;
+	}
+	
+	public void settingSecondCheck() {
+		secondCheck = true;
+	}
+	
+	public boolean getSecondCheck() {
+		return secondCheck;
 	}
 }

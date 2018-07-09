@@ -2,6 +2,7 @@ package ast;
 
 import utils.Environment;
 import utils.SemanticError;
+import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
 
@@ -29,8 +30,22 @@ public class ProgNode  implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env){
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> res1 = new ArrayList<>();
 		
 		env.pushScope();
+		
+		for (Node bClass:blocks) {
+			if (bClass instanceof BlockClassDecNode)
+				res1.addAll(bClass.checkSemantics(env));
+		}
+		
+		System.out.println("Prima passata");
+		System.out.println(res1);
+		
+		System.out.println("Seconda passata");
+		env.settingSecondCheck();
+		
+		System.out.println(env.getSecondCheck());
 		
 		for(Node b:blocks){
 			res.addAll(b.checkSemantics(env));
