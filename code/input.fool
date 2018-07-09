@@ -1,18 +1,26 @@
 class ciao extends super (int x, int y){
     bool f(int x, int h) let int z=1; in z=1;
     void z() return 0;
+    int fun2() return 3;
 };
 
-class super () {
+class super extends hero {
     void g() return 0;
+    int fun1() return 1;
+    int fun2() return 2;
 };
 
-class pippo() {
+class hero {
+    bool iAmAGenius() return true;  // LA NOTTE PORTA CONSIGLIO :D
+    void fuckYeah() print(69);
+};
+
+class pippo {
     void h() return 0;
 };
 
-class pippo() {
+class pippo {
     void u() return 0;
 };
 
-let ciao x = new ciao(); in x.m() x.ciao x.y=2;
+let ciao x = new ciao(); in x.m() x.ciao x.y=2 x.fun1();

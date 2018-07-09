@@ -54,6 +54,19 @@ public class BlockClassDecNode implements Node {
 		return fields;
 	}
 	
+	private ArrayList<Node> getInheritedMethods(String superclassID, Environment env) {
+		ArrayList<Node> methods = new ArrayList<>();
+		
+		SymbolTableEntry superclassEntry = env.getActiveDec("Class$" + superclassID);
+		if (superclassEntry != null) {
+			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
+			methods.addAll(getInheritedMethods(superclass.getSuperclassID(), env));
+			methods.addAll(superclass.getMethods());
+		}
+		
+		return methods;
+	}
+	
 	public Node typeCheck(){return null;}
 	
 	public String codeGeneration(){return null;}
@@ -63,76 +76,67 @@ public class BlockClassDecNode implements Node {
 		//create result list
 		ArrayList<SemanticError> res = new ArrayList<>();
 		
-		/*if (ext != null) {
-			SymbolTableEntry superEntry = env.getActiveDec("Class$"+ext);
-			if (superEntry == null)
-				res.add(new SemanticError("Superclass " + ext + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
-		}*/
-		
-		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),this); //separo introducendo "entry"
-		
-		if (env.getSecondCheck()) {
-			if (ext != null && env.getActiveDec("Class$"+ext) == null)
-				res.add(new SemanticError("Superclass "+ ext +" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+		// Executing first check on class definitions
+		if (!env.getSecondCheck()) {
+			HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
+			//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
+			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), this);
+			
+			if (classDecHM.put("Class$" + id, classEntry) != null)
+				res.add(new SemanticError("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+		}
+		// Executing second check on class definitions and everything inside
+		else {
+			// Handling superclass declaration
+			if (ext != null) {
+				// Superclass not declared
+				if (env.getActiveDec("Class$" + ext) == null)
+					res.add(new SemanticError("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				
+				// Climb back superclass declarations to collect list of inherited methods and fields
+				// TODO: va fatto qua? oppure in ClassMethodNode? per i campi dovrebbe essere un discorso analogo
+				// TODO: manca la gestion degli errori in caso di dichiarazioni multiple (che non sia overriding, nel caso dei metodi)
+				ArrayList<Node> inheritedMethods = getInheritedMethods(ext, env);
+				System.out.println("\nInherited method for class " + id);
+				for (Node m:inheritedMethods) {
+					FunDecNode method = (FunDecNode)m;
+					System.out.println(method.toPrint(""));
+				}
+				System.out.println();
+			}
 			
 			env.pushScope();
 			
-			HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
-			ArrayList<Node> parTypes = new ArrayList<Node>();
-			int paroffset=1;
+			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
+			ArrayList<Node> parTypes = new ArrayList<>();
+			int parOffset=1;
 			
-			for (Node par : fields) {
-				VarNode arg = (VarNode) par;
-				parTypes.add(arg.getType());
-				if ( fun_hm.put("Class$"+id+"$"+arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
-					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n"));
+			for (Node f : fields) {
+				VarNode field = (VarNode)f;
+				parTypes.add(field.getType());
+				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
+				
+				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
+					res.add(new SemanticError("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
 			
 			for (Node dec : methods) {
 				env.setOffset(env.getOffset()-2);
 				res.addAll(dec.checkSemantics(env));
 			}
+			
 			env.popScope();
 		}
-		else {
-			if (hm.put("Class$"+id,entry) != null)
-				res.add(new SemanticError("Class id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
-			else {
-			
-			}
-		}
-		/*
-		if (env.getSecondCheck() || env.getActiveDec("Class$"+id)!=null)
-			res.add(new SemanticError("Class id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
-		else {
-			hm.put("Class$"+id,entry);
-			
-			env.pushScope();
-			
-			HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
-			ArrayList<Node> parTypes = new ArrayList<Node>();
-			int paroffset=1;
-			
-			for (Node par : fields) {
-				VarNode arg = (VarNode) par;
-				parTypes.add(arg.getType());
-				if ( fun_hm.put("Class$"+id+"$"+arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
-					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n"));
-			}
-			
-			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
-				res.addAll(dec.checkSemantics(env));
-			}
-			env.popScope();
-		}*/
+		
 		return res;
 	}
 	
 	public String getID() {
 		return id;
+	}
+	
+	public String getSuperclassID() {
+		return ext;
 	}
 }
 
