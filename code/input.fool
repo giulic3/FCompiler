@@ -3,7 +3,7 @@ class hero {
     void fuckYeah() print(69);
 };
 
-class super extends hero() {
+class super extends hero {
     void g() return 0;
     int fun1() return 1;
     int fun2(int a, bool b) return 2;

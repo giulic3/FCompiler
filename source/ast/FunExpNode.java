@@ -4,10 +4,11 @@ import ast.types.IntType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class FunExpNode implements Node {
 	
@@ -64,13 +65,13 @@ public class FunExpNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+	public HashSet<String> checkSemantics(Environment env) {
+		HashSet<String> res = new HashSet<String>();
 
 		SymbolTableEntry entry = env.getActiveDec(id);
 
 		if (entry==null)
-			res.add(new SemanticError("Id "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+			res.add("Id "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		else{
 			this.entry = entry;
 			this.callNestingLevel = env.getNestingLevel();

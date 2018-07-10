@@ -2,9 +2,10 @@ package ast;
 
 import ast.types.IntType;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PlusNode implements Node {
 	
@@ -30,9 +31,9 @@ public class PlusNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da implementare
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 		
 		//check semantics in the left and in the right exp
 		

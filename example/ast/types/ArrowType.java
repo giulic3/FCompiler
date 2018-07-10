@@ -33,9 +33,9 @@ public class ArrowTypeNode implements Node {
 	}
 	
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO Auto-generated method stub
-		return new ArrayList<SemanticError>();
+		return new HashSet<String>();
 	}
 	
 	//non utilizzato

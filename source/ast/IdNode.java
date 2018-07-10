@@ -1,10 +1,11 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 /* corresponds to var */
@@ -30,15 +31,15 @@ public class IdNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 
 		//create result list
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 		
 		nestinglevel=env.getNestingLevel();
 		SymbolTableEntry entry = env.getActiveDec(id);
 		if (entry == null)
-			res.add(new SemanticError("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+			res.add("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		
 		this.entry=entry;
 		return res;

@@ -1,9 +1,10 @@
 package ast.types;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ast.Node;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 /* function type */
 public class ArrowType implements Node {
@@ -42,8 +43,8 @@ public class ArrowType implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		return new ArrayList<>();
+	public HashSet<String> checkSemantics(Environment env) {
+		return new HashSet<String>();
 	}
 
 	public String getID() {

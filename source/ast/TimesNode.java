@@ -4,6 +4,7 @@ import ast.types.*;
 import utils.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class TimesNode implements Node {
 
@@ -16,9 +17,9 @@ public class TimesNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		res.addAll(left.checkSemantics(env));
 		res.addAll(right.checkSemantics(env));

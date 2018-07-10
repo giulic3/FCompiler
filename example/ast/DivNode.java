@@ -17,9 +17,9 @@ public class DivNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public HashSet<String> checkSemantics(Environment env) {
         //create the result
-        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        HashSet<String> res = new HashSet<String>();
 
         //check semantics in the left and in the right exp
         res.addAll(left.checkSemantics(env));

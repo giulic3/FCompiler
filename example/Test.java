@@ -40,7 +40,7 @@ public class Test {
 	        Node ast = visitor.visit(parser.prog());
 
 	        Environment env = new Environment();
-	        ArrayList<SemanticError> err = ast.checkSemantics(env);
+	        HashSet<String> err = ast.checkSemantics(env);
 	        
 	        if(err.size()>0){
 	        	System.out.println("You had: " +err.size()+" errors:");

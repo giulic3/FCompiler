@@ -1,10 +1,11 @@
 package ast.types;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ast.Node;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 public class VoidType implements Node {
 	
@@ -29,9 +30,9 @@ public class VoidType implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da controllare
-		return new ArrayList<>();
+		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object

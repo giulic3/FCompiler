@@ -4,6 +4,7 @@ import ast.types.*;
 import utils.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /* integer division */
 public class DivNode implements Node {
@@ -17,9 +18,9 @@ public class DivNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		res.addAll(left.checkSemantics(env));
 		res.addAll(right.checkSemantics(env));

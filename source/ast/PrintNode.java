@@ -2,9 +2,10 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PrintNode implements Node {
 	
@@ -33,9 +34,9 @@ public class PrintNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da controllare
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		for (Node exp: exps)
 			res.addAll(exp.checkSemantics(env));

@@ -2,9 +2,10 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AssignmentNode implements Node {
 	
@@ -49,14 +50,14 @@ public class AssignmentNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		
 		/*
 		* controllare che la definizione non esista già nella symbol table
 		*
 		* */
 		
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		if (object != null)
 			res.addAll(object.checkSemantics(env));

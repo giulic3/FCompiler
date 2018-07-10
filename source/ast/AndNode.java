@@ -1,11 +1,12 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ast.types.BoolType;
 import utils.Environment;
 import utils.Helpers;
-import utils.SemanticError;
+;
 //import lib.FOOLlib;
 
 public class AndNode implements Node {
@@ -24,9 +25,9 @@ public class AndNode implements Node {
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
 

@@ -1,12 +1,12 @@
 package ast.types;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ast.Node;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
-//import util.SemanticError;
 
 public class ClassType implements Node {
 
@@ -38,13 +38,13 @@ public class ClassType implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da implementare
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		SymbolTableEntry entry = env.getActiveDec("Class$"+id);
 		if (entry == null)
-			res.add(new SemanticError("Class " + id + " not declared\n"));
+			res.add("Class " + id + " not declared\n");
 		
 		return res;
 	}

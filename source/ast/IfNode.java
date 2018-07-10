@@ -3,9 +3,10 @@ package ast;
 
 import ast.types.BoolType;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /* used both for ifExp and ifStm*/
 public class IfNode implements Node {
@@ -92,9 +93,9 @@ public class IfNode implements Node {
 	}
 	
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 		
 		res.addAll(cond.checkSemantics(env));
 		

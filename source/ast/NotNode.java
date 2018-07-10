@@ -1,9 +1,10 @@
 package ast;
 
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NotNode implements Node {
 	
@@ -27,7 +28,7 @@ public class NotNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da controllare
 		return value.checkSemantics(env);
 	}

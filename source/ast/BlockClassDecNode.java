@@ -2,11 +2,12 @@ package ast;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class BlockClassDecNode implements Node {
 	private String id;
@@ -84,10 +85,10 @@ public class BlockClassDecNode implements Node {
 	
 	public String codeGeneration(){return null;}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		
 		//create result list
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		// Executing first check on class definitions
 		if (!env.getSecondCheck()) {
@@ -96,23 +97,23 @@ public class BlockClassDecNode implements Node {
 			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), this);
 			
 			if (classDecHM.put("Class$" + id, classEntry) != null)
-				res.add(new SemanticError("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			
 			if (ext != null) {
 				SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+ext);
 				if (superclassEntry == null)
-					res.add(new SemanticError("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+					res.add("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {
 					if (ext.equals(id))
-						res.add(new SemanticError("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+						res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
 				
 				ArrayList<Node> inheritedFields = getInheritedFields(ext, env);
 				for (Node f:inheritedFields) {
 					for (Node curF: fields) {
 						if (f.getID().equals(curF.getID()))
-							res.add(new SemanticError("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+							res.add("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 					}
 				}
 			}
@@ -123,7 +124,7 @@ public class BlockClassDecNode implements Node {
 			if (ext != null) {
 				// Superclass not declared
 				if (env.getActiveDec("Class$" + ext) == null)
-					res.add(new SemanticError("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+					res.add(("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
 				
 				// Climb back superclass declarations to collect list of inherited methods and fields
 				// TODO: va fatto qua? oppure in ClassMethodNode? per i campi dovrebbe essere un discorso analogo
@@ -149,7 +150,7 @@ public class BlockClassDecNode implements Node {
 				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
 				
 				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
-					res.add(new SemanticError("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
+					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
 			
 			for (Node dec : methods) {

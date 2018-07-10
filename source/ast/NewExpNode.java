@@ -1,10 +1,11 @@
 package ast;
 
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NewExpNode implements Node {
 	
@@ -44,15 +45,15 @@ public class NewExpNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da implementare
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		// TODO: handle offset
 		// TODO: IMPORTANT: define unique key management for classes
 		SymbolTableEntry entry = env.getActiveDec("Class$"+id);
 		if (entry == null)
-			res.add(new SemanticError("Class " + id + " not declared\n"));
+			res.add("Class " + id + " not declared\n");
 		
 		for (Node a: args)
 			res.addAll(a.checkSemantics(env));

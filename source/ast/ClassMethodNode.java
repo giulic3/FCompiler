@@ -2,10 +2,11 @@ package ast;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /* method call */
 public class ClassMethodNode implements Node {
@@ -41,7 +42,7 @@ public class ClassMethodNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		
 		/*
 		 *  spudoratamente copiato dalla funexp ma in questo caso è più complesso.
@@ -49,11 +50,11 @@ public class ClassMethodNode implements Node {
 		 *  e va cercato il metodo all'interno della classe in esame
 		 */
 		
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
-			res.add(new SemanticError("Object " + obj.getID() + " not declared\n"));
+			res.add("Object " + obj.getID() + " not declared\n");
 		else {
 			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
 			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();
@@ -68,8 +69,8 @@ public class ClassMethodNode implements Node {
 			}
 			
 			if (foundMethod == null) {
-				res.add(new SemanticError("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
-						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
 			
 			this.entry = entry;

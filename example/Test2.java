@@ -75,7 +75,7 @@ public class Test2 {
 	        Node ast = visitor.visit(parser.prog()); //generazione AST 
 
 	        Environment env = new Environment();
-	        ArrayList<SemanticError> err = ast.checkSemantics(env);
+	        HashSet<String> err = ast.checkSemantics(env);
 	        
 	        if(err.size()>0){
 	        	System.out.println("You had: " +err.size()+" errors:");

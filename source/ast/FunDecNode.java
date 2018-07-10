@@ -1,10 +1,11 @@
 package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 public class FunDecNode implements Node {
@@ -28,10 +29,10 @@ public class FunDecNode implements Node {
 	}
 	
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 
 		//create result list
-		ArrayList<SemanticError> res = new ArrayList<>();
+		HashSet<String> res = new HashSet<String>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		env.setOffset(env.getOffset()-1);
@@ -50,20 +51,20 @@ public class FunDecNode implements Node {
 					// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
 					if (method.getID().equals(this.id)) {
 						if (method.parlist.size() != this.parlist.size())
-							res.add(new SemanticError("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+							res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 						else {
 							for (int i=0; i<parlist.size(); i++) {
 								VarNode inheritedMethodPar = (VarNode)method.parlist.get(i);
 								VarNode curMethodPar = (VarNode)this.parlist.get(i);
 								if (inheritedMethodPar.getType().getClass() != curMethodPar.getType().getClass())
-									res.add(new SemanticError("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
-											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+									res.add("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 							}
 						}
 						if (method.type.getClass() != this.type.getClass())
-							res.add(new SemanticError("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+							res.add("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 					}
 				}
 			}
@@ -71,7 +72,7 @@ public class FunDecNode implements Node {
 		
 		if(!env.getFunSecondCheck()) {
 			if (hm.put(funID, entry) != null)
-				res.add(new SemanticError("Fun id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				res.add("Fun id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		else {
 			env.pushScope();
@@ -85,7 +86,7 @@ public class FunDecNode implements Node {
 				VarNode arg = (VarNode) par;
 				parTypes.add(arg.getType());
 				if ( fun_hm.put(arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
-					res.add(new SemanticError("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n"));
+					res.add("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n");
 			}
 			
 			for (Node dec : declist) {

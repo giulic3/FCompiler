@@ -8,10 +8,11 @@ import ast.BoolValNode;
 
 import org.antlr.v4.runtime.*;
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Main {
 	
@@ -32,11 +33,11 @@ public class Main {
 	
 	private static Node semanticAnalysis(Node ast, boolean visualizeAST){
 		Environment env = new Environment();
-		ArrayList<SemanticError> err = ast.checkSemantics(env);
+		HashSet<String> err = ast.checkSemantics(env);
 		
 		if (err.size() > 0) {
-			for(SemanticError e:err){
-				System.out.print(e.toString());
+			for(String e:err){
+				System.out.print(e);
 			}
 			System.exit(2);
 		}

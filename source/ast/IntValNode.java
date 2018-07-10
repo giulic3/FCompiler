@@ -4,6 +4,7 @@ import ast.types.*;
 import utils.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class IntValNode implements Node {
 	
@@ -26,9 +27,9 @@ public class IntValNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da controllare
-		return new ArrayList<>();
+		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object

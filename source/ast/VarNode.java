@@ -2,10 +2,11 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 public class VarNode implements Node {
@@ -51,8 +52,8 @@ public class VarNode implements Node {
 	
 	public String codeGeneration(){return null;}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+	public HashSet<String> checkSemantics(Environment env){
+		HashSet<String> res = new HashSet<String>();
 		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
@@ -60,7 +61,7 @@ public class VarNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		if ( hm.put(id,entry) != null )
-			res.add(new SemanticError("Var or Par id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+			res.add("Var or Par id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		
 		res.addAll(type.checkSemantics(env));
 		if(exp!=null) res.addAll(exp.checkSemantics(env));

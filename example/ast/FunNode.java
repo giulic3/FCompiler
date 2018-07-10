@@ -25,17 +25,17 @@ public class FunNode implements Node {
   }
   
   @Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 	  
 	  //create result list
-	  ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+	  HashSet<String> res = new HashSet<String>();
 	  
 	  //env.offset = -2;
 	  HashMap<String,STentry> hm = env.symTable.get(env.nestingLevel);
       STentry entry = new STentry(env.nestingLevel,env.offset--); //separo introducendo "entry"
       
       if ( hm.put(id,entry) != null )
-        res.add(new SemanticError("Fun id "+id+" already declared"));
+        res.add(("Fun id "+id+" already declared"));
       else{
     	  //creare una nuova hashmap per la symTable
 	      env.nestingLevel++;

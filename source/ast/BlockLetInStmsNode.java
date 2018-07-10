@@ -1,9 +1,10 @@
 package ast;
 
 import utils.Environment;
-import utils.SemanticError;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class BlockLetInStmsNode implements Node {
 	
@@ -35,10 +36,10 @@ public class BlockLetInStmsNode implements Node {
 	
 	public String codeGeneration(){return null;}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){
+	public HashSet<String> checkSemantics(Environment env){
 		
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-		ArrayList<SemanticError> tmp = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
+		HashSet<String> tmp = new HashSet<String>();
 		
 		
 		// TODO: handle offset

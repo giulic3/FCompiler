@@ -1,7 +1,7 @@
 package ast;
 
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
@@ -29,46 +29,30 @@ public class ProgNode  implements Node {
 	
 	public String codeGeneration(){return null;};
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){
+	public HashSet<String> checkSemantics(Environment env){
 		
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-		ArrayList<SemanticError> res1 = new ArrayList<>();
+		HashSet<String> errors = new HashSet<>();
 		
 		env.pushScope();
 		
+		//System.out.println("Prima passata");
 		for (Node bClass:blocks) {
 			if (bClass instanceof BlockClassDecNode)
-				res1.addAll(bClass.checkSemantics(env));
+				errors.addAll(bClass.checkSemantics(env));
 		}
 		
-		HashSet<String> errors = new HashSet<>();
-		for (SemanticError e:res1)
-			errors.add(e.toString());
 		
-		//System.out.println("Prima passata");
-		//System.out.println(res1);
 		
 		//System.out.println("Seconda passata");
 		env.settingSecondCheck();
 		
-		//System.out.println(env.getSecondCheck());
-		
 		for(Node b:blocks){
-			res.addAll(b.checkSemantics(env));
+			errors.addAll(b.checkSemantics(env));
 		}
-		
-		//System.out.println("Prima passata");
-		//System.out.println(errors);
-		
-		for (SemanticError e:res)
-			errors.add(e.toString());
-		
-		//System.out.println("Seconda passata");
-		//System.out.println(errors);
 		
 		// QUI NON SERVE LA POPSCOPE!!!
 		
-		return res;
+		return errors;
 	}
 	
 	// Method to retrieve string identifier of an object

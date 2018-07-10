@@ -2,10 +2,11 @@ package ast;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ClassFieldNode implements Node {
 	
@@ -36,13 +37,13 @@ public class ClassFieldNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
-			res.add(new SemanticError("Object " + obj.getID() + " not declared\n"));
+			res.add("Object " + obj.getID() + " not declared\n");
 		else {
 			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
 			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();
@@ -57,7 +58,7 @@ public class ClassFieldNode implements Node {
 			}
 			
 			if (foundField == null) {
-				res.add(new SemanticError("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
 			
 			this.entry = entry;
