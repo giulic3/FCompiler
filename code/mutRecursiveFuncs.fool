@@ -1,0 +1,11 @@
+let
+ int f()
+    g();
+
+ int g()
+     h();
+ int h()
+    f();
+
+ in
+    g();

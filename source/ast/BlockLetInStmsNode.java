@@ -38,14 +38,24 @@ public class BlockLetInStmsNode implements Node {
 	public ArrayList<SemanticError> checkSemantics(Environment env){
 		
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		ArrayList<SemanticError> tmp = new ArrayList<SemanticError>();
+		
 		
 		// TODO: handle offset
 		env.pushScope();
 		
 		for(Node dec : decs){
-			res.addAll(dec.checkSemantics(env));
+			tmp.addAll(dec.checkSemantics(env));
 			
 		}
+		
+		env.settingFunSecondCheck(true);
+		
+		if (tmp.size() > 0)
+		for(Node dec : decs){
+			res.addAll(dec.checkSemantics(env));
+		}
+		env.settingFunSecondCheck(false);
 		
 		for(Node stm : stms){
 			res.addAll(stm.checkSemantics(env));

@@ -14,6 +14,7 @@ public class Environment {
 	private int nestingLevel;
 	private int offset;
 	private boolean secondCheck;
+	private boolean secondFunCheck;
 	
 	public Environment() {
 		symTable = new ArrayList<HashMap<String, SymbolTableEntry>>();
@@ -75,5 +76,13 @@ public class Environment {
 	
 	public boolean getSecondCheck() {
 		return secondCheck;
+	}
+	
+	public void settingFunSecondCheck(boolean isSecond) {
+		secondFunCheck = true;
+	}
+	
+	public boolean getFunSecondCheck() {
+		return secondFunCheck;
 	}
 }
