@@ -66,15 +66,13 @@ public class FunExpNode implements Node {
 	
 	public ArrayList<SemanticError> checkSemantics(Environment env) {
 		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-		
-		int j=env.getNestingLevel();
-		SymbolTableEntry tmp=null;
-		while (j>=0 && tmp==null)
-			tmp=(env.getSymTable().get(j--)).get(id);
-		if (tmp==null)
+
+		SymbolTableEntry entry = env.getActiveDec(id);
+
+		if (entry==null)
 			res.add(new SemanticError("Id "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else{
-			this.entry = tmp;
+			this.entry = entry;
 			this.callNestingLevel = env.getNestingLevel();
 			
 			for(Node arg : args)
