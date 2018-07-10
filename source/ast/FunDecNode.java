@@ -39,6 +39,36 @@ public class FunDecNode implements Node {
 		
 		String funID = this.classID + id;
 		
+		// this handles methods
+		if (!classID.isEmpty()) {
+			SymbolTableEntry classEntry = env.getActiveDec(this.classID);
+			if (classEntry != null) {
+				BlockClassDecNode classNode = (BlockClassDecNode)classEntry.getType();
+				ArrayList<Node> inheritedMethods = classNode.getInheritedMethods(classNode.getSuperclassID(), env);
+				for (Node m:inheritedMethods) {
+					FunDecNode method = (FunDecNode)m;
+					// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
+					if (method.getID().equals(this.id)) {
+						if (method.parlist.size() != this.parlist.size())
+							res.add(new SemanticError("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+						else {
+							for (int i=0; i<parlist.size(); i++) {
+								VarNode inheritedMethodPar = (VarNode)method.parlist.get(i);
+								VarNode curMethodPar = (VarNode)this.parlist.get(i);
+								if (inheritedMethodPar.getType().getClass() != curMethodPar.getType().getClass())
+									res.add(new SemanticError("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+							}
+						}
+						if (method.type.getClass() != this.type.getClass())
+							res.add(new SemanticError("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+					}
+				}
+			}
+		}
+		
 		if ( hm.put(funID,entry) != null )
 			res.add(new SemanticError("Fun id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
 		else {

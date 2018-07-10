@@ -54,7 +54,7 @@ public class BlockClassDecNode implements Node {
 		return fields;
 	}
 	
-	private ArrayList<Node> getInheritedMethods(String superclassID, Environment env) {
+	public ArrayList<Node> getInheritedMethods(String superclassID, Environment env) {
 		ArrayList<Node> methods = new ArrayList<>();
 		
 		SymbolTableEntry superclassEntry = env.getActiveDec("Class$" + superclassID);
@@ -65,6 +65,19 @@ public class BlockClassDecNode implements Node {
 		}
 		
 		return methods;
+	}
+	
+	public ArrayList<Node> getInheritedFields(String superclassID, Environment env) {
+		ArrayList<Node> fields = new ArrayList<>();
+		
+		SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+superclassID);
+		if (superclassEntry != null) {
+			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
+			fields.addAll(getInheritedFields(superclass.getSuperclassID(), env));
+			fields.addAll(superclass.getFields());
+		}
+		
+		return fields;
 	}
 	
 	public Node typeCheck(){return null;}
@@ -84,6 +97,25 @@ public class BlockClassDecNode implements Node {
 			
 			if (classDecHM.put("Class$" + id, classEntry) != null)
 				res.add(new SemanticError("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+			
+			if (ext != null) {
+				SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+ext);
+				if (superclassEntry == null)
+					res.add(new SemanticError("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				else {
+					if (ext.equals(id))
+						res.add(new SemanticError("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+				}
+				
+				ArrayList<Node> inheritedFields = getInheritedFields(ext, env);
+				for (Node f:inheritedFields) {
+					for (Node curF: fields) {
+						if (f.getID().equals(curF.getID()))
+							res.add(new SemanticError("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
+									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+					}
+				}
+			}
 		}
 		// Executing second check on class definitions and everything inside
 		else {
@@ -96,13 +128,13 @@ public class BlockClassDecNode implements Node {
 				// Climb back superclass declarations to collect list of inherited methods and fields
 				// TODO: va fatto qua? oppure in ClassMethodNode? per i campi dovrebbe essere un discorso analogo
 				// TODO: manca la gestion degli errori in caso di dichiarazioni multiple (che non sia overriding, nel caso dei metodi)
-				ArrayList<Node> inheritedMethods = getInheritedMethods(ext, env);
+				/*ArrayList<Node> inheritedMethods = getInheritedMethods(ext, env);
 				System.out.println("\nInherited method for class " + id);
 				for (Node m:inheritedMethods) {
 					FunDecNode method = (FunDecNode)m;
 					System.out.println(method.toPrint(""));
 				}
-				System.out.println();
+				System.out.println();*/
 			}
 			
 			env.pushScope();

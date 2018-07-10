@@ -5,6 +5,8 @@ import utils.SemanticError;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProgNode  implements Node {
 
@@ -39,17 +41,30 @@ public class ProgNode  implements Node {
 				res1.addAll(bClass.checkSemantics(env));
 		}
 		
-		System.out.println("Prima passata");
-		System.out.println(res1);
+		HashSet<String> errors = new HashSet<>();
+		for (SemanticError e:res1)
+			errors.add(e.toString());
 		
-		System.out.println("Seconda passata");
+		//System.out.println("Prima passata");
+		//System.out.println(res1);
+		
+		//System.out.println("Seconda passata");
 		env.settingSecondCheck();
 		
-		System.out.println(env.getSecondCheck());
+		//System.out.println(env.getSecondCheck());
 		
 		for(Node b:blocks){
 			res.addAll(b.checkSemantics(env));
 		}
+		
+		//System.out.println("Prima passata");
+		//System.out.println(errors);
+		
+		for (SemanticError e:res)
+			errors.add(e.toString());
+		
+		//System.out.println("Seconda passata");
+		//System.out.println(errors);
 		
 		// QUI NON SERVE LA POPSCOPE!!!
 		
