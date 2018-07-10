@@ -39,8 +39,10 @@ public class FunDecNode implements Node {
 		
 		String funID = this.classID + id;
 		
-		if ( hm.put(funID,entry) != null )
-			res.add(new SemanticError("Fun id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n"));
+		if(!env.getFunSecondCheck()) {
+			if (hm.put(funID, entry) != null)
+				res.add(new SemanticError("Fun id " + id + " alredy declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
+		}
 		else {
 			env.pushScope();
 			
