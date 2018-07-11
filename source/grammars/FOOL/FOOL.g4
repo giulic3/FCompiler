@@ -23,7 +23,7 @@ block  : let stms             #letInStms
 /* una classe può avere o 0 (no parentesi tonde) o più campi, ma ha sempre almeno un metodo,
  ogni dichiarazione di f è seguita da un ;
  */
-classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR vardec (COMMA vardec)* RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
+classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR varasm (COMMA varasm)* RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
 
 let    : LET (dec SEMIC)+ IN ;
 
@@ -104,8 +104,6 @@ TRUE   : 'true' ;
 FALSE  : 'false' ;
 LPAR   : '(' ;
 RPAR   : ')' ;
-//SLPAR  : '[' ;
-//SRPAR  : ']' ;
 CLPAR  : '{' ;
 CRPAR  : '}' ;
 IF     : 'if' ;

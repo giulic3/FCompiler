@@ -247,11 +247,11 @@ public class FOOLParser extends Parser {
 		}
 		public TerminalNode EXTENDS() { return getToken(FOOLParser.EXTENDS, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
-		public List<VardecContext> vardec() {
-			return getRuleContexts(VardecContext.class);
+		public List<VarasmContext> varasm() {
+			return getRuleContexts(VarasmContext.class);
 		}
-		public VardecContext vardec(int i) {
-			return getRuleContext(VardecContext.class,i);
+		public VarasmContext varasm(int i) {
+			return getRuleContext(VarasmContext.class,i);
 		}
 		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
 		public List<FundecContext> fundec() {
@@ -310,7 +310,7 @@ public class FOOLParser extends Parser {
 				setState(55);
 				match(LPAR);
 				setState(56);
-				vardec();
+				varasm();
 				setState(61);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -320,7 +320,7 @@ public class FOOLParser extends Parser {
 					setState(57);
 					match(COMMA);
 					setState(58);
-					vardec();
+					varasm();
 					}
 					}
 					setState(63);
@@ -1967,7 +1967,7 @@ public class FOOLParser extends Parser {
 		"\2\2(*\3\2\2\2)&\3\2\2\2*+\3\2\2\2+)\3\2\2\2+,\3\2\2\2,\3\3\2\2\2-.\5"+
 		"\b\5\2./\5$\23\2/\62\3\2\2\2\60\62\5\6\4\2\61-\3\2\2\2\61\60\3\2\2\2\62"+
 		"\5\3\2\2\2\63\64\7#\2\2\64\67\7*\2\2\65\66\7$\2\2\668\7*\2\2\67\65\3\2"+
-		"\2\2\678\3\2\2\28D\3\2\2\29:\7\24\2\2:?\5\n\6\2;<\7\5\2\2<>\5\n\6\2=;"+
+		"\2\2\678\3\2\2\28D\3\2\2\29:\7\24\2\2:?\5\f\7\2;<\7\5\2\2<>\5\f\7\2=;"+
 		"\3\2\2\2>A\3\2\2\2?=\3\2\2\2?@\3\2\2\2@B\3\2\2\2A?\3\2\2\2BC\7\25\2\2"+
 		"CE\3\2\2\2D9\3\2\2\2DE\3\2\2\2EF\3\2\2\2FJ\7\26\2\2GH\5\16\b\2HI\7\3\2"+
 		"\2IK\3\2\2\2JG\3\2\2\2KL\3\2\2\2LJ\3\2\2\2LM\3\2\2\2MN\3\2\2\2NO\7\27"+

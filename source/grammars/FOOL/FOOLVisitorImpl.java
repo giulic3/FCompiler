@@ -383,7 +383,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		ArrayList<Node> methods = new ArrayList<Node>();
 		String exp = (ctx.superName!=null) ? ctx.superName.getText() : null;
 		
-		for (VardecContext par : ctx.vardec()) {
+		for (VarasmContext par : ctx.varasm()) {
 			pars.add(visit(par));
 		}
 		

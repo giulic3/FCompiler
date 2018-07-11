@@ -87,7 +87,7 @@ public class Main {
 	public static void main(String[] args){
 
 		try {
-			File inputFile = new File("code/mutRecursiveMethods.fool");
+			File inputFile = new File("code/input.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
 		}

@@ -1,9 +1,13 @@
-class hero {
-    bool iAmAGenius() return true;  // LA NOTTE PORTA CONSIGLIO :D
+/*class hero {
+    bool iAmAGenius() return true;
     void fuckYeah() print(69);
 };
 
-class super extends hero {
+class super extends hero(
+    int x = 1,
+    int y = if (true) { 4 } else {5},
+    hero z = new hero()
+) {
     void g() return 0;
     int fun1() return 1;
     int fun2(int a, bool b) return 2;
@@ -15,4 +19,20 @@ class ciao extends super (int x, int y){
     void fun2() return 3;
 };
 
-let ciao x = new ciao(); in x.y=2 x.fun1();
+let ciao x = new ciao(); in x.y=2 x.fun1();*/
+
+
+class A {
+    void am1() return 0;
+    bool am2(bool flag) return not flag;
+
+};
+class B (int x = 0, A field = new A()) {
+    void bm1() field.am1();
+    int bm2() return x;
+};
+
+let
+    A a = new A();
+in
+    print(a.am2(false));
