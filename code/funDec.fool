@@ -11,4 +11,4 @@ let
     in
         y = y + 1;
 in
-    f(3);
+    print(ciao);

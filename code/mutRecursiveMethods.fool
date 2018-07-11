@@ -1,0 +1,17 @@
+class A {
+    void am1() return 0;
+    bool am2(bool flag) return not flag;
+
+};
+/*
+class B (int x, A field) {
+    void bm1() field.am1();
+    int bm2() return x;
+};
+*/
+let
+    A a = new A();
+in
+    print(a.am2(false));
+
+/* NOT WORKING */

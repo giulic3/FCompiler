@@ -21,6 +21,7 @@ public class Environment {
 		nestingLevel = -1;
 		offset = 0;
 		secondCheck = false;
+		secondFunCheck = false;
 	}
 	
 	public ArrayList<HashMap<String, SymbolTableEntry>> getSymTable() {

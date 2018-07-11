@@ -43,7 +43,7 @@ public class ClassFieldNode implements Node {
 		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
-			res.add("Object " + obj.getID() + " not declared\n");
+			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else {
 			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
 			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();

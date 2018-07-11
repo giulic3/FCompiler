@@ -11,6 +11,11 @@ import utils.Environment;
 ;
 
 import java.io.File;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -39,7 +44,8 @@ public class Main {
 			for(String e:err){
 				System.out.print(e);
 			}
-			System.exit(2);
+			 //System.exit(2);  //TODO temporary, only to allow testing of multiple files in a single run
+			return null; // TODO maybe
 		}
 		
 		if(visualizeAST) {
@@ -59,19 +65,35 @@ public class Main {
 		Node ast = lexicalAndSyntacticAnalysis(input);
 		
 		System.out.println("Visualizing AST...");
-		System.out.println(ast.toPrint(""));
+		//System.out.println(ast.toPrint(""));
 		
 		ast = semanticAnalysis(ast, true);
 		
 		return result;
 	}
+
+	public static void test(File file) {
+		try {
+
+			String output = "";
+			CharStream input = CharStreams.fromFileName(file.getAbsolutePath());
+			output += run(input);
+		}
+		catch (Exception e) {
+
+		}
+	}
 	
-	public static void main(String[] args) throws Exception{
-		
-		File inputFile = new File("code/input.fool");
-		CharStream input=CharStreams.fromFileName(inputFile.getAbsolutePath());
-		String output = run(input);
-		
+	public static void main(String[] args){
+
+		try {
+			File inputFile = new File("code/mutRecursiveMethods.fool");
+			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
+			String output = run(input);
+		}
+		catch (Exception E) {
+
+		}
 		/*ast.typeCheck();
 		
 		Node boolNode = new BoolValNode(true);

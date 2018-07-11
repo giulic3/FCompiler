@@ -2,7 +2,6 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
-;
 
 import java.util.ArrayList;
 import java.util.HashSet;

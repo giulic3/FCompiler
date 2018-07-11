@@ -61,7 +61,7 @@ public class VarNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		if ( hm.put(id,entry) != null )
-			res.add("Var or Par id "+id+" alredy declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+			res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		
 		res.addAll(type.checkSemantics(env));
 		if(exp!=null) res.addAll(exp.checkSemantics(env));

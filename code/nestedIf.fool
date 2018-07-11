@@ -7,7 +7,7 @@ if (2) then {
     if (true) then {
         if (60) then {
             if (70) then {
-                pippo.f(false)
+                print(false)
             } else {
                 x = 100
             }

@@ -152,12 +152,20 @@ public class BlockClassDecNode implements Node {
 				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
 					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
-			
+
+			env.settingFunSecondCheck(true);
+
 			for (Node dec : methods) {
 				env.setOffset(env.getOffset()-2);
 				res.addAll(dec.checkSemantics(env));
 			}
-			
+			env.settingFunSecondCheck(false);
+
+			for (Node dec : methods) {
+				env.setOffset(env.getOffset()-2);
+				res.addAll(dec.checkSemantics(env));
+			}
+
 			env.popScope();
 		}
 		

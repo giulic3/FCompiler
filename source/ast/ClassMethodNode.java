@@ -29,7 +29,8 @@ public class ClassMethodNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s+"Class Method Node:\n" + s + "\t\tObject:\n" + this.obj.toPrint(s+"\t\t\t") + "\n" + s + "\t\tMethod:\n" + this.id.toPrint(s+"\t\t\t");
+		return s+"Class Method Node:\n" + s + "\t\tObject:\n" + this.obj.toPrint(s+"\t\t\t") + "\n" + s
+				+ "\t\tMethod:\n" + this.id.toPrint(s+"\t\t\t");
 	}
 	
 	@Override
@@ -54,7 +55,8 @@ public class ClassMethodNode implements Node {
 		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
-			res.add("Object " + obj.getID() + " not declared\n");
+			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+
 		else {
 			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
 			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();

@@ -128,7 +128,7 @@ public class FunDecNode implements Node {
 	}
 	
 	public void setInsideClass(String val) {
-		this.classID = "Class$" + val;
+		this.classID = "Class$" + val + "$";
 	}
 
 	//valore di ritorno non utilizzato
