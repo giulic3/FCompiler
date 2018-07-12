@@ -80,7 +80,7 @@ public class Environment {
 	}
 	
 	public void settingFunSecondCheck(boolean isSecond) {
-		secondFunCheck = true;
+		secondFunCheck = isSecond;
 	}
 	
 	public boolean getFunSecondCheck() {

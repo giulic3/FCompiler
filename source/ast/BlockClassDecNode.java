@@ -89,6 +89,7 @@ public class BlockClassDecNode implements Node {
 		
 		//create result list
 		HashSet<String> res = new HashSet<String>();
+		HashSet<String> tmp = new HashSet<String>();
 		
 		// Executing first check on class definitions
 		if (!env.getSecondCheck()) {
@@ -153,19 +154,21 @@ public class BlockClassDecNode implements Node {
 					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
 
+
+			for (Node dec : methods) {
+				env.setOffset(env.getOffset()-2);
+				tmp.addAll(dec.checkSemantics(env));
+			}
 			env.settingFunSecondCheck(true);
 
-			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
-				res.addAll(dec.checkSemantics(env));
+			if(tmp.size()>0) {
+				for (Node dec : methods) {
+					env.setOffset(env.getOffset() - 2);
+					res.addAll(dec.checkSemantics(env));
+				}
 			}
 			env.settingFunSecondCheck(false);
-
-			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
-				res.addAll(dec.checkSemantics(env));
-			}
-
+			
 			env.popScope();
 		}
 		

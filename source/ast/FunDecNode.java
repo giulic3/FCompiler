@@ -37,6 +37,7 @@ public class FunDecNode implements Node {
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
+		entry.setClassName(classID);
 		
 		String funID = this.classID + id;
 		
@@ -74,8 +75,7 @@ public class FunDecNode implements Node {
 			if (hm.put(funID, entry) != null)
 				res.add("Fun id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
-		else {
-			env.pushScope();
+		env.pushScope();
 			
 			HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
 			
@@ -99,7 +99,6 @@ public class FunDecNode implements Node {
 			}
 			
 			env.popScope();
-		}
 		
 		return res;
 	}

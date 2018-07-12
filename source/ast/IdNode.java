@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -37,11 +38,18 @@ public class IdNode implements Node {
 		HashSet<String> res = new HashSet<String>();
 		
 		nestinglevel=env.getNestingLevel();
-		SymbolTableEntry entry = env.getActiveDec(id);
+		//SymbolTableEntry entry = env.getActiveDec(id);
+		
+		HashMap<String, SymbolTableEntry> entry = env.getSymTable().get(1);
+		
+		System.out.println("stampo la symbol table di livello 1");
+		System.out.println(entry.keySet());
+		
+		
 		if (entry == null)
 			res.add("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		
-		this.entry=entry;
+		//this.entry=entry;
 		return res;
 	}
 
