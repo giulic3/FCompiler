@@ -350,8 +350,6 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitVarasm(VarasmContext ctx){
 		
-		Node vardec = visit(ctx.vardec());
-		
 		Node typeNode = visit(ctx.vardec().type());
 		
 		//visit the exp

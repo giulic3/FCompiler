@@ -76,8 +76,13 @@ public class IdNode implements Node {
 			
 			if (found == null)
 				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			else
-				this.entry = new SymbolTableEntry(1, 0, found);
+			else {
+				if (found instanceof VarNode)
+					this.entry = new SymbolTableEntry(1,0,((VarNode)found).getType());
+				else
+					this.entry = new SymbolTableEntry(1, 0, found);
+			}
+			
 		}
 		else
 			this.entry = fieldEntry;
