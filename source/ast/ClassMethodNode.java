@@ -64,32 +64,42 @@ public class ClassMethodNode implements Node {
 		
 		IdNode objIDNode = (IdNode)obj;
 		SymbolTableEntry objEntry = objIDNode.getSTEntry();
-		VarNode objDec = (VarNode)objEntry.getType();
 		
-		ClassType classDef = (ClassType)(objDec.getType());
+		if (objEntry.getType() instanceof ClassType) {
+			String classID = ((ClassType) objEntry.getType()).getClassID();
+			SymbolTableEntry classEntry = env.getActiveDec(classID);
+			ClassType classDef = (ClassType)classEntry.getType();
+			
+			ArrayList<Node> methods = classDef.getMethodsList(true);
+			
+			int i = 0;
+			FunDecNode foundMethod = null;
+			while (foundMethod == null && i<methods.size()) {
+				FunDecNode m = (FunDecNode)methods.get(i);
+				if (m.getID().equals(id.getID())) foundMethod = m;
+				i++;
+			}
+			
+			if (foundMethod == null) {
+				res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
+			
+			this.callNestingLevel = env.getNestingLevel();
+			
+			for (Node arg : args)
+				res.addAll(arg.checkSemantics(env));
+		}
+		else {
+			res.add("Wrong usage of method on object at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		}
 		
 		//SymbolTableEntry classEntry = env.getActiveDec(id.getID());
 		//ClassType classDef = (ClassType) classEntry.getType();
-		ArrayList<Node> methods = classDef.getMethodsList(true);
 		
-		int i = 0;
-		FunDecNode foundMethod = null;
-		while (foundMethod == null && i<methods.size()) {
-			FunDecNode m = (FunDecNode)methods.get(i);
-			if (m.getID().equals(id.getID())) foundMethod = m;
-			i++;
-		}
-		
-		if (foundMethod == null) {
-			res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
-					+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		}
 		
 		//this.entry = entry;
-		this.callNestingLevel = env.getNestingLevel();
 		
-		for (Node arg : args)
-			res.addAll(arg.checkSemantics(env));
 		
 		return res;
 	}

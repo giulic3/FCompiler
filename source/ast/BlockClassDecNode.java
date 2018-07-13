@@ -143,12 +143,14 @@ public class BlockClassDecNode implements Node {
 			for (Node f : fields) {
 				VarNode field = (VarNode)f;
 				parTypes.add(field.getType());
-				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
+				//SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
 				
-				fieldEntry.setClassName(id);
+				//fieldEntry.setClassName(id);
 				
-				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
-					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
+				res.addAll(field.checkSemantics(env));
+				
+				//if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
+				//	res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
 			
 			
@@ -158,12 +160,13 @@ public class BlockClassDecNode implements Node {
 			}
 			env.settingFunSecondCheck(true);
 			
-			if(tmp.size()>0) {
+			//if(tmp.size()>0) {
 				for (Node dec : methods) {
 					env.setOffset(env.getOffset() - 2);
 					res.addAll(dec.checkSemantics(env));
 				}
-			}
+			//}
+			res.addAll(tmp);
 			env.settingFunSecondCheck(false);
 			
 			env.popScope();

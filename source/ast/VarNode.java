@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -14,6 +15,7 @@ public class VarNode implements Node {
 	private String id;
 	private Node type;
 	private Node exp;
+	private String classID;
 	
 	public VarNode(String i, Node t, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -31,6 +33,14 @@ public class VarNode implements Node {
 	
 	public ParserRuleContext getCtx(){
 		return ctx;
+	}
+	
+	public void setInsideClass(String id) {
+		this.classID = id;
+	}
+	
+	public String getClassID() {
+		return this.classID;
 	}
 	
 	public String toPrint(String s){
@@ -60,8 +70,20 @@ public class VarNode implements Node {
 		env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
-		if ( hm.put(id,entry) != null )
-			res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
+		
+		/*String classID = "Class$";
+		if (type instanceof ClassType) {
+			ClassType classType = (ClassType)type;
+			classID += classType.getClassID() + "$" + id;
+			entry.setClassName(classType.getClassID());
+			if ( hm.put(classID,entry) != null )
+				res.add("Class field "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		}
+		else {*/
+			if ( hm.put(ID,entry) != null )
+				res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		//}
 		
 		res.addAll(type.checkSemantics(env));
 		if(exp!=null) res.addAll(exp.checkSemantics(env));

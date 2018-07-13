@@ -78,22 +78,23 @@ public class FunDecNode implements Node {
 			if (hm.put(funID, entry) != null)
 				res.add("Fun id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
-		env.pushScope();
+		else {
+			env.pushScope();
 			
 			HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
 			
 			ArrayList<Node> parTypes = new ArrayList<Node>();
-			int paroffset=1;
+			int paroffset = 1;
 			
 			for (Node par : parlist) {
 				VarNode arg = (VarNode) par;
 				parTypes.add(arg.getType());
-				if ( fun_hm.put(arg.getId(),new SymbolTableEntry(env.getNestingLevel(),paroffset++,arg.getType())) != null  )
-					res.add("Parameter id "+arg.getId()+" already declared at line: "+arg.getCtx().start.getLine()+":"+arg.getCtx().start.getCharPositionInLine()+"\n");
+				if (fun_hm.put(arg.getId(), new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType())) != null)
+					res.add("Parameter id " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 			}
 			
 			for (Node dec : declist) {
-				env.setOffset(env.getOffset()-2);
+				env.setOffset(env.getOffset() - 2);
 				res.addAll(dec.checkSemantics(env));
 			}
 			
@@ -102,6 +103,7 @@ public class FunDecNode implements Node {
 			}
 			
 			env.popScope();
+		}
 		
 		return res;
 	}

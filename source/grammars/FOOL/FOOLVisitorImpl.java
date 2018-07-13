@@ -350,6 +350,8 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitVarasm(VarasmContext ctx){
 		
+		Node vardec = visit(ctx.vardec());
+		
 		Node typeNode = visit(ctx.vardec().type());
 		
 		//visit the exp
@@ -384,13 +386,15 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		String exp = (ctx.superName!=null) ? ctx.superName.getText() : null;
 		
 		for (VarasmContext par : ctx.varasm()) {
-			pars.add(visit(par));
+			VarNode node = (VarNode)visit(par);
+			node.setInsideClass(ctx.className.getText());
+			pars.add(node);
 		}
 		
 		for(FundecContext dec : ctx.fundec()){
-			FunDecNode tmp = (FunDecNode)visit(dec);
-			tmp.setInsideClass(ctx.className.getText());
-			methods.add(tmp);
+			FunDecNode node = (FunDecNode)visit(dec);
+			node.setInsideClass(ctx.className.getText());
+			methods.add(node);
 		}
 		
 		return new BlockClassDecNode(id,exp,pars,methods, ctx);

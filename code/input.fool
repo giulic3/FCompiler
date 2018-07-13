@@ -1,11 +1,12 @@
-/*class hero {
+/*
+class hero {
     bool iAmAGenius() return true;
     void fuckYeah() print(69);
 };
 
-class super extends hero(
+class super extends hero (
     int x = 1,
-    int y = if (true) { 4 } else {5},
+    int y = if (true) then { 4 } else {5},
     hero z = new hero()
 ) {
     void g() return 0;
@@ -13,26 +14,56 @@ class super extends hero(
     int fun2(int a, bool b) return 2;
 };
 
-class ciao extends super (int x, int y){
+class ciao extends super {
     bool f(int x, int h) let int z=1; in z=1;
     void z() return 0;
-    void fun2() return 3;
+    //void fun2() return 3;
 };
 
-let ciao x = new ciao(); in x.y=2 x.fun1();*/
+let ciao x = new ciao(); in x.y=2 x.fun1();
 
 
-class A (A field = new A()) {
-    void am1() return 0;
+class A {
+    void am1() let int x = 0; in print(x);
     bool am2(bool flag) return not flag;
 
 };
-class B extends A (int x = 0) {
+class B extends A (int x = 0, A field = new A()) {
     void bm1() field.am1();
     int bm2() return x;
 };
-/*
+
 let
     A a = new A();
 in
-    print(a.am2(false));*/
+    print(a.am2(false));
+    //print(a);
+*/
+
+/*
+class A (bool m = false)
+{ int m() return 0; };
+
+let
+    A a = new A();
+in
+    print(a.m());*/
+
+/*class A {
+    void am1() return 0;
+    bool am2(bool flag) return not flag;
+
+};*/
+
+class A {
+    void am1() print(4);
+};
+
+class B {
+    void bm1() let A field = new A(); in field.am1();
+};
+
+let
+    A a = new A();
+in
+    print(a.am1());
