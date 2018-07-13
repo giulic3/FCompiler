@@ -27,12 +27,12 @@ class A (A field = new A()) {
     bool am2(bool flag) return not flag;
 
 };
-class B (int x = 0) {
+class B extends A (int x = 0) {
     void bm1() field.am1();
     int bm2() return x;
 };
-
+/*
 let
     A a = new A();
 in
-    print(a.am2(false));
+    print(a.am2(false));*/

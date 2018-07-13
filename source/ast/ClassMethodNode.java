@@ -56,39 +56,40 @@ public class ClassMethodNode implements Node {
 		
 		//SymbolTableEntry classEntry = env.getActiveDec()
 		
-		SymbolTableEntry entry = env.getActiveDec(obj.getID());
-		if (entry == null)
-			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-
-		else {
-			SymbolTableEntry classEntry = env.getActiveDec(entry.getType().getID());
-			ClassType classDef = (ClassType) classEntry.getType();
-			ArrayList<Node> methods = classDef.getMethodsList(true);
-			ArrayList<Node> fields = classDef.getFieldsList(true);
-			
-			
-			
-			int i = 0;
-			FunDecNode foundMethod = null;
-			while (foundMethod == null && i<methods.size()) {
-				FunDecNode m = (FunDecNode)methods.get(i);
-				if (m.getID().equals(id.getID())) foundMethod = m;
-				i++;
-			}
-			
-			if (foundMethod == null) {
-				res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
-						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			}
-			
-			this.entry = entry;
-			this.callNestingLevel = env.getNestingLevel();
-			
-			for (Node arg : args)
-				res.addAll(arg.checkSemantics(env));
-			
-			res.addAll(obj.checkSemantics(env));
+		HashSet<String> objectErrors = obj.checkSemantics(env);
+		if (objectErrors.size() > 0) {
+			res.addAll(objectErrors);
+			return res;
 		}
+		
+		IdNode objIDNode = (IdNode)obj;
+		SymbolTableEntry objEntry = objIDNode.getSTEntry();
+		VarNode objDec = (VarNode)objEntry.getType();
+		
+		ClassType classDef = (ClassType)(objDec.getType());
+		
+		//SymbolTableEntry classEntry = env.getActiveDec(id.getID());
+		//ClassType classDef = (ClassType) classEntry.getType();
+		ArrayList<Node> methods = classDef.getMethodsList(true);
+		
+		int i = 0;
+		FunDecNode foundMethod = null;
+		while (foundMethod == null && i<methods.size()) {
+			FunDecNode m = (FunDecNode)methods.get(i);
+			if (m.getID().equals(id.getID())) foundMethod = m;
+			i++;
+		}
+		
+		if (foundMethod == null) {
+			res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
+					+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		}
+		
+		//this.entry = entry;
+		this.callNestingLevel = env.getNestingLevel();
+		
+		for (Node arg : args)
+			res.addAll(arg.checkSemantics(env));
 		
 		return res;
 	}

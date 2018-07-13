@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -36,34 +37,51 @@ public class IdNode implements Node {
 
 		return s + "ID Node: " + id + ", cur nestinglevel: " + nestinglevel + (entry != null ? entry.toPrint(", ") : "");
 	}
+	
+	public SymbolTableEntry getSTEntry() {
+		return this.entry;
+	}
 
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
+		
+		//discriminare se l'id node non appartiene ad una classe controllo classname != null
+		
 		//create result list
 		HashSet<String> res = new HashSet<String>();
 		
-		nestinglevel=env.getNestingLevel();
-		//SymbolTableEntry entry = env.getActiveDec(id);
+		nestinglevel = env.getNestingLevel();
 		
-		HashMap<String, SymbolTableEntry> entry = env.getSymTable().get(1);
-		
-		System.out.println("stampo la symbol table di livello 1");
-		System.out.println(entry.keySet());
-		
-		
-		if (entry == null)
-			res.add("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
-		
-		if (!env.getSecondCheck()) {
-			HashMap<String, SymbolTableEntry> symTable = env.getSymTable().get(0);
+		SymbolTableEntry fieldEntry = env.getActiveDec(id);
+		if (fieldEntry == null) {
+			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(1);
+			String identifier = classContentHM.keySet().iterator().next();
 			
+			fieldEntry = classContentHM.get(identifier);
+			String classID = fieldEntry.getClassName();
+			
+			Node found = null;
+			
+			if (!classID.isEmpty()) {
+				SymbolTableEntry classEntry = env.getActiveDec(classID);
+				ClassType classType = (ClassType)classEntry.getType();
+				ArrayList<Node> fields = classType.getFieldsList(true);
+				
+				for (Node f: fields)
+					if (f.getID().equals(id)) found = f;
+			}
+			
+			// vanno salvate le informazioni della entry nell'oggetto
+			
+			if (found == null)
+				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else
+				this.entry = new SymbolTableEntry(1, 0, found);
 		}
-		else {
+		else
+			this.entry = fieldEntry;
 		
-		}
-		
-		this.entry=entry;
 		return res;
 	}
 

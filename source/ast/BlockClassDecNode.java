@@ -113,7 +113,7 @@ public class BlockClassDecNode implements Node {
 			ClassType classType = (ClassType)classEntry.getType();
 			
 			if (ext != null) {
-				SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+ext);
+				SymbolTableEntry superclassEntry = env.getActiveDec(ext);
 				if (superclassEntry == null)
 					res.add("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {
@@ -134,9 +134,42 @@ public class BlockClassDecNode implements Node {
 					}
 				}
 			}
+			env.pushScope();
+			
+			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
+			ArrayList<Node> parTypes = new ArrayList<>();
+			int parOffset=1;
+			
+			for (Node f : fields) {
+				VarNode field = (VarNode)f;
+				parTypes.add(field.getType());
+				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
+				
+				fieldEntry.setClassName(id);
+				
+				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
+					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
+			}
+			
+			
+			for (Node dec : methods) {
+				env.setOffset(env.getOffset()-2);
+				tmp.addAll(dec.checkSemantics(env));
+			}
+			env.settingFunSecondCheck(true);
+			
+			if(tmp.size()>0) {
+				for (Node dec : methods) {
+					env.setOffset(env.getOffset() - 2);
+					res.addAll(dec.checkSemantics(env));
+				}
+			}
+			env.settingFunSecondCheck(false);
+			
+			env.popScope();
 		}
 		// Executing second check on class definitions and everything inside
-		else {
+		/*else {
 			// Handling superclass declaration
 			if (ext != null) {
 				// Superclass not declared
@@ -152,41 +185,9 @@ public class BlockClassDecNode implements Node {
 					FunDecNode method = (FunDecNode)m;
 					System.out.println(method.toPrint(""));
 				}
-				System.out.println();*/
+				System.out.println();
 			}
-			
-			env.pushScope();
-			
-			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
-			ArrayList<Node> parTypes = new ArrayList<>();
-			int parOffset=1;
-			
-			for (Node f : fields) {
-				VarNode field = (VarNode)f;
-				parTypes.add(field.getType());
-				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
-				
-				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
-					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
-			}
-
-
-			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
-				tmp.addAll(dec.checkSemantics(env));
-			}
-			env.settingFunSecondCheck(true);
-
-			if(tmp.size()>0) {
-				for (Node dec : methods) {
-					env.setOffset(env.getOffset() - 2);
-					res.addAll(dec.checkSemantics(env));
-				}
-			}
-			env.settingFunSecondCheck(false);
-			
-			env.popScope();
-		}
+		}*/
 		
 		return res;
 	}

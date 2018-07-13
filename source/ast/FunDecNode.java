@@ -40,7 +40,7 @@ public class FunDecNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		entry.setClassName(classID);
 		
-		String funID = this.classID + id;
+		String funID = (!classID.isEmpty()) ? "Class$" + this.classID +"$"+ id : id;
 		
 		// this handles methods
 		if (!classID.isEmpty()) {

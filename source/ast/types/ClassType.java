@@ -7,7 +7,6 @@ import java.util.HashSet;
 import ast.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
 
 public class ClassType implements Node {
@@ -56,7 +55,7 @@ public class ClassType implements Node {
 			ArrayList<Node> superFieldsList = superType.getFieldsList(true);
 			fieldsList.addAll(superFieldsList);
 		}
-		else
+		//else
 			fieldsList.addAll(fields);
 		
 		return fieldsList;
@@ -70,7 +69,7 @@ public class ClassType implements Node {
 			ArrayList<Node> superMethodsList = superType.getMethodsList(true);
 			methodsList.addAll(superMethodsList);
 		}
-		else
+		//else
 			methodsList.addAll(methods);
 		
 		return methodsList;
