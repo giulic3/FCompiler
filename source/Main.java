@@ -84,16 +84,16 @@ public class Main {
 		}
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws  Exception{
 
-		try {
+		//try {
 			File inputFile = new File("code/input.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
-		}
-		catch (Exception E) {
-
-		}
+		//}
+		/*catch (Exception E) {
+			System.out.println(E);
+		}*/
 		/*ast.typeCheck();
 		
 		Node boolNode = new BoolValNode(true);

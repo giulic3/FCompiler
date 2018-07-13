@@ -369,7 +369,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		else if (ctx.getText().equals("void"))
 			return new VoidType();
 		else
-			return new ClassType(ctx.getText());
+			return new ClassType(ctx.getText(), ctx);
 	}
 	
 	@Override

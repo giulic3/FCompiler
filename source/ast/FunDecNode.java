@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -45,8 +46,10 @@ public class FunDecNode implements Node {
 		if (!classID.isEmpty()) {
 			SymbolTableEntry classEntry = env.getActiveDec(this.classID);
 			if (classEntry != null) {
-				BlockClassDecNode classNode = (BlockClassDecNode)classEntry.getType();
-				ArrayList<Node> inheritedMethods = classNode.getInheritedMethods(classNode.getSuperclassID(), env);
+				ClassType classNode = (ClassType)classEntry.getType();
+				ArrayList<Node> inheritedMethods = classNode.getMethodsList(true);
+				
+				//ArrayList<Node> inheritedMethods = classNode.getInheritedMethods(classNode.getSuperclassID(), env);
 				for (Node m:inheritedMethods) {
 					FunDecNode method = (FunDecNode)m;
 					// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
@@ -127,7 +130,7 @@ public class FunDecNode implements Node {
 	}
 	
 	public void setInsideClass(String val) {
-		this.classID = "Class$" + val + "$";
+		this.classID = val;
 	}
 
 	//valore di ritorno non utilizzato

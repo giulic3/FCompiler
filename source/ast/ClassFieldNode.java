@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -45,9 +46,9 @@ public class ClassFieldNode implements Node {
 		if (entry == null)
 			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else {
-			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
-			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();
-			ArrayList<Node> fields = classDef.getFields();
+			SymbolTableEntry classEntry = env.getActiveDec(entry.getType().getID());
+			ClassType classDef = (ClassType) classEntry.getType();
+			ArrayList<Node> fields = classDef.getFieldsList(true);
 			
 			int i = 0;
 			VarNode foundField = null;

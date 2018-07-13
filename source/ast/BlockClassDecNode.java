@@ -1,6 +1,8 @@
 package ast;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
+import sun.awt.Symbol;
 import utils.Environment;
 ;
 import utils.SymbolTableEntry;
@@ -95,10 +97,20 @@ public class BlockClassDecNode implements Node {
 		if (!env.getSecondCheck()) {
 			HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
 			//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
-			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), this);
 			
-			if (classDecHM.put("Class$" + id, classEntry) != null)
+			ClassType classType = new ClassType(id, null, fields, methods, ctx);
+			
+			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), classType);
+			
+			if (classDecHM.put(id, classEntry) != null)
 				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			
+		}
+		// Executing second check on class definitions and everything inside
+		else {
+			// Handling superclass declaration
+			SymbolTableEntry classEntry = env.getActiveDec(id);
+			ClassType classType = (ClassType)classEntry.getType();
 			
 			if (ext != null) {
 				SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+ext);
@@ -107,14 +119,18 @@ public class BlockClassDecNode implements Node {
 				else {
 					if (ext.equals(id))
 						res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-				}
-				
-				ArrayList<Node> inheritedFields = getInheritedFields(ext, env);
-				for (Node f:inheritedFields) {
-					for (Node curF: fields) {
-						if (f.getID().equals(curF.getID()))
-							res.add("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+					else {
+						ClassType superType = (ClassType)superclassEntry.getType();
+						classType.setSuperType(superType);
+						
+						ArrayList<Node> inheritedFields = superType.getFieldsList(true);
+						for (Node f:inheritedFields) {
+							for (Node curF: fields) {
+								if (f.getID().equals(curF.getID()))
+									res.add("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
+											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+							}
+						}
 					}
 				}
 			}

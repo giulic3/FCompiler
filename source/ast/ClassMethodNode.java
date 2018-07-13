@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -51,16 +52,21 @@ public class ClassMethodNode implements Node {
 		 *  e va cercato il metodo all'interno della classe in esame
 		 */
 		
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
+		
+		//SymbolTableEntry classEntry = env.getActiveDec()
 		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
 			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 
 		else {
-			SymbolTableEntry classEntry = env.getActiveDec("Class$"+entry.getType().getID());
-			BlockClassDecNode classDef = (BlockClassDecNode) classEntry.getType();
-			ArrayList<Node> methods = classDef.getMethods();
+			SymbolTableEntry classEntry = env.getActiveDec(entry.getType().getID());
+			ClassType classDef = (ClassType) classEntry.getType();
+			ArrayList<Node> methods = classDef.getMethodsList(true);
+			ArrayList<Node> fields = classDef.getFieldsList(true);
+			
+			
 			
 			int i = 0;
 			FunDecNode foundMethod = null;
@@ -80,6 +86,8 @@ public class ClassMethodNode implements Node {
 			
 			for (Node arg : args)
 				res.addAll(arg.checkSemantics(env));
+			
+			res.addAll(obj.checkSemantics(env));
 		}
 		
 		return res;

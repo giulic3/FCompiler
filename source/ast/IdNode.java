@@ -13,6 +13,7 @@ import utils.SymbolTableEntry;
 public class IdNode implements Node {
 
 	private String id;
+	private String classID;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
 	private ParserRuleContext ctx;
@@ -20,6 +21,11 @@ public class IdNode implements Node {
 	public IdNode (String i, ParserRuleContext ctx) {
 		this.ctx=ctx;
 		id = i;
+		classID = null;
+	}
+	
+	public void setClassID(String classID) {
+		this.classID = classID;
 	}
 	
 	public String getID() {
@@ -49,7 +55,15 @@ public class IdNode implements Node {
 		if (entry == null)
 			res.add("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		
-		//this.entry=entry;
+		if (!env.getSecondCheck()) {
+			HashMap<String, SymbolTableEntry> symTable = env.getSymTable().get(0);
+			
+		}
+		else {
+		
+		}
+		
+		this.entry=entry;
 		return res;
 	}
 
