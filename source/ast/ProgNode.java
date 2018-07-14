@@ -35,20 +35,15 @@ public class ProgNode  implements Node {
 		
 		env.pushScope();
 		
-		//System.out.println("Prima passata");
 		for (Node bClass:blocks) {
 			if (bClass instanceof BlockClassDecNode)
 				errors.addAll(bClass.checkSemantics(env));
 		}
 		
-		
-		
-		//System.out.println("Seconda passata");
 		env.settingSecondCheck();
 		
-		for(Node b:blocks){
+		for(Node b:blocks)
 			errors.addAll(b.checkSemantics(env));
-		}
 		
 		// QUI NON SERVE LA POPSCOPE!!!
 		

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+import ast.types.ClassType;
 import sun.awt.Symbol;
 import utils.SymbolTableEntry;
 
@@ -58,6 +59,16 @@ public class Environment {
 		}
 		
 		return res;
+	}
+	
+	public SymbolTableEntry getClassEntry(String classID) {
+		return symTable.get(0).get(classID);
+	}
+	
+	public void updateClassEntry(ClassType type) {
+		SymbolTableEntry curEntry = getClassEntry(type.getID());
+		curEntry.setType(type);
+		symTable.get(0).put(type.getID(), curEntry);
 	}
 	
 	public void pushScope() {

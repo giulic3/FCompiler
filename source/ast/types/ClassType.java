@@ -100,17 +100,24 @@ public class ClassType implements Node {
 	
 	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: non dovrebbe servire
-		/*HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<String>();
 		
-		SymbolTableEntry entry = env.getActiveDec("Class$"+ classID);
+		SymbolTableEntry entry = env.getActiveDec(classID); // DO NOT REMOVE Class$ (all class IDs in entries will be changed to Class$NameClass form)
 		if (entry == null)
-			res.add("Class " + classID + " not declared\n");
+			res.add("Class " + classID + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		
-		return res;*/
-		return new HashSet<String>();
+		return res;
 	}
 	
 	public String getID() {
 		return classID;
+	}
+	
+	public void setFields(ArrayList<Node> fields){
+		this.fields = fields;
+	}
+	
+	public void setMethods(ArrayList<Node> methods){
+		this.methods = methods;
 	}
 }

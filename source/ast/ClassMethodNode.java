@@ -66,9 +66,7 @@ public class ClassMethodNode implements Node {
 		SymbolTableEntry objEntry = objIDNode.getSTEntry();
 		
 		if (objEntry.getType() instanceof ClassType) {
-			String classID = ((ClassType) objEntry.getType()).getClassID();
-			SymbolTableEntry classEntry = env.getActiveDec(classID);
-			ClassType classDef = (ClassType)classEntry.getType();
+			ClassType classDef = (ClassType)objEntry.getType();
 			
 			ArrayList<Node> methods = classDef.getMethodsList(true);
 			
@@ -93,12 +91,6 @@ public class ClassMethodNode implements Node {
 		else {
 			res.add("Wrong usage of method on object at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
-		
-		//SymbolTableEntry classEntry = env.getActiveDec(id.getID());
-		//ClassType classDef = (ClassType) classEntry.getType();
-		
-		
-		//this.entry = entry;
 		
 		
 		return res;

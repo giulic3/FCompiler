@@ -56,6 +56,10 @@ public class VarNode implements Node {
 		return type;
 	}
 	
+	public void setType(Node type) {
+		this.type = type;
+	}
+	
 	public String getId(){
 		return id;
 	}
@@ -65,6 +69,10 @@ public class VarNode implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		HashSet<String> res = new HashSet<String>();
 		
+		if (exp!=null) res.addAll(exp.checkSemantics(env));
+		
+		res.addAll(type.checkSemantics(env));
+		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		env.setOffset(env.getOffset()-1);
@@ -72,22 +80,18 @@ public class VarNode implements Node {
 		
 		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
 		
-		/*String classID = "Class$";
-		if (type instanceof ClassType) {
-			ClassType classType = (ClassType)type;
-			classID += classType.getClassID() + "$" + id;
-			entry.setClassName(classType.getClassID());
-			if ( hm.put(classID,entry) != null )
-				res.add("Class field "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		if (exp instanceof NewExpNode) {
+			NewExpNode newNode = (NewExpNode)exp;
+			SymbolTableEntry newEntry = newNode.getSTEntry();
+			if (newEntry != null) {
+				entry.setType(newEntry.getType());
+				setType(newEntry.getType());
+			}
 		}
-		else {*/
-			if ( hm.put(ID,entry) != null )
+		
+		if ( hm.put(ID,entry) != null )
 				res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
-		//}
-		
-		res.addAll(type.checkSemantics(env));
-		if(exp!=null) res.addAll(exp.checkSemantics(env));
-		
+				
 		return res;
 	}
 	

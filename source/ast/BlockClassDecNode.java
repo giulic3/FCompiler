@@ -109,8 +109,8 @@ public class BlockClassDecNode implements Node {
 		// Executing second check on class definitions and everything inside
 		else {
 			// Handling superclass declaration
-			SymbolTableEntry classEntry = env.getActiveDec(id);
-			ClassType classType = (ClassType)classEntry.getType();
+			// TODO: check null!
+			ClassType classType = (ClassType)env.getClassEntry(id).getType();
 			
 			if (ext != null) {
 				SymbolTableEntry superclassEntry = env.getActiveDec(ext);
@@ -140,57 +140,33 @@ public class BlockClassDecNode implements Node {
 			ArrayList<Node> parTypes = new ArrayList<>();
 			int parOffset=1;
 			
-			for (Node f : fields) {
+			for (Node f: fields) {
 				VarNode field = (VarNode)f;
-				parTypes.add(field.getType());
-				//SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
-				
-				//fieldEntry.setClassName(id);
-				
 				res.addAll(field.checkSemantics(env));
-				
-				//if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
-				//	res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
 			}
-			
 			
 			for (Node dec : methods) {
 				env.setOffset(env.getOffset()-2);
 				tmp.addAll(dec.checkSemantics(env));
 			}
+			
 			env.settingFunSecondCheck(true);
 			
 			//if(tmp.size()>0) {
-				for (Node dec : methods) {
-					env.setOffset(env.getOffset() - 2);
-					res.addAll(dec.checkSemantics(env));
-				}
+			for (Node dec : methods) {
+				env.setOffset(env.getOffset() - 2);
+				res.addAll(dec.checkSemantics(env));
+			}
 			//}
+			
 			res.addAll(tmp);
+			
 			env.settingFunSecondCheck(false);
+			
+			//env.updateClassEntry(classType);
 			
 			env.popScope();
 		}
-		// Executing second check on class definitions and everything inside
-		/*else {
-			// Handling superclass declaration
-			if (ext != null) {
-				// Superclass not declared
-				if (env.getActiveDec("Class$" + ext) == null)
-					res.add(("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
-				
-				// Climb back superclass declarations to collect list of inherited methods and fields
-				// TODO: va fatto qua? oppure in ClassMethodNode? per i campi dovrebbe essere un discorso analogo
-				// TODO: manca la gestion degli errori in caso di dichiarazioni multiple (che non sia overriding, nel caso dei metodi)
-				/*ArrayList<Node> inheritedMethods = getInheritedMethods(ext, env);
-				System.out.println("\nInherited method for class " + id);
-				for (Node m:inheritedMethods) {
-					FunDecNode method = (FunDecNode)m;
-					System.out.println(method.toPrint(""));
-				}
-				System.out.println();
-			}
-		}*/
 		
 		return res;
 	}

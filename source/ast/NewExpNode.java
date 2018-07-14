@@ -1,5 +1,6 @@
 package ast;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
 import utils.SymbolTableEntry;
@@ -13,11 +14,12 @@ public class NewExpNode implements Node {
 	protected ArrayList<Node> args;
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
+	private ParserRuleContext ctx;
 	
-	public NewExpNode(String ID, ArrayList<Node> args){
+	public NewExpNode(String ID, ArrayList<Node> args, ParserRuleContext ctx){
 		this.id = ID;
-		this.args=args;
-		
+		this.args = args;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
@@ -32,6 +34,10 @@ public class NewExpNode implements Node {
 			msg += ")";
 		
 		return msg;
+	}
+	
+	public SymbolTableEntry getSTEntry() {
+		return entry;
 	}
 	
 	
@@ -53,10 +59,14 @@ public class NewExpNode implements Node {
 		// TODO: IMPORTANT: define unique key management for classes
 		SymbolTableEntry entry = env.getActiveDec(id);
 		if (entry == null)
-			res.add("Class " + id + " not declared\n");
+			res.add("Class " + id + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		else
+			this.entry = entry;
 		
 		for (Node a: args)
 			res.addAll(a.checkSemantics(env));
+		
+		// TODO: aggiungere controlli parametri costruttori
 		
 		return res;
 	}
