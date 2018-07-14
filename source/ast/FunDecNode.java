@@ -11,21 +11,20 @@ import utils.SymbolTableEntry;
 
 public class FunDecNode implements Node {
 
-	private String id;
-	private Node type;
+	protected String name;
+	protected Node type;
 
-	private ArrayList<Node> parlist;
-	private ArrayList<Node> declist;
-	private ArrayList<Node> body;
-	private ParserRuleContext ctx;
-	private String classID = null;
+	protected ArrayList<Node> parList;
+	protected ArrayList<Node> decList;
+	protected ArrayList<Node> body;
+	protected ParserRuleContext ctx;
 
-	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body, ParserRuleContext ctx) {
-		this.ctx=ctx;
-		this.id = id;
+	public FunDecNode (String name, Node type, ArrayList<Node> decList, ArrayList<Node> parList, ArrayList<Node> body, ParserRuleContext ctx) {
+		this.ctx = ctx;
+		this.name = name;
 		this.type = type;
-		this.declist = declist;
-		this.parlist=parlist;
+		this.decList = decList;
+		this.parList = parList;
 		this.body = body;
 	}
 	
@@ -33,67 +32,75 @@ public class FunDecNode implements Node {
 	public HashSet<String> checkSemantics(Environment env) {
 
 		//create result list
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
-		entry.setClassName(classID);
 		
-		String funID = (classID!=null) ? "Class$" + this.classID +"$m$"+ id : id;
+		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni
 		
-		// this handles methods
-		if (classID!=null) {
-			SymbolTableEntry classEntry = env.getClassEntry(this.classID);
-			if (classEntry != null) {
-				ClassType classNode = (ClassType)classEntry.getType();
-				ArrayList<Node> inheritedMethods = classNode.getMethodsList(true);
-				
-				//ArrayList<Node> inheritedMethods = classNode.getInheritedMethods(classNode.getSuperclassID(), env);
-				for (Node m:inheritedMethods) {
-					FunDecNode method = (FunDecNode)m;
-					// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
-					if (method.getID().equals(this.id)) {
-						if (method.parlist.size() != this.parlist.size())
-							res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-						else {
-							for (int i=0; i<parlist.size(); i++) {
-								VarNode inheritedMethodPar = (VarNode)method.parlist.get(i);
-								VarNode curMethodPar = (VarNode)this.parlist.get(i);
-								if (inheritedMethodPar.getType().getClass() != curMethodPar.getType().getClass())
-									res.add("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
-											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-							}
-						}
-						if (method.type.getClass() != this.type.getClass())
-							res.add("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-					}
-				}
-			}
-		}
+//		entry.setClassName(classID);
+//
+//		String funID = (classID!=null) ? "Class$" + this.classID +"$m$"+ name : name;
+//
+//		// this handles methods
+//		if (classID!=null) {
+//			SymbolTableEntry classEntry = env.getClassEntry(this.classID);
+//			if (classEntry != null) {
+//				ClassType classNode = (ClassType)classEntry.getType();
+//				ArrayList<Node> inheritedMethods = classNode.getMethodsList(true);
+//
+//				//ArrayList<Node> inheritedMethods = classNode.getInheritedMethods(classNode.getSuperclassID(), env);
+//				for (Node m:inheritedMethods) {
+//					FunDecNode method = (FunDecNode)m;
+//					// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
+//					if (method.getID().equals(this.name)) {
+//						if (method.parList.size() != this.parList.size())
+//							res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
+//									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+//						else {
+//							for (int i = 0; i< parList.size(); i++) {
+//								VarNode inheritedMethodPar = (VarNode)method.parList.get(i);
+//								VarNode curMethodPar = (VarNode)this.parList.get(i);
+//								if (inheritedMethodPar.getType().getClass() != curMethodPar.getType().getClass())
+//									res.add("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+//											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+//							}
+//						}
+//						if (method.type.getClass() != this.type.getClass())
+//							res.add("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
+//									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+//					}
+//				}
+//			}
+//		}
+		// TODO: usare una chiave del tipo "Function$FunName"
+		//String funID = "Function$" + name; TODO: da decommentare quando si sistema ovunque la nuova chiave
+		String funID = name;
 		
 		if(!env.getFunSecondCheck()) {
 			if (hm.put(funID, entry) != null)
-				res.add("Fun id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				res.add("Function " + name + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		
 		env.pushScope();
 		
-		HashMap<String, SymbolTableEntry> fun_hm = env.getSymTable().get(env.getNestingLevel());
+		HashMap<String, SymbolTableEntry> funContentHM = env.getSymTable().get(env.getNestingLevel());
 		
-		ArrayList<Node> parTypes = new ArrayList<Node>();
+		ArrayList<Node> parTypes = new ArrayList<>();
 		int paroffset = 1;
 		
-		for (Node par : parlist) {
+		for (Node par : parList) {
 			VarNode arg = (VarNode) par;
 			parTypes.add(arg.getType());
-			if (fun_hm.put(arg.getId(), new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType())) != null)
-				res.add("Parameter id " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
+			
+			if (funContentHM.put(arg.getId(), funEntry) != null)
+				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 		
-		for (Node dec : declist) {
+		for (Node dec : decList) {
 			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));
 		}
@@ -112,26 +119,22 @@ public class FunDecNode implements Node {
 		String parlstr = "";
 		String declstr = "";
 
-		if (parlist!=null && !parlist.isEmpty()) {
-			for (Node par : parlist)
+		if (parList !=null && !parList.isEmpty()) {
+			for (Node par : parList)
 				parlstr += "\n" + par.toPrint(s + "\t\t");
 			parlstr+="\n"+s+"\t";
 		}
 
-		if (parlist!=null && !parlist.isEmpty()) {
+		if (decList !=null && !decList.isEmpty()) {
 			declstr = "\n"+s+"\tFun Decs:";
-			for (Node dec : declist)
+			for (Node dec : decList)
 				declstr += "\n" + dec.toPrint(s + "\t\t");
 		}
 
-		return s+"Fun Dec Node: " +type.toPrint("") + " " + id +"("
+		return s+"Fun Dec Node: " +type.toPrint("") + " " + name +"("
 				+parlstr+")"
 				+declstr;
 				//+body.toPrint(s+"  ") ;
-	}
-	
-	public void setInsideClass(String val) {
-		this.classID = val;
 	}
 
 	//valore di ritorno non utilizzato
@@ -145,7 +148,7 @@ public class FunDecNode implements Node {
 	}
 	
 	public String getID() {
-		return id;
+		return name;
 	}
 
 }

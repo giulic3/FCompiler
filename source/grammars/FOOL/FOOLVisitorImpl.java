@@ -311,6 +311,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
+		// TODO: check FunExpNode usage with new MethodDecNode
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx); // TODO: check passed context for error line numbers
 		return new ClassMethodNode(objectNode, methodNode, args, false, ctx);
 		
@@ -378,10 +379,12 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			pars.add(node);
 		}
 		
-		for(FundecContext dec : ctx.fundec()){
-			FunDecNode node = (FunDecNode)visit(dec);
-			node.setInsideClass(ctx.className.getText());
-			methods.add(node);
+		for(FundecContext dec : ctx.fundec()) {
+			FunDecNode funNode = (FunDecNode)visit(dec);
+			// TODO: Improve MethodDecNode creation
+			
+			MethodDecNode methodNode = new MethodDecNode(funNode, ctx.className.getText());
+			methods.add(methodNode);
 		}
 		
 		return new BlockClassDecNode(id,exp,pars,methods, ctx);
