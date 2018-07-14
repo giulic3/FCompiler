@@ -54,8 +54,6 @@ public class ClassMethodNode implements Node {
 		
 		HashSet<String> res = new HashSet<>();
 		
-		//SymbolTableEntry classEntry = env.getActiveDec()
-		
 		HashSet<String> objectErrors = obj.checkSemantics(env);
 		if (objectErrors.size() > 0) {
 			res.addAll(objectErrors);

@@ -40,11 +40,11 @@ public class FunDecNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		entry.setClassName(classID);
 		
-		String funID = (!classID.isEmpty()) ? "Class$" + this.classID +"$"+ id : id;
+		String funID = (!classID.isEmpty()) ? "Class$" + this.classID +"$m$"+ id : id;
 		
 		// this handles methods
 		if (!classID.isEmpty()) {
-			SymbolTableEntry classEntry = env.getActiveDec(this.classID);
+			SymbolTableEntry classEntry = env.getClassEntry(this.classID);
 			if (classEntry != null) {
 				ClassType classNode = (ClassType)classEntry.getType();
 				ArrayList<Node> inheritedMethods = classNode.getMethodsList(true);

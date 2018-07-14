@@ -73,25 +73,26 @@ public class VarNode implements Node {
 		
 		res.addAll(type.checkSemantics(env));
 		
-		//env.offset = -2;
-		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
-		
-		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
-		
-		if (exp instanceof NewExpNode) {
-			NewExpNode newNode = (NewExpNode)exp;
-			SymbolTableEntry newEntry = newNode.getSTEntry();
-			if (newEntry != null) {
-				entry.setType(newEntry.getType());
-				setType(newEntry.getType());
+		if(!env.getFunSecondCheck()) {
+			//env.offset = -2;
+			HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
+			env.setOffset(env.getOffset() - 1);
+			SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), type); //separo introducendo "entry"
+			
+			String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
+			
+			if (exp instanceof NewExpNode) {
+				NewExpNode newNode = (NewExpNode) exp;
+				SymbolTableEntry newEntry = newNode.getSTEntry();
+				if (newEntry != null) {
+					entry.setType(newEntry.getType());
+					setType(newEntry.getType());
+				}
 			}
+			
+			if (hm.put(ID, entry) != null)
+				res.add("Var or Par id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
-		
-		if ( hm.put(ID,entry) != null )
-				res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
-				
 		return res;
 	}
 	

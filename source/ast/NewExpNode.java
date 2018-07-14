@@ -57,7 +57,7 @@ public class NewExpNode implements Node {
 		
 		// TODO: handle offset
 		// TODO: IMPORTANT: define unique key management for classes
-		SymbolTableEntry entry = env.getActiveDec(id);
+		SymbolTableEntry entry = env.getClassEntry(id);
 		if (entry == null)
 			res.add("Class " + id + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else

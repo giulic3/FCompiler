@@ -57,32 +57,6 @@ public class BlockClassDecNode implements Node {
 		return fields;
 	}
 	
-	public ArrayList<Node> getInheritedMethods(String superclassID, Environment env) {
-		ArrayList<Node> methods = new ArrayList<>();
-		
-		SymbolTableEntry superclassEntry = env.getActiveDec("Class$" + superclassID);
-		if (superclassEntry != null) {
-			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
-			methods.addAll(getInheritedMethods(superclass.getSuperclassID(), env));
-			methods.addAll(superclass.getMethods());
-		}
-		
-		return methods;
-	}
-	
-	public ArrayList<Node> getInheritedFields(String superclassID, Environment env) {
-		ArrayList<Node> fields = new ArrayList<>();
-		
-		SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+superclassID);
-		if (superclassEntry != null) {
-			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
-			fields.addAll(getInheritedFields(superclass.getSuperclassID(), env));
-			fields.addAll(superclass.getFields());
-		}
-		
-		return fields;
-	}
-	
 	public Node typeCheck(){return null;}
 	
 	public String codeGeneration(){return null;}
@@ -102,7 +76,7 @@ public class BlockClassDecNode implements Node {
 			
 			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), classType);
 			
-			if (classDecHM.put(id, classEntry) != null)
+			if (classDecHM.put("Class$"+id, classEntry) != null)
 				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			
 		}
@@ -113,7 +87,7 @@ public class BlockClassDecNode implements Node {
 			ClassType classType = (ClassType)env.getClassEntry(id).getType();
 			
 			if (ext != null) {
-				SymbolTableEntry superclassEntry = env.getActiveDec(ext);
+				SymbolTableEntry superclassEntry = env.getClassEntry(ext);
 				if (superclassEntry == null)
 					res.add("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {

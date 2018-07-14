@@ -46,7 +46,7 @@ public class ClassFieldNode implements Node {
 		if (entry == null)
 			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else {
-			SymbolTableEntry classEntry = env.getActiveDec(entry.getType().getID());
+			SymbolTableEntry classEntry = env.getClassEntry(entry.getType().getID());
 			ClassType classDef = (ClassType) classEntry.getType();
 			ArrayList<Node> fields = classDef.getFieldsList(true);
 			

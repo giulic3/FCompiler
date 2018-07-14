@@ -62,7 +62,7 @@ public class Environment {
 	}
 	
 	public SymbolTableEntry getClassEntry(String classID) {
-		return symTable.get(0).get(classID);
+		return symTable.get(0).get("Class$"+classID);
 	}
 	
 	public void updateClassEntry(ClassType type) {

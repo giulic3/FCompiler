@@ -102,7 +102,7 @@ public class ClassType implements Node {
 		// TODO: non dovrebbe servire
 		HashSet<String> res = new HashSet<String>();
 		
-		SymbolTableEntry entry = env.getActiveDec(classID); // DO NOT REMOVE Class$ (all class IDs in entries will be changed to Class$NameClass form)
+		SymbolTableEntry entry = env.getClassEntry(classID); // DO NOT REMOVE Class$ (all class IDs in entries will be changed to Class$NameClass form)
 		if (entry == null)
 			res.add("Class " + classID + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		

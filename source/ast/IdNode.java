@@ -64,7 +64,7 @@ public class IdNode implements Node {
 			Node found = null;
 			
 			if (!classID.isEmpty()) {
-				SymbolTableEntry classEntry = env.getActiveDec(classID);
+				SymbolTableEntry classEntry = env.getClassEntry(classID);
 				ClassType classType = (ClassType)classEntry.getType();
 				ArrayList<Node> fields = classType.getFieldsList(true);
 				
