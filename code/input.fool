@@ -52,16 +52,21 @@ class A {
     bool am2(bool flag) return not flag;
 
 };*/
-
-class A (A field = new A()) {
+/*
+class A (int x = 1, A field = new A()) {
     void am1() print(4);
 };
+*/
 /*
 class B extends A (int x = 0, B n = new B()) {
     void bm1() field.am1();
 };*/
-
+/*
 let
-    A a = new A();
+    B a = new B();
 in
-    print(a.am1());
+    a.x=2;*/
+
+class C {
+    void f() let int x = 0; in x=1;
+};

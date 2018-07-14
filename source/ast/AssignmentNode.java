@@ -9,26 +9,20 @@ import java.util.HashSet;
 
 public class AssignmentNode implements Node {
 	
-	private Node id;
+	private Node varNode = null;
 	private Node exp;
-	private Node object;
+	private Node objFieldNode = null;
 	
-	public AssignmentNode(Node id, Node exp){
-		this.id=id;
-		this.exp=exp;
-		this.object = null;
-	}
-	
-	public AssignmentNode(Node id, Node exp, Node object){
-		this.id=id;
-		this.exp=exp;
-		this.object = object;
+	public AssignmentNode(Node var, Node exp, boolean isClassField){
+		if (isClassField) this.objFieldNode = var;
+		else this.varNode = var;
+		
+		this.exp = exp;
 	}
 	
 	public String toPrint(String s){
-		// TODO: handle object printing
-		return s + "Assignment Node:\n" + id.toPrint(s+"\t\t") + "\n" + exp.toPrint(s+"\t\t");
-	};
+		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : varNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
+	}
 	
 	public Node typeCheck() {
 		/*
@@ -59,10 +53,11 @@ public class AssignmentNode implements Node {
 		
 		HashSet<String> res = new HashSet<String>();
 		
-		if (object != null)
-			res.addAll(object.checkSemantics(env));
+		if (objFieldNode != null)
+			res.addAll(objFieldNode.checkSemantics(env));
+		else
+			res.addAll(varNode.checkSemantics(env));
 		
-		res.addAll(id.checkSemantics(env));
 		res.addAll(exp.checkSemantics(env));
 		
 		return res;

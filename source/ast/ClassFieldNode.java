@@ -27,7 +27,7 @@ public class ClassFieldNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s+"Class Field Node:\n" + s + "\t\tObject: " + this.obj.toPrint("") + "\n" + s + "\t\tMethod: " + this.id.toPrint("");
+		return s+"Class Field Node:\n" + s + "\tObject: " + this.obj.toPrint("") + "\n" + s + "\tField: " + this.id.toPrint("");
 	}
 	
 	public Node typeCheck() {
@@ -42,28 +42,34 @@ public class ClassFieldNode implements Node {
 		
 		HashSet<String> res = new HashSet<String>();
 		
+		res.addAll(obj.checkSemantics(env));
+		
 		SymbolTableEntry entry = env.getActiveDec(obj.getID());
 		if (entry == null)
 			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else {
 			SymbolTableEntry classEntry = env.getClassEntry(entry.getType().getID());
-			ClassType classDef = (ClassType) classEntry.getType();
-			ArrayList<Node> fields = classDef.getFieldsList(true);
-			
-			int i = 0;
-			VarNode foundField = null;
-			while (foundField == null && i<fields.size()) {
-				VarNode m = (VarNode)fields.get(i);
-				if (m.getID().equals(id.getID())) foundField = m;
-				i++;
+			if (classEntry != null) {
+				ClassType classDef = (ClassType) classEntry.getType();
+				ArrayList<Node> fields = classDef.getFieldsList(true);
+				
+				int i = 0;
+				VarNode foundField = null;
+				while (foundField == null && i < fields.size()) {
+					VarNode m = (VarNode) fields.get(i);
+					if (m.getID().equals(id.getID())) foundField = m;
+					i++;
+				}
+				
+				if (foundField == null) {
+					res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				}
+				
+				this.entry = entry;
+				this.callNestingLevel = env.getNestingLevel();
 			}
-			
-			if (foundField == null) {
-				res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			}
-			
-			this.entry = entry;
-			this.callNestingLevel = env.getNestingLevel();
+			else
+				res.add("Type of object " + obj.getID() + " is not defined at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		
 		return res;

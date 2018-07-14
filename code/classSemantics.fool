@@ -20,3 +20,5 @@ class pippo {
 };
 
 let ciao x = new ciao(); in x.m() x.ciao x.y=2 x.fun1();
+
+let int h = 0; in h=1;

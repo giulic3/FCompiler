@@ -10,29 +10,17 @@ import java.util.HashSet;
 public class NewExpNode implements Node {
 	
 	protected String id;
-	protected ArrayList<Node> args;
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
 	private ParserRuleContext ctx;
 	
-	public NewExpNode(String ID, ArrayList<Node> args, ParserRuleContext ctx){
+	public NewExpNode(String ID, ParserRuleContext ctx){
 		this.id = ID;
-		this.args = args;
 		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
-		String msg = s + "New Instance Node: " + this.id + "(";
-		
-		if (this.args != null && !this.args.isEmpty()) {
-			for (Node b : this.args) {
-				msg += "\n " + s + b.toPrint("\t");
-			}
-			msg += "\n" + s + ")";
-		} else
-			msg += ")";
-		
-		return msg;
+		return s + "New Instance Node: " + this.id + "()";
 	}
 	
 	public SymbolTableEntry getSTEntry() {
@@ -61,11 +49,6 @@ public class NewExpNode implements Node {
 			res.add("Class " + id + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else
 			this.entry = entry;
-		
-		for (Node a: args)
-			res.addAll(a.checkSemantics(env));
-		
-		// TODO: aggiungere controlli parametri costruttori
 		
 		return res;
 	}

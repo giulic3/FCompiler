@@ -244,33 +244,22 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	@Override
 	public Node visitNewExp(NewExpContext ctx) {
-		//this corresponds to a function invocation
 		
-		//declare the result
-		Node res;
-		
-		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<>();
-		
-		for(ExpContext exp : ctx.exp())
-			args.add(visit(exp));
-		
-		res = new NewExpNode(ctx.className.getText(), args, ctx);
-		
-		return res;
+		return new NewExpNode(ctx.className.getText(), ctx);
 	}
 	
 	@Override
 	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
 		
-		if (ctx.DOT() == null)
-			return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()));
+		Node varNode = visit(ctx.var());
+		Node expNode = visit(ctx.exp());
 		
-		// TODO: improve class field assignment
-		// TODO: check passed context for error line numbers
+		if (ctx.DOT() == null)
+			return new AssignmentNode(varNode, expNode, false);
+		
 		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
-		ClassFieldNode objectNode = new ClassFieldNode(visit(ctx.var()), fieldNode, false, ctx);
-		return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()), objectNode);
+		ClassFieldNode objectFieldNode = new ClassFieldNode(varNode, fieldNode, false, ctx);
+		return new AssignmentNode(objectFieldNode, expNode, true);
 	}
 	
 	public Node visitVar(VarContext ctx) {
