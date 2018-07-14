@@ -61,11 +61,9 @@ public class Main {
 		
 		System.out.println("Lexer & parser...");
 		
-		
 		Node ast = lexicalAndSyntacticAnalysis(input);
 		
 		System.out.println("Visualizing AST...");
-		//System.out.println(ast.toPrint(""));
 		
 		ast = semanticAnalysis(ast, true);
 		

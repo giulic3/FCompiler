@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="test" type="Application" factoryName="Application">
+  <configuration default="false" name="FOOL Tests" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="TestThread" />
     <module name="FCompiler" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />

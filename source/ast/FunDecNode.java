@@ -139,10 +139,10 @@ public class FunDecNode implements Node {
 
 	//valore di ritorno non utilizzato
 	public Node typeCheck () throws Exception {
-		for(Node p : parlist){
+		for(Node p : parList){
 			p.typeCheck();
 		}
-		for(Node d : declist){
+		for(Node d : decList){
 			d.typeCheck();
 		}
 		for(Node b : body){
