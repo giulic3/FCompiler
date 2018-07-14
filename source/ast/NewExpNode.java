@@ -2,7 +2,6 @@ package ast;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;

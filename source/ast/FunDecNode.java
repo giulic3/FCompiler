@@ -18,7 +18,7 @@ public class FunDecNode implements Node {
 	private ArrayList<Node> declist;
 	private ArrayList<Node> body;
 	private ParserRuleContext ctx;
-	private String classID = "";
+	private String classID = null;
 
 	public FunDecNode (String id, Node type, ArrayList<Node> declist, ArrayList<Node> parlist, ArrayList<Node> body, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -40,10 +40,10 @@ public class FunDecNode implements Node {
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		entry.setClassName(classID);
 		
-		String funID = (!classID.isEmpty()) ? "Class$" + this.classID +"$m$"+ id : id;
+		String funID = (classID!=null) ? "Class$" + this.classID +"$m$"+ id : id;
 		
 		// this handles methods
-		if (!classID.isEmpty()) {
+		if (classID!=null) {
 			SymbolTableEntry classEntry = env.getClassEntry(this.classID);
 			if (classEntry != null) {
 				ClassType classNode = (ClassType)classEntry.getType();

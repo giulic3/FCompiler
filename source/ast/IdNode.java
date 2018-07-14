@@ -63,7 +63,7 @@ public class IdNode implements Node {
 			
 			Node found = null;
 			
-			if (!classID.isEmpty()) {
+			if (classID!=null) {
 				SymbolTableEntry classEntry = env.getClassEntry(classID);
 				ClassType classType = (ClassType)classEntry.getType();
 				ArrayList<Node> fields = classType.getFieldsList(true);
@@ -77,10 +77,10 @@ public class IdNode implements Node {
 			if (found == null)
 				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			else {
-				if (found instanceof VarNode)
-					this.entry = new SymbolTableEntry(1,0,((VarNode)found).getType());
-				else
-					this.entry = new SymbolTableEntry(1, 0, found);
+				//if (found instanceof VarNode)
+					this.entry = ((VarNode)found).getSTEntry();
+				//else
+					//this.entry = new SymbolTableEntry(1, 0, found);
 			}
 			
 		}

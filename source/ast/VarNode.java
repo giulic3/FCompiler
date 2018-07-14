@@ -7,7 +7,6 @@ import java.util.HashSet;
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
 
 public class VarNode implements Node {
@@ -15,7 +14,8 @@ public class VarNode implements Node {
 	private String id;
 	private Node type;
 	private Node exp;
-	private String classID;
+	private String classID = null;
+	private SymbolTableEntry entry;
 	
 	public VarNode(String i, Node t, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -92,6 +92,8 @@ public class VarNode implements Node {
 			
 			if (hm.put(ID, entry) != null)
 				res.add("Var or Par id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else
+				this.entry = entry;
 		}
 		return res;
 	}
@@ -100,5 +102,9 @@ public class VarNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return id;
+	}
+	
+	public SymbolTableEntry getSTEntry(){
+		return this.entry;
 	}
 }
