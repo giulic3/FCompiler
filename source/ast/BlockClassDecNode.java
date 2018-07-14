@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import sun.awt.Symbol;
 import utils.Environment;
@@ -57,7 +58,15 @@ public class BlockClassDecNode implements Node {
 		return fields;
 	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck() throws Exception{
+		for(Node f : fields){
+			f.typeCheck();
+		}
+		for(Node m : methods){
+			m.typeCheck();
+		}
+		return new VoidType();
+	}
 	
 	public String codeGeneration(){return null;}
 	

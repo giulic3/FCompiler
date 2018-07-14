@@ -50,7 +50,9 @@ public class VarNode implements Node {
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck(){
+		return type;
+	}
 	
 	public Node getType(){
 		return type;

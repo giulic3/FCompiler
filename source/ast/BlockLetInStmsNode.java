@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.VoidType;
 import utils.Environment;
 ;
 
@@ -32,7 +33,15 @@ public class BlockLetInStmsNode implements Node {
 		//return "\n" + s +"  BlockLetInStms: \n"  + dec.toPrint(s+"   ") + "\n" /*+ stms.toPrint(s+"    ") */;
 	};
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck() throws Exception {
+		for(Node s : stms){
+			s.typeCheck();
+		}
+		for(Node d : decs){
+			d.typeCheck();
+		}
+		return new VoidType();
+	}
 	
 	public String codeGeneration(){return null;}
 	

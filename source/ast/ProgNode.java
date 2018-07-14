@@ -25,7 +25,13 @@ public class ProgNode  implements Node {
 		return  msg;
 	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck() throws Exception{
+		Node res=null;
+		for(Node b:blocks)
+			res=b.typeCheck();
+		//throw new Exception("Assignment Node typeCheck exception");
+		return res;
+	}
 	
 	public String codeGeneration(){return null;};
 	

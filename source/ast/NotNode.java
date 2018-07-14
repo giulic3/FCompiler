@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.IntType;
 import utils.Environment;
 ;
 
@@ -20,6 +21,9 @@ public class NotNode implements Node {
 	
 	public Node typeCheck() throws Exception {
 		// TODO: da controllare
+		
+		if (value.typeCheck() != new IntType())
+			throw new Exception("'not' used on Non integer type");
 		return value.typeCheck();
 	}
 	
