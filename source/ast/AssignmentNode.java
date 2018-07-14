@@ -2,6 +2,7 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
+import utils.Helpers;
 ;
 
 import java.util.ArrayList;
@@ -24,7 +25,17 @@ public class AssignmentNode implements Node {
 		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : varNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
 	}
 	
-	public Node typeCheck() {
+	public Node typeCheck() throws Exception{
+		
+			
+			Node idTypeCheckRes;
+			if (objFieldNode!=null) idTypeCheckRes  = objFieldNode.typeCheck();
+			varNode.typeCheck();
+			exp.typeCheck();
+			/*if(!Helpers.subtypeOf(exp.typeCheck(), idTypeCheckRes)){
+				throw new Exception("Assignment Node typeCheck exception");
+			}
+
 		/*
 		
 			1 - risalire la symbol table fino al primo id uguale a quello in esame.

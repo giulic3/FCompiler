@@ -56,7 +56,7 @@ public class Main {
 	}
 	
 	
-	public static String run(CharStream input) {
+	public static String run(CharStream input) throws Exception {
 		String result = "";
 		
 		System.out.println("Lexer & parser...");
@@ -68,6 +68,9 @@ public class Main {
 		//System.out.println(ast.toPrint(""));
 		
 		ast = semanticAnalysis(ast, true);
+		
+		Node type = ast.typeCheck(); //type-checking bottom-up
+		System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
 		
 		return result;
 	}

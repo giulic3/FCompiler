@@ -30,8 +30,8 @@ public class ClassFieldNode implements Node {
 		return s+"Class Field Node:\n" + s + "\tObject: " + this.obj.toPrint("") + "\n" + s + "\tField: " + this.id.toPrint("");
 	}
 	
-	public Node typeCheck() {
-		return null;
+	public Node typeCheck() throws Exception {
+		return id.typeCheck();
 	}
 	
 	public String codeGeneration() {

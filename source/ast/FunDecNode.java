@@ -135,9 +135,17 @@ public class FunDecNode implements Node {
 	}
 
 	//valore di ritorno non utilizzato
-	public Node typeCheck () {
-
-		return null;
+	public Node typeCheck () throws Exception {
+		for(Node p : parlist){
+			p.typeCheck();
+		}
+		for(Node d : declist){
+			d.typeCheck();
+		}
+		for(Node b : body){
+			b.typeCheck();
+		}
+		return type;
 	}
 
 	public String codeGeneration() {

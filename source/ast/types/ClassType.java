@@ -90,7 +90,7 @@ public class ClassType implements Node {
 	
 	public Node typeCheck() {
 		// TODO: da implementare
-		return null;
+		return this;
 	}
 	
 	public String codeGeneration() {
