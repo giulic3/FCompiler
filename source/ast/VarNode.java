@@ -92,7 +92,7 @@ public class VarNode implements Node {
 		}
 		
 		if (hm.put(ID, entry) != null)
-			res.add("Var or Par id " + id + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			res.add("Var or Par id " + id + " already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else
 			this.entry = entry;
 			

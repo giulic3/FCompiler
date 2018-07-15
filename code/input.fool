@@ -20,9 +20,9 @@ class ciao extends super {
     //void fun2() return 3;
 };
 
-let ciao x = new ciao(); in x.y=2 x.fun1();
+let ciao x = new ciao(); in x.y=2 x.fun1();*/
 
-
+/*
 class A (A field = new A()) {
     void am1() let int x = 0; in print(x);
     bool am2(bool flag) return not flag;
@@ -53,15 +53,14 @@ class A {
 
 };*/
 /*
-class A (int x = 1, A field = new A()) {
+class A (int x = 1, A field2 = new A()) {
     void am1() print(4);
 };
-*/
-/*
-class B extends A (int x = 0, B n = new B()) {
+
+class B extends A (B field = new B()) {
     void bm1() field.am1();
-};*/
-/*
+};
+
 let
     B a = new B();
 in
@@ -70,3 +69,11 @@ in
 class C {
     void f() let int x = 0; in x=1;
 };
+
+let
+    int f = 2;
+    void f() print(f);
+in
+    f();
+
+let C x = null; in x = new C();

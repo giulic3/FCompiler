@@ -227,7 +227,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		ArrayList<Node> args = new ArrayList<>();
 		
-		IdNode objectNode = new IdNode(ctx.object.getText(), ctx);
+		Node objectNode = visit(ctx.object);
 		
 		if (ctx.LPAR() == null) {
 			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
@@ -239,7 +239,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		// TODO: check passed context for error line numbers
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, true, ctx);
-		return new ClassMethodNode(new IdNode(ctx.object.getText(), ctx), methodNode, args, true, ctx);
+		return new ClassMethodNode(objectNode, methodNode);
 	}
 	
 	@Override
@@ -313,7 +313,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		// TODO: check FunExpNode usage with new MethodDecNode
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx); // TODO: check passed context for error line numbers
-		return new ClassMethodNode(objectNode, methodNode, args, false, ctx);
+		return new ClassMethodNode(objectNode, methodNode);
 		
 	}
 	

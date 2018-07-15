@@ -1,7 +1,6 @@
 package ast;
 
 import ast.types.ClassType;
-import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
 import utils.SymbolTableEntry;
@@ -10,28 +9,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /* method call */
-public class ClassMethodNode implements Node {
+public class ClassMethodNode extends FunExpNode {
 	
-	private Node obj;
-	private Node id;
-	
-	private ArrayList<Node> args;
-	private SymbolTableEntry entry = null;
-	private int callNestingLevel;
-	private boolean isExp;
-	private ParserRuleContext ctx;
+	private Node objectNode;
+	private Node funNode;
 
-	public ClassMethodNode(Node obj, Node ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
-		this.ctx = ctx;
-		this.obj = obj;
-		this.id = ID;
-		this.args = args;
-		this.isExp = isExp;
+	public ClassMethodNode(Node objectNode, FunExpNode funNode){
+		super(funNode.getID(), funNode.args, funNode.isExp, funNode.ctx);
+		this.objectNode = objectNode;
+		this.funNode = funNode;
 	}
 	
 	public String toPrint(String s) {
-		return s+"Class Method Node:\n" + s + "\t\tObject:\n" + this.obj.toPrint(s+"\t\t\t") + "\n" + s
-				+ "\t\tMethod:\n" + this.id.toPrint(s+"\t\t\t");
+		return s+"Method Call Node:\n" + s + "\t\tObject:\n" + this.objectNode.toPrint(s+"\t\t\t") + "\n" + s
+				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");
 	}
 	
 	@Override
@@ -54,13 +45,13 @@ public class ClassMethodNode implements Node {
 		
 		HashSet<String> res = new HashSet<>();
 		
-		HashSet<String> objectErrors = obj.checkSemantics(env);
+		HashSet<String> objectErrors = objectNode.checkSemantics(env);
 		if (objectErrors.size() > 0) {
 			res.addAll(objectErrors);
 			return res;
 		}
 		
-		IdNode objIDNode = (IdNode)obj;
+		IdNode objIDNode = (IdNode) objectNode;
 		SymbolTableEntry objEntry = objIDNode.getSTEntry();
 		
 		if (objEntry.getType() instanceof ClassType) {
@@ -72,12 +63,12 @@ public class ClassMethodNode implements Node {
 			FunDecNode foundMethod = null;
 			while (foundMethod == null && i<methods.size()) {
 				FunDecNode m = (FunDecNode)methods.get(i);
-				if (m.getID().equals(id.getID())) foundMethod = m;
+				if (m.getID().equals(funNode.getID())) foundMethod = m;
 				i++;
 			}
 			
 			if (foundMethod == null) {
-				res.add("Method " + id.getID() + " is not defined in class " + classDef.getID() + " at line "
+				res.add("Method " + funNode.getID() + " is not defined in class " + classDef.getID() + " at line "
 						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
 			
@@ -97,7 +88,7 @@ public class ClassMethodNode implements Node {
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
-		return id.getID();
+		return funNode.getID();
 	}
 }
 
