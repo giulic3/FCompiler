@@ -30,7 +30,13 @@ public class FunDecNode implements Node {
 		this.parList = parList;
 		this.body = body;
 	}
-	
+
+	public SymbolTableEntry getSTEntry(){
+
+		return this.funEntry;
+	}
+
+
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
@@ -70,6 +76,8 @@ public class FunDecNode implements Node {
 		entry.setType(funType);
 		this.funEntry = entry;
 
+
+
 		for (Node dec : decList) {
 			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));
@@ -93,7 +101,6 @@ public class FunDecNode implements Node {
 		if (parList !=null && !parList.isEmpty()) {
 			for (Node par : parList)
 				parlstr += "\n" + par.toPrint(s + "\t\t");
-			parlstr+="\n"+s+"\t";
 		}
 
 		if (decList !=null && !decList.isEmpty()) {
@@ -102,8 +109,8 @@ public class FunDecNode implements Node {
 				declstr += "\n" + dec.toPrint(s + "\t\t");
 		}
 
-		return s+"Fun Dec Node: " +type.toPrint("") + " " + name +"("
-				+parlstr+")"
+		return s+"Fun Dec Node: " + name + " : " +((this.funEntry != null) ? this.funEntry.getType().toPrint(s+"\t"): "")
+				+parlstr
 				+declstr;
 				//+body.toPrint(s+"  ") ;
 	}

@@ -19,12 +19,14 @@ public class FunType implements Node {
 	
 	// TODO: this toPrint() should be checked
 	public String toPrint(String indent) {
-		String parlstr = "";
+		String parlstr = "(";
 		
 		for (Node par:parTypesList)
-			parlstr += par.toPrint("");
-		
-		return "Arrow Type\n" + parlstr;// + returnType.toPrint(" ->") ;
+			parlstr += par.toPrint(" ");
+
+		parlstr += ")";
+
+		return parlstr + " -> " + returnType.toPrint("") ;
 	}
 	
 	public Node getReturnType() {

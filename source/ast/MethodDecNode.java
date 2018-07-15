@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SymbolTableEntry;
@@ -90,7 +91,13 @@ public class MethodDecNode extends FunDecNode {
 			if (methodContentHM.put(arg.getId(), parEntry) != null)
 				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
-		
+
+		FunType funType = new FunType(parTypes, type);
+		entry.setType(funType);
+		// funEntry is inherited from FunDecNode
+		this.funEntry = entry;
+
+
 		for (Node dec : decList) {
 			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));

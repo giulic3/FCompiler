@@ -71,6 +71,8 @@ public class ClassMethodNode extends FunExpNode {
 				res.add("Method " + funNode.getID() + " is not defined in class " + classDef.getID() + " at line "
 						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
+			else
+				this.entry = foundMethod.getSTEntry();
 			
 			this.callNestingLevel = env.getNestingLevel();
 			
