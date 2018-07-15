@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -18,6 +19,8 @@ public class FunDecNode implements Node {
 	protected ArrayList<Node> decList;
 	protected ArrayList<Node> body;
 	protected ParserRuleContext ctx;
+
+	protected SymbolTableEntry funEntry;
 
 	public FunDecNode (String name, Node type, ArrayList<Node> decList, ArrayList<Node> parList, ArrayList<Node> body, ParserRuleContext ctx) {
 		this.ctx = ctx;
@@ -62,7 +65,11 @@ public class FunDecNode implements Node {
 			if (funContentHM.put(arg.getId(), funEntry) != null)
 				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
-		
+
+		FunType funType = new FunType(parTypes, type);
+		entry.setType(funType);
+		this.funEntry = entry;
+
 		for (Node dec : decList) {
 			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));

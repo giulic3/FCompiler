@@ -21,7 +21,7 @@ public class ArrowTypeNode implements Node {
 		for (Node par:parlist)
 			parlstr += par.toPrint(s + " ");
 		
-		return s + "ArrowType\n" + parlstr + ret.toPrint(s + " ->") ;
+		return s + "FunType\n" + parlstr + ret.toPrint(s + " ->") ;
 	}
 	
 	public Node getRet() {

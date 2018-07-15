@@ -92,7 +92,7 @@ public class IdNode implements Node {
 
 	public Node typeCheck () {
 		/*
-		if (entry.getType() instanceof ArrowType) { //
+		if (entry.getType() instanceof FunType) { //
 			System.out.println("Wrong usage of function identifier");
 			System.exit(0);
 		}

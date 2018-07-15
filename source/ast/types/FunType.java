@@ -7,14 +7,14 @@ import utils.Environment;
 ;
 
 /* function type */
-public class ArrowType implements Node {
+public class FunType implements Node {
 	
 	private ArrayList<Node> parTypesList;
-	private Node ret;
+	private Node returnType;
 	
-	public ArrowType (ArrayList<Node> p, Node r) {
+	public FunType(ArrayList<Node> p, Node r) {
 		parTypesList = p;
-		ret = r;
+		returnType = r;
 	}
 	
 	// TODO: this toPrint() should be checked
@@ -24,11 +24,11 @@ public class ArrowType implements Node {
 		for (Node par:parTypesList)
 			parlstr += par.toPrint("");
 		
-		return "Arrow Type\n" + parlstr;// + ret.toPrint(" ->") ;
+		return "Arrow Type\n" + parlstr;// + returnType.toPrint(" ->") ;
 	}
 	
-	public Node getRet() {
-		return ret;
+	public Node getReturnType() {
+		return returnType;
 	}
 	
 	public ArrayList<Node> getParList () {
