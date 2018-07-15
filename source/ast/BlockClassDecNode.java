@@ -1,6 +1,9 @@
 package ast;
 
+import ast.types.ClassType;
+import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
+import sun.awt.Symbol;
 import utils.Environment;
 ;
 import utils.SymbolTableEntry;
@@ -55,33 +58,15 @@ public class BlockClassDecNode implements Node {
 		return fields;
 	}
 	
-	public ArrayList<Node> getInheritedMethods(String superclassID, Environment env) {
-		ArrayList<Node> methods = new ArrayList<>();
-		
-		SymbolTableEntry superclassEntry = env.getActiveDec("Class$" + superclassID);
-		if (superclassEntry != null) {
-			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
-			methods.addAll(getInheritedMethods(superclass.getSuperclassID(), env));
-			methods.addAll(superclass.getMethods());
+	public Node typeCheck() throws Exception{
+		for(Node f : fields){
+			f.typeCheck();
 		}
-		
-		return methods;
-	}
-	
-	public ArrayList<Node> getInheritedFields(String superclassID, Environment env) {
-		ArrayList<Node> fields = new ArrayList<>();
-		
-		SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+superclassID);
-		if (superclassEntry != null) {
-			BlockClassDecNode superclass = (BlockClassDecNode)superclassEntry.getType();
-			fields.addAll(getInheritedFields(superclass.getSuperclassID(), env));
-			fields.addAll(superclass.getFields());
+		for(Node m : methods){
+			m.typeCheck();
 		}
-		
-		return fields;
+		return new VoidType();
 	}
-	
-	public Node typeCheck(){return null;}
 	
 	public String codeGeneration(){return null;}
 	
@@ -89,83 +74,80 @@ public class BlockClassDecNode implements Node {
 		
 		//create result list
 		HashSet<String> res = new HashSet<String>();
+		HashSet<String> tmp = new HashSet<String>();
 		
 		// Executing first check on class definitions
 		if (!env.getSecondCheck()) {
 			HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
 			//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
-			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), this);
 			
-			if (classDecHM.put("Class$" + id, classEntry) != null)
+			ClassType classType = new ClassType(id, null, fields, methods, ctx);
+			
+			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), classType);
+			
+			if (classDecHM.put("Class$"+id, classEntry) != null)
 				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			
+		}
+		// Executing second check on class definitions and everything inside
+		else {
+			// Handling superclass declaration
+			// TODO: check null!
+			ClassType classType = (ClassType)env.getClassEntry(id).getType();
+			
 			if (ext != null) {
-				SymbolTableEntry superclassEntry = env.getActiveDec("Class$"+ext);
+				SymbolTableEntry superclassEntry = env.getClassEntry(ext);
 				if (superclassEntry == null)
 					res.add("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {
 					if (ext.equals(id))
 						res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-				}
-				
-				ArrayList<Node> inheritedFields = getInheritedFields(ext, env);
-				for (Node f:inheritedFields) {
-					for (Node curF: fields) {
-						if (f.getID().equals(curF.getID()))
-							res.add("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
-									+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+					else {
+						ClassType superType = (ClassType)superclassEntry.getType();
+						classType.setSuperType(superType);
+						
+						ArrayList<Node> inheritedFields = superType.getFieldsList(true);
+						for (Node f:inheritedFields) {
+							for (Node curF: fields) {
+								if (f.getID().equals(curF.getID()))
+									res.add("Class field '" + curF.getID() + "' is already declared in one of its superclasses at line "
+											+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+							}
+						}
 					}
 				}
 			}
-		}
-		// Executing second check on class definitions and everything inside
-		else {
-			// Handling superclass declaration
-			if (ext != null) {
-				// Superclass not declared
-				if (env.getActiveDec("Class$" + ext) == null)
-					res.add(("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n"));
-				
-				// Climb back superclass declarations to collect list of inherited methods and fields
-				// TODO: va fatto qua? oppure in ClassMethodNode? per i campi dovrebbe essere un discorso analogo
-				// TODO: manca la gestion degli errori in caso di dichiarazioni multiple (che non sia overriding, nel caso dei metodi)
-				/*ArrayList<Node> inheritedMethods = getInheritedMethods(ext, env);
-				System.out.println("\nInherited method for class " + id);
-				for (Node m:inheritedMethods) {
-					FunDecNode method = (FunDecNode)m;
-					System.out.println(method.toPrint(""));
-				}
-				System.out.println();*/
-			}
-			
 			env.pushScope();
 			
 			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
 			ArrayList<Node> parTypes = new ArrayList<>();
 			int parOffset=1;
 			
-			for (Node f : fields) {
+			for (Node f: fields) {
 				VarNode field = (VarNode)f;
-				parTypes.add(field.getType());
-				SymbolTableEntry fieldEntry = new SymbolTableEntry(env.getNestingLevel(), parOffset++, field.getType());
-				
-				if (classContentHM.put("Class$" + id + "$" + field.getId(), fieldEntry) != null)
-					res.add(("Class field " + field.getId() + " already declared at line: " + field.getCtx().start.getLine() + ":" + field.getCtx().start.getCharPositionInLine()+"\n"));
+				res.addAll(field.checkSemantics(env));
 			}
-
+			
+			for (Node dec : methods) {
+				env.setOffset(env.getOffset()-2);
+				tmp.addAll(dec.checkSemantics(env));
+			}
+			
 			env.settingFunSecondCheck(true);
-
+			
+			//if(tmp.size()>0) {
 			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
+				env.setOffset(env.getOffset() - 2);
 				res.addAll(dec.checkSemantics(env));
 			}
+			//}
+			
+			res.addAll(tmp);
+			
 			env.settingFunSecondCheck(false);
-
-			for (Node dec : methods) {
-				env.setOffset(env.getOffset()-2);
-				res.addAll(dec.checkSemantics(env));
-			}
-
+			
+			//env.updateClassEntry(classType);
+			
 			env.popScope();
 		}
 		

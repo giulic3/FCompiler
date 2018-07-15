@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+import ast.types.ClassType;
 import sun.awt.Symbol;
 import utils.SymbolTableEntry;
 
@@ -60,6 +61,16 @@ public class Environment {
 		return res;
 	}
 	
+	public SymbolTableEntry getClassEntry(String classID) {
+		return symTable.get(0).get("Class$"+classID);
+	}
+	
+	public void updateClassEntry(ClassType type) {
+		SymbolTableEntry curEntry = getClassEntry(type.getID());
+		curEntry.setType(type);
+		symTable.get(0).put(type.getID(), curEntry);
+	}
+	
 	public void pushScope() {
 		HashMap<String, SymbolTableEntry> scope = new HashMap<>();
 		nestingLevel+=1;
@@ -80,7 +91,7 @@ public class Environment {
 	}
 	
 	public void settingFunSecondCheck(boolean isSecond) {
-		secondFunCheck = true;
+		secondFunCheck = isSecond;
 	}
 	
 	public boolean getFunSecondCheck() {

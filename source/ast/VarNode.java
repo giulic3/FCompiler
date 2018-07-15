@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
 
 public class VarNode implements Node {
@@ -14,6 +14,8 @@ public class VarNode implements Node {
 	private String id;
 	private Node type;
 	private Node exp;
+	private String classID = null;
+	private SymbolTableEntry entry;
 	
 	public VarNode(String i, Node t, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -33,6 +35,14 @@ public class VarNode implements Node {
 		return ctx;
 	}
 	
+	public void setInsideClass(String id) {
+		this.classID = id;
+	}
+	
+	public String getClassID() {
+		return this.classID;
+	}
+	
 	public String toPrint(String s){
 		if (exp != null)
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
@@ -40,10 +50,16 @@ public class VarNode implements Node {
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck(){
+		return type;
+	}
 	
 	public Node getType(){
 		return type;
+	}
+	
+	public void setType(Node type) {
+		this.type = type;
 	}
 	
 	public String getId(){
@@ -55,17 +71,31 @@ public class VarNode implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		HashSet<String> res = new HashSet<String>();
 		
-		//env.offset = -2;
-		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
-		
-		if ( hm.put(id,entry) != null )
-			res.add("Var or Par id "+id+" already declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		if (exp!=null) res.addAll(exp.checkSemantics(env));
 		
 		res.addAll(type.checkSemantics(env));
-		if(exp!=null) res.addAll(exp.checkSemantics(env));
 		
+		//env.offset = -2;
+		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
+		env.setOffset(env.getOffset() - 1);
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), type); //separo introducendo "entry"
+		
+		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
+		
+		if (exp instanceof NewExpNode) {
+			NewExpNode newNode = (NewExpNode) exp;
+			SymbolTableEntry newEntry = newNode.getSTEntry();
+			if (newEntry != null) {
+				entry.setType(newEntry.getType());
+				setType(newEntry.getType());
+			}
+		}
+		
+		if (hm.put(ID, entry) != null)
+			res.add("Var or Par id " + id + " already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		else
+			this.entry = entry;
+			
 		return res;
 	}
 	
@@ -73,5 +103,9 @@ public class VarNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return id;
+	}
+	
+	public SymbolTableEntry getSTEntry(){
+		return this.entry;
 	}
 }

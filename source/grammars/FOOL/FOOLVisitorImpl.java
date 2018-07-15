@@ -227,7 +227,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		ArrayList<Node> args = new ArrayList<>();
 		
-		IdNode objectNode = new IdNode(ctx.object.getText(), ctx);
+		Node objectNode = visit(ctx.object);
 		
 		if (ctx.LPAR() == null) {
 			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
@@ -239,38 +239,27 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		// TODO: check passed context for error line numbers
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, true, ctx);
-		return new ClassMethodNode(new IdNode(ctx.object.getText(), ctx), methodNode, args, true, ctx);
+		return new ClassMethodNode(objectNode, methodNode);
 	}
 	
 	@Override
 	public Node visitNewExp(NewExpContext ctx) {
-		//this corresponds to a function invocation
 		
-		//declare the result
-		Node res;
-		
-		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<>();
-		
-		for(ExpContext exp : ctx.exp())
-			args.add(visit(exp));
-		
-		res = new NewExpNode(ctx.className.getText(), args);
-		
-		return res;
+		return new NewExpNode(ctx.className.getText(), ctx);
 	}
 	
 	@Override
 	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
 		
-		if (ctx.DOT() == null)
-			return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()));
+		Node idVariableNode = visit(ctx.var());
+		Node expNode = visit(ctx.exp());
 		
-		// TODO: improve class field assignment
-		// TODO: check passed context for error line numbers
+		if (ctx.DOT() == null)
+			return new AssignmentNode(idVariableNode, expNode, false);
+		
 		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
-		ClassFieldNode objectNode = new ClassFieldNode(visit(ctx.var()), fieldNode, false, ctx);
-		return new AssignmentNode(visit(ctx.var()), visit(ctx.exp()), objectNode);
+		ClassFieldNode objectFieldNode = new ClassFieldNode(idVariableNode, fieldNode, false, ctx);
+		return new AssignmentNode(objectFieldNode, expNode, true);
 	}
 	
 	public Node visitVar(VarContext ctx) {
@@ -322,8 +311,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
+		// TODO: check FunExpNode usage with new MethodDecNode
 		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx); // TODO: check passed context for error line numbers
-		return new ClassMethodNode(objectNode, methodNode, args, false, ctx);
+		return new ClassMethodNode(objectNode, methodNode);
 		
 	}
 	
@@ -369,7 +359,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		else if (ctx.getText().equals("void"))
 			return new VoidType();
 		else
-			return new ClassType(ctx.getText());
+			return new ClassType(ctx.getText(), ctx);
 	}
 	
 	@Override
@@ -384,13 +374,17 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		String exp = (ctx.superName!=null) ? ctx.superName.getText() : null;
 		
 		for (VarasmContext par : ctx.varasm()) {
-			pars.add(visit(par));
+			VarNode node = (VarNode)visit(par);
+			node.setInsideClass(ctx.className.getText());
+			pars.add(node);
 		}
 		
-		for(FundecContext dec : ctx.fundec()){
-			FunDecNode tmp = (FunDecNode)visit(dec);
-			tmp.setInsideClass(ctx.className.getText());
-			methods.add(tmp);
+		for(FundecContext dec : ctx.fundec()) {
+			FunDecNode funNode = (FunDecNode)visit(dec);
+			// TODO: Improve MethodDecNode creation
+			
+			MethodDecNode methodNode = new MethodDecNode(funNode, ctx.className.getText());
+			methods.add(methodNode);
 		}
 		
 		return new BlockClassDecNode(id,exp,pars,methods, ctx);

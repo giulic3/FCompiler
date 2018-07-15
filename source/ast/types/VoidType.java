@@ -14,7 +14,7 @@ public class VoidType implements Node {
 	
 	// TODO: da controllare
 	public String toPrint(String indent) {
-		return "VoidType";
+		return indent+"VoidType";
 	}
 
 	/*public TypeEnum getType() {

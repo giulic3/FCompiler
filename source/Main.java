@@ -56,18 +56,19 @@ public class Main {
 	}
 	
 	
-	public static String run(CharStream input) {
+	public static String run(CharStream input) throws Exception {
 		String result = "";
 		
 		System.out.println("Lexer & parser...");
 		
-		
 		Node ast = lexicalAndSyntacticAnalysis(input);
 		
 		System.out.println("Visualizing AST...");
-		//System.out.println(ast.toPrint(""));
 		
 		ast = semanticAnalysis(ast, true);
+		
+		Node type = ast.typeCheck(); //type-checking bottom-up
+		System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
 		
 		return result;
 	}
@@ -84,16 +85,16 @@ public class Main {
 		}
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws  Exception{
 
-		try {
+		//try {
 			File inputFile = new File("code/input.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
-		}
-		catch (Exception E) {
-
-		}
+		//}
+		/*catch (Exception E) {
+			System.out.println(E);
+		}*/
 		/*ast.typeCheck();
 		
 		Node boolNode = new BoolValNode(true);

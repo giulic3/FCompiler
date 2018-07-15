@@ -32,13 +32,13 @@ public class TestThread implements Runnable {
 
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 
 		File codeDirectory = new File("code/");
 
 		for (File inputFile : codeDirectory.listFiles()) {
 
-			try {
+			//try {
 				Thread t = new Thread(new TestThread(inputFile));
 				// this will call run() function
 				t.start();
@@ -48,10 +48,10 @@ public class TestThread implements Runnable {
 				//checks if this thread is alive
 				//System.out.println(ANSI_RED + ", status = " + t.isAlive() + ANSI_RESET);
 				System.out.println("\n");
-			}
-			catch (Exception E) {
+			//}
+			//catch (Exception E) {
 
-			}
+			//}
 		}
 	}
 

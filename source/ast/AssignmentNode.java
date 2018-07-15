@@ -2,46 +2,31 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
-;
-
-import java.util.ArrayList;
+import utils.Helpers;
 import java.util.HashSet;
 
 public class AssignmentNode implements Node {
 	
-	private Node id;
+	private Node idVariableNode = null;
 	private Node exp;
-	private Node object;
+	private Node objFieldNode = null;
 	
-	public AssignmentNode(Node id, Node exp){
-		this.id=id;
-		this.exp=exp;
-		this.object = null;
-	}
-	
-	public AssignmentNode(Node id, Node exp, Node object){
-		this.id=id;
-		this.exp=exp;
-		this.object = object;
+	public AssignmentNode(Node var, Node exp, boolean isClassField){
+		if (isClassField) this.objFieldNode = var;
+		else this.idVariableNode = var;
+		
+		this.exp = exp;
 	}
 	
 	public String toPrint(String s){
-		// TODO: handle object printing
-		return s + "Assignment Node:\n" + id.toPrint(s+"\t\t") + "\n" + exp.toPrint(s+"\t\t");
-	};
+		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
+	}
 	
-	public Node typeCheck() {
-		/*
+	public Node typeCheck() throws Exception{
 		
-			1 - risalire la symbol table fino al primo id uguale a quello in esame.
-			2 - recuperare il tipo dichiarato
-			3 - recuperare il tipo dell'espressione a destra dell'uguale
-			4 - confrontarli provocando un errore nel caso di incompatibilità
-			5 - per le classi non basta risalire la symbol table ma è necessario anche
-				controllare che la classe a DESTRA dell'uguale sia sottotipo di quella a SINISTRA
-		        DX <: SX
-		 
-		 */
+		if(!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())){
+			throw new Exception("Assignment Node typeCheck exception");
+		}
 		
 		return new VoidType();
 	}
@@ -52,17 +37,13 @@ public class AssignmentNode implements Node {
 	
 	public HashSet<String> checkSemantics(Environment env) {
 		
-		/*
-		* controllare che la definizione non esista già nella symbol table
-		*
-		* */
-		
 		HashSet<String> res = new HashSet<String>();
 		
-		if (object != null)
-			res.addAll(object.checkSemantics(env));
+		if (objFieldNode != null)
+			res.addAll(objFieldNode.checkSemantics(env));
+		else
+			res.addAll(idVariableNode.checkSemantics(env));
 		
-		res.addAll(id.checkSemantics(env));
 		res.addAll(exp.checkSemantics(env));
 		
 		return res;

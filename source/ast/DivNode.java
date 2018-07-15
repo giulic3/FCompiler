@@ -33,15 +33,13 @@ public class DivNode implements Node {
 				+ "\n"
 				+ right.toPrint(s+"\t") ;
 	}
-
-	public Node typeCheck() {
-		/*
-		if (! ( FOOLlib.isSubtype(left.typeCheck(),new IntType()) &&
-				FOOLlib.isSubtype(right.typeCheck(),new IntType()) ) ) {
-			System.out.println("Non integers in multiplication");
-			System.exit(0);
+	
+	public Node typeCheck()throws Exception {
+		
+		if (! ( Helpers.subtypeOf(left.typeCheck(),new IntType()) &&
+				Helpers.subtypeOf(right.typeCheck(),new IntType()) ) ) {
+			throw new Exception("Non integers in division");
 		}
-		*/
 		return new IntType();
 	}
 

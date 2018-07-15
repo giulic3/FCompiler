@@ -25,7 +25,13 @@ public class ProgNode  implements Node {
 		return  msg;
 	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck() throws Exception{
+		Node res=null;
+		for(Node b:blocks)
+			res=b.typeCheck();
+		//throw new Exception("Assignment Node typeCheck exception");
+		return res;
+	}
 	
 	public String codeGeneration(){return null;};
 	
@@ -35,20 +41,15 @@ public class ProgNode  implements Node {
 		
 		env.pushScope();
 		
-		//System.out.println("Prima passata");
 		for (Node bClass:blocks) {
 			if (bClass instanceof BlockClassDecNode)
 				errors.addAll(bClass.checkSemantics(env));
 		}
 		
-		
-		
-		//System.out.println("Seconda passata");
 		env.settingSecondCheck();
 		
-		for(Node b:blocks){
+		for(Node b:blocks)
 			errors.addAll(b.checkSemantics(env));
-		}
 		
 		// QUI NON SERVE LA POPSCOPE!!!
 		

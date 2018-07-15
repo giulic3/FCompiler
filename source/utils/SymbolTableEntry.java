@@ -8,6 +8,7 @@ public class SymbolTableEntry {
 	private int nestingLevel;
 	private int offset;
 	private Node type;
+	private String className = null;
 	
 	public SymbolTableEntry(int level, int offset, Node t) {
 		this.nestingLevel = level;
@@ -37,5 +38,13 @@ public class SymbolTableEntry {
 	
 	public String toString() {
 		return toPrint("");
+	}
+	
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	public String getClassName() {
+		return className;
 	}
 }

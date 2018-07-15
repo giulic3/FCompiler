@@ -18,8 +18,8 @@ public class FunExpNode implements Node {
 	protected ArrayList<Node> args;
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
-	private boolean isExp;
-	private ParserRuleContext ctx;
+	protected boolean isExp;
+	protected ParserRuleContext ctx;
 	
 	public FunExpNode(String ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
 		this.ctx=ctx;
@@ -70,10 +70,10 @@ public class FunExpNode implements Node {
 	public HashSet<String> checkSemantics(Environment env) {
 		HashSet<String> res = new HashSet<String>();
 
-		SymbolTableEntry entry = env.getActiveDec(id);
+		SymbolTableEntry entry = env.getActiveDec("Function$" + id);
 
 		if (entry==null)
-			res.add("Id "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+			res.add("Fun "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
 		else{
 			this.entry = entry;
 			this.callNestingLevel = env.getNestingLevel();

@@ -68,7 +68,7 @@ value  :  INTEGER                          #intVal
       | var     #varExp
       | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funExp
       | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
-      | NEW className=ID (LPAR (exp (COMMA exp)* )? RPAR)       #newExp
+      | NEW className=ID (LPAR RPAR)       #newExp
       ;
 
 var: ID;

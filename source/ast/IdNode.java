@@ -1,8 +1,10 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
@@ -12,6 +14,7 @@ import utils.SymbolTableEntry;
 public class IdNode implements Node {
 
 	private String id;
+	private String classID;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
 	private ParserRuleContext ctx;
@@ -19,6 +22,11 @@ public class IdNode implements Node {
 	public IdNode (String i, ParserRuleContext ctx) {
 		this.ctx=ctx;
 		id = i;
+		classID = null;
+	}
+	
+	public void setClassID(String classID) {
+		this.classID = classID;
 	}
 	
 	public String getID() {
@@ -29,19 +37,56 @@ public class IdNode implements Node {
 
 		return s + "ID Node: " + id + ", cur nestinglevel: " + nestinglevel + (entry != null ? entry.toPrint(", ") : "");
 	}
+	
+	public SymbolTableEntry getSTEntry() {
+		return this.entry;
+	}
 
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
+		
+		//discriminare se l'id node non appartiene ad una classe controllo classname != null
+		
 		//create result list
 		HashSet<String> res = new HashSet<String>();
 		
-		nestinglevel=env.getNestingLevel();
-		SymbolTableEntry entry = env.getActiveDec(id);
-		if (entry == null)
-			res.add("Variable " + id + " not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		nestinglevel = env.getNestingLevel();
 		
-		this.entry=entry;
+		SymbolTableEntry fieldEntry = env.getActiveDec(id);
+		if (fieldEntry == null) {
+			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(1);
+			String identifier = classContentHM.keySet().iterator().next();
+			
+			fieldEntry = classContentHM.get(identifier);
+			String classID = fieldEntry.getClassName();
+			
+			Node found = null;
+			
+			if (classID!=null) {
+				SymbolTableEntry classEntry = env.getClassEntry(classID);
+				ClassType classType = (ClassType)classEntry.getType();
+				ArrayList<Node> fields = classType.getFieldsList(true);
+				
+				for (Node f: fields)
+					if (f.getID().equals(id)) found = f;
+			}
+			
+			// vanno salvate le informazioni della entry nell'oggetto
+			
+			if (found == null)
+				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else {
+				//if (found instanceof VarNode)
+					this.entry = ((VarNode)found).getSTEntry();
+				//else
+					//this.entry = new SymbolTableEntry(1, 0, found);
+			}
+			
+		}
+		else
+			this.entry = fieldEntry;
+		
 		return res;
 	}
 
