@@ -251,14 +251,14 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
 		
-		Node varNode = visit(ctx.var());
+		Node idVariableNode = visit(ctx.var());
 		Node expNode = visit(ctx.exp());
 		
 		if (ctx.DOT() == null)
-			return new AssignmentNode(varNode, expNode, false);
+			return new AssignmentNode(idVariableNode, expNode, false);
 		
 		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
-		ClassFieldNode objectFieldNode = new ClassFieldNode(varNode, fieldNode, false, ctx);
+		ClassFieldNode objectFieldNode = new ClassFieldNode(idVariableNode, fieldNode, false, ctx);
 		return new AssignmentNode(objectFieldNode, expNode, true);
 	}
 	

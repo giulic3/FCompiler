@@ -62,13 +62,14 @@ class B extends A (B field = new B()) {
 };
 
 let
-    B a = new B();
+    int f = 2;
+    void f() print(f);
 in
-    a.x=2;*/
-
+    f();
+/*
 class C {
     void f() let int x = 0; in x=1;
-};
+};*/
 
 let
     int f = 2;

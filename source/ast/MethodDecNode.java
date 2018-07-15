@@ -129,11 +129,6 @@ public class MethodDecNode extends FunDecNode {
 	}
 	
 	@Override
-	public Node typeCheck () {
-		return null;
-	}
-	
-	@Override
 	public String codeGeneration() {
 		return "";
 	}

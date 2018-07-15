@@ -30,7 +30,7 @@ public class NewExpNode implements Node {
 	
 	@Override
 	public Node typeCheck() {
-		return null;
+		return entry.getType();
 	}
 	
 	public String codeGeneration() {
