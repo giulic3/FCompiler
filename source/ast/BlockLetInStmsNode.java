@@ -34,11 +34,11 @@ public class BlockLetInStmsNode implements Node {
 	};
 	
 	public Node typeCheck() throws Exception {
-		for(Node s : stms){
-			s.typeCheck();
-		}
 		for(Node d : decs){
 			d.typeCheck();
+		}
+		for(Node s : stms){
+			s.typeCheck();
 		}
 		return new VoidType();
 	}
@@ -48,23 +48,26 @@ public class BlockLetInStmsNode implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		
 		HashSet<String> res = new HashSet<String>();
-		HashSet<String> tmp = new HashSet<String>();
+		//HashSet<String> tmp = new HashSet<String>();
 		
 		
 		// TODO: handle offset
 		env.pushScope();
 		
 		for(Node dec : decs){
-			tmp.addAll(dec.checkSemantics(env));
+			if(dec instanceof FunDecNode) {
+				res.addAll(dec.checkSemantics(env));
+			}
 			
 		}
 		
 		env.settingFunSecondCheck(true);
 		
-		if (tmp.size() > 0)
+		//if (tmp.size() > 0)
 		for(Node dec : decs){
 			res.addAll(dec.checkSemantics(env));
 		}
+		
 		env.settingFunSecondCheck(false);
 		
 		for(Node stm : stms){
