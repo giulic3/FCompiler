@@ -43,7 +43,16 @@ public class BlockLetInStmsNode implements Node {
 		return new VoidType();
 	}
 	
-	public String codeGeneration(){return null;}
+	public String codeGeneration(){
+		String res="";
+		for (Node d : decs){
+			res += d.codeGeneration();
+		}
+		for (Node s : stms){
+			res += s.codeGeneration();
+		}
+		return res;
+	}
 	
 	public HashSet<String> checkSemantics(Environment env){
 		

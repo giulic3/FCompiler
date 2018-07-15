@@ -29,11 +29,15 @@ public class ProgNode  implements Node {
 		Node res=null;
 		for(Node b:blocks)
 			res=b.typeCheck();
-		//throw new Exception("Assignment Node typeCheck exception");
 		return res;
 	}
 	
-	public String codeGeneration(){return null;};
+	public String codeGeneration(){
+		String res="";
+		for(Node b:blocks)
+			res += b.codeGeneration();
+		return res;
+	}
 	
 	public HashSet<String> checkSemantics(Environment env){
 		

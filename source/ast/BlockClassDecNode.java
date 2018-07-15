@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import sun.awt.Symbol;
 import utils.Environment;
 ;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class BlockClassDecNode implements Node {
 	private ArrayList<Node> fields;
 	private ArrayList<Node> methods;
 	private ParserRuleContext ctx;
+	private ClassType type;
+	private ClassType superType;
 	
 	
 	/* se non ci sono parametri par sarà null, se non è estesa ext sarà null */
@@ -65,9 +68,14 @@ public class BlockClassDecNode implements Node {
 			2 - per ogni metodo della classe devo controllare, nel caso in cui lo sovrascriva,
 				che il tipo dell'ultimo metodo sia sottotipo di quello di cui fa overriding.
 			3 - I parametri del nuovo metodo siano TUTTI sopratipo di quelli del metodo di cui si fa overriding.
-		
+		    
+		    
+		    N.B. il controllo sull'overriding di metodo è implementato nel nodo del metodo.
 		 */
 		
+		if(!Helpers.subtypeOf(type, superType)){
+			throw new Exception("class: " + id + "is not subtype of class: " + ext);
+		} //questo controllo dovrebbe essere superfluo.
 		
 		for(Node f : fields){
 			f.typeCheck();
@@ -75,10 +83,12 @@ public class BlockClassDecNode implements Node {
 		for(Node m : methods){
 			m.typeCheck();
 		}
-		return new VoidType();
+		return type;
 	}
 	
-	public String codeGeneration(){return null;}
+	public String codeGeneration(){
+		return null;
+	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
 		
@@ -92,6 +102,8 @@ public class BlockClassDecNode implements Node {
 			//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
 			
 			ClassType classType = new ClassType(id, null, fields, methods, ctx);
+			
+			this.type = classType;
 			
 			SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), classType);
 			
@@ -115,6 +127,9 @@ public class BlockClassDecNode implements Node {
 						//ClassType classType = (ClassType)env.getClassEntry(id).getType();
 						
 						ClassType superType = (ClassType)superclassEntry.getType();
+						
+						this.superType =superType;
+						
 						classType.setSuperType(superType);
 						
 						ArrayList<Node> inheritedFields = superType.getFieldsList(true);
