@@ -119,6 +119,15 @@ public class IfNode implements Node {
 	
 	@Override
 	public Node typeCheck() {
+		
+		/*
+		*
+		* 1 - controllare se stms o exp
+		* 2 - se stms controllare che entrambi i rami siano void e in caso contrario sollevare eccezione altrimenti ritorno voidtype
+		* 3 - se exp controllare che entrambi i rami abbiamo un tipo compatibile (ovvero entrambi estendano una classe in comune o siano dello stesso tipo)
+		*     in caso positivo ritornare o il tipo della classe in comune o uno di quelli dei due rami. Altrimenti sollevare eccezione.
+		*
+		* */
 		return new BoolType();
 	}
 	

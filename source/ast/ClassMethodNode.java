@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import utils.Environment;
 ;
 import utils.SymbolTableEntry;
@@ -63,6 +64,9 @@ public class ClassMethodNode extends FunExpNode {
 			else
 				this.entry = foundMethod.getSTEntry();
 			
+			if (((FunType)entry.getType()).getParList().size() != args.size())
+				res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			this.callNestingLevel = env.getNestingLevel();
 			
 			for (Node arg : args)
