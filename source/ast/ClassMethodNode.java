@@ -25,23 +25,12 @@ public class ClassMethodNode extends FunExpNode {
 				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");
 	}
 	
-	@Override
-	public Node typeCheck() {
-		return null;
-	}
-	
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		
-		/*
-		 *  spudoratamente copiato dalla funexp ma in questo caso è più complesso.
-		 *  Va cercata la definizione dell'oggetto, la classe con cui è definito
-		 *  e va cercato il metodo all'interno della classe in esame
-		 */
 		
 		HashSet<String> res = new HashSet<>();
 		

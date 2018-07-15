@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ast.types.ClassType;
+import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 public class VarNode implements Node {
@@ -50,8 +52,14 @@ public class VarNode implements Node {
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
 	
-	public Node typeCheck(){
-		return type;
+	public Node typeCheck() throws Exception {
+		if(exp!=null) {
+			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
+				throw new Exception("Assignment Node typeCheck exception");
+			}
+		}
+		
+		return new VoidType();
 	}
 	
 	public Node getType(){

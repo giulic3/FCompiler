@@ -3,7 +3,6 @@ package ast;
 
 import ast.types.BoolType;
 import utils.Environment;
-;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -127,6 +126,7 @@ public class IfNode implements Node {
 	public String codeGeneration() {
 		return null;
 	}
+	//return type;
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned

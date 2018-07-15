@@ -41,13 +41,14 @@ public class ProgNode  implements Node {
 		
 		env.pushScope();
 		
-		for (Node bClass:blocks) {
-			if (bClass instanceof BlockClassDecNode)
-				errors.addAll(bClass.checkSemantics(env));
-		}
+		//for (Node bClass:blocks) {
+	//		if (bClass instanceof BlockClassDecNode)
+	//			errors.addAll(bClass.checkSemantics(env));
+	//	}
 		
 		env.settingSecondCheck();
 		
+		if (errors.size() ==0)
 		for(Node b:blocks)
 			errors.addAll(b.checkSemantics(env));
 		

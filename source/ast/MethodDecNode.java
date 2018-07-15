@@ -4,6 +4,7 @@ import ast.types.ClassType;
 import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 public class MethodDecNode extends FunDecNode {
 	
 	private String classID;
+	ArrayList<Node> inheritedMethods;
 	
 	public MethodDecNode(FunDecNode funNode, String classID) {
 		super(funNode.name, funNode.type, funNode.decList, funNode.parList, funNode.body, funNode.ctx);
@@ -46,7 +48,7 @@ public class MethodDecNode extends FunDecNode {
 		SymbolTableEntry classEntry = env.getClassEntry(this.classID);
 		if (classEntry != null) {
 			ClassType classNode = (ClassType)classEntry.getType();
-			ArrayList<Node> inheritedMethods = classNode.getMethodsList(true);
+			inheritedMethods = classNode.getMethodsList(true);
 			
 			for (Node m:inheritedMethods) {
 				MethodDecNode method = (MethodDecNode)m;
@@ -54,18 +56,6 @@ public class MethodDecNode extends FunDecNode {
 				if (method.getID().equals(this.name)) {
 					if (method.parList.size() != this.parList.size())
 						res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
-								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-					else {
-						for (int i = 0; i< parList.size(); i++) {
-							VarNode inheritedMethodPar = (VarNode)method.parList.get(i);
-							VarNode curMethodPar = (VarNode)this.parList.get(i);
-							if (inheritedMethodPar.getType().getClass() != curMethodPar.getType().getClass())
-								res.add("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
-										+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-						}
-					}
-					if (method.type.getClass() != this.type.getClass())
-						res.add("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
 			}
@@ -138,5 +128,31 @@ public class MethodDecNode extends FunDecNode {
 	@Override
 	public String getID() {
 		return name;
+	}
+	
+	@Override
+	
+	public Node typeCheck () throws Exception {
+		
+		for (Node m:inheritedMethods) {
+			MethodDecNode method = (MethodDecNode) m;
+			for (int i = 0; i < parList.size(); i++) {
+				if (!Helpers.subtypeOf(method.parList.get(i).typeCheck(), parList.get(i).typeCheck()))
+					throw new Exception("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
+			if (!Helpers.subtypeOf(method.type, this.type))
+				throw new Exception("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			
+		}
+		
+		for(Node d : decList){
+			d.typeCheck();
+		}
+		for(Node b : body){
+			b.typeCheck();
+		}
+		return type;
 	}
 }

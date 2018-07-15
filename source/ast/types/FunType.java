@@ -38,7 +38,7 @@ public class FunType implements Node {
 	}
 	
 	public Node typeCheck() {
-		return null;
+		return returnType;
 	}
 	
 	public String codeGeneration() {

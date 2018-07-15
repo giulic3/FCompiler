@@ -59,6 +59,16 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception{
+		/*
+		
+			1 - controllare che la classe ne estenda un'altra ext!=null
+			2 - per ogni metodo della classe devo controllare, nel caso in cui lo sovrascriva,
+				che il tipo dell'ultimo metodo sia sottotipo di quello di cui fa overriding.
+			3 - I parametri del nuovo metodo siano TUTTI sopratipo di quelli del metodo di cui si fa overriding.
+		
+		 */
+		
+		
 		for(Node f : fields){
 			f.typeCheck();
 		}
@@ -77,7 +87,7 @@ public class BlockClassDecNode implements Node {
 		HashSet<String> tmp = new HashSet<String>();
 		
 		// Executing first check on class definitions
-		if (!env.getSecondCheck()) {
+		//if (!env.getSecondCheck()) {
 			HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
 			//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
 			
@@ -88,12 +98,11 @@ public class BlockClassDecNode implements Node {
 			if (classDecHM.put("Class$"+id, classEntry) != null)
 				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			
-		}
+		//}
 		// Executing second check on class definitions and everything inside
-		else {
+	//	else {
 			// Handling superclass declaration
 			// TODO: check null!
-			ClassType classType = (ClassType)env.getClassEntry(id).getType();
 			
 			if (ext != null) {
 				SymbolTableEntry superclassEntry = env.getClassEntry(ext);
@@ -103,6 +112,8 @@ public class BlockClassDecNode implements Node {
 					if (ext.equals(id))
 						res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 					else {
+						//ClassType classType = (ClassType)env.getClassEntry(id).getType();
+						
 						ClassType superType = (ClassType)superclassEntry.getType();
 						classType.setSuperType(superType);
 						
@@ -149,7 +160,7 @@ public class BlockClassDecNode implements Node {
 			//env.updateClassEntry(classType);
 			
 			env.popScope();
-		}
+	//	}
 		
 		return res;
 	}

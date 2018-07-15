@@ -5,7 +5,7 @@ import ast.types.IntType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 import java.util.ArrayList;
@@ -46,21 +46,16 @@ public class FunExpNode implements Node {
 	
 	
 	@Override
-	public Node typeCheck() {
-		if (!isExp)
-			return new VoidType();
-		else
-			return new IntType();
+	public Node typeCheck() throws Exception{
 		
-		// TODO: da implementare
-		/*
-		 *
-		 * 1 - cercare la funzione nella symbol table, se non la trovo errore
-		 * 2 - se trovo l'identificatore devo controllare che sia una funzione
-		 * 3 - controllo che il numero di parametri sia uguale
-		 * 4 - controllo i tipi di tutti i parametri
-		 *
-		 * */
+		FunType funType = (FunType)entry.getType();
+		ArrayList<Node> parlisttype = funType.getParList();
+		
+		for(int i=0; i<parlisttype.size(); i++) {
+			if(!Helpers.subtypeOf(args.get(i).typeCheck(), parlisttype.get(i)))
+				throw new Exception("wrong argument type: " + args.get(i).toPrint(""));
+		}
+		return funType.getReturnType();
 	}
 	
 	public String codeGeneration() {
