@@ -52,8 +52,10 @@ public class FunDecNode implements Node {
 		String funID = "Function$" + name;
 		
 		if(!env.getFunSecondCheck()) {
-			if (hm.put(funID, entry) != null)
+			if(hm.get(funID) != null)
 				res.add("Function " + name + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else
+				hm.put(funID, entry);
 		}
 		
 		env.pushScope();
@@ -72,11 +74,7 @@ public class FunDecNode implements Node {
 				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 
-		FunType funType = new FunType(parTypes, type);
-		entry.setType(funType);
 		this.funEntry = entry;
-
-
 
 		for (Node dec : decList) {
 			env.setOffset(env.getOffset() - 2);

@@ -13,5 +13,3 @@ let
     A a = new A();
 in
     print(a.am2(false));
-
-/* NOT WORKING */

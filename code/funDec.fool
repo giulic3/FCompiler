@@ -4,7 +4,7 @@ let
     in
         y = y + 1;
 in
-    f(3);
+    f(3,4);
 let
     int f()  let
         int y = 0;
@@ -12,5 +12,3 @@ let
         y = y + 1;
 in
     print(ciao);
-
-/* NOT WORKING */

@@ -1,9 +1,6 @@
 package grammars.FOOL;
 
-import ast.types.BoolType;
-import ast.types.ClassType;
-import ast.types.IntType;
-import ast.types.VoidType;
+import ast.types.*;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
 
@@ -52,11 +49,15 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//initialize @res with the visits to the type and its ID
 		// res = new FunDecNode(ctx.ID().getText(), visit(ctx.type()));
 		ArrayList<Node> pars = new ArrayList<>();
+		ArrayList<Node> parTypes = new ArrayList<>();
 		
 		//add argument declarations
-		for(VardecContext par : ctx.vardec())
-			pars.add(visit(par));
+		for(VardecContext par : ctx.vardec()) {
+			VarNode parNode = (VarNode)visit(par);
+			pars.add(parNode);
+			parTypes.add(parNode.getType());
 			//res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));
+		}
 
 		//add body
 		//create a list for the nested var declarations
@@ -77,8 +78,12 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		
 		if (ctx.exp() != null)
 			body.add(visit(ctx.exp()));
+
+		Node returnType = visit(ctx.type());
+
+		FunType funType = new FunType(parTypes, returnType);
 		
-		return new FunDecNode(ctx.ID().getText(), visit(ctx.type()), innerDec, pars, body, ctx);
+		return new FunDecNode(ctx.ID().getText(), funType, innerDec, pars, body, ctx);
 	}
 
 

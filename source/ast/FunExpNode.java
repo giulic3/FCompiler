@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.FunType;
 import ast.types.IntType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -80,6 +81,11 @@ public class FunExpNode implements Node {
 			
 			for(Node arg : args)
 				res.addAll(arg.checkSemantics(env));
+
+			FunType funType = (FunType) this.entry.getType();
+			if (funType.getParList().size() != args.size())
+				res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		return res;
 	}
