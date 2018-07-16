@@ -41,6 +41,10 @@ public class IdNode implements Node {
 	public SymbolTableEntry getSTEntry() {
 		return this.entry;
 	}
+	
+	public void setSTEntry(SymbolTableEntry entry) {
+		this.entry=entry;
+	}
 
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
@@ -105,16 +109,15 @@ public class IdNode implements Node {
 	}
 
 	public String codeGeneration() {
-		/*
-		String getAR="";
-		for (int i=0; i<nestinglevel-entry.getNestinglevel(); i++)
-			getAR+="lw\n";
-		return "push "+entry.getOffset()+"\n"+ //metto offset sullo stack
-				"lfp\n"+getAR+ //risalgo la catena statica
-				"add\n"+
-				"lw\n"; //carico sullo stack il valore all'indirizzo ottenuto
-				*/
-
-		return null;
+		// TODO: da controllare
+		String getAR = "";
+		
+		for (int i = 0; i < nestinglevel - entry.getNestingLevel(); i++) getAR += "lw\n";
+		
+		return  "push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+				"lfp\n" +
+				getAR +     //risalgo la catena statica
+				"add\n" +
+				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
 	}
 }

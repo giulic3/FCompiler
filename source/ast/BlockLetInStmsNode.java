@@ -2,7 +2,6 @@ package ast;
 
 import ast.types.VoidType;
 import utils.Environment;
-;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,6 +61,8 @@ public class BlockLetInStmsNode implements Node {
 		
 		// TODO: handle offset
 		env.pushScope();
+		
+		if (decs.size() > 0) env.setOffset(-1);
 		
 		for(Node dec : decs){
 			if(dec instanceof FunDecNode) {

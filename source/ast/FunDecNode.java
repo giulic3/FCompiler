@@ -44,7 +44,7 @@ public class FunDecNode implements Node {
 		HashSet<String> res = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
+		//env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni
@@ -70,8 +70,8 @@ public class FunDecNode implements Node {
 			parTypes.add(arg.getType());
 			SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
 			
-			if (funContentHM.put(arg.getId(), funEntry) != null)
-				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			if (funContentHM.put(arg.getID(), funEntry) != null)
+				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 
 		this.funEntry = entry;

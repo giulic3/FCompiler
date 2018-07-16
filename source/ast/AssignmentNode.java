@@ -22,19 +22,6 @@ public class AssignmentNode implements Node {
 		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
 	}
 	
-	public Node typeCheck() throws Exception{
-		
-		if(!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())){
-			throw new Exception("Assignment Node typeCheck exception");
-		}
-		
-		return new VoidType();
-	}
-	
-	public String codeGeneration() {
-		return null;
-	}
-	
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		HashSet<String> res = new HashSet<String>();
@@ -47,6 +34,26 @@ public class AssignmentNode implements Node {
 		res.addAll(exp.checkSemantics(env));
 		
 		return res;
+	}
+	
+	public Node typeCheck() throws Exception{
+		
+		if(idVariableNode!=null) {
+			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())) {
+				throw new Exception("Assignment Node typeCheck exception");
+			}
+		}
+		else{
+			if (!Helpers.subtypeOf(exp.typeCheck(), objFieldNode.typeCheck())) {
+				throw new Exception("Assignment Node Class field typeCheck exception");
+			}
+		}
+		
+		return new VoidType();
+	}
+	
+	public String codeGeneration() {
+		return null;
 	}
 	
 	// Method to retrieve string identifier of an object

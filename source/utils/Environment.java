@@ -18,7 +18,7 @@ public class Environment {
 	private boolean secondFunCheck;
 	
 	public Environment() {
-		symTable = new ArrayList<HashMap<String, SymbolTableEntry>>();
+		symTable = new ArrayList<>();
 		nestingLevel = -1;
 		offset = 0;
 		secondCheck = false;
@@ -47,6 +47,14 @@ public class Environment {
 	
 	public void setSymTable(ArrayList<HashMap<String, SymbolTableEntry>> symTable) {
 		this.symTable = symTable;
+	}
+	
+	public int decrementOffset() {
+		return offset--;
+	}
+	
+	public int increaseOffset() {
+		return offset++;
 	}
 	
 	public SymbolTableEntry getActiveDec(String id) {

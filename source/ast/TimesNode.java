@@ -2,42 +2,39 @@ package ast;
 
 import ast.types.*;
 import utils.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TimesNode implements Node {
 
-	private Node left;
-	private Node right;
+	private Node leftOperand;
+	private Node rightOperand;
 
 	public TimesNode (Node l, Node r) {
-		left = l;
-		right = r;
+		leftOperand = l;
+		rightOperand = r;
+	}
+	
+	public String toPrint(String s) {
+		return s+"Times Node\n"
+				+ leftOperand.toPrint(s+"\t")
+				+ "\n"
+				+ rightOperand.toPrint(s+"\t") ;
 	}
 
-	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
 		HashSet<String> res = new HashSet<String>();
 
-		res.addAll(left.checkSemantics(env));
-		res.addAll(right.checkSemantics(env));
+		res.addAll(leftOperand.checkSemantics(env));
+		res.addAll(rightOperand.checkSemantics(env));
 
 		return res;
-	}
-
-	public String toPrint(String s) {
-		return s+"Times Node\n"
-				+ left.toPrint(s+"\t")
-				+ "\n"
-				+ right.toPrint(s+"\t") ;
 	}
 	
 	public Node typeCheck() throws Exception {
 		
-		if (! ( Helpers.subtypeOf(new IntType(),left.typeCheck()) &&
-				Helpers.subtypeOf(new IntType(),right.typeCheck()) ) ) {
+		if (! ( Helpers.subtypeOf(new IntType(), leftOperand.typeCheck()) &&
+				Helpers.subtypeOf(new IntType(), rightOperand.typeCheck()) ) ) {
 			throw new Exception("Non integers in multiplication");
 		}
 		
@@ -45,9 +42,9 @@ public class TimesNode implements Node {
 	}
 
 	public String codeGeneration() {
-		return "";
+		// TODO: da controllare
+		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "mult\n";
 	}
-	
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned

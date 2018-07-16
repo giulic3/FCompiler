@@ -3,9 +3,7 @@ package ast;
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -28,14 +26,6 @@ public class ClassFieldNode implements Node {
 	
 	public String toPrint(String s) {
 		return s+"Class Field Node:\n" + s + "\tObject: " + this.obj.toPrint("") + "\n" + s + "\tField: " + this.id.toPrint("");
-	}
-	
-	public Node typeCheck() throws Exception {
-		return id.typeCheck();
-	}
-	
-	public String codeGeneration() {
-		return null;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -65,6 +55,7 @@ public class ClassFieldNode implements Node {
 					res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
 				
+				((IdNode)id).setSTEntry(foundField.getSTEntry());
 				this.entry = entry;
 				this.callNestingLevel = env.getNestingLevel();
 			}
@@ -73,6 +64,14 @@ public class ClassFieldNode implements Node {
 		}
 		
 		return res;
+	}
+	
+	public Node typeCheck() throws Exception {
+		return id.typeCheck();
+	}
+	
+	public String codeGeneration() {
+		return null;
 	}
 	
 	// Method to retrieve string identifier of an object

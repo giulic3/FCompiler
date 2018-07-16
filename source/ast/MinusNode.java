@@ -20,6 +20,11 @@ public class MinusNode implements Node {
 		return indent + "Minus Node:\n" + value.toPrint(indent+"\t");
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da implementare
+		return value.checkSemantics(env);
+	}
+	
 	public Node typeCheck() throws Exception {
 		// TODO: da implementare
 		if(!Helpers.subtypeOf(new IntType(), value.typeCheck())){
@@ -36,11 +41,6 @@ public class MinusNode implements Node {
 		// di quello di minus, quindi deve comparire prima nella stringa. Il risultato sarà codestring + minus.codegen).
 		return value.codeGeneration();
 		
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return value.checkSemantics(env);
 	}
 	
 	// Method to retrieve string identifier of an object

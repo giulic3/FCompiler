@@ -3,7 +3,6 @@ package ast.types;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 import ast.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -45,6 +44,14 @@ public class ClassType implements Node {
 	
 	public ClassType getSuperType() {
 		return superType;
+	}
+	
+	public void setFields(ArrayList<Node> fields){
+		this.fields = fields;
+	}
+	
+	public void setMethods(ArrayList<Node> methods){
+		this.methods = methods;
 	}
 	
 	public ArrayList<Node> getFieldsList(boolean incInherited) {
@@ -94,22 +101,8 @@ public class ClassType implements Node {
 		superType = type;
 	}
 	
-	
-	
 	public String toPrint(String indent) {
 		return classID; // TODO: to be updated
-	}
-	
-	
-	
-	public Node typeCheck() {
-		// TODO: da implementare
-		return this;
-	}
-	
-	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -125,15 +118,17 @@ public class ClassType implements Node {
 		return res;
 	}
 	
+	public Node typeCheck() {
+		// TODO: da implementare
+		return this;
+	}
+	
+	public String codeGeneration() {
+		// TODO: da implementare
+		return null;
+	}
+	
 	public String getID() {
 		return classID;
-	}
-	
-	public void setFields(ArrayList<Node> fields){
-		this.fields = fields;
-	}
-	
-	public void setMethods(ArrayList<Node> methods){
-		this.methods = methods;
 	}
 }

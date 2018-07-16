@@ -1,22 +1,28 @@
 import ast.*;
 import grammars.FOOL.FOOLLexer;
-import grammars.FOOL.FOOLLexer.*;
 import grammars.FOOL.FOOLParser;
 import grammars.FOOL.FOOLVisitorImpl;
 import ast.BoolValNode;
 
 
+import grammars.SVM.ExecuteVM;
+import grammars.SVM.SVMLexer;
+import grammars.SVM.SVMParser;
+import grammars.SVM.SVMVisitorImpl;
 import org.antlr.v4.runtime.*;
 import utils.Environment;
 ;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Main {
@@ -68,10 +74,42 @@ public class Main {
 		ast = semanticAnalysis(ast, true);
 		if(ast!=null) {
 			Node type = ast.typeCheck(); //type-checking bottom-up
-			System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+			System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
+			System.out.println();
+			
+			// Code Generation
+			codeGen(ast);
 		}
 		
 		return result;
+	}
+	
+	public static void codeGen(Node ast) throws Exception {
+		String assembly = ast.codeGeneration();
+		System.out.println(assembly);
+		
+		BufferedWriter asmOutput = new BufferedWriter(new FileWriter("code/output.fool.asm"));
+		asmOutput.write(assembly);
+		asmOutput.close();
+		
+		File asmInputFile = new File("code/output.fool.asm");
+		CharStream input = CharStreams.fromFileName(asmInputFile.getAbsolutePath());
+		
+		SVMLexer asmLexer = new SVMLexer(input);
+		CommonTokenStream asmTokens = new CommonTokenStream(asmLexer);
+		SVMParser asmParser = new SVMParser(asmTokens);
+		SVMVisitorImpl asmVisitor = new SVMVisitorImpl();
+		
+		asmVisitor.visit(asmParser.assembly());
+		
+		System.out.println("Starting Virtual Machine...");
+		ExecuteVM vm = new ExecuteVM(SVMParser.code);
+		
+		System.out.println("Code Array:");
+		System.out.println(Arrays.toString(SVMParser.code));
+		
+		System.out.println("Virtual Machine execution result:");
+		vm.cpu();
 	}
 
 	public static void testWithThreads(File file) {
@@ -114,7 +152,7 @@ public class Main {
 	public static void main(String[] args) throws  Exception{
 
 		//try {
-			File inputFile = new File("code/classFieldAssignment.fool");
+			File inputFile = new File("code/input.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
 		//}
