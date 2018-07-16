@@ -33,8 +33,8 @@ public class SubNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "sub\n";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

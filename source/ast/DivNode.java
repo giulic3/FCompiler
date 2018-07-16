@@ -3,18 +3,17 @@ package ast;
 import ast.types.*;
 import utils.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /* integer division */
 public class DivNode implements Node {
 
-	private Node left;
-	private Node right;
+	private Node leftOperand;
+	private Node rightOperand;
 
 	public DivNode (Node l, Node r) {
-		left = l;
-		right = r;
+		leftOperand = l;
+		rightOperand = r;
 	}
 
 	@Override
@@ -22,29 +21,30 @@ public class DivNode implements Node {
 
 		HashSet<String> res = new HashSet<String>();
 
-		res.addAll(left.checkSemantics(env));
-		res.addAll(right.checkSemantics(env));
+		res.addAll(leftOperand.checkSemantics(env));
+		res.addAll(rightOperand.checkSemantics(env));
 
 		return res;
 	}
 
 	public String toPrint(String s) {
-		return s+"Div Node\n" + left.toPrint(s+"\t")
+		return s+"Div Node\n" + leftOperand.toPrint(s+"\t")
 				+ "\n"
-				+ right.toPrint(s+"\t") ;
+				+ rightOperand.toPrint(s+"\t") ;
 	}
 	
 	public Node typeCheck()throws Exception {
 		
-		if (! ( Helpers.subtypeOf(left.typeCheck(),new IntType()) &&
-				Helpers.subtypeOf(right.typeCheck(),new IntType()) ) ) {
+		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(),new IntType()) &&
+				Helpers.subtypeOf(rightOperand.typeCheck(),new IntType()) ) ) {
 			throw new Exception("Non integers in division");
 		}
 		return new IntType();
 	}
 
 	public String codeGeneration() {
-		return "";
+		// TODO: da controllare
+		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "div\n";
 	}
 	
 	// Method to retrieve string identifier of an object

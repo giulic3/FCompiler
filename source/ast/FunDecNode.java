@@ -44,7 +44,7 @@ public class FunDecNode implements Node {
 		HashSet<String> res = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
+		//env.setOffset(env.getOffset()-1);
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
 		
 		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni

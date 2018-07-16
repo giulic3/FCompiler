@@ -33,8 +33,8 @@ public class PlusNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "add\n";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

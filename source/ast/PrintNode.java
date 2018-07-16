@@ -29,8 +29,13 @@ public class PrintNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		String res = "";
+		
+		for (Node e: exps)
+			res += e.codeGeneration() + "print\n";
+		
+		return res;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

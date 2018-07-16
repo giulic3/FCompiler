@@ -74,7 +74,13 @@ public class VarNode implements Node {
 		return id;
 	}
 	
-	public String codeGeneration(){return null;}
+	public String codeGeneration() {
+		// TODO: da controllare
+		if (exp != null)
+			return exp.codeGeneration();
+		
+		return "";
+	}
 	
 	public HashSet<String> checkSemantics(Environment env){
 		HashSet<String> res = new HashSet<String>();
@@ -85,8 +91,7 @@ public class VarNode implements Node {
 		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset() - 1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), type); //separo introducendo "entry"
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.decrementOffset(), type); //separo introducendo "entry"
 		
 		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
 		
