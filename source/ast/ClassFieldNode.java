@@ -65,6 +65,7 @@ public class ClassFieldNode implements Node {
 					res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
 				
+				((IdNode)id).setSTEntry(foundField.getSTEntry());
 				this.entry = entry;
 				this.callNestingLevel = env.getNestingLevel();
 			}

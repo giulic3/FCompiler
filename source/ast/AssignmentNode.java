@@ -24,8 +24,15 @@ public class AssignmentNode implements Node {
 	
 	public Node typeCheck() throws Exception{
 		
-		if(!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())){
-			throw new Exception("Assignment Node typeCheck exception");
+		if(idVariableNode!=null) {
+			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())) {
+				throw new Exception("Assignment Node typeCheck exception");
+			}
+		}
+		else{
+			if (!Helpers.subtypeOf(exp.typeCheck(), objFieldNode.typeCheck())) {
+				throw new Exception("Assignment Node Class field typeCheck exception");
+			}
 		}
 		
 		return new VoidType();
