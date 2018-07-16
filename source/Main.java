@@ -74,7 +74,7 @@ public class Main {
 		return result;
 	}
 
-	public static void test(File file) {
+	public static void testWithThreads(File file) {
 		try {
 
 			String output = "";
@@ -82,14 +82,39 @@ public class Main {
 			output += run(input);
 		}
 		catch (Exception e) {
+			// printStackTrace method
+			// prints line numbers + call stack
+			e.printStackTrace();
 
+			// Prints what exception has been thrown
+			System.out.println(e);
 		}
+	}
+
+	public static String testWithYaml(String testID, CharStream input, String expectedResult, boolean enableLogging, boolean showAST, boolean noColors) {
+		String actualResult = "";
+
+		try {
+			actualResult = run(input);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		StringBuilder output = new StringBuilder();
+		output.append("-Expected: ").append(expectedResult).append("\n")
+				.append("-Got: ").append(actualResult).append("\n");
+		if (actualResult.trim().equals(expectedResult.trim())) {
+			output.append("Test PASSED!");
+		} else {
+			output.append("Test FAILED!");
+		}
+
+		return output.toString();
 	}
 	
 	public static void main(String[] args) throws  Exception{
 
 		//try {
-			File inputFile = new File("code/nestedIf.fool");
+			File inputFile = new File("code/classFieldAssignment.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
 		//}

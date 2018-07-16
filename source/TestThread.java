@@ -4,6 +4,7 @@ import java.io.File;
 
 public class TestThread implements Runnable {
 
+	/* TODO move elsewhere, these constants can be useful in other files too */
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
@@ -28,7 +29,7 @@ public class TestThread implements Runnable {
 		//System.out.println(ANSI_GREEN + ", status = " + t.isAlive() + ANSI_RESET);
 		System.out.println(ANSI_BLUE + file.getName() + ANSI_RESET);
 
-		Main.test(file);
+		Main.testWithThreads(file);
 
 	}
 
@@ -38,20 +39,18 @@ public class TestThread implements Runnable {
 
 		for (File inputFile : codeDirectory.listFiles()) {
 
-			//try {
+			try {
 				Thread t = new Thread(new TestThread(inputFile));
 				// this will call run() function
 				t.start();
 				// waits for this thread to die
 				t.join();
-				//System.out.print(t.getName());
-				//checks if this thread is alive
-				//System.out.println(ANSI_RED + ", status = " + t.isAlive() + ANSI_RESET);
-				System.out.println("\n");
-			//}
-			//catch (Exception E) {
 
-			//}
+				System.out.println("\n");
+			}
+			catch (Exception E) {
+
+			}
 		}
 	}
 
