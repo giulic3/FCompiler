@@ -1,4 +1,4 @@
-class hero {
+/*class hero {
     bool iAmAGenius() return true;
     void fuckYeah() print(69);
 };
@@ -16,4 +16,20 @@ let
     super y = new super();
     hero z = new hero();
 in
-    z = if (true && false) then {x} else {y};
+    z = if (true && false) then {x} else {y};*/
+
+/*class A (int field = 1) {
+    void setter(int value) field = value;   // TODO: da permettere!!
+};
+
+let
+    A a = new A();
+in
+    a.setter(5);
+    print(a.field);*/
+
+let
+    int x = 6;
+    int y = 2;
+in
+    print(x, y, x+y, x-y, x*y, x/y);

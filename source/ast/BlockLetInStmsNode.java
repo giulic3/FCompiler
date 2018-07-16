@@ -63,6 +63,8 @@ public class BlockLetInStmsNode implements Node {
 		// TODO: handle offset
 		env.pushScope();
 		
+		if (decs.size() > 0) env.setOffset(-1);
+		
 		for(Node dec : decs){
 			if(dec instanceof FunDecNode) {
 				res.addAll(dec.checkSemantics(env));
