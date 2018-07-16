@@ -1,8 +1,6 @@
 package ast;
 
 import ast.types.FunType;
-import ast.types.IntType;
-import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
@@ -44,8 +42,28 @@ public class FunExpNode implements Node {
 		return msg;
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		HashSet<String> res = new HashSet<String>();
+		
+		SymbolTableEntry entry = env.getActiveDec("Function$" + id);
+		
+		if (entry==null)
+			res.add("Fun "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
+		else{
+			this.entry = entry;
+			this.callNestingLevel = env.getNestingLevel();
+			
+			for(Node arg : args)
+				res.addAll(arg.checkSemantics(env));
+			
+			FunType funType = (FunType) this.entry.getType();
+			if (funType.getParList().size() != args.size())
+				res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
+						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		}
+		return res;
+	}
 	
-	@Override
 	public Node typeCheck() throws Exception{
 		
 		FunType funType = (FunType)entry.getType();
@@ -61,28 +79,6 @@ public class FunExpNode implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
-
-		SymbolTableEntry entry = env.getActiveDec("Function$" + id);
-
-		if (entry==null)
-			res.add("Fun "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
-		else{
-			this.entry = entry;
-			this.callNestingLevel = env.getNestingLevel();
-			
-			for(Node arg : args)
-				res.addAll(arg.checkSemantics(env));
-
-			FunType funType = (FunType) this.entry.getType();
-			if (funType.getParList().size() != args.size())
-				res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
-						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		}
-		return res;
 	}
 	
 	public String getID() {

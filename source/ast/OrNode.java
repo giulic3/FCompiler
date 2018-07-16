@@ -1,13 +1,9 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
 import ast.types.BoolType;
 import utils.Environment;
 import utils.Helpers;
-;
-//import lib.FOOLlib;
 
 public class OrNode implements Node {
 
@@ -24,7 +20,6 @@ public class OrNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
 		HashSet<String> res = new HashSet<String>();

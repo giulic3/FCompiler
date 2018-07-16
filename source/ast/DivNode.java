@@ -2,8 +2,6 @@ package ast;
 
 import ast.types.*;
 import utils.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /* integer division */
@@ -16,8 +14,13 @@ public class DivNode implements Node {
 		left = l;
 		right = r;
 	}
-
-	@Override
+	
+	public String toPrint(String s) {
+		return s+"Div Node\n" + left.toPrint(s+"\t")
+				+ "\n"
+				+ right.toPrint(s+"\t") ;
+	}
+	
 	public HashSet<String> checkSemantics(Environment env) {
 
 		HashSet<String> res = new HashSet<String>();
@@ -26,12 +29,6 @@ public class DivNode implements Node {
 		res.addAll(right.checkSemantics(env));
 
 		return res;
-	}
-
-	public String toPrint(String s) {
-		return s+"Div Node\n" + left.toPrint(s+"\t")
-				+ "\n"
-				+ right.toPrint(s+"\t") ;
 	}
 	
 	public Node typeCheck()throws Exception {

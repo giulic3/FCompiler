@@ -2,8 +2,6 @@ package ast;
 
 import ast.types.*;
 import utils.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TimesNode implements Node {
@@ -15,8 +13,14 @@ public class TimesNode implements Node {
 		left = l;
 		right = r;
 	}
+	
+	public String toPrint(String s) {
+		return s+"Times Node\n"
+				+ left.toPrint(s+"\t")
+				+ "\n"
+				+ right.toPrint(s+"\t") ;
+	}
 
-	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
 		HashSet<String> res = new HashSet<String>();
@@ -25,13 +29,6 @@ public class TimesNode implements Node {
 		res.addAll(right.checkSemantics(env));
 
 		return res;
-	}
-
-	public String toPrint(String s) {
-		return s+"Times Node\n"
-				+ left.toPrint(s+"\t")
-				+ "\n"
-				+ right.toPrint(s+"\t") ;
 	}
 	
 	public Node typeCheck() throws Exception {
@@ -47,7 +44,6 @@ public class TimesNode implements Node {
 	public String codeGeneration() {
 		return "";
 	}
-	
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned

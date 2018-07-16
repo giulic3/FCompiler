@@ -2,9 +2,6 @@ package ast;
 
 import ast.types.BoolType;
 import utils.Environment;
-;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class BoolValNode implements Node {
@@ -18,7 +15,12 @@ public class BoolValNode implements Node {
 	public String toPrint(String s) {
 		return s + "Boolean value: " + value;
 	}
-	@Override
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
+	
 	public Node typeCheck() {
 		return new BoolType();
 	}
@@ -26,11 +28,6 @@ public class BoolValNode implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return "push "+(value?1:0)+"\n";
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object

@@ -1,15 +1,17 @@
 package ast;
 
 import utils.Environment;
-;
-import utils.SymbolTableEntry;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ProgNode  implements Node {
-
+	
+	/**
+	 *
+	 * Nodo di ingresso dell'ast (albero di sintassi astratta)
+	 *
+	 * */
+	
 	private ArrayList<Node> blocks;
 	
 	public ProgNode (ArrayList<Node> d) {
@@ -44,11 +46,6 @@ public class ProgNode  implements Node {
 		HashSet<String> errors = new HashSet<>();
 		
 		env.pushScope();
-		
-		//for (Node bClass:blocks) {
-	//		if (bClass instanceof BlockClassDecNode)
-	//			errors.addAll(bClass.checkSemantics(env));
-	//	}
 		
 		env.settingSecondCheck();
 		

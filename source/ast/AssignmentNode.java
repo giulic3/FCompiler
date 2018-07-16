@@ -22,6 +22,20 @@ public class AssignmentNode implements Node {
 		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		
+		HashSet<String> res = new HashSet<String>();
+		
+		if (objFieldNode != null)
+			res.addAll(objFieldNode.checkSemantics(env));
+		else
+			res.addAll(idVariableNode.checkSemantics(env));
+		
+		res.addAll(exp.checkSemantics(env));
+		
+		return res;
+	}
+	
 	public Node typeCheck() throws Exception{
 		
 		if(idVariableNode!=null) {
@@ -40,20 +54,6 @@ public class AssignmentNode implements Node {
 	
 	public String codeGeneration() {
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		
-		HashSet<String> res = new HashSet<String>();
-		
-		if (objFieldNode != null)
-			res.addAll(objFieldNode.checkSemantics(env));
-		else
-			res.addAll(idVariableNode.checkSemantics(env));
-		
-		res.addAll(exp.checkSemantics(env));
-		
-		return res;
 	}
 	
 	// Method to retrieve string identifier of an object

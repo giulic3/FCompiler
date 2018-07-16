@@ -1,12 +1,8 @@
 package ast;
 
 import ast.types.BoolType;
-import ast.types.IntType;
 import utils.Environment;
 import utils.Helpers;
-;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class NotNode implements Node {
@@ -21,6 +17,11 @@ public class NotNode implements Node {
 		return indent + "Not Node:\n" + value.toPrint(indent+"\t");
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return value.checkSemantics(env);
+	}
+	
 	public Node typeCheck() throws Exception {
 		// TODO: da controllare
 		
@@ -33,12 +34,6 @@ public class NotNode implements Node {
 		// TODO: da implementare
 		return null;
 	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return value.checkSemantics(env);
-	}
-	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {

@@ -2,11 +2,9 @@ package ast;
 
 import ast.types.ClassType;
 import ast.types.FunType;
-import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,16 +20,33 @@ public class MethodDecNode extends FunDecNode {
 		this.classID = classID;
 	}
 	
-	/*public MethodDecNode (String name, Node type, ArrayList<Node> decList, ArrayList<Node> parList, ArrayList<Node> bodyList, String classID, ParserRuleContext ctx) {
-		super(name, type, decList, parList, bodyList, ctx);
-		this.classID = classID;
-	}*/
-	
 	public void setInsideClass(String val) {
 		this.classID = val;
 	}
 	
-	@Override
+	public String toPrint(String s) {
+		
+		String parlstr = "";
+		String declstr = "";
+		
+		if (parList != null && !parList.isEmpty()) {
+			for (Node par : parList)
+				parlstr += "\n" + par.toPrint(s + "\t\t");
+			parlstr+="\n"+s+"\t";
+		}
+		
+		if (decList != null && !decList.isEmpty()) {
+			declstr = "\n"+s+"\tFun Decs:";
+			for (Node dec : decList)
+				declstr += "\n" + dec.toPrint(s + "\t\t");
+		}
+		
+		return s+"Method Dec Node (in class " + classID + "): " +type.toPrint("") + " " + name +"("
+				+parlstr+")"
+				+declstr;
+		//+body.toPrint(s+"  ") ;
+	}
+	
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		//create result list
@@ -78,8 +93,8 @@ public class MethodDecNode extends FunDecNode {
 			parTypes.add(arg.getType());
 			SymbolTableEntry parEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
 			
-			if (methodContentHM.put(arg.getId(), parEntry) != null)
-				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			if (methodContentHM.put(arg.getID(), parEntry) != null)
+				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 		this.funEntry = entry;
 
@@ -95,42 +110,6 @@ public class MethodDecNode extends FunDecNode {
 		
 		return res;
 	}
-	
-	@Override
-	public String toPrint(String s) {
-		
-		String parlstr = "";
-		String declstr = "";
-		
-		if (parList != null && !parList.isEmpty()) {
-			for (Node par : parList)
-				parlstr += "\n" + par.toPrint(s + "\t\t");
-			parlstr+="\n"+s+"\t";
-		}
-		
-		if (decList != null && !decList.isEmpty()) {
-			declstr = "\n"+s+"\tFun Decs:";
-			for (Node dec : decList)
-				declstr += "\n" + dec.toPrint(s + "\t\t");
-		}
-		
-		return s+"Method Dec Node (in class " + classID + "): " +type.toPrint("") + " " + name +"("
-				+parlstr+")"
-				+declstr;
-		//+body.toPrint(s+"  ") ;
-	}
-	
-	@Override
-	public String codeGeneration() {
-		return "";
-	}
-	
-	@Override
-	public String getID() {
-		return name;
-	}
-	
-	@Override
 	
 	public Node typeCheck () throws Exception {
 		
@@ -155,5 +134,13 @@ public class MethodDecNode extends FunDecNode {
 			b.typeCheck();
 		}
 		return ((FunType)type).getReturnType();
+	}
+	
+	public String codeGeneration() {
+		return "";
+	}
+	
+	public String getID() {
+		return name;
 	}
 }

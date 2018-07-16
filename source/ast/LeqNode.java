@@ -1,14 +1,11 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
 import ast.types.BoolType;
 import ast.types.IntType;
 import utils.Environment;
 import utils.Helpers;
-;
-//import lib.FOOLlib;
+
 
 public class LeqNode implements Node {
 
@@ -25,7 +22,6 @@ public class LeqNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
 		HashSet<String> res = new HashSet<String>();

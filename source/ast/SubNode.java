@@ -1,12 +1,8 @@
 package ast;
 
-import ast.types.BoolType;
 import ast.types.IntType;
 import utils.Environment;
 import utils.Helpers;
-;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class SubNode implements Node {
@@ -23,7 +19,17 @@ public class SubNode implements Node {
 		return s + "Sub Node:\n" + leftOperand.toPrint(s+"\t") + "\n" + rightOperand.toPrint(s+"\t");
 	}
 	
-	@Override
+	public HashSet<String> checkSemantics(Environment env) {
+		HashSet<String> res = new HashSet<String>();
+		
+		//check semantics in the left and in the right exp
+		
+		res.addAll(leftOperand.checkSemantics(env));
+		res.addAll(rightOperand.checkSemantics(env));
+		
+		return res;
+	}
+	
 	public Node typeCheck() throws Exception {
 		if (! ( Helpers.subtypeOf(new IntType(),leftOperand.typeCheck()) &&
 				Helpers.subtypeOf(new IntType(),rightOperand.typeCheck()) ) ) {
@@ -35,17 +41,6 @@ public class SubNode implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
-		
-		//check semantics in the left and in the right exp
-		
-		res.addAll(leftOperand.checkSemantics(env));
-		res.addAll(rightOperand.checkSemantics(env));
-		
-		return res;
 	}
 	
 	// Method to retrieve string identifier of an object

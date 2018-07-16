@@ -3,8 +3,6 @@ package ast;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SymbolTableEntry;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class NewExpNode implements Node {
@@ -27,17 +25,6 @@ public class NewExpNode implements Node {
 		return entry;
 	}
 	
-	
-	@Override
-	public Node typeCheck() {
-		return entry.getType();
-	}
-	
-	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
-	}
-	
 	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da implementare
 		HashSet<String> res = new HashSet<String>();
@@ -53,6 +40,14 @@ public class NewExpNode implements Node {
 		return res;
 	}
 	
+	public Node typeCheck() {
+		return entry.getType();
+	}
+	
+	public String codeGeneration() {
+		// TODO: da implementare
+		return null;
+	}
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned

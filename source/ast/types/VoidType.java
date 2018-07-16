@@ -16,10 +16,11 @@ public class VoidType implements Node {
 	public String toPrint(String indent) {
 		return indent+"VoidType";
 	}
-
-	/*public TypeEnum getType() {
-		return TypeEnum.VOID;
-	}*/
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
 	
 	public Node typeCheck() {
 		return new VoidType(); // TODO: da controllare
@@ -28,11 +29,6 @@ public class VoidType implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object
