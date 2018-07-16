@@ -1,6 +1,5 @@
 import ast.*;
 import grammars.FOOL.FOOLLexer;
-import grammars.FOOL.FOOLLexer.*;
 import grammars.FOOL.FOOLParser;
 import grammars.FOOL.FOOLVisitorImpl;
 import ast.BoolValNode;

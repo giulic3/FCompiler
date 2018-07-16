@@ -2,9 +2,6 @@ package ast;
 
 import ast.types.NullType;
 import utils.Environment;
-;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class NullNode implements Node {
@@ -15,6 +12,11 @@ public class NullNode implements Node {
 		return indent + "Null Node";
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
+	
 	public Node typeCheck() {
 		// TODO: da implementare
 		return new NullType();
@@ -23,11 +25,6 @@ public class NullNode implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object

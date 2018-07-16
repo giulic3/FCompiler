@@ -3,9 +3,7 @@ package ast;
 import ast.types.ClassType;
 import ast.types.FunType;
 import utils.Environment;
-;
 import utils.SymbolTableEntry;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -24,11 +22,6 @@ public class ClassMethodNode extends FunExpNode {
 	public String toPrint(String s) {
 		return s+"Method Call Node:\n" + s + "\t\tObject:\n" + this.objectNode.toPrint(s+"\t\t\t") + "\n" + s
 				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");
-	}
-	
-	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -78,6 +71,17 @@ public class ClassMethodNode extends FunExpNode {
 		
 		
 		return res;
+	}
+	
+	/**
+	 *
+	 * La funzione typeCheck viene ereditata dalla classe FunExpNode
+	 *
+	 * */
+	
+	public String codeGeneration() {
+		// TODO: da implementare
+		return null;
 	}
 	
 	// Method to retrieve string identifier of an object

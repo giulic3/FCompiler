@@ -1,11 +1,8 @@
 package ast.types;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
 import ast.Node;
 import utils.Environment;
-;
 
 public class IntType implements Node {
 	
@@ -16,10 +13,11 @@ public class IntType implements Node {
 	public String toPrint(String indent) {
 		return "IntType";
 	}
-
-	/*public TypeEnum getType() {
-		return TypeEnum.INT;
-	}*/
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
 	
 	public Node typeCheck() {
 		return new IntType();
@@ -28,12 +26,6 @@ public class IntType implements Node {
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;
-	}
-	
-	@Override
-	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
 	}
 	
 	// Method to retrieve string identifier of an object

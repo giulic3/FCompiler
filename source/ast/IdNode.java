@@ -41,6 +41,10 @@ public class IdNode implements Node {
 	public SymbolTableEntry getSTEntry() {
 		return this.entry;
 	}
+	
+	public void setSTEntry(SymbolTableEntry entry) {
+		this.entry=entry;
+	}
 
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {

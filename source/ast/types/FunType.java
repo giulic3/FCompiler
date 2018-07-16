@@ -17,6 +17,14 @@ public class FunType implements Node {
 		returnType = r;
 	}
 	
+	public Node getReturnType() {
+		return returnType;
+	}
+	
+	public ArrayList<Node> getParList () {
+		return parTypesList;
+	}
+	
 	// TODO: this toPrint() should be checked
 	public String toPrint(String indent) {
 		String parlstr = "(";
@@ -29,12 +37,8 @@ public class FunType implements Node {
 		return parlstr + " -> " + returnType.toPrint("") ;
 	}
 	
-	public Node getReturnType() {
-		return returnType;
-	}
-	
-	public ArrayList<Node> getParList () {
-		return parTypesList;
+	public HashSet<String> checkSemantics(Environment env) {
+		return new HashSet<String>();
 	}
 	
 	public Node typeCheck() {
@@ -43,10 +47,6 @@ public class FunType implements Node {
 	
 	public String codeGeneration() {
 		return null;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env) {
-		return new HashSet<String>();
 	}
 
 	public String getID() {

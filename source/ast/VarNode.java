@@ -33,6 +33,10 @@ public class VarNode implements Node {
 		exp = v;
 	}
 	
+	public SymbolTableEntry getSTEntry(){
+		return this.entry;
+	}
+	
 	public ParserRuleContext getCtx(){
 		return ctx;
 	}
@@ -45,23 +49,6 @@ public class VarNode implements Node {
 		return this.classID;
 	}
 	
-	public String toPrint(String s){
-		if (exp != null)
-			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
-		else
-			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
-	}
-	
-	public Node typeCheck() throws Exception {
-		if(exp!=null) {
-			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
-				throw new Exception("Assignment Node typeCheck exception");
-			}
-		}
-		
-		return new VoidType();
-	}
-	
 	public Node getType(){
 		return type;
 	}
@@ -70,16 +57,11 @@ public class VarNode implements Node {
 		this.type = type;
 	}
 	
-	public String getId(){
-		return id;
-	}
-	
-	public String codeGeneration() {
-		// TODO: da controllare
+	public String toPrint(String s){
 		if (exp != null)
-			return exp.codeGeneration();
-		
-		return "";
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
+		else
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env){
@@ -108,17 +90,31 @@ public class VarNode implements Node {
 			res.add("Var or Par id " + id + " already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else
 			this.entry = entry;
-			
+		
 		return res;
+	}
+	
+	public Node typeCheck() throws Exception {
+		if(exp!=null) {
+			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
+				throw new Exception("Assignment Node typeCheck exception");
+			}
+		}
+		
+		return new VoidType();
+	}
+	
+	public String codeGeneration() {
+		// TODO: da controllare
+		if (exp != null)
+			return exp.codeGeneration();
+		
+		return "";
 	}
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return id;
-	}
-	
-	public SymbolTableEntry getSTEntry(){
-		return this.entry;
 	}
 }

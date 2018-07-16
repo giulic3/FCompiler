@@ -70,8 +70,8 @@ public class FunDecNode implements Node {
 			parTypes.add(arg.getType());
 			SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
 			
-			if (funContentHM.put(arg.getId(), funEntry) != null)
-				res.add("Parameter name " + arg.getId() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			if (funContentHM.put(arg.getID(), funEntry) != null)
+				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 
 		this.funEntry = entry;

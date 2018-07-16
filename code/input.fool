@@ -3,18 +3,13 @@
     void fuckYeah() print(69);
 };
 
-class super extends hero(int x = 0) {
-    void g() return 0;
+    void m() print(2);
 };
 
-class ciao extends hero (int x = 1, int y = 2){
-    void z() return 0;
-};
 
 let
-    ciao x = new ciao();
-    super y = new super();
-    hero z = new hero();
+    int y=2;
+    A z =  new A();
 in
     z = if (true && false) then {x} else {y};*/
 
