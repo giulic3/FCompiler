@@ -25,7 +25,7 @@ public class BoolValNode implements Node {
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		return "push "+(value?1:0)+"\n";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

@@ -1,8 +1,8 @@
 package ast.types;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import ast.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -55,10 +55,25 @@ public class ClassType implements Node {
 			ArrayList<Node> superFieldsList = superType.getFieldsList(true);
 			fieldsList.addAll(superFieldsList);
 		}
-		//else
-			fieldsList.addAll(fields);
+		fieldsList.addAll(fields);
 		
 		return fieldsList;
+	}
+	
+	public Set<String> getSuperList(boolean incInherited) {
+		// TODO: risalire la gerarchia delle classi per
+		Set<String> classList = new HashSet<>();
+		
+		if (incInherited && superType != null) {
+			Set<String> superClassList = superType.getSuperList(true);
+			classList.addAll(superClassList);
+		}
+		if(superType!=null) {
+			classList.add(superType.classID);
+		}
+		else
+			classList.add(classID);
+		return classList;
 	}
 	
 	public ArrayList<Node> getMethodsList(boolean incInherited) {
@@ -69,8 +84,7 @@ public class ClassType implements Node {
 			ArrayList<Node> superMethodsList = superType.getMethodsList(true);
 			methodsList.addAll(superMethodsList);
 		}
-		//else
-			methodsList.addAll(methods);
+		methodsList.addAll(methods);
 		
 		return methodsList;
 	}
@@ -105,6 +119,8 @@ public class ClassType implements Node {
 		SymbolTableEntry entry = env.getClassEntry(classID); // DO NOT ADD Class$ (all class IDs in entries will be changed to Class$NameClass form)
 		if (entry == null)
 			res.add("Class " + classID + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		
+		//this.superClassList=
 		
 		return res;
 	}

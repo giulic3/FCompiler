@@ -24,7 +24,7 @@ public class IntValNode implements Node {
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		return  "push "+value+"\n";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

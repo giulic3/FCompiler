@@ -36,7 +36,7 @@ public class ProgNode  implements Node {
 		String res="";
 		for(Node b:blocks)
 			res += b.codeGeneration();
-		return res;
+		return res+"halt\n";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env){

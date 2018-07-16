@@ -3,7 +3,6 @@ package ast;
 
 import ast.types.BoolType;
 import ast.types.VoidType;
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import utils.Environment;
 import utils.Helpers;
 
@@ -123,15 +122,19 @@ public class IfNode implements Node {
 	@Override
 	public Node typeCheck() throws Exception {
 		
+		if(!Helpers.subtypeOf(cond.typeCheck(), new BoolType())){
+			throw new Exception("condition is not boolean");
+		}
+		
 		if(thStms!=null){
 			for(Node ths : thStms)
 				if(!Helpers.subtypeOf(ths.typeCheck(), new VoidType())){
-					throw new Exception("not void statament");
+					throw new Exception("not void statement");
 			}
 			if(elStms!=null){
 				for(Node els : elStms)
 				if(!Helpers.subtypeOf(els.typeCheck(), new VoidType())){
-					throw new Exception("not void statament");
+					throw new Exception("not void statement");
 				}
 			}
 			return new VoidType();
@@ -141,12 +144,12 @@ public class IfNode implements Node {
 				return th.typeCheck();
 			}
 			if(Helpers.subtypeOf(th.typeCheck(),el.typeCheck())){
-				return th.typeCheck();
-			}
-			if(Helpers.subtypeOf(el.typeCheck(),th.typeCheck())){
 				return el.typeCheck();
 			}
-			throw new Exception("Icompatible expression types");
+			if(Helpers.subtypeOf(el.typeCheck(),th.typeCheck())){
+				return th.typeCheck();
+			}
+			throw new Exception("Incompatible expression types");
 		}
 	}
 	

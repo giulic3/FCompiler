@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import ast.types.BoolType;
+import ast.types.IntType;
 import utils.Environment;
+import utils.Helpers;
 ;
 //import lib.FOOLlib;
 
@@ -36,8 +38,12 @@ public class GeqNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-
+	public Node typeCheck() throws Exception {
+		Node l = left.typeCheck();
+		Node r = right.typeCheck();
+		if (!(Helpers.subtypeOf(new IntType(),l) && Helpers.subtypeOf(new IntType(),r))) {
+			throw new Exception("Incompatible types in Gequal");
+		}
 		return new BoolType();
 	}
 

@@ -1,12 +1,12 @@
 let int x = 1; in
-if (2) then {
+if (true) then {
     if (true) then {
         print(7)
     }
 } else {
     if (true) then {
-        if (60) then {
-            if (70) then {
+        if (false) then {
+            if (false) then {
                 print(false)
             } else {
                 x = 100
@@ -16,3 +16,5 @@ if (2) then {
         print(90)
     }
 };
+
+// le condizioni devono essere booleane altrimenti ottengo errore di tipo.

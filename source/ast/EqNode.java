@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import ast.types.BoolType;
 import utils.Environment;
+import utils.Helpers;
 ;
 //import lib.FOOLlib;
 
@@ -36,15 +37,13 @@ public class EqNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-		/*
-		BaseType l = left.typeCheck();
-		BaseType r = right.typeCheck();
-		if (! ( FOOLlib.isSubtype(l,r) || FOOLlib.isSubtype(r,l) ) ) {
-			System.out.println("Incompatible types in equal");
-			System.exit(0);
+	public Node typeCheck() throws Exception {
+		
+		Node l = left.typeCheck();
+		Node r = right.typeCheck();
+		if (! ( Helpers.subtypeOf(l,r) || Helpers.subtypeOf(r,l))) {
+			throw new Exception("Incompatible types in equal");
 		}
-		*/
 		return new BoolType();
 	}
 

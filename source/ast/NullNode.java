@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.NullType;
 import utils.Environment;
 ;
 
@@ -16,7 +17,7 @@ public class NullNode implements Node {
 	
 	public Node typeCheck() {
 		// TODO: da implementare
-		return null;
+		return new NullType();
 	}
 	
 	public String codeGeneration() {

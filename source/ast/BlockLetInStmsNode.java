@@ -31,7 +31,7 @@ public class BlockLetInStmsNode implements Node {
 		
 		
 		//return "\n" + s +"  BlockLetInStms: \n"  + dec.toPrint(s+"   ") + "\n" /*+ stms.toPrint(s+"    ") */;
-	};
+	}
 	
 	public Node typeCheck() throws Exception {
 		for(Node d : decs){

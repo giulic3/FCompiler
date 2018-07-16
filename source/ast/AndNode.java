@@ -40,7 +40,6 @@ public class AndNode implements Node {
 	public Node typeCheck() throws Exception {
 		if (!(Helpers.subtypeOf(left.typeCheck(), new BoolType()) && Helpers.subtypeOf(right.typeCheck(), new BoolType())))
 			throw new Exception("And Node typeCheck exception");
-		
 		return new BoolType();
 	}
 

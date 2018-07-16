@@ -12,6 +12,7 @@ import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class BlockClassDecNode implements Node {
 	private String id;
@@ -20,7 +21,6 @@ public class BlockClassDecNode implements Node {
 	private ArrayList<Node> methods;
 	private ParserRuleContext ctx;
 	private ClassType type;
-	private ClassType superType;
 	
 	
 	/* se non ci sono parametri par sarà null, se non è estesa ext sarà null */
@@ -72,10 +72,11 @@ public class BlockClassDecNode implements Node {
 		    
 		    N.B. il controllo sull'overriding di metodo è implementato nel nodo del metodo.
 		 */
-		
-		if(!Helpers.subtypeOf(type, superType)){
-			throw new Exception("class: " + id + "is not subtype of class: " + ext);
-		} //questo controllo dovrebbe essere superfluo.
+		/*if(ext!=null){
+			if(!Helpers.subtypeOf(type, type.getSuperType())){
+				throw new Exception("class: " + id + " is not subtype of class: " + ext);
+			} //questo controllo dovrebbe essere superfluo.
+		}*/
 		
 		for(Node f : fields){
 			f.typeCheck();
@@ -127,8 +128,6 @@ public class BlockClassDecNode implements Node {
 						//ClassType classType = (ClassType)env.getClassEntry(id).getType();
 						
 						ClassType superType = (ClassType)superclassEntry.getType();
-						
-						this.superType =superType;
 						
 						classType.setSuperType(superType);
 						

@@ -1,6 +1,8 @@
 package ast;
 
+import ast.types.IntType;
 import utils.Environment;
+import utils.Helpers;
 ;
 
 import java.util.ArrayList;
@@ -18,14 +20,22 @@ public class MinusNode implements Node {
 		return indent + "Minus Node:\n" + value.toPrint(indent+"\t");
 	}
 	
-	public Node typeCheck() {
+	public Node typeCheck() throws Exception {
 		// TODO: da implementare
-		return null;
+		if(!Helpers.subtypeOf(new IntType(), value.typeCheck())){
+			throw new Exception("minus on non Integer Type");
+		}
+		return new IntType();
 	}
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		// push(-pop), si assume che value.codegen lasci il risultato sulla cima dello
+		// stack, prendiamo questo valore, facciamo pop, mettiamo il meno davanti e
+		// rifacciamo push. (il codice fenerato da value.codegen() deve essere eseguito prima
+		// di quello di minus, quindi deve comparire prima nella stringa. Il risultato sarà codestring + minus.codegen).
+		return value.codeGeneration();
+		
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

@@ -1,7 +1,9 @@
 package ast;
 
+import ast.types.BoolType;
 import ast.types.IntType;
 import utils.Environment;
+import utils.Helpers;
 ;
 
 import java.util.ArrayList;
@@ -22,7 +24,11 @@ public class PlusNode implements Node {
 	}
 	
 	@Override
-	public Node typeCheck() {
+	public Node typeCheck() throws Exception {
+		if (! ( Helpers.subtypeOf(new IntType(),leftOperand.typeCheck()) &&
+				Helpers.subtypeOf(new IntType(),rightOperand.typeCheck()) ) ) {
+			throw new Exception("Plus Node typeCheck exception");
+		}
 		return new IntType();
 	}
 	

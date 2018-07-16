@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import ast.types.BoolType;
 import utils.Environment;
+import utils.Helpers;
 ;
 //import lib.FOOLlib;
 
@@ -36,8 +37,9 @@ public class OrNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-
+	public Node typeCheck() throws Exception {
+		if (!(Helpers.subtypeOf(new BoolType(), left.typeCheck()) && Helpers.subtypeOf(new BoolType(),right.typeCheck())))
+			throw new Exception("And Node typeCheck exception");
 		return new BoolType();
 	}
 

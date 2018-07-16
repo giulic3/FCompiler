@@ -61,14 +61,14 @@ public class ClassMethodNode extends FunExpNode {
 				res.add("Method " + funNode.getID() + " is not defined in class " + classDef.getID() + " at line "
 						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
-			else
+			else {
 				this.entry = foundMethod.getSTEntry();
-			
-			if (((FunType)entry.getType()).getParList().size() != args.size())
-				res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
-						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			this.callNestingLevel = env.getNestingLevel();
-			
+				
+				if (((FunType) entry.getType()).getParList().size() != args.size())
+					res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
+							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				this.callNestingLevel = env.getNestingLevel();
+			}
 			for (Node arg : args)
 				res.addAll(arg.checkSemantics(env));
 		}

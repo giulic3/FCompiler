@@ -136,15 +136,16 @@ public class MethodDecNode extends FunDecNode {
 		
 		for (Node m:inheritedMethods) {
 			MethodDecNode method = (MethodDecNode) m;
-			for (int i = 0; i < parList.size(); i++) {
-				if (!Helpers.subtypeOf(method.parList.get(i).typeCheck(), parList.get(i).typeCheck()))
-					throw new Exception("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+			if (method.getID().equals(this.name)) {
+				for (int i = 0; i < parList.size(); i++) {
+					if (!Helpers.subtypeOf(method.parList.get(i).typeCheck(), parList.get(i).typeCheck()))
+						throw new Exception("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
+								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				}
+				if (!Helpers.subtypeOf(((FunType)method.type).getReturnType(), ((FunType)this.type).getReturnType()))
+					throw new Exception("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
 							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
-			if (!Helpers.subtypeOf(method.type, this.type))
-				throw new Exception("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
-						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			
 		}
 		
 		for(Node d : decList){
@@ -153,6 +154,6 @@ public class MethodDecNode extends FunDecNode {
 		for(Node b : body){
 			b.typeCheck();
 		}
-		return type;
+		return ((FunType)type).getReturnType();
 	}
 }

@@ -1,7 +1,9 @@
 package ast;
 
+import ast.types.BoolType;
 import ast.types.IntType;
 import utils.Environment;
+import utils.Helpers;
 ;
 
 import java.util.ArrayList;
@@ -22,8 +24,8 @@ public class NotNode implements Node {
 	public Node typeCheck() throws Exception {
 		// TODO: da controllare
 		
-		if (value.typeCheck() != new IntType())
-			throw new Exception("'not' used on Non integer type");
+		if (!Helpers.subtypeOf(value.typeCheck(), new BoolType()))
+			throw new Exception("'not' used on Non Bool type");
 		return value.typeCheck();
 	}
 	

@@ -75,9 +75,10 @@ public class FunDecNode implements Node {
 		}
 
 		this.funEntry = entry;
-
+		
+		if(!decList.isEmpty())
+			env.setOffset(-2);
 		for (Node dec : decList) {
-			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));
 		}
 		
@@ -124,7 +125,7 @@ public class FunDecNode implements Node {
 		for(Node b : body){
 			b.typeCheck();
 		}
-		return type;
+		return ((FunType)type).getReturnType();
 	}
 
 	public String codeGeneration() {

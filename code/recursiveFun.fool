@@ -1,4 +1,4 @@
 let
-    int f(int par) if (par == 0) then {print(1)} else { f(par-1) };
+    void f(int par) if (par == 0) then {print(1)} else { f(par-1) }; // se funzione f fosse intera essendo un if di statement ho un errore di tipo sulla chiamata ricorsiva
 in
     f(5);

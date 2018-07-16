@@ -66,9 +66,10 @@ public class Main {
 		System.out.println("Visualizing AST...");
 		
 		ast = semanticAnalysis(ast, true);
-		
-		Node type = ast.typeCheck(); //type-checking bottom-up
-		System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+		if(ast!=null) {
+			Node type = ast.typeCheck(); //type-checking bottom-up
+			System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
+		}
 		
 		return result;
 	}
@@ -88,7 +89,7 @@ public class Main {
 	public static void main(String[] args) throws  Exception{
 
 		//try {
-			File inputFile = new File("code/input.fool");
+			File inputFile = new File("code/nestedIf.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
 		//}
