@@ -34,7 +34,7 @@ public class OrNode implements Node {
 
 	public Node typeCheck() throws Exception {
 		if (!(Helpers.subtypeOf(new BoolType(), left.typeCheck()) && Helpers.subtypeOf(new BoolType(),right.typeCheck())))
-			throw new Exception("And Node typeCheck exception");
+			throw new Exception("Or Node typeCheck exception");
 		return new BoolType();
 	}
 

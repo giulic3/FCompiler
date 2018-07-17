@@ -49,6 +49,23 @@ public class VarNode implements Node {
 		return this.classID;
 	}
 	
+	public String toPrint(String s){
+		if (exp != null)
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
+		else
+			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")";
+	}
+	
+	public Node typeCheck() throws Exception {
+		if(exp!=null) {
+			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
+				throw new Exception("Var Node typeCheck exception");
+			}
+		}
+		
+		return new VoidType();
+	}
+	
 	public Node getType(){
 		return type;
 	}

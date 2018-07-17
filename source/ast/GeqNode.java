@@ -33,7 +33,7 @@ public class GeqNode implements Node {
 
 		return res;
 	}
-
+	// succeeds only when operands are integers (*NOT* booleans)
 	public Node typeCheck() throws Exception {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
