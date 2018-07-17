@@ -64,7 +64,7 @@ value  :  INTEGER                          #intVal
       | BOOLVAL                            #boolVal
       | NULL                               #nullVal
       | LPAR exp RPAR                      #baseExp
-      | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR (ELSE CLPAR elseBranch=exp CRPAR)?  #ifExp
+      | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
       | var     #varExp
       | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funExp
       | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
