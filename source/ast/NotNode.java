@@ -31,8 +31,17 @@ public class NotNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		
+		String lab = Helpers.newLabel();
+		String pass = Helpers.newLabel();
+		return value.codeGeneration()+
+				"push 1\n"+
+				"beq" + lab + "\n"+
+				"push 1\n"+
+				"b " + pass + "\n"+
+				lab+":\n"+
+				"push 0"+
+				pass+":\n";
 	}
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned

@@ -8,6 +8,11 @@ public class BoolValNode implements Node {
 	
 	private boolean value;
 	
+	/**
+	 *
+	 * Rappresenta i valori booleani
+	 *
+	 * */
 	public BoolValNode(boolean n) {
 		value = n;
 	}
@@ -27,7 +32,7 @@ public class BoolValNode implements Node {
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return "push "+(value?1:0)+"\n";
+		return "push "+(value ? 1 : 0)+"\n";
 	}
 	
 	// Method to retrieve string identifier of an object

@@ -44,8 +44,17 @@ public class LeqNode implements Node {
 	}
 
 	public String codeGeneration() {
-
-		return "";
+		
+		String l1 = Helpers.newLabel();
+		String l2 = Helpers.newLabel();
+		return left.codeGeneration()+
+				right.codeGeneration()+
+				"bleq "+ l1 +"\n"+
+				"push 0\n"+
+				"b " + l2 + "\n" +
+				l1 + ":\n"+
+				"push 1\n" +
+				l2 + ":\n";
 	}
 	
 	// Method to retrieve string identifier of an object
