@@ -39,8 +39,23 @@ public class OrNode implements Node {
 	}
 
 	public String codeGeneration() {
-
-		return "";
+		String exitLabel = Helpers.newLabel();
+		String atLeastOneTrue = Helpers.newLabel();
+		
+		String leftAssembly = left.codeGeneration();
+		String rightAssembly = right.codeGeneration();
+		
+		return  leftAssembly +
+				"push 1\n" +
+				"beq " + atLeastOneTrue + "\n" +
+				rightAssembly +
+				"push 1\n" +
+				"beq " + atLeastOneTrue + "\n" +
+				"push 0\n" +
+				"b " + exitLabel + "\n" +
+				atLeastOneTrue + ":\n" +
+				"push 1\n" +
+				exitLabel + ":\n";
 	}
 	
 	// Method to retrieve string identifier of an object

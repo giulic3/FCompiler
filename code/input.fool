@@ -55,9 +55,16 @@ let
 in
     print(e1 && e2);
 */
+/*
+let
+    bool e1 = false;
+    bool e2 = false;
+in
+    print(e1 || e2);
+*/
 
 let
     bool x = true;
-    int z = if (x && true) then { x * 3 } else { 4 + x };
+    int z = if (x || false) then { x * 3 } else { 4 + x };
 in
     print(z);
