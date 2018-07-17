@@ -24,13 +24,13 @@ public class ProgLetInNode implements Node {
   }
   
   @Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 	  env.nestingLevel++;
       HashMap<String,STentry> hm = new HashMap<String,STentry> ();
       env.symTable.add(hm);
       
       //declare resulting list
-      ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+      HashSet<String> res = new HashSet<String>();
       
       //check semantics in the dec list
       if(declist.size() > 0){

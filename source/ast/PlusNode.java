@@ -1,11 +1,13 @@
 package ast;
 
-import ast.types.BaseType;
+import ast.types.BoolType;
 import ast.types.IntType;
 import utils.Environment;
-import utils.SemanticError;
+import utils.Helpers;
+;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PlusNode implements Node {
 	
@@ -22,17 +24,34 @@ public class PlusNode implements Node {
 	}
 	
 	@Override
-	public Node typeCheck() {
+	public Node typeCheck() throws Exception {
+		if (! ( Helpers.subtypeOf(new IntType(),leftOperand.typeCheck()) &&
+				Helpers.subtypeOf(new IntType(),rightOperand.typeCheck()) ) ) {
+			throw new Exception("Plus Node typeCheck exception");
+		}
 		return new IntType();
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "add\n";
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO: da implementare
+		HashSet<String> res = new HashSet<String>();
+		
+		//check semantics in the left and in the right exp
+		
+		res.addAll(leftOperand.checkSemantics(env));
+		res.addAll(rightOperand.checkSemantics(env));
+		
+		return res;
+	}
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
 		return null;
 	}
 }

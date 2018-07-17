@@ -1,2 +1,20 @@
-Giulia.saluta(ciao);
-Giulia.nonSaluta();
+class Bellissima {
+    void saluta() print(ciao); /*  ciao è un id */
+    void nonSaluta() print(silenzio); /* è un id */
+};
+
+let
+    Bellissima Giulia = new Bellissima();
+in
+    print(
+        Giulia.saluta(),
+        Giulia.nonSaluta(ciaone),   // usare il parametro causa un NullPointerException
+        Giulia.sorride()
+    );
+
+/* Method sorride is not defined in class Bellissima at line 12:8
+ Variable ciao not declared at line: 2:24
+ Variable silenzio not declared at line: 3:27
+*/
+
+/*é NOT WORKING */

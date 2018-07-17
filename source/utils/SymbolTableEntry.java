@@ -8,6 +8,7 @@ public class SymbolTableEntry {
 	private int nestingLevel;
 	private int offset;
 	private Node type;
+	private String className = null;
 	
 	public SymbolTableEntry(int level, int offset, Node t) {
 		this.nestingLevel = level;
@@ -32,9 +33,18 @@ public class SymbolTableEntry {
 	}
 	
 	public String toPrint(String s) {
-		return s + ": STEntry = {\n" +
-				"\tnesting level: " + Integer.toString(nestingLevel) + "\n" +
-				"\ttype: " + type.toPrint(s+"\t") + "\n" +
-				"\toffset: " + Integer.toString(offset) + "\n}\n";
+		return s + "Associated STEntry = { type: " + type.toPrint("") + ", nesting level: " + nestingLevel + ", offset: " + offset + " }";
+	}
+	
+	public String toString() {
+		return toPrint("");
+	}
+	
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	public String getClassName() {
+		return className;
 	}
 }

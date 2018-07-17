@@ -19,4 +19,16 @@ public interface SVMVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssembly(SVMParser.AssemblyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SVMParser#simpleCmd}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleCmd(SVMParser.SimpleCmdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SVMParser#composedCmd}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComposedCmd(SVMParser.ComposedCmdContext ctx);
 }

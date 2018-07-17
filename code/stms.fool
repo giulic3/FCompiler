@@ -1,2 +1,2 @@
 let int x = 0 ; in
-if (not x==1) then {x = 3} ; else { x = 4 };
+if (not (x==1)) then {x = 3} else { x = 4 }; // il not ha precedenza sull'uguale, se tolgo le parentesi al controllo il typechecking viene eseguito solo su x ritornando un errore di tipo

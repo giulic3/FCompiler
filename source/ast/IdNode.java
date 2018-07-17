@@ -1,63 +1,102 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
-import ast.types.ArrowType;
-import ast.types.BaseType;
-import ast.types.IntType;
+import ast.types.ClassType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
+;
 import utils.SymbolTableEntry;
 
 /* corresponds to var */
 public class IdNode implements Node {
 
 	private String id;
+	private String classID;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
+	private ParserRuleContext ctx;
 
-	public IdNode (String i) {
+	public IdNode (String i, ParserRuleContext ctx) {
+		this.ctx=ctx;
 		id = i;
+		classID = null;
+	}
+	
+	public void setClassID(String classID) {
+		this.classID = classID;
+	}
+	
+	public String getID() {
+		return id;
 	}
 
 	public String toPrint(String s) {
 
-		/*
-		commento temporaneo: la toPrint viene eseguita dopo la fase di checkSemantics quando
-		nestingLevel è già inizializzato
-
-		return s+"Id:" + id
-				+ " at nestlev " + nestinglevel +"\n"
-				+ entry.toPrint(s+"  ") ;
-		*/
-
-		return s + "ID: " + id;
+		return s + "ID Node: " + id + ", cur nestinglevel: " + nestinglevel + (entry != null ? entry.toPrint(", ") : "");
+	}
+	
+	public SymbolTableEntry getSTEntry() {
+		return this.entry;
+	}
+	
+	public void setSTEntry(SymbolTableEntry entry) {
+		this.entry=entry;
 	}
 
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 
+		
+		//discriminare se l'id node non appartiene ad una classe controllo classname != null
+		
 		//create result list
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-		/*
-		int j = env.getNestingLevel();
-		SymbolTableEntry tmp = null;
-		while (j>=0 && tmp==null)
-			tmp = (env.getSymTable().get(j--)).get(id);
-		if (tmp==null)
-			res.add(new SemanticError("Id "+id+" not declared"));
-
-		else{
-			entry = tmp;
-			nestinglevel = env.getNestingLevel();
+		HashSet<String> res = new HashSet<String>();
+		
+		nestinglevel = env.getNestingLevel();
+		
+		SymbolTableEntry fieldEntry = env.getActiveDec(id);
+		if (fieldEntry == null) {
+			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(1);
+			String identifier = classContentHM.keySet().iterator().next();
+			
+			fieldEntry = classContentHM.get(identifier);
+			String classID = fieldEntry.getClassName();
+			
+			Node found = null;
+			
+			if (classID!=null) {
+				SymbolTableEntry classEntry = env.getClassEntry(classID);
+				ClassType classType = (ClassType)classEntry.getType();
+				ArrayList<Node> fields = classType.getFieldsList(true);
+				
+				for (Node f: fields)
+					if (f.getID().equals(id)) found = f;
+			}
+			
+			// vanno salvate le informazioni della entry nell'oggetto
+			
+			if (found == null)
+				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else {
+				//if (found instanceof VarNode)
+					this.entry = ((VarNode)found).getSTEntry();
+				//else
+					//this.entry = new SymbolTableEntry(1, 0, found);
+			}
+			
 		}
-		*/
+		else
+			this.entry = fieldEntry;
+		
 		return res;
 	}
 
 	public Node typeCheck () {
 		/*
-		if (entry.getType() instanceof ArrowType) { //
+		if (entry.getType() instanceof FunType) { //
 			System.out.println("Wrong usage of function identifier");
 			System.exit(0);
 		}
@@ -70,16 +109,15 @@ public class IdNode implements Node {
 	}
 
 	public String codeGeneration() {
-		/*
-		String getAR="";
-		for (int i=0; i<nestinglevel-entry.getNestinglevel(); i++)
-			getAR+="lw\n";
-		return "push "+entry.getOffset()+"\n"+ //metto offset sullo stack
-				"lfp\n"+getAR+ //risalgo la catena statica
-				"add\n"+
-				"lw\n"; //carico sullo stack il valore all'indirizzo ottenuto
-				*/
-
-		return null;
+		// TODO: da controllare
+		String getAR = "";
+		
+		for (int i = 0; i < nestinglevel - entry.getNestingLevel(); i++) getAR += "lw\n";
+		
+		return  "push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+				"lfp\n" +
+				getAR +     //risalgo la catena statica
+				"add\n" +
+				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
 	}
 }

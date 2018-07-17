@@ -1,44 +1,47 @@
 package ast;
 
-import ast.types.BaseType;
-import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.SemanticError;
 import utils.SymbolTableEntry;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NewExpNode implements Node {
 	
 	protected String id;
-	protected ArrayList<Node> args;
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
+	private ParserRuleContext ctx;
 	
-	public NewExpNode(String ID, ArrayList<Node> args){
+	public NewExpNode(String ID, ParserRuleContext ctx){
 		this.id = ID;
-		this.args=args;
-		
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
-		String msg = s + "New Instance Node: " + this.id + "(";
-		
-		if (this.args != null && !this.args.isEmpty()) {
-			for (Node b : this.args) {
-				msg += "\n " + s + b.toPrint("\t");
-			}
-			msg += "\n" + s + ")";
-		} else
-			msg += ")";
-		
-		return msg;
+		return s + "New Instance Node: " + this.id + "()";
 	}
 	
+	public SymbolTableEntry getSTEntry() {
+		return entry;
+	}
 	
-	@Override
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da implementare
+		HashSet<String> res = new HashSet<String>();
+		
+		// TODO: handle offset
+		// TODO: IMPORTANT: define unique key management for classes
+		SymbolTableEntry entry = env.getClassEntry(id);
+		if (entry == null)
+			res.add("Class " + id + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		else
+			this.entry = entry;
+		
+		return res;
+	}
+	
 	public Node typeCheck() {
-		return new IntType();
+		return entry.getType();
 	}
 	
 	public String codeGeneration() {
@@ -46,10 +49,9 @@ public class NewExpNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
-		return null;
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return id;
 	}
-	
-	
 }

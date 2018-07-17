@@ -23,9 +23,9 @@ public class BoolNode implements Node {
   }    
   
   @Override
- 	public ArrayList<SemanticError> checkSemantics(Environment env) {
+ 	public HashSet<String> checkSemantics(Environment env) {
 
- 	  return new ArrayList<SemanticError>();
+ 	  return new HashSet<String>();
  	}
   
   public String codeGeneration() {

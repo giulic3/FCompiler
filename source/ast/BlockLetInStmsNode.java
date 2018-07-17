@@ -1,17 +1,17 @@
 package ast;
 
-import ast.types.BaseType;
+import ast.types.VoidType;
 import utils.Environment;
-import utils.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class BlockLetInStmsNode implements Node {
 	
-	private Node stms;
+	private ArrayList<Node> stms;
 	private ArrayList<Node> decs;
 	
-	public BlockLetInStmsNode(ArrayList<Node> d, Node s){
+	public BlockLetInStmsNode(ArrayList<Node> d, ArrayList<Node> s){
 		stms=s;
 		decs=d;
 	}
@@ -21,19 +21,80 @@ public class BlockLetInStmsNode implements Node {
 		for (Node b:decs) {
 			msg += "\n" + s + b.toPrint("\t\t");
 		}
-		msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
+		msg += "\n" + s + "\tIn:";
+		for (Node b:stms) {
+			msg += "\n" + s + b.toPrint("\t\t");
+		}
+		//msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
 		return msg;
 		
 		
 		//return "\n" + s +"  BlockLetInStms: \n"  + dec.toPrint(s+"   ") + "\n" /*+ stms.toPrint(s+"    ") */;
-	};
+	}
 	
-	public Node typeCheck(){return null;}
+	public Node typeCheck() throws Exception {
+		for(Node d : decs){
+			d.typeCheck();
+		}
+		for(Node s : stms){
+			s.typeCheck();
+		}
+		return new VoidType();
+	}
 	
-	public String codeGeneration(){return null;}
+	public String codeGeneration(){
+		String res="";
+		for (Node d : decs){
+			res += d.codeGeneration();
+		}
+		for (Node s : stms){
+			res += s.codeGeneration();
+		}
+		return res;
+	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env){return null;}
+	public HashSet<String> checkSemantics(Environment env){
+		
+		HashSet<String> res = new HashSet<String>();
+		//HashSet<String> tmp = new HashSet<String>();
+		
+		
+		// TODO: handle offset
+		env.pushScope();
+		
+		if (decs.size() > 0) env.setOffset(-1);
+		
+		for(Node dec : decs){
+			if(dec instanceof FunDecNode) {
+				res.addAll(dec.checkSemantics(env));
+			}
+			
+		}
+		
+		env.settingFunSecondCheck(true);
+		
+		//if (tmp.size() > 0)
+		for(Node dec : decs){
+			res.addAll(dec.checkSemantics(env));
+		}
+		
+		env.settingFunSecondCheck(false);
+		
+		for(Node stm : stms){
+			res.addAll(stm.checkSemantics(env));
+		}
+		
+		env.popScope();
+		
+		return res;
 	
+	}
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }
 
 

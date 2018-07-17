@@ -22,7 +22,7 @@ public class PrintNode implements Node {
   }  
   
   @Override
- 	public ArrayList<SemanticError> checkSemantics(Environment env) {
+ 	public HashSet<String> checkSemantics(Environment env) {
 
  	  return val.checkSemantics(env);
  	}

@@ -1,12 +1,11 @@
 package ast;
 
-import java.util.ArrayList;
-
-import ast.types.BaseType;
+import java.util.HashSet;
 import ast.types.BoolType;
+import ast.types.IntType;
 import utils.Environment;
-import utils.SemanticError;
-//import lib.FOOLlib;
+import utils.Helpers;
+
 
 public class LeqNode implements Node {
 
@@ -23,10 +22,9 @@ public class LeqNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
 
@@ -35,9 +33,13 @@ public class LeqNode implements Node {
 
 		return res;
 	}
-
-	public Node typeCheck() {
-
+	// succeeds only when operands are integers (*NOT* booleans)
+	public Node typeCheck() throws Exception {
+		Node l = left.typeCheck();
+		Node r = right.typeCheck();
+		if (!(Helpers.subtypeOf(new IntType(),l) && Helpers.subtypeOf(new IntType(),r))) {
+			throw new Exception("Incompatible types in Lequal");
+		}
 		return new BoolType();
 	}
 
@@ -45,5 +47,10 @@ public class LeqNode implements Node {
 
 		return "";
 	}
-
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

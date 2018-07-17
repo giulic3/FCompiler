@@ -1,12 +1,9 @@
 package ast;
 
-import java.util.ArrayList;
-
-import ast.types.BaseType;
+import java.util.HashSet;
 import ast.types.BoolType;
 import utils.Environment;
-import utils.SemanticError;
-//import lib.FOOLlib;
+import utils.Helpers;
 
 public class OrNode implements Node {
 
@@ -23,10 +20,9 @@ public class OrNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
 
@@ -36,8 +32,9 @@ public class OrNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-
+	public Node typeCheck() throws Exception {
+		if (!(Helpers.subtypeOf(new BoolType(), left.typeCheck()) && Helpers.subtypeOf(new BoolType(),right.typeCheck())))
+			throw new Exception("Or Node typeCheck exception");
 		return new BoolType();
 	}
 
@@ -45,5 +42,10 @@ public class OrNode implements Node {
 
 		return "";
 	}
-
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

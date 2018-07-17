@@ -1,42 +1,38 @@
 package ast;
 
-import ast.types.BaseType;
-import ast.types.IntType;
+import ast.types.BoolType;
 import utils.Environment;
-import utils.SemanticError;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class BoolValNode implements Node {
 	
-	private Boolean value;
-
-//	Serve avere il contesto come parametro del costruttore?
-//	public IntNode(FOOLParser.IntValContext ctx, int val) {
-//		super(ctx);
-//		this.val = val;
-//	}
+	private boolean value;
 	
-	public BoolValNode(Boolean n) {
+	public BoolValNode(boolean n) {
 		value = n;
 	}
 	
 	public String toPrint(String s) {
-		return s + "Boolean value: " + Boolean.toString(value);
+		return s + "Boolean value: " + value;
 	}
-	@Override
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
+	
 	public Node typeCheck() {
-		return new IntType();
+		return new BoolType();
 	}
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		return "push "+(value?1:0)+"\n";
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
 		return null;
 	}
-	
 }

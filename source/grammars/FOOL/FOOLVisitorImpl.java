@@ -1,12 +1,8 @@
 package grammars.FOOL;
 
-import ast.types.BoolType;
-import ast.types.ClassType;
-import ast.types.IntType;
-import ast.types.VoidType;
+import ast.types.*;
 import grammars.FOOL.FOOLParser.*;
 import ast.*;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 
@@ -24,7 +20,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new ProgNode(blocks);
 		
 	}
-
+/*
 	public Node visitLetInExp(LetInExpContext ctx) {
 
 		Node res;
@@ -45,7 +41,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		return new BlockSingleExpNode(visit(ctx.exp()));
 		
 	}
-
+*/
 
 	@Override
 	public Node visitFundec(FundecContext ctx) {
@@ -53,11 +49,15 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//initialize @res with the visits to the type and its ID
 		// res = new FunDecNode(ctx.ID().getText(), visit(ctx.type()));
 		ArrayList<Node> pars = new ArrayList<>();
+		ArrayList<Node> parTypes = new ArrayList<>();
 		
 		//add argument declarations
-		for(VardecContext par : ctx.vardec())
-			pars.add(visit(par));
+		for(VardecContext par : ctx.vardec()) {
+			VarNode parNode = (VarNode)visit(par);
+			pars.add(parNode);
+			parTypes.add(parNode.getType());
 			//res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));
+		}
 
 		//add body
 		//create a list for the nested var declarations
@@ -70,17 +70,20 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 				innerDec.add(visit(dc));
 		}
 
-		Node body;
-		//get the exp body or the stms body
-		if (ctx.exp() != null)
-			body = visit(ctx.exp());
-		else
-			body = visit(ctx.stms());
+		ArrayList<Node> body = new ArrayList<>();
 		
+		if (ctx.stms() != null)
+			for (StmContext stm: ctx.stms().stm())
+				body.add(visit(stm));
+		
+		if (ctx.exp() != null)
+			body.add(visit(ctx.exp()));
 
-		return new FunDecNode(ctx.ID().getText(), visit(ctx.type()), innerDec, pars, body);
+		Node returnType = visit(ctx.type());
 
-
+		FunType funType = new FunType(parTypes, returnType);
+		
+		return new FunDecNode(ctx.ID().getText(), funType, innerDec, pars, body, ctx);
 	}
 
 
@@ -175,10 +178,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
 		
-		if (ctx.elseBranch == null)
-			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch));
-		else
-			return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+		return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
 	}
 	
 	public Node visitBoolVal(BoolValContext ctx){
@@ -195,16 +195,14 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//this is actually the default implementation for this method in the FOOLBaseVisitor class
 		//therefore it can be safely removed here
 
-		return visit (ctx.exp());
-
+		return visit(ctx.exp());
 	}
 
 	@Override
 	public Node visitVarExp(VarExpContext ctx) {
 
 		//this corresponds to a variable access
-		return new IdNode(ctx.ID().getText());
-
+		return visit(ctx.var());
 	}
 	
 	
@@ -221,7 +219,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new FunExpNode(ctx.ID().getText(), args);
+		res = new FunExpNode(ctx.ID().getText(), args, true, ctx);
 		
 		return res;
 	}
@@ -229,47 +227,45 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitMethodExp(MethodExpContext ctx) {
 		
-		/* control LPAR if is class field */
-		
-		//this corresponds to a function invocation
-		
-		//declare the result
-		Node res;
-		
-		//get the invocation arguments
 		ArrayList<Node> args = new ArrayList<>();
+		
+		Node objectNode = visit(ctx.object);
+		
+		if (ctx.LPAR() == null) {
+			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
+			return new ClassFieldNode(objectNode, fieldNode, true, ctx);
+		}
 		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		res = new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, true);
-		
-		return res;
+		// TODO: check passed context for error line numbers
+		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, true, ctx);
+		return new ClassMethodNode(objectNode, methodNode);
 	}
 	
 	@Override
 	public Node visitNewExp(NewExpContext ctx) {
-		//this corresponds to a function invocation
 		
-		//declare the result
-		Node res;
-		
-		//get the invocation arguments
-		ArrayList<Node> args = new ArrayList<>();
-		
-		for(ExpContext exp : ctx.exp())
-			args.add(visit(exp));
-		
-		res = new NewExpNode(ctx.className.getText(), args);
-		
-		return res;
+		return new NewExpNode(ctx.className.getText(), ctx);
 	}
 	
 	@Override
 	public Node visitVarStmAssignment(VarStmAssignmentContext ctx){
-
-		Node res = new AssignmentNode(ctx.ID().toString(), visit(ctx.exp()));
-		return res;
+		
+		Node idVariableNode = visit(ctx.var());
+		Node expNode = visit(ctx.exp());
+		
+		if (ctx.DOT() == null)
+			return new AssignmentNode(idVariableNode, expNode, false);
+		
+		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
+		ClassFieldNode objectFieldNode = new ClassFieldNode(idVariableNode, fieldNode, false, ctx);
+		return new AssignmentNode(objectFieldNode, expNode, true);
+	}
+	
+	public Node visitVar(VarContext ctx) {
+		return new IdNode(ctx.ID().getText(), ctx);
 	}
 	
 	@Override
@@ -278,11 +274,16 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node res;
 		
 		ArrayList<Node> decs = new ArrayList<>();
+		ArrayList<Node> stms = new ArrayList<>();
+		
+		for(StmContext stm : ctx.stms().stm())
+			stms.add(visit(stm));
 		
 		for(DecContext dec : ctx.let().dec())
 			decs.add(visit(dec));
 			
-		res = new BlockLetInStmsNode(decs, visit(ctx.stms()));
+		
+		res = new BlockLetInStmsNode(decs,stms);
 		
 		return res;
 		
@@ -302,10 +303,20 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//get the invocation arguments
 		ArrayList<Node> args = new ArrayList<>();
 		
+		Node objectNode = visit(ctx.object);
+		
+		if (ctx.LPAR() == null) {
+			IdNode fieldNode = new IdNode(ctx.memberName.getText(), ctx);
+			return new ClassFieldNode(objectNode, fieldNode, false, ctx);
+		}
+		
 		for(ExpContext exp : ctx.exp())
 			args.add(visit(exp));
 		
-		return new MethodNode(ctx.object.getText(), ctx.methodName.getText(), args, false);
+		// TODO: check FunExpNode usage with new MethodDecNode
+		FunExpNode methodNode = new FunExpNode(ctx.memberName.getText(), args, false, ctx); // TODO: check passed context for error line numbers
+		return new ClassMethodNode(objectNode, methodNode);
+		
 	}
 	
 	
@@ -337,7 +348,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node expNode = visit(ctx.exp());
 		
 		//build the varNode
-		return new VarNode(ctx.vardec().ID().getText(), typeNode, expNode);
+		return new VarNode(ctx.vardec().ID().getText(), typeNode, ctx, expNode);
 	}
 	
 	@Override
@@ -350,8 +361,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		else if (ctx.getText().equals("void"))
 			return new VoidType();
 		else
-			return new ClassType(ctx.getText());
-
+			return new ClassType(ctx.getText(), ctx);
 	}
 	
 	@Override
@@ -365,18 +375,42 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		ArrayList<Node> methods = new ArrayList<Node>();
 		String exp = (ctx.superName!=null) ? ctx.superName.getText() : null;
 		
-		for (VardecContext par : ctx.vardec()) {
-			pars.add(visit(par));
+		for (VarasmContext par : ctx.varasm()) {
+			VarNode node = (VarNode)visit(par);
+			node.setInsideClass(ctx.className.getText());
+			pars.add(node);
 		}
 		
-		for(FundecContext dec : ctx.fundec())
-			methods.add(visit(dec));
+		for(FundecContext dec : ctx.fundec()) {
+			FunDecNode funNode = (FunDecNode)visit(dec);
+			// TODO: Improve MethodDecNode creation
+			
+			MethodDecNode methodNode = new MethodDecNode(funNode, ctx.className.getText());
+			methods.add(methodNode);
+		}
 		
-		return new BlockClassDecNode(id,exp,pars,methods);
+		return new BlockClassDecNode(id,exp,pars,methods, ctx);
 		
 	}
 	
 	public Node visitVardec(FOOLParser.VardecContext ctx) {
-		return new VarNode(ctx.ID().getText(), visit(ctx.type()));
+		return new VarNode(ctx.ID().getText(), visit(ctx.type()), ctx);
+	}
+	
+	public Node visitFunStm(FunStmContext ctx) {
+		//this corresponds to a function invocation
+		
+		//declare the result
+		Node res;
+		
+		//get the invocation arguments
+		ArrayList<Node> args = new ArrayList<>();
+		
+		for(ExpContext exp : ctx.exp())
+			args.add(visit(exp));
+		
+		res = new FunExpNode(ctx.ID().getText(), args, false, ctx);
+		
+		return res;
 	}
 }

@@ -1,12 +1,9 @@
 package ast;
 
-import java.util.ArrayList;
-
-import ast.types.BaseType;
+import java.util.HashSet;
 import ast.types.BoolType;
 import utils.Environment;
-import utils.SemanticError;
-//import lib.FOOLlib;
+import utils.Helpers;
 
 public class EqNode implements Node {
 
@@ -23,10 +20,9 @@ public class EqNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
 
@@ -36,15 +32,13 @@ public class EqNode implements Node {
 		return res;
 	}
 
-	public Node typeCheck() {
-		/*
-		BaseType l = left.typeCheck();
-		BaseType r = right.typeCheck();
-		if (! ( FOOLlib.isSubtype(l,r) || FOOLlib.isSubtype(r,l) ) ) {
-			System.out.println("Incompatible types in equal");
-			System.exit(0);
+	public Node typeCheck() throws Exception {
+		
+		Node l = left.typeCheck();
+		Node r = right.typeCheck();
+		if (! ( Helpers.subtypeOf(l,r) || Helpers.subtypeOf(r,l))) {
+			throw new Exception("Incompatible types in equal");
 		}
-		*/
 		return new BoolType();
 	}
 
@@ -64,5 +58,10 @@ public class EqNode implements Node {
 
 		return "";
 	}
-
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

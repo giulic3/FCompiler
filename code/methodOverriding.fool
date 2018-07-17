@@ -1,0 +1,15 @@
+class A {
+    bool overriddenMethod(int a, int b) return true;
+};
+
+class B extends A {
+    int overridingMethod(bool x, bool y) return 1;
+};
+
+let
+    B b = new B();
+in
+    b.overridingMethod(true, false);
+
+/* OK b.overridingMethod e' usato come statement per cui il suo tipo di ritorno nell'istruzione e' void anche se era
+ stato dichiarato con tipo int, cosi' semplicemente non sto usando il valore di ritorno */

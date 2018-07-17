@@ -1,14 +1,18 @@
 package ast;
 
-import java.util.ArrayList;
-
-import ast.types.BaseType;
+import java.util.HashSet;
 import ast.types.BoolType;
 import utils.Environment;
-import utils.SemanticError;
-//import lib.FOOLlib;
+import utils.Helpers;
+
 
 public class AndNode implements Node {
+	
+	/**
+	 *
+	 * Nodo per la gestione dell'<strong>AND</strong> tra due Booleani.
+	 *
+	 * */
 
 	private Node left;
 	private Node right;
@@ -23,10 +27,9 @@ public class AndNode implements Node {
 				+ right.toPrint(s+"\t") ;
 	}
 
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
 
@@ -35,9 +38,15 @@ public class AndNode implements Node {
 
 		return res;
 	}
-
-	public Node typeCheck() {
-
+	
+	/**
+	 *
+	 * Applica il controllo su le due espressioni a destra e sinistra dell'AND per verificare che siano entrambe di tipo Booleano.
+	 *
+	 * */
+	public Node typeCheck() throws Exception {
+		if (!(Helpers.subtypeOf(left.typeCheck(), new BoolType()) && Helpers.subtypeOf(right.typeCheck(), new BoolType())))
+			throw new Exception("And Node typeCheck exception");
 		return new BoolType();
 	}
 
@@ -45,5 +54,10 @@ public class AndNode implements Node {
 
 		return "";
 	}
-
+	
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
+		return null;
+	}
 }

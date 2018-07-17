@@ -1,12 +1,17 @@
 package ast.types;
 
-import java.util.ArrayList;
-
+import java.util.HashSet;
 import ast.Node;
 import utils.Environment;
-import utils.SemanticError;
+
 
 public class BoolType implements Node {
+	
+	/**
+	 *
+	 * Nodo indicativo del tipo Booleano, è gestito come sottotipo di Integer in FOOL.
+	 *
+	 * */
 	
 	public BoolType() {
 	}
@@ -14,10 +19,11 @@ public class BoolType implements Node {
 	public String toPrint(String indent) {
 		return "BoolType";
 	}
-
-	/*public TypeEnum getType() {
-		return TypeEnum.BOOL;
-	}*/
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
 	
 	public Node typeCheck() {
 		return new BoolType();
@@ -28,9 +34,9 @@ public class BoolType implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID(){
 		return null;
 	}
-	
-}  
+}

@@ -1,9 +1,8 @@
 package ast;
 
+import ast.types.NullType;
 import utils.Environment;
-import utils.SemanticError;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NullNode implements Node {
 	
@@ -13,9 +12,14 @@ public class NullNode implements Node {
 		return indent + "Null Node";
 	}
 	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
+	
 	public Node typeCheck() {
 		// TODO: da implementare
-		return null;
+		return new NullType();
 	}
 	
 	public String codeGeneration() {
@@ -23,8 +27,9 @@ public class NullNode implements Node {
 		return null;
 	}
 	
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
 		return null;
 	}
 }

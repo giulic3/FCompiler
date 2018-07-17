@@ -21,7 +21,7 @@ public class ArrowTypeNode implements Node {
 		for (Node par:parlist)
 			parlstr += par.toPrint(s + " ");
 		
-		return s + "ArrowType\n" + parlstr + ret.toPrint(s + " ->") ;
+		return s + "FunType\n" + parlstr + ret.toPrint(s + " ->") ;
 	}
 	
 	public Node getRet() {
@@ -33,9 +33,9 @@ public class ArrowTypeNode implements Node {
 	}
 	
 	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		// TODO Auto-generated method stub
-		return new ArrayList<SemanticError>();
+		return new HashSet<String>();
 	}
 	
 	//non utilizzato

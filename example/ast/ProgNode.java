@@ -19,7 +19,7 @@ public class ProgNode implements Node {
   }
   
   @Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 		
 		return exp.checkSemantics(env);
 	}

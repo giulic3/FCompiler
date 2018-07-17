@@ -1,1 +1,36 @@
-let int x = 2; in print(2,true,null,3+2);
+/*class hero {
+    bool iAmAGenius() return true;
+    void fuckYeah() print(69);
+};
+
+    void m() print(2);
+};
+
+
+let
+    int y=2;
+    A z =  new A();
+in
+    z = if (true && false) then {x} else {y};*/
+
+/*class A (int field = 1) {
+    void setter(int value) field = value;   // TODO: da permettere!!
+};
+
+let
+    A a = new A();
+in
+    a.setter(5);
+    print(a.field);*/
+/*
+let
+    int x = 6;
+    int y = 2;
+in
+    print(x, y, x+y, x-y, x*y, x/y);*/
+
+let
+    int x = 0;
+in
+    x = if (false) then { 5+3 } else { 9-2 }
+    print(x);

@@ -1,12 +1,16 @@
 package ast.types;
 
-import java.util.ArrayList;
-
+import java.util.HashSet;
 import ast.Node;
 import utils.Environment;
-import utils.SemanticError;
 
 public class IntType implements Node {
+	
+	/**
+	 *
+	 * Nodo indicativo del tipo Intero
+	 *
+	 * */
 	
 	public IntType() {
 	}
@@ -15,13 +19,14 @@ public class IntType implements Node {
 	public String toPrint(String indent) {
 		return "IntType";
 	}
-
-	/*public TypeEnum getType() {
-		return TypeEnum.INT;
-	}*/
+	
+	public HashSet<String> checkSemantics(Environment env) {
+		// TODO: da controllare
+		return new HashSet<String>();
+	}
 	
 	public Node typeCheck() {
-		return new IntType(); // TODO: da controllare
+		return new IntType();
 	}
 	
 	public String codeGeneration() {
@@ -29,9 +34,9 @@ public class IntType implements Node {
 		return null;
 	}
 	
-	@Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
-		// TODO: da implementare
+	// Method to retrieve string identifier of an object
+	// In nodes where identifier is not significant, null is returned
+	public String getID() {
 		return null;
 	}
 }

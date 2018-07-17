@@ -1,6 +1,11 @@
-class ciao extends super (int x, int y){
-    bool f(int g, int h) let int x=1; in x+1;
-    void z() 0;
+class ciao extends super (int x = 1, int y = 2){
+    bool f(int g, int h) let int x=1; in x=1;
+    void z() return 0;
 };
 
-new pinco(1,5,z);
+let
+    pippo x = new pinco(); // NON usare parametri nel costruttore!!
+in
+    x=1;
+
+

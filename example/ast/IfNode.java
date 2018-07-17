@@ -26,9 +26,9 @@ public class IfNode implements Node {
   
   
   @Override
-	public ArrayList<SemanticError> checkSemantics(Environment env) {
+	public HashSet<String> checkSemantics(Environment env) {
 	  //create the result
-	  ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+	  HashSet<String> res = new HashSet<String>();
 	  
 	  //check semantics in the condition
 	  res.addAll(cond.checkSemantics(env));

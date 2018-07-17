@@ -1,0 +1,50 @@
+// THIS IS RIGHT (OK)
+/*
+class A {
+    bool overriddenMethod(int a, int b) return true;
+};
+
+class B extends A {
+    int overridingMethod(bool x, bool y) return 1;
+};
+
+let
+    A a = new A();
+    B b = new B();
+in
+    b = a;
+*/
+
+// THIS IS WRONG (???)
+/*
+class A {
+    bool overriddenMethod(int a, int b) return true;
+};
+
+class B {
+    int overridingMethod(bool x, bool y) return 1;
+};
+
+let
+    A a = new A();
+    B b = new B();
+in
+    b = a;
+*/
+// il sottotipaggio vale SOLO su classi e sottoclassi?
+
+// THIS IS WRONG AGAIN (OK)
+
+class A {
+    bool overriddenMethod(bool a, bool b) return true;
+};
+
+class B { // con 'extends' A il test passa
+    int overridingMethod(int x, int y) return 1;
+};
+
+let
+    A a = new A();
+    B b = new B();
+in
+    b = a;

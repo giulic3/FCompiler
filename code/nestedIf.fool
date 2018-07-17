@@ -1,17 +1,20 @@
-if (2) then {
+let int x = 1; in
+if (true) then {
     if (true) then {
-        7
+        print(7)
     }
 } else {
     if (true) then {
-        if (60) then {
-            if (70) then {
-                false
+        if (false) then {
+            if (false) then {
+                print(false)
             } else {
-                100
+                x = 100
             }
         }
     } else {
-        90
+        print(90)
     }
 };
+
+// le condizioni devono essere booleane altrimenti ottengo errore di tipo.
