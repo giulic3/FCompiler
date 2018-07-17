@@ -8,6 +8,7 @@ import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 public class FunDecNode implements Node {
@@ -125,6 +126,10 @@ public class FunDecNode implements Node {
 		for(Node b : body){
 			b.typeCheck();
 		}
+		// check if the type of the last stms or exp in body is subtype of the function return type
+		if (!Helpers.subtypeOf(body.get(body.size()-1).typeCheck(), ((FunType)type).getReturnType()))
+			throw new Exception("Fun Dec Node: wrong function return type");
+
 		return ((FunType)type).getReturnType();
 	}
 
