@@ -25,8 +25,8 @@ public class PlusNode implements Node {
 	
 	@Override
 	public Node typeCheck() throws Exception {
-		if (! ( Helpers.subtypeOf(new IntType(),leftOperand.typeCheck()) &&
-				Helpers.subtypeOf(new IntType(),rightOperand.typeCheck()) ) ) {
+		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
+				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
 			throw new Exception("Plus Node typeCheck exception");
 		}
 		return new IntType();

@@ -51,8 +51,27 @@ public class AndNode implements Node {
 	}
 
 	public String codeGeneration() {
-
-		return "";
+		String exitLabel = Helpers.newLabel();
+		String equalValues = Helpers.newLabel();
+		String bothTrue = Helpers.newLabel();
+		
+		String leftAssembly = left.codeGeneration();
+		String rightAssembly = right.codeGeneration();
+		
+		return  leftAssembly +
+				rightAssembly +
+				"beq " + equalValues + "\n" +
+				"push 0\n" +
+				"b " + exitLabel + "\n" +
+				equalValues + ":\n" +
+				leftAssembly +
+				"push 1\n" +
+				"beq " + bothTrue + "\n" +
+				"push 0\n" +
+				"b " + exitLabel + "\n" +
+				bothTrue + ":\n" +
+				"push 1\n" +
+				exitLabel + ":\n";
 	}
 	
 	// Method to retrieve string identifier of an object
