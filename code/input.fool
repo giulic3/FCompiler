@@ -30,8 +30,7 @@ in
     print(x, y, x+y, x-y, x*y, x/y);*/
 
 let
-    int x = 3;
-    int y = 2;
-    bool z = if (true) then { false } else { true };
+    int x = 0;
 in
-    if (z) then { print(x+y) };
+    x = if (false) then { 5+3 } else { 9-2 }
+    print(x);
