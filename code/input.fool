@@ -23,18 +23,19 @@ in
     a.setter(5);
     print(a.field);*/
 
-let
-    int x = 6;
-    int y = 2;
-in
-    print(x, y, x+y, x-y, x*y, x/y);
-/*
+/*  NON FUNZIONA
 let
     int f(int x, int y) let int z = y-2; in print(x) print(y) print(z) return x*z;
     int h = 2;
 in
     h = f(6,-5)
     print(h);*/
+/*
+let
+    int x = 6;
+    int y = 2;
+in
+    print(x, y, x+y, x-y, x*y, x/y);
 
 let
     int z = 5;
@@ -46,3 +47,17 @@ let
     int x = -4;
 in
     print(x, -x);
+*/
+/*
+let
+    bool e1 = true;
+    bool e2 = true;
+in
+    print(e1 && e2);
+*/
+
+let
+    bool x = true;
+    int z = if (x && true) then { x * 3 } else { 4 + x };
+in
+    print(z);

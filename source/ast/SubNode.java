@@ -31,8 +31,8 @@ public class SubNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if (! ( Helpers.subtypeOf(new IntType(),leftOperand.typeCheck()) &&
-				Helpers.subtypeOf(new IntType(),rightOperand.typeCheck()) ) ) {
+		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
+				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
 			throw new Exception("Sub Node typeCheck exception");
 		}
 		return new IntType();

@@ -32,12 +32,10 @@ public class TimesNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		
-		if (! ( Helpers.subtypeOf(new IntType(), leftOperand.typeCheck()) &&
-				Helpers.subtypeOf(new IntType(), rightOperand.typeCheck()) ) ) {
-			throw new Exception("Non integers in multiplication");
+		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
+				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
+			throw new Exception("Times Node typeCheck exception");
 		}
-		
 		return new IntType();
 	}
 
