@@ -8,6 +8,11 @@ import java.util.Set;
 
 public class Helpers {
 	
+	private static int labelCount = 0;
+	private static int funLabelCount = 0;
+	private static String funcAssembly = "";
+	
+	
 	public static boolean subtypeOf(Node a, Node b) {
 		
 		if ((a instanceof BoolType) && (b instanceof IntType)) {
@@ -29,5 +34,21 @@ public class Helpers {
 			}
 		}
 		return false;
+	}
+	
+	public static String newLabel() {
+		return "label" + (labelCount++);
+	}
+	
+	public static String newFuncLabel() {
+		return "function" + (funLabelCount++);
+	}
+	
+	public static void appendFuncAssembly(String assembly) {
+		funcAssembly += "\n" + assembly;
+	}
+	
+	public static String getFuncAssembly() {
+		return funcAssembly;
 	}
 }

@@ -132,7 +132,34 @@ public class IfNode implements Node {
 	
 	@Override
 	public String codeGeneration() {
-		return null;
+		String trueBranch = Helpers.newLabel();
+		String exitBranch = Helpers.newLabel();
+		
+		String thenCode = "";
+		String elseCode = "";
+		
+		// Exp
+		if (this.th != null) {
+			thenCode += this.th.codeGeneration();
+			elseCode += (this.el != null) ? this.el.codeGeneration() : "";
+		}
+		// Stms
+		else {
+			for (Node thStm: this.thStms)
+				thenCode += thStm.codeGeneration();
+			
+			for (Node elStm: this.elStms)
+				elseCode += elStm.codeGeneration();
+		}
+		
+		return  cond.codeGeneration() +
+				"push 1\n" +
+				"beq " + trueBranch + "\n" +
+				elseCode +
+				"b " + exitBranch + "\n" +
+				trueBranch + ":\n" +
+				thenCode +
+				exitBranch + ":\n";
 	}
 	
 	// Method to retrieve string identifier of an object
