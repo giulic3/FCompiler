@@ -77,7 +77,12 @@ public class VarNode implements Node {
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.decrementOffset(), type); //separo introducendo "entry"
 		
-		String ID = (this.classID != null) ? "Class$" + this.classID + "$" + id : id;
+		String ID = id;
+		if(this.classID != null){
+			entry.setClassName(classID);
+			ID = "Class$" + this.classID + "$" + ID;
+		}
+		
 		
 		if (exp instanceof NewExpNode) {
 			NewExpNode newNode = (NewExpNode) exp;

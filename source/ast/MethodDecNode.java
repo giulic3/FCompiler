@@ -22,10 +22,6 @@ public class MethodDecNode extends FunDecNode {
 		this.classID = classID;
 	}
 	
-	public void setInsideClass(String val) {
-		this.classID = val;
-	}
-	
 	public String toPrint(String s) {
 		
 		String parlstr = "";
@@ -105,8 +101,9 @@ public class MethodDecNode extends FunDecNode {
 			res.addAll(dec.checkSemantics(env));
 		}
 		
-		for (Node b : body)
+		for (Node b : body){
 			res.addAll(b.checkSemantics(env));
+		}
 		
 		env.popScope();
 		
