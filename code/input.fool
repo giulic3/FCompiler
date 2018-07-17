@@ -64,7 +64,20 @@ in
 */
 
 let
+    bool e1 = false;
+in
+    print(not e1);
+
+/*
+let
     bool x = true;
     int z = if (x || false) then { x * 3 } else { 4 + x };
+in
+    print(z);
+*/
+
+let
+    bool x = not false;
+    int z = if (not x || false) then { x * 3 } else { 4 + x };
 in
     print(z);

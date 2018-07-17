@@ -31,18 +31,19 @@ public class NotNode implements Node {
 	}
 	
 	public String codeGeneration() {
+		String label = Helpers.newLabel();
+		String exit = Helpers.newLabel();
 		
-		String lab = Helpers.newLabel();
-		String pass = Helpers.newLabel();
-		return value.codeGeneration()+
-				"push 1\n"+
-				"beq" + lab + "\n"+
-				"push 1\n"+
-				"b " + pass + "\n"+
-				lab+":\n"+
-				"push 0"+
-				pass+":\n";
+		return  value.codeGeneration() +
+				"push 1\n" +
+				"beq " + label + "\n" +
+				"push 1\n" +
+				"b " + exit + "\n" +
+				label + ":\n" +
+				"push 0\n" +
+				exit + ":\n";
 	}
+	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
