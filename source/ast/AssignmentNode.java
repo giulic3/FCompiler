@@ -3,6 +3,8 @@ package ast;
 import ast.types.VoidType;
 import utils.Environment;
 import utils.Helpers;
+import utils.SymbolTableEntry;
+
 import java.util.HashSet;
 
 public class AssignmentNode implements Node {
@@ -16,6 +18,7 @@ public class AssignmentNode implements Node {
 	private Node idVariableNode = null;
 	private Node exp;
 	private Node objFieldNode = null;
+	private int nestingLevel = 0;
 	
 	public AssignmentNode(Node var, Node exp, boolean isClassField){
 		if (isClassField) this.objFieldNode = var;
@@ -42,6 +45,8 @@ public class AssignmentNode implements Node {
 			res.addAll(idVariableNode.checkSemantics(env));
 		
 		res.addAll(exp.checkSemantics(env));
+		
+		nestingLevel = env.getNestingLevel();
 		
 		return res;
 	}
@@ -70,7 +75,21 @@ public class AssignmentNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		return null;
+		String getAR = "";
+		
+		// TODO: class field assignment MUST be done
+		
+		IdNode var = (IdNode)idVariableNode;
+		SymbolTableEntry entry = var.getSTEntry();
+		
+		for (int i = 0; i < nestingLevel - entry.getNestingLevel(); i++) getAR += "lw\n";
+		
+		return  exp.codeGeneration() +
+				"push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+				"lfp\n" +
+				getAR +     //risalgo la catena statica
+				"add\n" +
+				"sw\n";     //carico sullo stack il valore all'indirizzo ottenuto
 	}
 	
 	// Method to retrieve string identifier of an object
