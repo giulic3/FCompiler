@@ -26,10 +26,6 @@ public class IdNode implements Node {
 		classID = null;
 	}
 	
-	public void setClassID(String classID) {
-		this.classID = classID;
-	}
-	
 	public String getID() {
 		return id;
 	}
@@ -65,7 +61,6 @@ public class IdNode implements Node {
 			
 			fieldEntry = classContentHM.get(identifier);
 			String classID = fieldEntry.getClassName();
-			
 			Node found = null;
 			
 			if (classID!=null) {
@@ -87,7 +82,6 @@ public class IdNode implements Node {
 				//else
 					//this.entry = new SymbolTableEntry(1, 0, found);
 			}
-			
 		}
 		else
 			this.entry = fieldEntry;

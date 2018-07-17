@@ -19,11 +19,16 @@ public class AssignmentNode implements Node {
 	private Node exp;
 	private Node objFieldNode = null;
 	private int nestingLevel = 0;
+	private String classID=null;
 	
 	public AssignmentNode(Node var, Node exp, boolean isClassField){
 		if (isClassField) this.objFieldNode = var;
 		else this.idVariableNode = var;
 		this.exp = exp;
+	}
+	
+	public void setClassID(String classID) {
+		this.classID = classID;
 	}
 	
 	public String toPrint(String s){
@@ -41,8 +46,9 @@ public class AssignmentNode implements Node {
 		
 		if (objFieldNode != null)
 			res.addAll(objFieldNode.checkSemantics(env));
-		else
+		else{
 			res.addAll(idVariableNode.checkSemantics(env));
+		}
 		
 		res.addAll(exp.checkSemantics(env));
 		
