@@ -50,6 +50,7 @@ public class BlockLetInStmsNode implements Node {
 		for (Node s : stms){
 			res += s.codeGeneration();
 		}
+		res += "cfp\n";
 		return res;
 	}
 	
@@ -72,6 +73,8 @@ public class BlockLetInStmsNode implements Node {
 		}
 		
 		env.settingFunSecondCheck(true);
+		
+		if (decs.size() > 0) env.setOffset(-1);
 		
 		//if (tmp.size() > 0)
 		for(Node dec : decs){

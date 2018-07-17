@@ -22,15 +22,27 @@ let
 in
     a.setter(5);
     print(a.field);*/
-/*
+
 let
     int x = 6;
     int y = 2;
 in
-    print(x, y, x+y, x-y, x*y, x/y);*/
+    print(x, y, x+y, x-y, x*y, x/y);
+/*
+let
+    int f(int x, int y) let int z = y-2; in print(x) print(y) print(z) return x*z;
+    int h = 2;
+in
+    h = f(6,-5)
+    print(h);*/
 
 let
-    int x = 0;
+    int z = 5;
+    int f() return z+4;
 in
-    x = if (false) then { 5+3 } else { 9-2 }
-    print(x);
+    print(f());
+
+let
+    int x = -4;
+in
+    print(x, -x);

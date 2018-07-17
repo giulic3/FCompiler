@@ -77,8 +77,21 @@ public class FunExpNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		// TODO: da controllare
+		String parAssembly = "";
+		for (int i = args.size()-1; i >= 0; i--)
+			parAssembly += args.get(i).codeGeneration();
+		
+		return  "lfp\n" +
+				parAssembly +
+				"lfp\n" +
+				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				"push " + entry.getOffset() + "\n" +
+				"lfp\n" +
+				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				"add\n" +
+				"lw\n" +
+				"js\n";
 	}
 	
 	public String getID() {

@@ -8,6 +8,7 @@ import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 ;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 
 /* corresponds to var */
@@ -110,13 +111,10 @@ public class IdNode implements Node {
 
 	public String codeGeneration() {
 		// TODO: da controllare
-		String getAR = "";
-		
-		for (int i = 0; i < nestinglevel - entry.getNestingLevel(); i++) getAR += "lw\n";
 		
 		return  "push " + entry.getOffset() + "\n" +     //metto offset sullo stack
 				"lfp\n" +
-				getAR +     //risalgo la catena statica
+				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +     //risalgo la catena statica
 				"add\n" +
 				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
 	}

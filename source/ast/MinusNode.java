@@ -39,7 +39,8 @@ public class MinusNode implements Node {
 		// stack, prendiamo questo valore, facciamo pop, mettiamo il meno davanti e
 		// rifacciamo push. (il codice fenerato da value.codegen() deve essere eseguito prima
 		// di quello di minus, quindi deve comparire prima nella stringa. Il risultato sarà codestring + minus.codegen).
-		return value.codeGeneration();
+		String valCodeGen = value.codeGeneration();
+		return "push -1\n" + valCodeGen + "mult\n";
 		
 	}
 	

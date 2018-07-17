@@ -51,4 +51,11 @@ public class Helpers {
 	public static String getFuncAssembly() {
 		return funcAssembly;
 	}
+	
+	public static String getActivationRecordCode(int callNestingLevel, int decNestingLevel) {
+		String code = "";
+		for (int i = 0; i < callNestingLevel - decNestingLevel; i++)
+			code += "lw\n";
+		return code;
+	}
 }

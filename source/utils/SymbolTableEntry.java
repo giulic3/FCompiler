@@ -28,6 +28,10 @@ public class SymbolTableEntry {
 		return type;
 	}
 	
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+	
 	public void setType(Node type) {
 		this.type = type;
 	}

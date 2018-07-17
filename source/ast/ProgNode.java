@@ -1,6 +1,8 @@
 package ast;
 
 import utils.Environment;
+import utils.Helpers;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -74,7 +76,7 @@ public class ProgNode  implements Node {
 		String res="";
 		for(Node b:blocks)
 			res += b.codeGeneration();
-		return res+"halt\n";
+		return res +"halt\n" + Helpers.getFuncAssembly();
 	}
 	
 	// Method to retrieve string identifier of an object

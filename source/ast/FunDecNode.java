@@ -44,17 +44,26 @@ public class FunDecNode implements Node {
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		//env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
+		
+		int offset = env.decrementOffset();
+		
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), offset, type); //separo introducendo "entry"
 		
 		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni
 		
 		String funID = "Function$" + name;
 		
 		if(!env.getFunSecondCheck()) {
-			if(hm.get(funID) != null)
+			if(hm.get(funID) != null) {
+				//this.funEntry = hm.get(funID);
 				res.add("Function " + name + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
 			else
 				hm.put(funID, entry);
+		} else {
+			SymbolTableEntry existingEntry = hm.get(funID);
+			existingEntry.setOffset(offset);
+			this.funEntry=existingEntry;
 		}
 		
 		env.pushScope();
@@ -72,11 +81,12 @@ public class FunDecNode implements Node {
 			if (funContentHM.put(arg.getID(), funEntry) != null)
 				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
-
+		
 		this.funEntry = entry;
 		
 		if(!decList.isEmpty())
 			env.setOffset(-2);
+			
 		for (Node dec : decList) {
 			res.addAll(dec.checkSemantics(env));
 		}
@@ -132,7 +142,41 @@ public class FunDecNode implements Node {
 	}
 
 	public String codeGeneration() {
-		return "";
+		// TODO: da controllare
+		String decAssembly = "";
+		String decPopAssembly = "";
+		String parPopAssembly = "";
+		String bodyAssembly = "";
+		String funLabel = Helpers.newFuncLabel();
+		
+		for (Node dec: decList) {
+			decAssembly += dec.codeGeneration();
+			decPopAssembly += "pop\n";
+		}
+		
+		for (Node par: parList)
+			parPopAssembly += "pop\n";
+		
+		for (Node n: body)
+			bodyAssembly += n.codeGeneration();
+		
+		String funcCode = funLabel + ":\n" +
+				"cfp\n" +
+				"lra\n" +
+				decAssembly +
+				bodyAssembly +
+				"srv\n" +
+				decPopAssembly +
+				"sra\n" +
+				"pop\n" +
+				parPopAssembly +
+				"sfp\n" +
+				"lrv\n" +
+				"lra\n" +
+				"js\n";
+		Helpers.appendFuncAssembly(funcCode);
+		
+		return "push " + funLabel + "\n";
 	}
 	
 	public String getID() {
