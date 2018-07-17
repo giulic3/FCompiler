@@ -7,6 +7,12 @@ import utils.Environment;
 
 public class BoolType implements Node {
 	
+	/**
+	 *
+	 * Nodo indicativo del tipo Booleano, è gestito come sottotipo di Integer in FOOL.
+	 *
+	 * */
+	
 	public BoolType() {
 	}
 	
@@ -20,7 +26,7 @@ public class BoolType implements Node {
 	}
 	
 	public Node typeCheck() {
-		return new BoolType(); // TODO: decidere se Bool <= Int
+		return new BoolType();
 	}
 	
 	public String codeGeneration() {

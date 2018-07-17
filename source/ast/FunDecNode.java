@@ -2,8 +2,6 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import ast.types.ClassType;
 import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;

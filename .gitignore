@@ -65,3 +65,7 @@ out/
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+#LaTeX
+docs/report/FOOLreport.*
+!docs/report/FOOLreport.tex

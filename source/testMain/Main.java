@@ -1,27 +1,18 @@
+package testMain;
+
 import ast.*;
 import grammars.FOOL.FOOLLexer;
 import grammars.FOOL.FOOLParser;
 import grammars.FOOL.FOOLVisitorImpl;
-import ast.BoolValNode;
-
-
 import grammars.SVM.ExecuteVM;
 import grammars.SVM.SVMLexer;
 import grammars.SVM.SVMParser;
 import grammars.SVM.SVMVisitorImpl;
 import org.antlr.v4.runtime.*;
 import utils.Environment;
-;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 

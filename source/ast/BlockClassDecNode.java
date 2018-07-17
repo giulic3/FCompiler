@@ -9,6 +9,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class BlockClassDecNode implements Node {
+	
+	/**
+	 *
+	 * Nodo per la gestione della <strong>Dichiarazione</strong> di una classe.
+	 *
+	 * */
+	
 	private String id;
 	private String ext;
 	private ArrayList<Node> fields;
@@ -47,14 +54,36 @@ public class BlockClassDecNode implements Node {
 		return msg;
 	}
 	
+	/**
+	 *
+	 * Utility per il recupero dei metodi della classe.
+	 *
+	 * */
 	public ArrayList<Node> getMethods() {
 		return methods;
 	}
 	
+	/**
+	 *
+	 * Utility per il recupero dei campi della classe.
+	 *
+	 * */
 	public ArrayList<Node> getFields() {
 		return fields;
 	}
 	
+	/**
+	 *
+	 * La funzione <strong>checkSemantics</strong> per la dichiarazione di una classe si occupa di
+	 * controllare che:
+	 * <ul>
+	 *     <li>La classe non sia già stata dichiarata</li>
+	 *     <li>Un'eventuale superclasse esista, quindi che la superclasse sia dichiarata</li>
+	 * 	   <li>Che la classe non estenda se stessa</li>
+	 * 	   <li>Non ci sia overriding di campi (come da specifica)</li>
+	 * </ul>
+	 *
+	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		//create result list
@@ -143,6 +172,11 @@ public class BlockClassDecNode implements Node {
 		return res;
 	}
 	
+	/**
+	 *
+	 * La funzione <strong>typeChecking</strong> avvia il controllo su campi e metodi della classe
+	 *
+	 * */
 	public Node typeCheck() throws Exception{
 		/*
 		

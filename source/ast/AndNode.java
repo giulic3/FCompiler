@@ -7,6 +7,12 @@ import utils.Helpers;
 
 
 public class AndNode implements Node {
+	
+	/**
+	 *
+	 * Nodo per la gestione dell'<strong>AND</strong> tra due Booleani.
+	 *
+	 * */
 
 	private Node left;
 	private Node right;
@@ -32,7 +38,12 @@ public class AndNode implements Node {
 
 		return res;
 	}
-
+	
+	/**
+	 *
+	 * Applica il controllo su le due espressioni a destra e sinistra dell'AND per verificare che siano entrambe di tipo Booleano.
+	 *
+	 * */
 	public Node typeCheck() throws Exception {
 		if (!(Helpers.subtypeOf(left.typeCheck(), new BoolType()) && Helpers.subtypeOf(right.typeCheck(), new BoolType())))
 			throw new Exception("And Node typeCheck exception");

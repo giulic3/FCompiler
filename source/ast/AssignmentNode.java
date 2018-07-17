@@ -7,6 +7,12 @@ import java.util.HashSet;
 
 public class AssignmentNode implements Node {
 	
+	/**
+	 *
+	 * Nodo per la gestione dell'<strong>Assegnamento</strong> ad una variabile.
+	 *
+	 * */
+	
 	private Node idVariableNode = null;
 	private Node exp;
 	private Node objFieldNode = null;
@@ -14,7 +20,6 @@ public class AssignmentNode implements Node {
 	public AssignmentNode(Node var, Node exp, boolean isClassField){
 		if (isClassField) this.objFieldNode = var;
 		else this.idVariableNode = var;
-		
 		this.exp = exp;
 	}
 	
@@ -22,6 +27,11 @@ public class AssignmentNode implements Node {
 		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
 	}
 	
+	/**
+	 *
+	 * Controlla che gli elementi a sinistra e destra dell'uguale siano stati definiti.
+	 *
+	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		HashSet<String> res = new HashSet<String>();
@@ -36,6 +46,13 @@ public class AssignmentNode implements Node {
 		return res;
 	}
 	
+	/**
+	 *
+	 * Controlla che gli elementi a sinistra e destra dell'uguale abbiano tipi compatibili,
+	 * gestisce sia il caso in cui si stia assegnando ad una variabile sia il caso in cui si stia
+	 * assegnando al campo di una classe (con la notazione oggetto.field=espressione).
+	 *
+	 * */
 	public Node typeCheck() throws Exception{
 		
 		if(idVariableNode!=null) {

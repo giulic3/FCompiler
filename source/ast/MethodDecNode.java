@@ -121,7 +121,7 @@ public class MethodDecNode extends FunDecNode {
 						throw new Exception("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
-				if (!Helpers.subtypeOf(((FunType)method.type).getReturnType(), ((FunType)this.type).getReturnType()))
+				if (!Helpers.subtypeOf(((FunType)this.type).getReturnType(),((FunType)method.type).getReturnType()))
 					throw new Exception("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
 							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}

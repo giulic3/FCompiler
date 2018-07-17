@@ -9,6 +9,12 @@ import utils.Environment;
 
 public class VoidType implements Node {
 	
+	/**
+	 *
+	 * Nodo indicativo del tipo Void, relativo agli statement
+	 *
+	 * */
+	
 	public VoidType() {
 	}
 	
