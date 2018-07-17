@@ -12,6 +12,13 @@ public class FunType implements Node {
 	private ArrayList<Node> parTypesList;
 	private Node returnType;
 	
+	/**
+	 *
+	 * Nodo indicativo del tipo di una Funzione, notazione (T1xT2x.....xTn) --> T.
+	 * Dove T1,T2,...,Tn sono i tipi dei rispettivi parametri mentre T è
+	 * il tipo di ritorno della funzione
+	 *
+	 * */
 	public FunType(ArrayList<Node> p, Node r) {
 		parTypesList = p;
 		returnType = r;

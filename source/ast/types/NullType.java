@@ -14,7 +14,6 @@ public class NullType extends ClassType {
 	 * che contiene l'istanza
 	 *
 	 * */
-	
 	//TODO: trovare soluzione migliore per il tipo null e controllare bene typechecking
 	public NullType(){
 		super(null, null, null,null, null);

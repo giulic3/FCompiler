@@ -12,7 +12,12 @@ public class ClassMethodNode extends FunExpNode {
 	
 	private Node objectNode;
 	private Node funNode;
-
+	
+	/**
+	 *
+	 * Nodo per la gestione dell'invocazione di un metodo della classe tipo di objectNode.
+	 *
+	 * */
 	public ClassMethodNode(Node objectNode, FunExpNode funNode){
 		super(funNode.getID(), funNode.args, funNode.isExp, funNode.ctx);
 		this.objectNode = objectNode;
@@ -24,6 +29,11 @@ public class ClassMethodNode extends FunExpNode {
 				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");
 	}
 	
+	/**
+	 *
+	 * Controlla che l'oggetto sia definito, che il metodo sia definito ed invocato con il giusto numero di parametri
+	 *
+	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		HashSet<String> res = new HashSet<>();
@@ -75,10 +85,15 @@ public class ClassMethodNode extends FunExpNode {
 	
 	/**
 	 *
-	 * La funzione typeCheck viene ereditata dalla classe FunExpNode
+	 * La funzione <strong>typeCheck</strong> viene ereditata dalla classe FunExpNode.
 	 *
 	 * */
 	
+	/**
+	 *
+	 * La funzione <strong>codeGeneration</strong>
+	 *
+	 * */
 	public String codeGeneration() {
 		// TODO: da implementare
 		return null;

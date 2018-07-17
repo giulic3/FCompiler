@@ -8,6 +8,11 @@ public class IntValNode implements Node {
 	
 	private int value;
 	
+	/**
+	 *
+	 * Rappresenta i valori interi
+	 *
+	 * */
 	public IntValNode(int n) {
 		value = n;
 	}

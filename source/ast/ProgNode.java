@@ -8,13 +8,13 @@ import java.util.HashSet;
 
 public class ProgNode  implements Node {
 	
+	private ArrayList<Node> blocks;
+	
 	/**
 	 *
 	 * Nodo di ingresso dell'<em>ast</em> (albero di sintassi astratta)
 	 *
 	 * */
-	private ArrayList<Node> blocks;
-	
 	public ProgNode (ArrayList<Node> d) {
 		this.blocks=d;
 	}

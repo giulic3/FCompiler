@@ -10,12 +10,6 @@ import java.util.HashSet;
 
 public class BlockClassDecNode implements Node {
 	
-	/**
-	 *
-	 * Nodo per la gestione della <strong>Dichiarazione</strong> di una classe.
-	 *
-	 * */
-	
 	private String id;
 	private String ext;
 	private ArrayList<Node> fields;
@@ -23,9 +17,11 @@ public class BlockClassDecNode implements Node {
 	private ParserRuleContext ctx;
 	private ClassType type;
 	
-	
-	/* se non ci sono parametri par sarà null, se non è estesa ext sarà null */
-	
+	/**
+	 *
+	 * Nodo per la gestione della <strong>Dichiarazione</strong> di una classe.
+	 *
+	 * */
 	public BlockClassDecNode(String id, String ext, ArrayList<Node> fields, ArrayList<Node> methods, ParserRuleContext ctx) {
 		this.id=id;
 		this.ext=ext;

@@ -12,7 +12,6 @@ public class BoolType implements Node {
 	 * Nodo indicativo del tipo Booleano, è gestito come sottotipo di Integer in FOOL.
 	 *
 	 * */
-	
 	public BoolType() {
 	}
 	

@@ -11,7 +11,6 @@ public class IntType implements Node {
 	 * Nodo indicativo del tipo Intero
 	 *
 	 * */
-	
 	public IntType() {
 	}
 	

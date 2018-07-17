@@ -9,7 +9,12 @@ public class DivNode implements Node {
 
 	private Node leftOperand;
 	private Node rightOperand;
-
+	
+	/**
+	 *
+	 * Gestisce gli operandi della Divisione.
+	 *
+	 */
 	public DivNode (Node l, Node r) {
 		leftOperand = l;
 		rightOperand = r;
@@ -31,6 +36,11 @@ public class DivNode implements Node {
 		return res;
 	}
 	
+	/**
+	 *
+	 * La divisione viene effettuata solo su tipi interi e suoi sottotipi, ad esempio i booleani.
+	 *
+	 * */
 	public Node typeCheck()throws Exception {
 		
 		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(),new IntType()) &&

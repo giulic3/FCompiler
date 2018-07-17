@@ -11,6 +11,11 @@ public class BlockLetInStmsNode implements Node {
 	private ArrayList<Node> stms;
 	private ArrayList<Node> decs;
 	
+	/**
+	 *
+	 * Nodo per la gestione degli <strong>Scope Let in Stms</strong>.
+	 *
+	 * */
 	public BlockLetInStmsNode(ArrayList<Node> d, ArrayList<Node> s){
 		stms=s;
 		decs=d;
@@ -30,6 +35,50 @@ public class BlockLetInStmsNode implements Node {
 		
 		
 		//return "\n" + s +"  BlockLetInStms: \n"  + dec.toPrint(s+"   ") + "\n" /*+ stms.toPrint(s+"    ") */;
+	}
+	
+	/**
+	 *
+	 * Aggiunge uno scope alla symbol table e lancia checkSemantics() sulle relative
+	 * dichiarazioni e statment dello scope, successivamente si occupa di rimuovere lo scope.
+	 *
+	 * */
+	public HashSet<String> checkSemantics(Environment env){
+		
+		HashSet<String> res = new HashSet<String>();
+		//HashSet<String> tmp = new HashSet<String>();
+		
+		
+		// TODO: handle offset
+		env.pushScope();
+		
+		if (decs.size() > 0) env.setOffset(-1);
+		
+		for(Node dec : decs){
+			if(dec instanceof FunDecNode) {
+				res.addAll(dec.checkSemantics(env));
+			}
+		}
+		
+		env.settingFunSecondCheck(true);
+		
+		if (decs.size() > 0) env.setOffset(-1);
+		
+		//if (tmp.size() > 0)
+		for(Node dec : decs){
+			res.addAll(dec.checkSemantics(env));
+		}
+		
+		env.settingFunSecondCheck(false);
+		
+		for(Node stm : stms){
+			res.addAll(stm.checkSemantics(env));
+		}
+		
+		env.popScope();
+		
+		return res;
+		
 	}
 	
 	public Node typeCheck() throws Exception {
@@ -52,45 +101,6 @@ public class BlockLetInStmsNode implements Node {
 		}
 		res += "cfp\n";
 		return res;
-	}
-	
-	public HashSet<String> checkSemantics(Environment env){
-		
-		HashSet<String> res = new HashSet<String>();
-		//HashSet<String> tmp = new HashSet<String>();
-		
-		
-		// TODO: handle offset
-		env.pushScope();
-		
-		if (decs.size() > 0) env.setOffset(-1);
-		
-		for(Node dec : decs){
-			if(dec instanceof FunDecNode) {
-				res.addAll(dec.checkSemantics(env));
-			}
-			
-		}
-		
-		env.settingFunSecondCheck(true);
-		
-		if (decs.size() > 0) env.setOffset(-1);
-		
-		//if (tmp.size() > 0)
-		for(Node dec : decs){
-			res.addAll(dec.checkSemantics(env));
-		}
-		
-		env.settingFunSecondCheck(false);
-		
-		for(Node stm : stms){
-			res.addAll(stm.checkSemantics(env));
-		}
-		
-		env.popScope();
-		
-		return res;
-	
 	}
 	
 	// Method to retrieve string identifier of an object

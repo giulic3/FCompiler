@@ -9,7 +9,12 @@ public class EqNode implements Node {
 
 	private Node left;
 	private Node right;
-
+	
+	/**
+	 *
+	 * Gestisce gli operandi dell'uguaglianza.
+	 *
+	 */
 	public EqNode (Node l, Node r) {
 		left = l;
 		right = r;
@@ -32,6 +37,11 @@ public class EqNode implements Node {
 		return res;
 	}
 
+	/**
+	 *
+	 * L'uguaglianza può essere eseguita solo su booleani e sui sottotipi.
+	 *
+	 * */
 	public Node typeCheck() throws Exception {
 		
 		Node l = left.typeCheck();

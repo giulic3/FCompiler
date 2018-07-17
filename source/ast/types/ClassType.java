@@ -21,6 +21,11 @@ public class ClassType implements Node {
 	// campi TODO : arraylist? hashmap?
 	// metodi
 	
+	/**
+	 *
+	 * Nodo indicativo del tipo Classe, ogni classe è un istanza di questo tipo.
+	 *
+	 * */
 	public ClassType(String classID, ParserRuleContext ctx) {
 		this.classID = classID;
 		this.ctx = ctx;

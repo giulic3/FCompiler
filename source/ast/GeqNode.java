@@ -11,7 +11,12 @@ public class GeqNode implements Node {
 
 	private Node left;
 	private Node right;
-
+	
+	/**
+	 *
+	 * Gestisce gli operandi del confronto >=.
+	 *
+	 */
 	public GeqNode (Node l, Node r) {
 		left = l;
 		right = r;
@@ -33,7 +38,12 @@ public class GeqNode implements Node {
 
 		return res;
 	}
-	// succeeds only when operands are integers (*NOT* booleans)
+	
+	/**
+	 *
+	 * Il confronto avviene tra interi e suoi sottotipi, ad esempio i booleani.
+	 *
+	 * */
 	public Node typeCheck() throws Exception {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();

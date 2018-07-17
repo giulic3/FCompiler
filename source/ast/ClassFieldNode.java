@@ -17,6 +17,11 @@ public class ClassFieldNode implements Node {
 	private boolean isExp;
 	private ParserRuleContext ctx;
 	
+	/**
+	 *
+	 * Nodo per la gestione di assegnamenti a campi di una classe.
+	 *
+	 * */
 	public ClassFieldNode(Node obj, Node ID, boolean isExp, ParserRuleContext ctx) {
 		this.ctx = ctx;
 		this.obj = obj;
@@ -28,6 +33,11 @@ public class ClassFieldNode implements Node {
 		return s+"Class Field Node:\n" + s + "\tObject: " + this.obj.toPrint("") + "\n" + s + "\tField: " + this.id.toPrint("");
 	}
 	
+	/**
+	 *
+	 * Controlla che l'oggetto sia stato istanziato e successivamente che il campo sia presente nella classe tipo dell'oggetto.
+	 *
+	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		HashSet<String> res = new HashSet<String>();
@@ -66,6 +76,10 @@ public class ClassFieldNode implements Node {
 		return res;
 	}
 	
+	/**
+	 *
+	 * Ritorna il tipo del campo della classe, ai fini della verifica sui tipi è sufficiente questa informazione.
+	 * */
 	public Node typeCheck() throws Exception {
 		return id.typeCheck();
 	}
