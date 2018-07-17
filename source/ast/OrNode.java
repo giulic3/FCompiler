@@ -2,17 +2,21 @@ package ast;
 
 import java.util.HashSet;
 import ast.types.BoolType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 
 public class OrNode implements Node {
 
 	private Node left;
 	private Node right;
+	private ParserRuleContext ctx;
 
-	public OrNode (Node l, Node r) {
+	public OrNode (Node l, Node r, ParserRuleContext ctx) {
 		left = l;
 		right = r;
+		this.ctx = ctx;
 	}
 
 	public String toPrint(String s) {
@@ -34,7 +38,8 @@ public class OrNode implements Node {
 
 	public Node typeCheck() throws Exception {
 		if (!(Helpers.subtypeOf(new BoolType(), left.typeCheck()) && Helpers.subtypeOf(new BoolType(),right.typeCheck())))
-			throw new Exception("Or Node typeCheck exception");
+			throw new TypeCheckException("Or", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		
 		return new BoolType();
 	}
 

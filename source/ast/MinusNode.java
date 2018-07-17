@@ -1,8 +1,10 @@
 package ast;
 
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 ;
 
 import java.util.ArrayList;
@@ -11,9 +13,11 @@ import java.util.HashSet;
 public class MinusNode implements Node {
 	
 	private Node value;
+	private ParserRuleContext ctx;
 	
-	public MinusNode(Node value) {
+	public MinusNode(Node value, ParserRuleContext ctx) {
 		this.value = value;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String indent) {
@@ -28,7 +32,7 @@ public class MinusNode implements Node {
 	public Node typeCheck() throws Exception {
 		// TODO: da implementare
 		if(!Helpers.subtypeOf(new IntType(), value.typeCheck())){
-			throw new Exception("minus on non Integer Type");
+			throw new TypeCheckException("Unary Minus", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new IntType();
 	}

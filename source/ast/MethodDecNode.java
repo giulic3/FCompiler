@@ -5,6 +5,8 @@ import ast.types.FunType;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
+import utils.TypeCheckException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,12 +120,10 @@ public class MethodDecNode extends FunDecNode {
 			if (method.getID().equals(this.name)) {
 				for (int i = 0; i < parList.size(); i++) {
 					if (!Helpers.subtypeOf(method.parList.get(i).typeCheck(), parList.get(i).typeCheck()))
-						throw new Exception("Method overloading (wrong parameter type) '" + this.toPrint("") + "' is not allowed at line "
-								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+						throw new TypeCheckException("Method Dec (parameter overloading not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 				}
 				if (!Helpers.subtypeOf(((FunType)this.type).getReturnType(),((FunType)method.type).getReturnType()))
-					throw new Exception("Method overloading (wrong return type) '" + this.toPrint("") + "' is not allowed at line "
-							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+					throw new TypeCheckException("Method Dec (return type overloading not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
 		

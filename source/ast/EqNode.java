@@ -2,22 +2,26 @@ package ast;
 
 import java.util.HashSet;
 import ast.types.BoolType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 
 public class EqNode implements Node {
 
 	private Node left;
 	private Node right;
+	private ParserRuleContext ctx;
 	
 	/**
 	 *
 	 * Gestisce gli operandi dell'uguaglianza.
 	 *
 	 */
-	public EqNode (Node l, Node r) {
+	public EqNode (Node l, Node r, ParserRuleContext ctx) {
 		left = l;
 		right = r;
+		this.ctx = ctx;
 	}
 
 	public String toPrint(String s) {
@@ -47,7 +51,7 @@ public class EqNode implements Node {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
 		if (! ( Helpers.subtypeOf(l,r) || Helpers.subtypeOf(r,l))) {
-			throw new Exception("Incompatible types in equal");
+			throw new TypeCheckException("Equal Check", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new BoolType();
 	}

@@ -2,8 +2,10 @@ package ast;
 
 import java.util.HashSet;
 import ast.types.BoolType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 
 
 public class AndNode implements Node {
@@ -13,13 +15,15 @@ public class AndNode implements Node {
 	 * Nodo per la gestione dell'<strong>AND</strong> tra due Booleani.
 	 *
 	 * */
-
+	
 	private Node left;
 	private Node right;
+	private ParserRuleContext ctx;
 
-	public AndNode (Node l, Node r) {
+	public AndNode (Node l, Node r, ParserRuleContext ctx) {
 		left = l;
 		right = r;
+		this.ctx = ctx;
 	}
 
 	public String toPrint(String s) {
@@ -46,7 +50,8 @@ public class AndNode implements Node {
 	 * */
 	public Node typeCheck() throws Exception {
 		if (!(Helpers.subtypeOf(left.typeCheck(), new BoolType()) && Helpers.subtypeOf(right.typeCheck(), new BoolType())))
-			throw new Exception("And Node typeCheck exception");
+			throw new TypeCheckException("And", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		
 		return new BoolType();
 	}
 

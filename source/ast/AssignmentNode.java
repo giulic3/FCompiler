@@ -1,9 +1,11 @@
 package ast;
 
 import ast.types.VoidType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
+import utils.TypeCheckException;
 
 import java.util.HashSet;
 
@@ -19,11 +21,13 @@ public class AssignmentNode implements Node {
 	private Node exp;
 	private Node objFieldNode = null;
 	private int nestingLevel = 0;
+	private ParserRuleContext ctx;
 	
-	public AssignmentNode(Node var, Node exp, boolean isClassField){
+	public AssignmentNode(Node var, Node exp, boolean isClassField, ParserRuleContext ctx){
 		if (isClassField) this.objFieldNode = var;
 		else this.idVariableNode = var;
 		this.exp = exp;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s){
@@ -62,12 +66,12 @@ public class AssignmentNode implements Node {
 		
 		if(idVariableNode!=null) {
 			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())) {
-				throw new Exception("Assignment Node typeCheck exception");
+				throw new TypeCheckException("Assignment", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
 		else{
 			if (!Helpers.subtypeOf(exp.typeCheck(), objFieldNode.typeCheck())) {
-				throw new Exception("Assignment Node Class field typeCheck exception");
+				throw new TypeCheckException("Assignment", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
 		

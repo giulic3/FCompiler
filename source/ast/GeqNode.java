@@ -3,23 +3,27 @@ package ast;
 import java.util.HashSet;
 import ast.types.BoolType;
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 
 
 public class GeqNode implements Node {
 
 	private Node left;
 	private Node right;
+	private ParserRuleContext ctx;
 	
 	/**
 	 *
 	 * Gestisce gli operandi del confronto >=.
 	 *
 	 */
-	public GeqNode (Node l, Node r) {
+	public GeqNode (Node l, Node r, ParserRuleContext ctx) {
 		left = l;
 		right = r;
+		this.ctx = ctx;
 	}
 
 	public String toPrint(String s) {
@@ -48,7 +52,7 @@ public class GeqNode implements Node {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
 		if (!(Helpers.subtypeOf(new IntType(),l) && Helpers.subtypeOf(new IntType(),r))) {
-			throw new Exception("Incompatible types in Gequal");
+			throw new TypeCheckException("Greater/Equal", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new BoolType();
 	}

@@ -3,8 +3,11 @@ package ast;
 
 import ast.types.BoolType;
 import ast.types.VoidType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,31 +19,35 @@ public class IfNode implements Node {
 	private Node el;
 	private ArrayList<Node> thStms;
 	private ArrayList<Node> elStms;
+	private ParserRuleContext ctx;
 
 	// IfExp
-	public IfNode(Node cond, Node th, Node el) {
+	public IfNode(Node cond, Node th, Node el, ParserRuleContext ctx) {
 		this.cond = cond;
 		this.th = th;
 		this.el = el;
 		this.thStms = new ArrayList<>();
 		this.elStms = new ArrayList<>();
+		this.ctx = ctx;
 	}
 
 	/* ifStm */
-	public IfNode(Node cond, ArrayList<Node> thStms) {
+	public IfNode(Node cond, ArrayList<Node> thStms, ParserRuleContext ctx) {
 		this.cond = cond;
 		this.th = null;
 		this.el = null;
 		this.thStms = thStms;
-		this.elStms = new ArrayList<>();;
+		this.elStms = new ArrayList<>();
+		this.ctx = ctx;
 	}
 
-	public IfNode(Node cond, ArrayList<Node> thStms, ArrayList<Node> elStms) {
+	public IfNode(Node cond, ArrayList<Node> thStms, ArrayList<Node> elStms, ParserRuleContext ctx) {
 		this.cond = cond;
 		this.th = null;
 		this.el = null;
 		this.thStms = thStms;
 		this.elStms = elStms;
+		this.ctx = ctx;
 	}
 	
 	@Override
@@ -103,7 +110,7 @@ public class IfNode implements Node {
 	public Node typeCheck() throws Exception {
 		
 		if(!Helpers.subtypeOf(cond.typeCheck(), new BoolType())){
-			throw new Exception("condition is not boolean");
+			throw new TypeCheckException("If (condition)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		
 		// IfExp
@@ -114,17 +121,17 @@ public class IfNode implements Node {
 			if(Helpers.subtypeOf(el.typeCheck(),th.typeCheck())){
 				return th.typeCheck();
 			}
-			throw new Exception("Incompatible expression types");
+			throw new TypeCheckException("If (then/else type)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		// IfStms
 		else {
 			for(Node ths : thStms)
 				if(!Helpers.subtypeOf(ths.typeCheck(), new VoidType()))
-					throw new Exception("not void statement");
+					throw new TypeCheckException("If (non void statement)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			
 			for(Node els : elStms)
 				if(!Helpers.subtypeOf(els.typeCheck(), new VoidType()))
-					throw new Exception("not void statement");
+					throw new TypeCheckException("If (non void statement)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 					
 			return new VoidType();
 		}

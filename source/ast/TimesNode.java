@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.*;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.*;
 import java.util.HashSet;
 
@@ -8,10 +9,12 @@ public class TimesNode implements Node {
 
 	private Node leftOperand;
 	private Node rightOperand;
+	private ParserRuleContext ctx;
 
-	public TimesNode (Node l, Node r) {
+	public TimesNode (Node l, Node r, ParserRuleContext ctx) {
 		leftOperand = l;
 		rightOperand = r;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
@@ -34,7 +37,7 @@ public class TimesNode implements Node {
 	public Node typeCheck() throws Exception {
 		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
 				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
-			throw new Exception("Times Node typeCheck exception");
+			throw new TypeCheckException("Times", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new IntType();
 	}

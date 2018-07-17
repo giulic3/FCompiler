@@ -2,8 +2,10 @@ package ast;
 
 import ast.types.BoolType;
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
 ;
 
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ public class PlusNode implements Node {
 	
 	private Node leftOperand;
 	private Node rightOperand;
+	private ParserRuleContext ctx;
 	
-	public PlusNode(Node l, Node r) {
+	public PlusNode(Node l, Node r, ParserRuleContext ctx) {
 		leftOperand = l;
 		rightOperand = r;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
@@ -27,7 +31,7 @@ public class PlusNode implements Node {
 	public Node typeCheck() throws Exception {
 		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
 				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
-			throw new Exception("Plus Node typeCheck exception");
+			throw new TypeCheckException("Plus", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new IntType();
 	}

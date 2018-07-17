@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.*;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.*;
 import java.util.HashSet;
 
@@ -9,15 +10,17 @@ public class DivNode implements Node {
 
 	private Node leftOperand;
 	private Node rightOperand;
+	private ParserRuleContext ctx;
 	
 	/**
 	 *
 	 * Gestisce gli operandi della Divisione.
 	 *
 	 */
-	public DivNode (Node l, Node r) {
+	public DivNode (Node l, Node r, ParserRuleContext ctx) {
 		leftOperand = l;
 		rightOperand = r;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
@@ -45,7 +48,7 @@ public class DivNode implements Node {
 		
 		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(),new IntType()) &&
 				Helpers.subtypeOf(rightOperand.typeCheck(),new IntType()) ) ) {
-			throw new Exception("Non integers in division");
+			throw new TypeCheckException("Division", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new IntType();
 	}

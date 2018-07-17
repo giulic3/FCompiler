@@ -24,7 +24,10 @@ public class PrintNode implements Node {
 		return printMsg;
 	}
 	
-	public Node typeCheck() {
+	public Node typeCheck() throws Exception {
+		for (Node n: exps)
+			n.typeCheck();
+		
 		return new VoidType();
 	}
 	

@@ -1,16 +1,21 @@
 package ast;
 
 import ast.types.BoolType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
+
 import java.util.HashSet;
 
 public class NotNode implements Node {
 	
 	private Node value;
+	private ParserRuleContext ctx;
 	
-	public NotNode(Node value) {
+	public NotNode(Node value, ParserRuleContext ctx) {
 		this.value = value;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String indent) {
@@ -26,7 +31,8 @@ public class NotNode implements Node {
 		// TODO: da controllare
 		
 		if (!Helpers.subtypeOf(value.typeCheck(), new BoolType()))
-			throw new Exception("'not' used on Non Bool type");
+			throw new TypeCheckException("Not", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		
 		return value.typeCheck();
 	}
 	

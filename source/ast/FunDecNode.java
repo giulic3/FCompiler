@@ -8,6 +8,7 @@ import utils.Environment;
 ;
 import utils.Helpers;
 import utils.SymbolTableEntry;
+import utils.TypeCheckException;
 
 public class FunDecNode implements Node {
 
@@ -136,7 +137,7 @@ public class FunDecNode implements Node {
 		}
 		// check if the type of the last stms or exp in body is subtype of the function return type
 		if (!Helpers.subtypeOf(body.get(body.size()-1).typeCheck(), ((FunType)type).getReturnType()))
-			throw new Exception("Fun Dec Node: wrong function return type");
+			throw new TypeCheckException("Function Return", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 
 		return ((FunType)type).getReturnType();
 	}

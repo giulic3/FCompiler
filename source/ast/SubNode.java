@@ -1,18 +1,23 @@
 package ast;
 
 import ast.types.IntType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
+import utils.TypeCheckException;
+
 import java.util.HashSet;
 
 public class SubNode implements Node {
 	
 	private Node leftOperand;
 	private Node rightOperand;
+	private ParserRuleContext ctx;
 	
-	public SubNode(Node l, Node r) {
+	public SubNode(Node l, Node r, ParserRuleContext ctx) {
 		leftOperand = l;
 		rightOperand = r;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String s) {
@@ -33,7 +38,7 @@ public class SubNode implements Node {
 	public Node typeCheck() throws Exception {
 		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
 				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
-			throw new Exception("Sub Node typeCheck exception");
+			throw new TypeCheckException("Sub", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return new IntType();
 	}

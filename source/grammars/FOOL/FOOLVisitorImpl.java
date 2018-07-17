@@ -98,11 +98,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return visit( ctx.left );
 		}else{
 			if (ctx.operator.getType() == FOOLLexer.EQ)
-				return new EqNode(visit(ctx.left), visit(ctx.right));
+				return new EqNode(visit(ctx.left), visit(ctx.right), ctx);
 			else if (ctx.operator.getType() == FOOLLexer.LEQ)
-				return new LeqNode(visit(ctx.left), visit(ctx.right));
+				return new LeqNode(visit(ctx.left), visit(ctx.right), ctx);
 			else
-				return new GeqNode(visit(ctx.left), visit(ctx.right));
+				return new GeqNode(visit(ctx.left), visit(ctx.right), ctx);
 		}
 		//return null;
 		
@@ -113,9 +113,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			return visit(ctx.left);
 		else {
 			if (ctx.operator.getType() == FOOLLexer.PLUS)
-				return new PlusNode(visit(ctx.left), visit(ctx.right));
+				return new PlusNode(visit(ctx.left), visit(ctx.right), ctx);
 			else
-				return new SubNode(visit(ctx.left), visit(ctx.right));
+				return new SubNode(visit(ctx.left), visit(ctx.right), ctx);
 		}
 	}
 	
@@ -128,9 +128,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		} else{
 			//it is a binary expression, you should visit left and right
 			if (ctx.operator.getType() == FOOLLexer.TIMES)
-				return new TimesNode(visit(ctx.left), visit(ctx.right));
+				return new TimesNode(visit(ctx.left), visit(ctx.right), ctx);
 			else
-				return new DivNode(visit(ctx.left), visit(ctx.right));
+				return new DivNode(visit(ctx.left), visit(ctx.right), ctx);
 
 		}
 
@@ -145,9 +145,9 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		}
 		else {
 			if (ctx.operator.getType() == FOOLLexer.AND)
-				return new AndNode(visit(ctx.left), visit(ctx.right));
+				return new AndNode(visit(ctx.left), visit(ctx.right), ctx);
 			else
-				return new OrNode(visit(ctx.left), visit(ctx.right));
+				return new OrNode(visit(ctx.left), visit(ctx.right), ctx);
 		}
 	}
 	
@@ -156,11 +156,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//notice here the necessity of having named elements in the grammar
 		
 		if ((ctx.NOT() != null) && (ctx.MINUS() != null))
-			return new NotNode(new MinusNode(visit(ctx.val)));
+			return new NotNode(new MinusNode(visit(ctx.val), ctx), ctx);
 		else if (ctx.NOT() != null)
-			return new NotNode(visit(ctx.val));
+			return new NotNode(visit(ctx.val), ctx);
 		else if (ctx.MINUS() != null)
-			return new MinusNode(visit(ctx.val));
+			return new MinusNode(visit(ctx.val), ctx);
 		else
 			return visit(ctx.val);
 	}
@@ -178,7 +178,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 	
 	public Node visitIfExp(FOOLParser.IfExpContext ctx){
 		
-		return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch));
+		return new IfNode(visit(ctx.cond), visit(ctx.thenBranch), visit(ctx.elseBranch), ctx);
 	}
 	
 	public Node visitBoolVal(BoolValContext ctx){
@@ -257,11 +257,11 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		Node expNode = visit(ctx.exp());
 		
 		if (ctx.DOT() == null)
-			return new AssignmentNode(idVariableNode, expNode, false);
+			return new AssignmentNode(idVariableNode, expNode, false, ctx);
 		
 		IdNode fieldNode = new IdNode(ctx.fieldName.getText(), ctx);
 		ClassFieldNode objectFieldNode = new ClassFieldNode(idVariableNode, fieldNode, false, ctx);
-		return new AssignmentNode(objectFieldNode, expNode, true);
+		return new AssignmentNode(objectFieldNode, expNode, true, ctx);
 	}
 	
 	public Node visitVar(VarContext ctx) {
@@ -329,13 +329,13 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 			thenStms.add(visit(stm));
 
 		if (ctx.elseBranch == null)
-			return new IfNode(visit(ctx.cond), thenStms);
+			return new IfNode(visit(ctx.cond), thenStms, ctx);
 		else {
 			ArrayList<Node> elseStms = new ArrayList<>();
 			for (StmContext stm: ctx.elseBranch.stm())
 				elseStms.add(visit(stm));
 			
-			return new IfNode(visit(ctx.cond), thenStms, elseStms);
+			return new IfNode(visit(ctx.cond), thenStms, elseStms, ctx);
 		}
 	}
 	

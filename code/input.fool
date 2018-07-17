@@ -48,13 +48,13 @@ let
 in
     print(x, -x);
 */
-/*
+
 let
     bool e1 = true;
-    bool e2 = true;
+    bool e2 = false;
 in
     print(e1 && e2);
-*/
+
 /*
 let
     bool e1 = false;
@@ -62,12 +62,12 @@ let
 in
     print(e1 || e2);
 */
-
+/*
 let
     bool e1 = false;
 in
     print(not e1);
-
+*/
 /*
 let
     bool x = true;
@@ -75,9 +75,10 @@ let
 in
     print(z);
 */
-
+/*
 let
     bool x = not false;
     int z = if (not x || false) then { x * 3 } else { 4 + x };
 in
     print(z);
+*/

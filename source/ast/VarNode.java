@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
+import utils.TypeCheckException;
 
 public class VarNode implements Node {
 	private ParserRuleContext ctx;
@@ -98,7 +99,7 @@ public class VarNode implements Node {
 	public Node typeCheck() throws Exception {
 		if(exp!=null) {
 			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
-				throw new Exception("Var Node typeCheck exception");
+				throw new TypeCheckException("Var", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
 		

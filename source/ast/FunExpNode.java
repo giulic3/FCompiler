@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
+import utils.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -71,7 +72,7 @@ public class FunExpNode implements Node {
 		
 		for(int i=0; i<parlisttype.size(); i++) {
 			if(!Helpers.subtypeOf(args.get(i).typeCheck(), parlisttype.get(i)))
-				throw new Exception("wrong argument type: " + args.get(i).toPrint(""));
+				throw new TypeCheckException("Fun Call (par: " + args.get(i).toPrint(""), ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		return funType.getReturnType();
 	}
