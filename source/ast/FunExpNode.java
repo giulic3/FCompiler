@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.ClassType;
 import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -20,12 +21,18 @@ public class FunExpNode implements Node {
 	protected int callNestingLevel;
 	protected boolean isExp;
 	protected ParserRuleContext ctx;
+	protected String classID=null;
+	
 	
 	public FunExpNode(String ID, ArrayList<Node> args, boolean isExp, ParserRuleContext ctx){
 		this.ctx=ctx;
 		this.id = ID;
 		this.args=args;
 		this.isExp = isExp;
+	}
+	
+	public void setClassID(String classID){
+		this.classID=classID;
 	}
 	
 	
@@ -46,21 +53,47 @@ public class FunExpNode implements Node {
 	public HashSet<String> checkSemantics(Environment env) {
 		HashSet<String> res = new HashSet<String>();
 		
-		SymbolTableEntry entry = env.getActiveDec("Function$" + id);
+		ArrayList<Node> methods = new ArrayList<>();
 		
-		if (entry==null)
-			res.add("Fun "+id+" not declared at line: "+ctx.start.getLine()+":"+ctx.start.getCharPositionInLine()+"\n");
-		else{
-			this.entry = entry;
-			this.callNestingLevel = env.getNestingLevel();
+		if(classID != null){
+			SymbolTableEntry classEntry = env.getClassEntry(classID);
+			ClassType  classType= (ClassType) classEntry.getType() ;
+			methods = classType.getMethodsList(true);
+			Node found = null;
 			
-			for(Node arg : args)
-				res.addAll(arg.checkSemantics(env));
+			for(Node m : methods){
+				if(m.getID().equals(id)) found=m;
+			}
 			
-			FunType funType = (FunType) this.entry.getType();
-			if (funType.getParList().size() != args.size())
-				res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
+			if (found != null) {
+				this.entry = ((MethodDecNode) found).getSTEntry();
+				
+				FunType funType = (FunType) this.entry.getType();
+				if (funType.getParList().size() != args.size())
+					res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
+							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
+			else {
+				res.add("Method " + this.id + " not declared at line "
 						+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
+		}
+		else {
+			SymbolTableEntry entry = env.getActiveDec("Function$" + id);
+			if (entry == null)
+				res.add("Fun " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else {
+				this.entry = entry;
+				this.callNestingLevel = env.getNestingLevel();
+				
+				for (Node arg : args)
+					res.addAll(arg.checkSemantics(env));
+				
+				FunType funType = (FunType) this.entry.getType();
+				if (funType.getParList().size() != args.size())
+					res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
+							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
 		}
 		return res;
 	}

@@ -88,7 +88,7 @@ class A {
 };
 
 class B extends A {
-    void f() print(2);
+    void f() m();
 };
 
 class C {
@@ -98,5 +98,5 @@ class C {
 let
     A a = new B();
 in
-    a = new C();
-    print(a);
+    //a = new C();
+    print(a.f());

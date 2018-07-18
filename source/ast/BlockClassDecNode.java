@@ -135,23 +135,24 @@ public class BlockClassDecNode implements Node {
 		
 		HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
 		ArrayList<Node> parTypes = new ArrayList<>();
-		int parOffset=1;
+		//int parOffset=1;
+		env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
 		
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
 			res.addAll(field.checkSemantics(env));
 		}
 		
+		//env.setOffset(-2);
 		for (Node dec : methods) {
-			env.setOffset(env.getOffset()-2);
 			tmp.addAll(dec.checkSemantics(env));
 		}
 		
 		env.settingFunSecondCheck(true);
 		
 		//if(tmp.size()>0) {
+		//env.setOffset(-2);
 		for (Node dec : methods) {
-			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));
 		}
 		//}

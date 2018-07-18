@@ -102,6 +102,8 @@ public class MethodDecNode extends FunDecNode {
 		}
 		
 		for (Node b : body){
+			if(b instanceof FunExpNode)
+				((FunExpNode)b).setClassID(classID);
 			res.addAll(b.checkSemantics(env));
 		}
 		
