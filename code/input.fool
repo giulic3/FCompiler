@@ -47,7 +47,7 @@ let
     int x = -4;
 in
     print(x, -x);
-*/
+
 
 let
     bool e1 = true;
@@ -55,7 +55,7 @@ let
 in
     print(e1 && e2);
 
-/*
+
 let
     bool e1 = false;
     bool e2 = false;
@@ -82,3 +82,21 @@ let
 in
     print(z);
 */
+
+class A {
+    void m() print(1);
+};
+
+class B extends A {
+    void f() print(2);
+};
+
+class C {
+    int f() return 1;
+};
+
+let
+    A a = new B();
+in
+    a = new C();
+    print(a);

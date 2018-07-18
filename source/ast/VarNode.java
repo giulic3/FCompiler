@@ -75,7 +75,9 @@ public class VarNode implements Node {
 		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), env.decrementOffset(), type); //separo introducendo "entry"
+		int FieldOrVarOffset = (classID!=null) ? env.increaseOffset() : env.decrementOffset();
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), FieldOrVarOffset, type); //separo introducendo "entry"
+		entry.setStaticType(type);
 		
 		String ID = id;
 		if(this.classID != null){

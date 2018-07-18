@@ -9,6 +9,7 @@ public class SymbolTableEntry {
 	private int offset;
 	private Node type;
 	private String className = null;
+	private Node staticType = null;
 	
 	public SymbolTableEntry(int level, int offset, Node t) {
 		this.nestingLevel = level;
@@ -28,16 +29,24 @@ public class SymbolTableEntry {
 		return type;
 	}
 	
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-	
 	public void setType(Node type) {
 		this.type = type;
 	}
 	
+	public Node getStaticType() {
+		return staticType;
+	}
+	
+	public void setStaticType(Node type) {
+		this.staticType = type;
+	}
+	
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+	
 	public String toPrint(String s) {
-		return s + "Associated STEntry = { type: " + type.toPrint("") + ", nesting level: " + nestingLevel + ", offset: " + offset + " }";
+		return s + "Associated STEntry = { type: " + type.toPrint("") + (staticType != null ? ", static type: " + staticType.toPrint("") : "") + ", nesting level: " + nestingLevel + ", offset: " + offset + " }";
 	}
 	
 	public String toString() {

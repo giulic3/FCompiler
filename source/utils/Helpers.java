@@ -12,7 +12,9 @@ public class Helpers {
 	private static int funLabelCount = 0;
 	private static String funcAssembly = "";
 	
-	
+	/*
+		A <: B!!!!!
+	 */
 	public static boolean subtypeOf(Node a, Node b) {
 		
 		if ((a instanceof BoolType) && (b instanceof IntType)) {
@@ -22,6 +24,8 @@ public class Helpers {
 		} else if ((a instanceof VoidType) && (b instanceof VoidType)) {
 			return true;
 		} else if ((a instanceof BoolType) && (b instanceof BoolType)) {
+			return true;
+		} else if ((a instanceof NullType) && (b instanceof ClassType)) {
 			return true;
 		}
 		else if ((a instanceof ClassType) && (b instanceof ClassType)) {

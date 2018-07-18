@@ -1,5 +1,6 @@
 package ast;
 
+import ast.types.ClassType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -71,8 +72,19 @@ public class AssignmentNode implements Node {
 	public Node typeCheck() throws Exception{
 		
 		if(idVariableNode!=null) {
-			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck())) {
+			IdNode var = (IdNode)idVariableNode;
+			SymbolTableEntry entry = var.getSTEntry();
+			
+			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck()) || !Helpers.subtypeOf(exp.typeCheck(), entry.getStaticType())) {
 				throw new TypeCheckException("Assignment", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+			}
+			else {
+				if (idVariableNode.typeCheck() instanceof ClassType) {
+					entry.setType(exp.typeCheck());
+					var.setSTEntry(entry);
+					
+					System.out.println(((IdNode)idVariableNode).getSTEntry());
+				}
 			}
 		}
 		else{
