@@ -83,6 +83,10 @@ public class BlockLetInStmsNode implements Node {
 			}
 		}
 		
+		res.removeAll(tmp);
+		
+		res.addAll(fin);
+		
 		env.popScope();
 		
 		return res;

@@ -51,7 +51,7 @@ public class NewExpNode implements Node {
 	public String codeGeneration() {
 		ClassType classContent = (ClassType) entry.getType();
 		ArrayList<Node> fields = classContent.getFieldsList(true);
-		int i=fields.size();
+		int i=fields.size()-1;
 		StringBuilder argsCode = new StringBuilder();
 		while(i>=0){
 			argsCode.append(fields.get(i).codeGeneration());
