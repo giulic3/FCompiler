@@ -1,8 +1,12 @@
 package ast;
 
+import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class NewExpNode implements Node {
@@ -45,8 +49,18 @@ public class NewExpNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		ClassType classContent = (ClassType) entry.getType();
+		ArrayList<Node> fields = classContent.getFieldsList(true);
+		int i=fields.size();
+		StringBuilder argsCode = new StringBuilder();
+		while(i>=0){
+			argsCode.append(fields.get(i).codeGeneration());
+			i--;
+		}
+		return "push " +
+				fields.size() +
+				Helpers.getDispatchTableLabelForClass(id) +
+				"new\n";
 	}
 	
 	// Method to retrieve string identifier of an object
