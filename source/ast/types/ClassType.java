@@ -88,15 +88,15 @@ public class ClassType implements Node {
 		return classList;
 	}
 	
-	public ArrayList<Node> getMethodsList(boolean incInherited) {
+	public ArrayList<Node> getMethodsList(boolean incInherited, boolean excludeCurrent) {
 		// TODO: risalire la gerarchia delle classi per includere anche i metodi ereditati se incInherited = true (da verificare)
 		ArrayList<Node> methodsList = new ArrayList<>();
 		
 		if (incInherited && superType != null) {
-			ArrayList<Node> superMethodsList = superType.getMethodsList(true);
+			ArrayList<Node> superMethodsList = superType.getMethodsList(true, false);
 			methodsList.addAll(superMethodsList);
 		}
-		methodsList.addAll(methods);
+		if (!excludeCurrent) methodsList.addAll(methods);
 		
 		return methodsList;
 	}

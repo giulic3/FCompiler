@@ -49,7 +49,7 @@ public class Environment {
 		this.symTable = symTable;
 	}
 	
-	public int decrementOffset() {
+	public int decreaseOffset() {
 		return offset--;
 	}
 	

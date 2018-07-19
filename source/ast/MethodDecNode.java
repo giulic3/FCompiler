@@ -2,6 +2,7 @@ package ast;
 
 import ast.types.ClassType;
 import ast.types.FunType;
+import ast.types.VoidType;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
@@ -51,8 +52,8 @@ public class MethodDecNode extends FunDecNode {
 		HashSet<String> res = new HashSet<String>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		env.setOffset(env.getOffset()-1);
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.getOffset(),type); //separo introducendo "entry"
+		//env.setOffset(env.getOffset()-1);
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.increaseOffset(),type); //separo introducendo "entry"
 		entry.setClassName(classID);
 		
 		String methodID = "Class$" + classID +"$m$"+ name;
@@ -61,7 +62,7 @@ public class MethodDecNode extends FunDecNode {
 		SymbolTableEntry classEntry = env.getClassEntry(this.classID);
 		if (classEntry != null) {
 			ClassType classNode = (ClassType)classEntry.getType();
-			inheritedMethods = classNode.getMethodsList(true);
+			inheritedMethods = classNode.getMethodsList(true, true);
 			
 			for (Node m:inheritedMethods) {
 				MethodDecNode method = (MethodDecNode)m;
@@ -71,9 +72,10 @@ public class MethodDecNode extends FunDecNode {
 					if (method.parList.size() != this.parList.size())
 						res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-					else // current method is overriding a superclass method, so we set the offset of the superclass
+					else { // current method is overriding a superclass method, so we set the offset of the superclass
 						entry.setOffset(method.getSTEntry().getOffset());
-
+						env.decreaseOffset();
+					}
 				}
 			}
 		}
@@ -140,7 +142,44 @@ public class MethodDecNode extends FunDecNode {
 	}
 	
 	public String codeGeneration() {
-		return "";
+		String decAssembly = "";
+		String decPopAssembly = "";
+		String parPopAssembly = "";
+		String bodyAssembly = "";
+		String funLabel = Helpers.getDispatchTable(classID).get(funEntry.getOffset());
+		
+		FunType funcType = (FunType)type;
+		String storeRetVal = funcType.getReturnType() instanceof VoidType ? "" : "srv\n";
+		String loadRetVal = funcType.getReturnType() instanceof VoidType ? "" : "lrv\n";
+		
+		for (Node dec: decList) {
+			decAssembly += dec.codeGeneration();
+			decPopAssembly += "pop\n";
+		}
+		
+		for (Node par: parList)
+			parPopAssembly += "pop\n";
+		
+		for (Node n: body)
+			bodyAssembly += n.codeGeneration();
+		
+		String funcCode = funLabel + ":\n" +
+				"cfp\n" +
+				"lra\n" +
+				decAssembly +
+				bodyAssembly +
+				storeRetVal +
+				decPopAssembly +
+				"sra\n" +
+				"pop\n" +
+				parPopAssembly +
+				"sfp\n" +
+				loadRetVal +
+				"lra\n" +
+				"js\n";
+		Helpers.appendFuncAssembly(funcCode);
+		
+		return funLabel + "\n";
 	}
 	
 	public String getID() {

@@ -58,7 +58,7 @@ public class FunExpNode implements Node {
 		if(classID != null){
 			SymbolTableEntry classEntry = env.getClassEntry(classID);
 			ClassType  classType= (ClassType) classEntry.getType() ;
-			methods = classType.getMethodsList(true);
+			methods = classType.getMethodsList(true, false);
 			Node found = null;
 			
 			for(Node m : methods){

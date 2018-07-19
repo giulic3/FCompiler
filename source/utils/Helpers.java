@@ -3,14 +3,14 @@ package utils;
 import ast.Node;
 import ast.types.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Helpers {
 	
 	private static int labelCount = 0;
 	private static int funLabelCount = 0;
 	private static String funcAssembly = "";
+	private static HashMap<String, ArrayList<String>> dispatchTables = new HashMap<>();
 	
 	/*
 		A <: B!!!!!
@@ -61,5 +61,17 @@ public class Helpers {
 		for (int i = 0; i < callNestingLevel - decNestingLevel; i++)
 			code += "lw\n";
 		return code;
+	}
+	
+	public static String getDispatchTableLabelForClass(String classID) {
+		return "DT$Class$" + classID;
+	}
+	
+	public static ArrayList<String> getDispatchTable(String classID) {
+		return dispatchTables.get(classID);
+	}
+	
+	public static void addDispatchTable(String classID, ArrayList<String> dt) {
+		dispatchTables.put(classID, dt);
 	}
 }

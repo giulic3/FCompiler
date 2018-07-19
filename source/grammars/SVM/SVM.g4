@@ -23,7 +23,7 @@ static HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
 assembly: ( simpleCmd )* ;
 
 simpleCmd: ( composedCmd | POP | ADD | SUB | MULT | DIV | STOREW | LOADW | JS | LOADRA | STORERA
-            | LOADRV | STORERV | LOADFP | STOREFP | COPYFP | LOADHP | STOREHP | PRINT | HALT ) ;
+            | LOADRV | STORERV | LOADFP | STOREFP | COPYFP | LOADHP | STOREHP | PRINT | HALT | NEW ) ;
 
 composedCmd: ( PUSH num=NUMBER | PUSH label=LABEL | label=LABEL COL
             | BRANCH label=LABEL | BRANCHEQ label=LABEL | BRANCHLESSEQ label=LABEL ) ;
@@ -55,7 +55,7 @@ LOADHP	 : 'lhp' ;	// load heap pointer in the stack
 STOREHP	 : 'shp' ;	// store top into heap pointer
 PRINT	 : 'print' ;	// print top of stack
 HALT	 : 'halt' ;	// stop execution
-
+NEW      : 'new'; // alloc heap memory
 COL	 : ':' ;
 LABEL	 : ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;

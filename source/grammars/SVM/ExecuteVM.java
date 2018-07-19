@@ -1,5 +1,7 @@
 package grammars.SVM;
 
+import java.util.ArrayList;
+
 public class ExecuteVM {
 	
 	public static final int CODESIZE = 10000;
@@ -112,6 +114,14 @@ public class ExecuteVM {
 					break;
 				case SVMParser.HALT :
 					return;
+				case SVMParser.NEW:
+					int dispTB = pop();
+					int nargs = pop();
+					for(int i=0; i < nargs; i++){
+						pushHeap(pop());
+					}
+					pushHeap(dispTB);
+					break;
 			}
 		}
 	}
@@ -122,6 +132,10 @@ public class ExecuteVM {
 	
 	private void push(int v) {
 		memory[--sp] = v;
+	}
+	
+	private void pushHeap(int v){
+		memory[hp++] = v;
 	}
 	
 }
