@@ -67,9 +67,13 @@ public class MethodDecNode extends FunDecNode {
 				MethodDecNode method = (MethodDecNode)m;
 				// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
 				if (method.getID().equals(this.name)) {
+
 					if (method.parList.size() != this.parList.size())
 						res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+					else // current method is overriding a superclass method, so we set the offset of the superclass
+						entry.setOffset(method.getSTEntry().getOffset());
+
 				}
 			}
 		}
