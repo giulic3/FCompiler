@@ -64,7 +64,7 @@ public class Helpers {
 	}
 	
 	public static String getDispatchTableLabelForClass(String classID) {
-		return "DT$Class$" + classID;
+		return "DTClass" + classID;
 	}
 	
 	public static ArrayList<String> getDispatchTable(String classID) {
@@ -72,6 +72,19 @@ public class Helpers {
 	}
 	
 	public static void addDispatchTable(String classID, ArrayList<String> dt) {
-		dispatchTables.put(classID, dt);
+		dispatchTables.put(getDispatchTableLabelForClass(classID), dt);
+	}
+	
+	public static String generateDispatchTablesCode() {
+		String code = "";
+		
+		for (Map.Entry<String, ArrayList<String>> dt : dispatchTables.entrySet()) {
+			code += dt.getKey() + ":\n";
+			for (String metLabel: dt.getValue()) {
+				code += metLabel + "\n";
+			}
+		}
+		
+		return code;
 	}
 }

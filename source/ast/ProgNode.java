@@ -76,7 +76,7 @@ public class ProgNode  implements Node {
 		String res="";
 		for(Node b:blocks)
 			res += b.codeGeneration();
-		return res +"halt\n" + Helpers.getFuncAssembly();
+		return res +"halt\n" + Helpers.getFuncAssembly() + "\n";// + Helpers.generateDispatchTablesCode();
 	}
 	
 	// Method to retrieve string identifier of an object

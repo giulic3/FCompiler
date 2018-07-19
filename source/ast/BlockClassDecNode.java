@@ -137,8 +137,8 @@ public class BlockClassDecNode implements Node {
 		
 		HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
 		ArrayList<Node> parTypes = new ArrayList<>();
-
-		env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
+		//int parOffset=1;
+		env.setOffset(classType.getFieldsList(true).size() - fields.size());
 		
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
@@ -200,7 +200,7 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String codeGeneration(){
-		ArrayList<Node> methodsList = type.getMethodsList(true, false);
+		/*ArrayList<Node> methodsList = type.getMethodsList(true, false);
 		ArrayList<String> dt = new ArrayList<>();
 		
 		for (Node m: methodsList) {
@@ -210,7 +210,7 @@ public class BlockClassDecNode implements Node {
 			dt.add(offset, Helpers.newFuncLabel());
 		}
 		
-		Helpers.addDispatchTable(id, dt);
+		Helpers.addDispatchTable(id, dt);*/
 		
 		return "";
 	}

@@ -57,9 +57,12 @@ public class NewExpNode implements Node {
 			argsCode.append(fields.get(i).codeGeneration());
 			i--;
 		}
-		return "push " +
-				fields.size() +
-				Helpers.getDispatchTableLabelForClass(id) +
+		
+		//for (Node a: fields)
+		//	argsCode.append(a.codeGeneration());
+		
+		return argsCode + "push " + fields.size() + "\n" +
+				//"push " + Helpers.getDispatchTableLabelForClass(id) + "\n" +
 				"new\n";
 	}
 	

@@ -1,8 +1,10 @@
 package ast;
 
 import ast.types.ClassType;
+import com.sun.tools.corba.se.idl.toJavaPortable.Helper;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -85,7 +87,19 @@ public class ClassFieldNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		return null;
+		SymbolTableEntry fieldEntry = ((IdNode)id).getSTEntry();
+		
+		// gli offset dei campi partono da 0
+		return  obj.codeGeneration() +
+				"push " + fieldEntry.getOffset() + "\n" +
+				"add\n" +
+				"lw\n";
+				//"push 0\n" +//"lhp\n" +
+				//Helpers.getActivationRecordCode(callNestingLevel, fieldEntry.getNestingLevel()) +
+				//"add\n" +
+				//"push " + fieldEntry.getOffset() + "\n" +
+				//"add\n" +//"sub\n" +
+				//"lw\n";
 	}
 	
 	// Method to retrieve string identifier of an object
