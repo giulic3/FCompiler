@@ -122,7 +122,7 @@ in
     f()
     print(x);
 */
-
+/*
 class A (int x = 0, int y = 1) {
     void f() print(x, y);
 };
@@ -147,7 +147,7 @@ in
     b.g()
     c.f()
     d.i();
-
+*/
 /*
 class A {
     void f() print(2);
@@ -161,3 +161,13 @@ let
 in
     b.f();
 */
+
+class A (int x = 20, bool cond = true, int y = 50) {
+    void f() print(x);
+};
+let
+    A a = new A();
+    A b = new A();
+in
+   // print(a.y, a.cond, a.y)
+    print(a.x, a.cond, a.y, b.x, b.cond, b.y);

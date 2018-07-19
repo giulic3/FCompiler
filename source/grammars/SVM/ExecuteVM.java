@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class ExecuteVM {
 	
 	public static final int CODESIZE = 10000;
-	public static final int MEMSIZE = 10000;
+	public static final int MEMSIZE = 15;
 	
 	private int[] code;
 	private int[] memory = new int[MEMSIZE];
@@ -115,12 +115,15 @@ public class ExecuteVM {
 				case SVMParser.HALT :
 					return;
 				case SVMParser.NEW:
-					int dispTB = pop();
+					// mi prendo l'heap pointer attuale per sapere dove inizia il nuovo oggetto
+					int startPointer = hp;
+					//int dispTB = pop();
 					int nargs = pop();
 					for(int i=0; i < nargs; i++){
 						pushHeap(pop());
 					}
-					pushHeap(dispTB);
+					//pushHeap(dispTB);
+					push(startPointer);
 					break;
 			}
 		}

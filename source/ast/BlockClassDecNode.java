@@ -2,7 +2,6 @@ package ast;
 
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
@@ -139,7 +138,7 @@ public class BlockClassDecNode implements Node {
 		HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
 		ArrayList<Node> parTypes = new ArrayList<>();
 		//int parOffset=1;
-		env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
+		env.setOffset(classType.getFieldsList(true).size() - fields.size());
 		
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
@@ -160,21 +159,26 @@ public class BlockClassDecNode implements Node {
 		
 		env.settingFunSecondCheck(true);
 		
-		//if(tmp.size()>0) {
 		env.setOffset(methodBaseOffset);
 		for (Node dec : methods) {
 			res.addAll(dec.checkSemantics(env));
 		}
-		//}
 		
-		res.addAll(tmp);
+		HashSet<String> fin = new HashSet<>();
+		
+		for(String s : res){
+			if (tmp.contains(s)){
+				fin.add(s);
+			}
+		}
+		
+		res.removeAll(tmp);
+		
+		res.addAll(fin);
 		
 		env.settingFunSecondCheck(false);
 		
-		//env.updateClassEntry(classType);
-		
 		env.popScope();
-		//	}
 		
 		return res;
 	}
@@ -185,21 +189,6 @@ public class BlockClassDecNode implements Node {
 	 *
 	 * */
 	public Node typeCheck() throws Exception{
-		/*
-		
-			1 - controllare che la classe ne estenda un'altra superClassID!=null
-			2 - per ogni metodo della classe devo controllare, nel caso in cui lo sovrascriva,
-				che il tipo dell'ultimo metodo sia sottotipo di quello di cui fa overriding.
-			3 - I parametri del nuovo metodo siano TUTTI sopratipo di quelli del metodo di cui si fa overriding.
-		    
-		    
-		    N.B. il controllo sull'overriding di metodo è implementato nel nodo del metodo.
-		 */
-		/*if(superClassID!=null){
-			if(!Helpers.subtypeOf(type, type.getSuperType())){
-				throw new Exception("class: " + id + " is not subtype of class: " + superClassID);
-			} //questo controllo dovrebbe essere superfluo.
-		}*/
 		
 		for(Node f : fields){
 			f.typeCheck();
@@ -211,17 +200,17 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String codeGeneration(){
-		ArrayList<Node> methodsList = type.getMethodsList(true, false);
+		/*ArrayList<Node> methodsList = type.getMethodsList(true, false);
 		ArrayList<String> dt = new ArrayList<>();
 		
 		for (Node m: methodsList) {
 			MethodDecNode method = (MethodDecNode)m;
 			SymbolTableEntry entry = method.getSTEntry();
 			int offset = entry.getOffset();
-			dt.set(offset, Helpers.newFuncLabel());
+			dt.add(offset, Helpers.newFuncLabel());
 		}
 		
-		Helpers.addDispatchTable(id, dt);
+		Helpers.addDispatchTable(id, dt);*/
 		
 		return "";
 	}

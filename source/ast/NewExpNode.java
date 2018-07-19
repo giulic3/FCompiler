@@ -51,15 +51,18 @@ public class NewExpNode implements Node {
 	public String codeGeneration() {
 		ClassType classContent = (ClassType) entry.getType();
 		ArrayList<Node> fields = classContent.getFieldsList(true);
-		int i=fields.size();
+		int i=fields.size()-1;
 		StringBuilder argsCode = new StringBuilder();
 		while(i>=0){
 			argsCode.append(fields.get(i).codeGeneration());
 			i--;
 		}
-		return "push " +
-				fields.size() +
-				Helpers.getDispatchTableLabelForClass(id) +
+		
+		//for (Node a: fields)
+		//	argsCode.append(a.codeGeneration());
+		
+		return argsCode + "push " + fields.size() + "\n" +
+				//"push " + Helpers.getDispatchTableLabelForClass(id) + "\n" +
 				"new\n";
 	}
 	
