@@ -2,16 +2,19 @@ package ast;
 
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
+import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class BlockClassDecNode implements Node {
 	
 	private String id;
-	private String ext;
+	private String superClassID;
 	private ArrayList<Node> fields;
 	private ArrayList<Node> methods;
 	private ParserRuleContext ctx;
@@ -22,9 +25,9 @@ public class BlockClassDecNode implements Node {
 	 * Nodo per la gestione della <strong>Dichiarazione</strong> di una classe.
 	 *
 	 * */
-	public BlockClassDecNode(String id, String ext, ArrayList<Node> fields, ArrayList<Node> methods, ParserRuleContext ctx) {
+	public BlockClassDecNode(String id, String superClassID, ArrayList<Node> fields, ArrayList<Node> methods, ParserRuleContext ctx) {
 		this.id=id;
-		this.ext=ext;
+		this.superClassID = superClassID;
 		this.fields=fields;
 		this.methods=methods;
 		this.ctx=ctx;
@@ -32,8 +35,8 @@ public class BlockClassDecNode implements Node {
 	
 	public String toPrint(String s){
 		String msg = "\n"+s+"Class Dec Node: " + this.id;
-		if(ext!=null){
-			msg+=" extends " + ext;
+		if(superClassID !=null){
+			msg+=" extends " + superClassID;
 		}
 		msg+=" {";
 		if(fields!=null) {
@@ -95,7 +98,7 @@ public class BlockClassDecNode implements Node {
 		
 		this.type = classType;
 		
-		SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.getOffset(), classType);
+		SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.increaseOffset(), classType);
 		
 		if (classDecHM.put("Class$"+id, classEntry) != null)
 			res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
@@ -106,12 +109,12 @@ public class BlockClassDecNode implements Node {
 		// Handling superclass declaration
 		// TODO: check null!
 		
-		if (ext != null) {
-			SymbolTableEntry superclassEntry = env.getClassEntry(ext);
+		if (superClassID != null) {
+			SymbolTableEntry superclassEntry = env.getClassEntry(superClassID);
 			if (superclassEntry == null)
-				res.add("Superclass '" + ext + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				res.add("Superclass '" + superClassID + "' not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			else {
-				if (ext.equals(id))
+				if (superClassID.equals(id))
 					res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {
 					//ClassType classType = (ClassType)env.getClassEntry(id).getType();
@@ -143,7 +146,14 @@ public class BlockClassDecNode implements Node {
 			res.addAll(field.checkSemantics(env));
 		}
 		
-		//env.setOffset(-2);
+		ArrayList<Node> inheritedMethods = classType.getMethodsList(true, true);
+		Set<String> uniqueIDs = new HashSet<>();
+		for (Node method: inheritedMethods)
+			if (!uniqueIDs.contains(method.getID())) uniqueIDs.add(method.getID());
+		
+		int methodBaseOffset = uniqueIDs.size();
+		
+		env.setOffset(methodBaseOffset);
 		for (Node dec : methods) {
 			tmp.addAll(dec.checkSemantics(env));
 		}
@@ -151,7 +161,7 @@ public class BlockClassDecNode implements Node {
 		env.settingFunSecondCheck(true);
 		
 		//if(tmp.size()>0) {
-		//env.setOffset(-2);
+		env.setOffset(methodBaseOffset);
 		for (Node dec : methods) {
 			res.addAll(dec.checkSemantics(env));
 		}
@@ -177,7 +187,7 @@ public class BlockClassDecNode implements Node {
 	public Node typeCheck() throws Exception{
 		/*
 		
-			1 - controllare che la classe ne estenda un'altra ext!=null
+			1 - controllare che la classe ne estenda un'altra superClassID!=null
 			2 - per ogni metodo della classe devo controllare, nel caso in cui lo sovrascriva,
 				che il tipo dell'ultimo metodo sia sottotipo di quello di cui fa overriding.
 			3 - I parametri del nuovo metodo siano TUTTI sopratipo di quelli del metodo di cui si fa overriding.
@@ -185,9 +195,9 @@ public class BlockClassDecNode implements Node {
 		    
 		    N.B. il controllo sull'overriding di metodo è implementato nel nodo del metodo.
 		 */
-		/*if(ext!=null){
+		/*if(superClassID!=null){
 			if(!Helpers.subtypeOf(type, type.getSuperType())){
-				throw new Exception("class: " + id + " is not subtype of class: " + ext);
+				throw new Exception("class: " + id + " is not subtype of class: " + superClassID);
 			} //questo controllo dovrebbe essere superfluo.
 		}*/
 		
@@ -201,7 +211,19 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String codeGeneration(){
-		return null;
+		ArrayList<Node> methodsList = type.getMethodsList(true, false);
+		ArrayList<String> dt = new ArrayList<>();
+		
+		for (Node m: methodsList) {
+			MethodDecNode method = (MethodDecNode)m;
+			SymbolTableEntry entry = method.getSTEntry();
+			int offset = entry.getOffset();
+			dt.set(offset, Helpers.newFuncLabel());
+		}
+		
+		Helpers.addDispatchTable(id, dt);
+		
+		return "";
 	}
 	
 	public String getID() {
@@ -209,7 +231,7 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String getSuperclassID() {
-		return ext;
+		return superClassID;
 	}
 }
 

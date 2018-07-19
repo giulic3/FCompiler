@@ -3,6 +3,7 @@ package ast;
 import ast.types.ClassType;
 import ast.types.FunType;
 import utils.Environment;
+import utils.Helpers;
 import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,14 +51,20 @@ public class ClassMethodNode extends FunExpNode {
 		if (objEntry.getType() instanceof ClassType) {
 			ClassType classDef = (ClassType)objEntry.getType();
 			
-			ArrayList<Node> methods = classDef.getMethodsList(true);
+			ArrayList<Node> methods = classDef.getMethodsList(true, false);
 			
-			int i = 0;
+			/*
+				Il ciclo deve partire dalla fine perchè, se il metodo che stiamo cercando ha fatto overriding,
+				ci interessa trovare quello della sottoclasse e non quello della superclasse (altrimenti avrebbe
+				restituito il primo che trovava). Ciò serve per ottenere la corretta symbol table entry per
+				prendere il giusto offset da usare nella dispatch table.
+			 */
+			int i = methods.size()-1;
 			FunDecNode foundMethod = null;
-			while (foundMethod == null && i<methods.size()) {
+			while (foundMethod == null && i>=0) {
 				FunDecNode m = (FunDecNode)methods.get(i);
 				if (m.getID().equals(funNode.getID())) foundMethod = m;
-				i++;
+				i--;
 			}
 			
 			if (foundMethod == null) {
@@ -95,8 +102,20 @@ public class ClassMethodNode extends FunExpNode {
 	 *
 	 * */
 	public String codeGeneration() {
-		// TODO: da implementare
-		return null;
+		String parAssembly = "";
+		for (int i = args.size()-1; i >= 0; i--)
+			parAssembly += args.get(i).codeGeneration();
+		
+		return  "lfp\n" +
+				parAssembly +
+				"lfp\n" +
+				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				"push " + entry.getOffset() + "\n" +
+				"lfp\n" +
+				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				"add\n" +
+				"lw\n" +
+				"js\n";
 	}
 	
 	// Method to retrieve string identifier of an object

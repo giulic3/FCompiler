@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import ast.types.FunType;
+import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
@@ -45,7 +46,7 @@ public class FunDecNode implements Node {
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		//env.setOffset(env.getOffset()-1);
 		
-		int offset = env.decrementOffset();
+		int offset = env.decreaseOffset();
 		
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), offset, type); //separo introducendo "entry"
 		
@@ -149,6 +150,10 @@ public class FunDecNode implements Node {
 		String bodyAssembly = "";
 		String funLabel = Helpers.newFuncLabel();
 		
+		FunType funcType = (FunType)type;
+		String storeRetVal = funcType.getReturnType() instanceof VoidType ? "" : "srv\n";
+		String loadRetVal = funcType.getReturnType() instanceof VoidType ? "" : "lrv\n";
+		
 		for (Node dec: decList) {
 			decAssembly += dec.codeGeneration();
 			decPopAssembly += "pop\n";
@@ -165,13 +170,13 @@ public class FunDecNode implements Node {
 				"lra\n" +
 				decAssembly +
 				bodyAssembly +
-				"srv\n" +
+				storeRetVal +
 				decPopAssembly +
 				"sra\n" +
 				"pop\n" +
 				parPopAssembly +
 				"sfp\n" +
-				"lrv\n" +
+				loadRetVal +
 				"lra\n" +
 				"js\n";
 		Helpers.appendFuncAssembly(funcCode);

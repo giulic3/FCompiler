@@ -82,7 +82,7 @@ let
 in
     print(z);
 */
-
+/*
 class A {
     void m() print(1);
 };
@@ -100,3 +100,64 @@ let
 in
     //a = new C();
     print(a.f());
+*/
+/*
+let
+    int x = 25;
+    bool cond = true;
+    int y = if (cond) then { x * 2 } else { (x-1)/4 };
+    int f(int x) let
+        int z = x * 2 + y;  // DA' ERRORE NELLA PRIMA PASSATA (non trova y) E QUINDI NON FUNZIONA (MA IN REALTà FA QUELLO CHE DEVE)
+        in
+            return z - x;
+in
+    print(f(8)+y);
+*/
+/*
+let
+    int x = 43;
+    void f() x = x + 1;
+in
+    print(x)
+    f()
+    print(x);
+*/
+
+class A (int x = 0, int y = 1) {
+    void f() print(x, y);
+};
+class B extends A (bool b = false) {
+    void g() print(b);
+};
+class C extends B (A a = null, bool cond = true) {
+    void f() print(a, cond);
+    void ciao() print(2);
+};
+class D extends A (bool b = true, bool cond = false) {
+    void h() print(b, cond);
+    void i() print(b);
+};
+let
+    A a = new A();
+    B b = new B();
+    C c = new C();
+    D d = new D();
+in
+    a.f()
+    b.g()
+    c.f()
+    d.i();
+
+/*
+class A {
+    void f() print(2);
+};
+class B extends A {
+    void g() print(3);
+    void f() print(4);
+};
+let
+    B b = new B();
+in
+    b.f();
+*/
