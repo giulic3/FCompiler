@@ -2,7 +2,6 @@ package ast;
 
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
@@ -166,8 +165,29 @@ public class BlockClassDecNode implements Node {
 			res.addAll(dec.checkSemantics(env));
 		}
 		//}
+		System.out.println("tmp: "+tmp+"\n");
 		
-		res.addAll(tmp);
+		System.out.println("res: "+res+"\n");
+		
+		HashSet<String> fin = new HashSet<>();
+		
+		for(String s : res){
+			if (tmp.contains(s)){
+				fin.add(s);
+			}
+		}
+		
+		System.out.println("fin: "+fin+"\n");
+		
+		res.removeAll(tmp);
+		
+		System.out.println("res: "+res+"\n");
+		
+		res.addAll(fin);
+		
+		System.out.println("res: "+res+"\n");
+		
+		//res.addAll(tmp);
 		
 		env.settingFunSecondCheck(false);
 		

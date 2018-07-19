@@ -46,7 +46,7 @@ public class BlockLetInStmsNode implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		
 		HashSet<String> res = new HashSet<String>();
-		//HashSet<String> tmp = new HashSet<String>();
+		HashSet<String> tmp = new HashSet<String>();
 		
 		
 		// TODO: handle offset
@@ -55,9 +55,9 @@ public class BlockLetInStmsNode implements Node {
 		if (decs.size() > 0) env.setOffset(-1);
 		
 		for(Node dec : decs){
-			if(dec instanceof FunDecNode) {
+			//if(dec instanceof FunDecNode) {
 				res.addAll(dec.checkSemantics(env));
-			}
+			//}
 		}
 		
 		env.settingFunSecondCheck(true);
@@ -66,13 +66,21 @@ public class BlockLetInStmsNode implements Node {
 		
 		//if (tmp.size() > 0)
 		for(Node dec : decs){
-			res.addAll(dec.checkSemantics(env));
+			tmp.addAll(dec.checkSemantics(env));
 		}
 		
 		env.settingFunSecondCheck(false);
 		
 		for(Node stm : stms){
 			res.addAll(stm.checkSemantics(env));
+		}
+		
+		HashSet<String> fin = new HashSet<>();
+		
+		for(String s : res){
+			if (tmp.contains(s)){
+				fin.add(s);
+			}
 		}
 		
 		env.popScope();
