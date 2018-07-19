@@ -1,392 +1,192 @@
-%% BioMed_Central_Tex_Template_v1.06
-%%                                      %
-%  bmc_article.tex            ver: 1.06 %
-%                                       %
+\documentclass[a4paper]{article}   % list options between brackets
+\usepackage[italian]{babel}              % list packages between braces
+\usepackage{blindtext} % used for title and subtitle format
+\usepackage[utf8]{inputenc}
+% type user-defined commands here
 
-%%IMPORTANT: do not delete the first line of this template
-%%It must be present to enable the BMC Submission system to
-%%recognise this template!!
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                     %%
-%%  LaTeX template for BioMed Central  %%
-%%     journal article submissions     %%
-%%                                     %%
-%%          <8 June 2012>              %%
-%%                                     %%
-%%                                     %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                 %%
-%% For instructions on how to fill out this Tex template           %%
-%% document please refer to Readme.html and the instructions for   %%
-%% authors page on the biomed central website                      %%
-%% http://www.biomedcentral.com/info/authors/                      %%
-%%                                                                 %%
-%% Please do not use \input{...} to include other tex files.       %%
-%% Submit your LaTeX manuscript as one .tex document.              %%
-%%                                                                 %%
-%% All additional figures and files should be attached             %%
-%% separately and not embedded in the \TeX\ document itself.       %%
-%%                                                                 %%
-%% BioMed Central currently use the MikTex distribution of         %%
-%% TeX for Windows) of TeX and LaTeX.  This is available from      %%
-%% http://www.miktex.org                                           %%
-%%                                                                 %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%% additional documentclass options:
-%  [doublespacing]
-%  [linenumbers]   - put the line numbers on margins
-
-%%% loading packages, author definitions
-
-%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
-\documentclass{bmcart}
-
-%%% Load packages
-%\usepackage{amsthm,amsmath}
-%\RequirePackage{natbib}
-%\RequirePackage[authoryear]{natbib}% uncomment this for author-year bibliography
-%\RequirePackage{hyperref}
-\usepackage[utf8]{inputenc} %unicode support
-%\usepackage[applemac]{inputenc} %applemac support if unicode package fails
-%\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                             %%
-%%  If you wish to display your graphics for   %%
-%%  your own use using includegraphic or       %%
-%%  includegraphics, then comment out the      %%
-%%  following two lines of code.               %%
-%%  NB: These line *must* be included when     %%
-%%  submitting to BMC.                         %%
-%%  All figure files must be submitted as      %%
-%%  separate graphics through the BMC          %%
-%%  submission process, not included in the    %%
-%%  submitted article.                         %%
-%%                                             %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\def\includegraphic{}
-\def\includegraphics{}
-
-
-
-%%% Put your definitions there:
-\startlocaldefs
-\endlocaldefs
-
-
-%%% Begin ...
 \begin{document}
 
-%%% Start of article front matter
-\begin{frontmatter}
+\title{FCompiler: A FOOL implementation\\
+Progetto di Compilatori e Interpreti,\\
+          anno accademico 2017/2018}   % type title between braces
+\author{Giulia Cantini (giulia.cantini2@studio.unibo.it)\\
+        Matteo Del Vecchio (matteo.delvecchio6@studio.unibo.it)\\
+        Simone Preite (simone.preite@studio.unibo.it)}
+\date{20 Luglio 2018}    % type date between braces
+\maketitle
 
-\begin{fmbox}
-\dochead{Documentazione linguaggio FOOL}
+\tableofcontents
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Enter the title of your article here     %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduzione}
 
-\title{A sample article title}
+Il progetto consiste nell'implementazione di un compilatore per un linguaggio FOOL (Functional Object Oriented Language) che traduce in bytecode
+eseguibile da una stack machine SVM (Simplified Virtual Machine).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Enter the authors here                   %%
-%%                                          %%
-%% Specify information, if available,       %%
-%% in the form:                             %%
-%%   <key>={<id1>,<id2>}                    %%
-%%   <key>=                                 %%
-%% Comment or delete the keys which are     %%
-%% not used. Repeat \author command as much %%
-%% as required.                             %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Di seguito si riportano le specifiche fornite per il progetto.
 
-\author[
-   email={jane.e.doe@cambridge.co.uk}   % email address
-]{\inits{GC}\fnm{Giulia } \snm{Cantini}}
-\author[
-   email={john.RS.Smith@cambridge.co.uk}
-]{\inits{MDV}\fnm{Matteo} \snm{Del Vecchio}}
-\author[
-email={john.RS.Smith@cambridge.co.uk}
-]{\inits{SP}\fnm{Simone} \snm{Preite}}
+\subsection{Specifiche fornite}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Enter the authors' addresses here        %%
-%%                                          %%
-%% Repeat \address commands as much as      %%
-%% required.                                %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Espressioni}
 
-\address[id=aff1]{%                           % unique id
-  \orgname{Department of Zoology, Cambridge}, % university, etc
-  \street{Waterloo Road},                     %
-  %\postcode{}                                % post or zip code
-  \city{London},                              % city
-  \cny{UK}                                    % country
-}
-\address[id=aff2]{%
-  \orgname{Marine Ecology Department, Institute of Marine Sciences Kiel},
-  \street{D\"{u}sternbrooker Weg 20},
-  \postcode{24105}
-  \city{Kiel},
-  \cny{Germany}
-}
+Estensione delle espressioni con operatori $<=, >=, ||, \&\&, /, - $
+   e not.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Enter short notes here                   %%
-%%                                          %%
-%% Short notes will be after addresses      %%
-%% on first page.                           %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Comandi}
 
-\begin{artnotes}
-%\note{Sample of title note}     % note to the article
-\note[id=n1]{Equal contributor} % note, connected to author
-\end{artnotes}
+Esiste la categoria sintattica \textit{stm}:\\
 
-\end{fmbox}% comment this for two column layout
+stm : 	id = exp (assegnamento) ; \\
+	$|$ if exp then { stms } else { stms } (condizionale)\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% The Abstract begins here                 %%
-%%                                          %%
-%% Please refer to the Instructions for     %%
-%% authors on http://www.biomedcentral.com  %%
-%% and include the section headings         %%
-%% accordingly for your article type.       %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+stms :  ( stm )+
 
-\begin{abstractbox}
+\subsubsection{Object orientation}
 
-\begin{abstract} % abstract
-\parttitle{First part title} %if any
-Text for this section.
+È possibile dichiarare classi e sottoclassi  al top level.\\
+Le classi contengono
+  \begin{itemize}
+    \item campi (dichiarati nella classe o ereditati dalla super-classe)
+    \item metodi (esplicitamente dichiarati nella classe o ereditati dalla super-classe).
+  \end{itemize}
+Se in una sottoclasse viene dichiarato un metodo con il medesimo nome
+di un metodo della super-classe, tale metodo sovrascrive quello della
+super-classe. Non è possibile avere overriding di campi.\\
+Quindi, significa che occorre estendere\\
 
-\parttitle{Second part title} %if any
-Text for this section.
-\end{abstract}
+%TODO fix indentation
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% The keywords begin here                  %%
-%%                                          %%
-%% Put each keyword in separate \kwd{}.     %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{dichiarazioni}\\
 
-\begin{keyword}
-\kwd{sample}
-\kwd{article}
-\kwd{author}
-\end{keyword}
+   class ID [extends ID] (...campi dichiarati come parametri...) {\\
 
-% MSC classifications codes, if any
-%\begin{keyword}[class=AMS]
-%\kwd[Primary ]{}
-%\kwd{}
-%\kwd[; secondary ]{}
-%\end{keyword}
+     ... metodi dichiarati come funzioni ...\\
 
-\end{abstractbox}
-%
-%\end{fmbox}% uncomment this for twcolumn layout
+   }
 
-\end{frontmatter}
+\textbf{espressioni}\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% The Main Body begins here                %%
-%%                                          %%
-%% Please refer to the instructions for     %%
-%% authors on:                              %%
-%% http://www.biomedcentral.com/info/authors%%
-%% and include the section headings         %%
-%% accordingly for your article type.       %%
-%%                                          %%
-%% See the Results and Discussion section   %%
-%% for details on how to create sub-sections%%
-%%                                          %%
-%% use \cite{...} to cite references        %%
-%%  \cite{koon} and                         %%
-%%  \cite{oreg,khar,zvai,xjon,schn,pond}    %%
-%%  \nocite{smith,marg,hunn,advi,koha,mouse}%%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   x.m(..)          // x e` un oggetto, m e` un metodo\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%% start of article main body
-% <put your article body there>
+   new C(..)				// C e` un identificatore di classe\\
 
-%%%%%%%%%%%%%%%%
-%% Background %%
-%%
-\section*{Content}
-Text and results for this section, as per the individual journal's instructions for authors. %\cite{koon,oreg,khar,zvai,xjon,schn,pond,smith,marg,hunn,advi,koha,mouse}
+   null\\
 
-\section*{Section title}
-Text for this section \ldots
-\subsection*{Sub-heading for section}
-Text for this sub-heading \ldots
-\subsubsection*{Sub-sub heading for section}
-Text for this sub-sub-heading \ldots
-\paragraph*{Sub-sub-sub heading for section}
-Text for this sub-sub-sub-heading \ldots
-In this section we examine the growth rate of the mean of $Z_0$, $Z_1$ and $Z_2$. In
-addition, we examine a common modeling assumption and note the
-importance of considering the tails of the extinction time $T_x$ in
-studies of escape dynamics.
-We will first consider the expected resistant population at $vT_x$ for
-some $v>0$, (and temporarily assume $\alpha=0$)
-%
-\[
- E \bigl[Z_1(vT_x) \bigr]= E
-\biggl[\mu T_x\int_0^{v\wedge
-1}Z_0(uT_x)
-\exp \bigl(\lambda_1T_x(v-u) \bigr)\,du \biggr].
-\]
-%
-If we assume that sensitive cells follow a deterministic decay
-$Z_0(t)=xe^{\lambda_0 t}$ and approximate their extinction time as
-$T_x\approx-\frac{1}{\lambda_0}\log x$, then we can heuristically
-estimate the expected value as
-%
-\begin{eqnarray}\label{eqexpmuts}
-E\bigl[Z_1(vT_x)\bigr] &=& \frac{\mu}{r}\log x
-\int_0^{v\wedge1}x^{1-u}x^{({\lambda_1}/{r})(v-u)}\,du
-\nonumber\\
-&=& \frac{\mu}{r}x^{1-{\lambda_1}/{\lambda_0}v}\log x\int_0^{v\wedge
-1}x^{-u(1+{\lambda_1}/{r})}\,du
-\nonumber\\
-&=& \frac{\mu}{\lambda_1-\lambda_0}x^{1+{\lambda_1}/{r}v} \biggl(1-\exp \biggl[-(v\wedge1) \biggl(1+
-\frac{\lambda_1}{r}\biggr)\log x \biggr] \biggr).
-\end{eqnarray}
-%
-Thus we observe that this expected value is finite for all $v>0$ (also see \cite{koon,khar,zvai,xjon,marg}).
-%\nocite{oreg,schn,pond,smith,marg,hunn,advi,koha,mouse}
+\textbf{comandi} con x.m(..), se il metodo ritorna void.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                          %%
-%% Backmatter begins here                   %%
-%%                                          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In particolare
 
-\begin{backmatter}
+\begin{itemize}
 
-\section*{Competing interests}
-  The authors declare that they have no competing interests.
+  \item Gli oggetti nascono come istanza di classi
+  \item I campi sono modificabili
+  \item Il linguaggio ha il comando di assegnamento
+  \item Non è possibile dichiarare funzioni annidate. Le funzioni NON possono
+    essere passate come parametri
+  \item É possibile avere funzioni/metodi mutuamente ricorsive.
 
-\section*{Author's contributions}
-    Text for this section \ldots
+\end{itemize}
 
-\section*{Acknowledgements}
-  Text for this section \ldots
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                  The Bibliography                       %%
-%%                                                         %%
-%%  Bmc_mathpys.bst  will be used to                       %%
-%%  create a .BBL file for submission.                     %%
-%%  After submission of the .TEX file,                     %%
-%%  you will be prompted to submit your .BBL file.         %%
-%%                                                         %%
-%%                                                         %%
-%%  Note that the displayed Bibliography will not          %%
-%%  necessarily be rendered by Latex exactly as specified  %%
-%%  in the online Instructions for Authors.                %%
-%%                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Type check}
 
-% if your bibliography is in bibtex format, use those commands:
-\bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
-\bibliography{bmc_article}      % Bibliography file (usually '*.bib' )
-% for author-year bibliography (bmc-mathphys or spbasic)
-% a) write to bib file (bmc-mathphys only)
-% @settings{label, options="nameyear"}
-% b) uncomment next line
-%\nocite{label}
+Il compilatore deve comprendere un type-checker che controlli il corretto uso dei tipi.
+In particolare:
 
-% or include bibliography directly:
-% \begin{thebibliography}
-% \bibitem{b1}
-% \end{thebibliography}
+\begin{itemize}
+  \item esiste il tipo void, oltre al tipo classe
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Figures                       %%
-%%                               %%
-%% NB: this is for captions and  %%
-%% Titles. All graphics must be  %%
-%% submitted separately and NOT  %%
-%% included in the Tex document  %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \item Si deve considerare una nozione di subtyping fra classi e tipi di funzioni. Il tipo
+  di una funzione f1 è sottotipo del tipo di una funzione f2 se il tipo ritornato da f1
+  è sottotipo del tipo ritornato da f2, se hanno il medesimo numero di parametri, e se
+  ogni tipo di parametro di f1 è sopratipo del corrisponde tipo di parametro di f2.
+  Una classe C1 è sottotipo di una classe C2 se C1 estende C2 e se i campi e metodi che
+  vengono sovrascritti sono sottotipi rispetto ai campi e metodi corrispondenti di C2.
+  Inoltre, C1 è sottotipo di C2 se esiste una classe C3 sottotipo di C2 di cui C1 è
+  sottotipo.
 
-%%
-%% Do not use \listoffigures as most will included as separate files
+  \item definire e implementare le regole di tipaggio per tutti i costrutti, in
+  particolare per il condizionale.
+\end{itemize}
 
-\section*{Figures}
-  \begin{figure}[h!]
-  \caption{\csentence{Sample figure title.}
-      A short description of the figure content
-      should go here.}
-      \end{figure}
+\subsubsection{Il codice oggetto}
 
-\begin{figure}[h!]
-  \caption{\csentence{Sample figure title.}
-      Figure legend text.}
-      \end{figure}
+Il compilatore deve generare codice per un esecutore virtuale chiamato SVM (stack
+virtual machine) la cui sintassi è definita nel file SVM.g. Tale esecutore ha una
+memoria in cui gli indirizzi alti sono usati per uno stack. Uno stack pointer punta alla
+locazione successiva alla prossima locazione libera per lo stack (se la memoria ha
+indirizzi da 0 a MEMSIZE-1, lo stack pointer inizialmente punta a MEMSIZE).
+In questo modo, quando lo stack non e` vuoto, lo stack pointer punta al top dello stack.\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Tables                        %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Il programma è collocato in una memoria separata puntata dall’instruction pointer
+(che punta alla prossima istruzione da eseguire). Gli altri registri della macchina
+virtuale sono: HP (heap pointer), RA (return address), RV (return value) e FP
+(frame pointer).\\
+In particolare, HP serve per puntare alla prossima locazione disponibile dello
+heap; assumendo di usare gli indirizzi bassi per lo heap, HP contiene inizialmente
+il valore 0.\\
 
-%% Use of \listoftables is discouraged.
-%%
-\section*{Tables}
-\begin{table}[h!]
-\caption{Sample table title. This is where the description of the table should go.}
-      \begin{tabular}{cccc}
-        \hline
-           & B1  &B2   & B3\\ \hline
-        A1 & 0.1 & 0.2 & 0.3\\
-        A2 & ... & ..  & .\\
-        A3 & ..  & .   & .\\ \hline
-      \end{tabular}
-\end{table}
+\begin{itemize}
+  \item Implementare tutte le operazioni per le nuove espressioni
+  \item Implementare il dynamic dispatch ==> implementare e definire layout oggetti e classi
+(vedi lezioni)
+  \item La generazione di codice oggetto e` fatta utilizzando una grammatica con attributi,
+vedere SVM.g4).
+Definire una grammatica SENZA attributi (come FOOL.g4) e definire una visita
+dell'albero sintattico per generare il codice.
+\end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Additional Files              %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Opzionali}
 
-\section*{Additional Files}
-  \subsection*{Additional file 1 --- Sample additional file title}
-    Additional file descriptions text (including details of how to
-    view the file, if it is in a non-standard format or the file extension).  This might
-    refer to a multi-page table or a figure.
-
-  \subsection*{Additional file 2 --- Sample additional file title}
-    Additional file descriptions text.
+La deallocazione degli oggetti nello heap (garbage collection) NON È OBBLIGATORIA.
+Chi è interessato può scrivere il modulo relativo.
 
 
-\end{backmatter}
+
+\section{Struttura del progetto}
+
+Il codice sorgente del progetto è contenuto nella sottodirectory source/ che è così divisa:
+
+\begin{itemize}
+  \item \textbf{ast/} contiene i nodi dell'albero di sintassi astratta generati dal parser
+  \begin{itemize}
+    \item \textbf{ast/types/}
+    in particolare, contiene quei nodi che rappresentano dei tipi all'interno della grammatica
+  \end{itemize}
+  \item \textbf{grammars/}
+    contiene i file .g4 per le grammatiche FOOL e SVM
+  \item \textbf{lib/}
+    contiene la libreria (.jar) di ANTLRv4
+  \item \textbf{testMain/}
+    contiene le classi principali delle due rispettive configurazioni di run, Main.java per l'esecuzione "normale"
+    e TestThread.java per l'esecuzione dei test su file .fool multipli (contenuti nella cartella FCompiler/code)
+  \item \textbf{utils/}
+    contiene le classi di supporto per la symbol table, il typecheck e altre funzioni ausiliarie.
+
+\end{itemize}
+
+Il progetto è stato sviluppato usando IntelliJ IDEA, consultare il file README.md per le istruzioni
+su come aprire ed eseguire il progetto con il suddetto IDE o utilizzando Eclipse.
+
+\section{Specifiche del linguaggio e grammatica}
+
+
+\section{Ast}
+
+\section{Analisi semantica}
+
+\subsection{Symbol Table}
+\subsection{Type check}
+
+\section{Generazione del codice}
+
+\subsection{Gestione degli offset, stack, heap}
+\subsection{Grammatica SVM senza attributi e SVMVisitor}
+\subsection{Dynamic dispatch}
+\subsection{Garbage collector (???)}
+
+\section{Conclusioni}
+
+\begin{thebibliography}{9}
+  % type bibliography here
+\end{thebibliography}
+
 \end{document}
