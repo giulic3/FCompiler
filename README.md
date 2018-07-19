@@ -1,6 +1,6 @@
 # FCompiler
 
-## Istruzioni Eclipse (versione utilizzata: Oxygen.3a (4.7.3a))
+### Istruzioni Eclipse (versione utilizzata: Oxygen.3a (4.7.3a))
 
 1. Decomprimere l'archivio .zip.
 2. Aprire Eclipse, selezionare File > Open Projects from File System…, nella schermata successiva cliccare su Directory, selezionare la cartella FCompiler del progetto appena decompresso e premere "Finish".
@@ -9,8 +9,13 @@
 
 <!-- TODO preparare la configurazione di run per Eclipse e aggiungerla al source (oppure aggiungere le istruzioni per crearla nell'elenco puntato) -->
 
-## Istruzioni IntelliJ IDEA (versione utilizzata: 2018.1.6)
+### Istruzioni IntelliJ IDEA (versione utilizzata: 2018.1.6)
 
 1. Decomprimere l'archivio .zip.
 2. Aprire IntelliJ IDEA, selezionare File > Open, selezionare la cartella FCompiler appena decompressa e premere OK
 3. Nella tab Project sulla sinistra, fare click destro sulla cartella FCompiler/source/lib, e selezionare Add as Library…, quindi cliccare OK
+
+### Autori
+  * [Giulia Cantini](https://github.com/giulic3) - giulia.cantini2@studio.unibo.it
+  * [Matteo Del Vecchio](https://github.com/matteodelv) - matteo.delvecchio6@studio.unibo.it
+  * [Simone Preite](https://github.com/simonepreite) - simone.preite@studio.unibo.it
