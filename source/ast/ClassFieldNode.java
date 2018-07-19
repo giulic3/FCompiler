@@ -1,7 +1,6 @@
 package ast;
 
 import ast.types.ClassType;
-import com.sun.tools.corba.se.idl.toJavaPortable.Helper;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
@@ -66,8 +65,9 @@ public class ClassFieldNode implements Node {
 				if (foundField == null) {
 					res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
-				
-				((IdNode)id).setSTEntry(foundField.getSTEntry());
+				else {
+					((IdNode) id).setSTEntry(foundField.getSTEntry());
+				}
 				this.entry = entry;
 				this.callNestingLevel = env.getNestingLevel();
 			}
@@ -81,6 +81,7 @@ public class ClassFieldNode implements Node {
 	/**
 	 *
 	 * Ritorna il tipo del campo della classe, ai fini della verifica sui tipi è sufficiente questa informazione.
+	 * 
 	 * */
 	public Node typeCheck() throws Exception {
 		return id.typeCheck();

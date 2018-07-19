@@ -161,7 +161,7 @@ let
 in
     b.f();
 */
-
+/*
 class A (int x = 20, bool cond = true, int y = 50) {
     void f() print(x);
 };
@@ -169,5 +169,16 @@ let
     A a = new A();
     A b = new A();
 in
-   // print(a.y, a.cond, a.y)
-    print(a.x, a.cond, a.y, b.x, b.cond, b.y);
+    print(a.y, a.cond, a.y)
+    print(a.x, a.cond, a.y, b.x, b.cond, b.y);*/
+    let
+    bool x1 = 2||1==3||4;
+    bool x2 = 2+1==4-1;
+    bool x3 = 2<=3;
+    bool x4 = 4>=2;
+    int x5 = 4 && if (true) then { 3/1 } else { 0*2 }; // errori di tipo, and tra void e int, perchè la dichiarazione ha tipo void mentre l'if ha tipo intero
+
+    bool x8 = not - 2;
+    bool x9 = not 2;
+    in
+    print(x1, x2, x3, x4, x5, x8, x9);

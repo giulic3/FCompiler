@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ast.types.ClassType;
-import com.sun.tools.corba.se.idl.toJavaPortable.Helper;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
