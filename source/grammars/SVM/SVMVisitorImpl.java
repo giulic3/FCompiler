@@ -57,6 +57,8 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 			SVMParser.code[SVMParser.i++] = SVMParser.STOREHP;
 		else if (ctx.PRINT() != null)
 			SVMParser.code[SVMParser.i++] = SVMParser.PRINT;
+		else if (ctx.NEW() != null)
+			SVMParser.code[SVMParser.i++] = SVMParser.NEW;
 		else
 			SVMParser.code[SVMParser.i++] = SVMParser.HALT;
 		

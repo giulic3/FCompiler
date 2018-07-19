@@ -23,7 +23,7 @@ static HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
 assembly: ( simpleCmd )* ;
 
 simpleCmd: ( composedCmd | POP | ADD | SUB | MULT | DIV | STOREW | LOADW | JS | LOADRA | STORERA
-            | LOADRV | STORERV | LOADFP | STOREFP | COPYFP | LOADHP | STOREHP | PRINT | HALT ) ;
+            | LOADRV | STORERV | LOADFP | STOREFP | COPYFP | LOADHP | STOREHP | PRINT | HALT | NEW ) ;
 
 composedCmd: ( PUSH num=NUMBER | PUSH label=LABEL | label=LABEL COL
             | BRANCH label=LABEL | BRANCHEQ label=LABEL | BRANCHLESSEQ label=LABEL ) ;
