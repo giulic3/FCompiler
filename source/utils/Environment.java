@@ -28,33 +28,49 @@ public class Environment {
 	public ArrayList<HashMap<String, SymbolTableEntry>> getSymTable() {
 		return symTable;
 	}
-	
-	public int getNestingLevel() {
-		return nestingLevel;
-	}
-	
-	public int getOffset() {
-		return offset;
-	}
-	
-	public void setNestingLevel(int nestingLevel) {
-		this.nestingLevel = nestingLevel;
-	}
-	
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-	
+
 	public void setSymTable(ArrayList<HashMap<String, SymbolTableEntry>> symTable) {
 		this.symTable = symTable;
 	}
-	
+
+	public int getNestingLevel() {
+		return nestingLevel;
+	}
+
+	public void setNestingLevel(int nestingLevel) {
+		this.nestingLevel = nestingLevel;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
 	public int decreaseOffset() {
 		return offset--;
 	}
 	
 	public int increaseOffset() {
 		return offset++;
+	}
+
+	public void settingSecondCheck() {
+		secondCheck = true;
+	}
+
+	public boolean getSecondCheck() {
+		return secondCheck;
+	}
+
+	public void settingFunSecondCheck(boolean isSecond) {
+		secondFunCheck = isSecond;
+	}
+
+	public boolean getFunSecondCheck() {
+		return secondFunCheck;
 	}
 	
 	public SymbolTableEntry getActiveDec(String id) {
@@ -68,6 +84,17 @@ public class Environment {
 		
 		return res;
 	}
+
+	public void pushScope() {
+		HashMap<String, SymbolTableEntry> scope = new HashMap<>();
+		nestingLevel+=1;
+		symTable.add(scope);
+	}
+
+	public void popScope() {
+		symTable.remove(nestingLevel);
+		nestingLevel-=1;
+	}
 	
 	public SymbolTableEntry getClassEntry(String classID) {
 		return symTable.get(0).get("Class$"+classID);
@@ -79,30 +106,7 @@ public class Environment {
 		symTable.get(0).put(type.getID(), curEntry);
 	}
 	
-	public void pushScope() {
-		HashMap<String, SymbolTableEntry> scope = new HashMap<>();
-		nestingLevel+=1;
-		symTable.add(scope);
-	}
+
 	
-	public void popScope() {
-		symTable.remove(nestingLevel);
-		nestingLevel-=1;
-	}
-	
-	public void settingSecondCheck() {
-		secondCheck = true;
-	}
-	
-	public boolean getSecondCheck() {
-		return secondCheck;
-	}
-	
-	public void settingFunSecondCheck(boolean isSecond) {
-		secondFunCheck = isSecond;
-	}
-	
-	public boolean getFunSecondCheck() {
-		return secondFunCheck;
-	}
+
 }
