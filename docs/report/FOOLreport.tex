@@ -152,24 +152,67 @@ Il codice sorgente del progetto è contenuto nella sottodirectory source/ che è
     in particolare, contiene quei nodi che rappresentano dei tipi all'interno della grammatica
   \end{itemize}
   \item \textbf{grammars/}
-    contiene i file .g4 per le grammatiche FOOL e SVM
+    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'ast
   \item \textbf{lib/}
     contiene la libreria (.jar) di ANTLRv4
   \item \textbf{testMain/}
-    contiene le classi principali delle due rispettive configurazioni di run, Main.java per l'esecuzione "normale"
+    contiene le classi principali delle due rispettive configurazioni di run, Main.java per l'esecuzione standard
     e TestThread.java per l'esecuzione dei test su file .fool multipli (contenuti nella cartella FCompiler/code)
   \item \textbf{utils/}
-    contiene le classi di supporto per la symbol table, il typecheck e altre funzioni ausiliarie.
+    contiene le classi di supporto per la symbol table, il type checking e altre funzioni ausiliarie.
 
 \end{itemize}
 
-Il progetto è stato sviluppato usando IntelliJ IDEA, consultare il file README.md per le istruzioni
-su come aprire ed eseguire il progetto con il suddetto IDE o utilizzando Eclipse.
+Il progetto è stato sviluppato usando IntelliJ IDEA, si consulti il file README.md per le istruzioni
+su come aprire ed eseguire il progetto con il suddetto IDE oppure utilizzando Eclipse.
 
-\section{Specifiche del linguaggio e grammatica}
+\section{Caratteristiche del linguaggio e grammatica}
 
+Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocchi: ogni blocco può essere una dichiarazione di classe (al top level)
+oppure una sequenza di dichiarazioni introdotte dalla keyword \textit{let}, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta
+dalla keyword \textit{in}.\\
 
-\section{Ast}
+% TODO inserisci esempio di programma
+
+Le espressioni sono state estese a comprendere gli operatori $<=, >=, ||, \&\&, /, - $
+   e not nella seguente maniera:\\
+
+% TODO inserire grammatica fool come codice o come immagine relativamente a exp, operand, term, factor, atom
+
+Sono stati aggiunti gli statement\\
+
+% TODO inserire stm e stms, come prima
+
+uno statement può essere un assegnamento (semplice o campo di un oggetto), un condizionale, una print
+o una chiamata di funzione/metodo.\\
+
+Una dichiarazione di classe viene fatta nel modo seguente:\\
+
+% TODO inserisci esempio di classe scritta in .fool
+
+dove le parentesi tonde delimitano i campi e le parentesi graffe i metodi. Una classe può contenere nessun campo
+ma deve contenere sempre almeno un metodo.
+
+% TODO inserisci regola classdec
+
+% TODO caratteristica da cambiare?
+Un oggetto può essere istanziato utilizzando la keyword \textit{new}. Il costruttore deve essere richiamato senza argomenti, mentre i valori dei campi
+sono stati già inizializzati durante la dichiarazione della classe e potranno essere modificati successivamente
+tramite assegnamento.\\
+
+%TODO completare...
+Ulteriori caratteristiche del linguaggio sono le seguenti:\\
+\begin{itemize}
+  \item Tutte le variabili devono essere inizializzate al momento della dichiarazione (così come vale
+ per i campi di una classe).
+  \item Una variabile può avere tipo intero, booleano o classe (se è un oggetto).
+  \item Una funzione può avere tipo di ritorno void
+  \item È stato inserito il tipo null che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
+
+  %TODO completare...
+\end{itemize}
+
+\section{AST}
 
 \section{Analisi semantica}
 
