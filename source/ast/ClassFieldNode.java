@@ -90,17 +90,12 @@ public class ClassFieldNode implements Node {
 	public String codeGeneration() {
 		SymbolTableEntry fieldEntry = ((IdNode)id).getSTEntry();
 		
+		// TODO: check if static chain climbing is needed
 		// gli offset dei campi partono da 0
 		return  obj.codeGeneration() +
 				"push " + fieldEntry.getOffset() + "\n" +
 				"add\n" +
 				"lw\n";
-				//"push 0\n" +//"lhp\n" +
-				//Helpers.getActivationRecordCode(callNestingLevel, fieldEntry.getNestingLevel()) +
-				//"add\n" +
-				//"push " + fieldEntry.getOffset() + "\n" +
-				//"add\n" +//"sub\n" +
-				//"lw\n";
 	}
 	
 	// Method to retrieve string identifier of an object

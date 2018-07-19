@@ -97,21 +97,28 @@ public class AssignmentNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		String getAR = "";
-		
-		// TODO: class field assignment MUST be done
-		
-		IdNode var = (IdNode)idVariableNode;
-		SymbolTableEntry entry = var.getSTEntry();
-		
-		for (int i = 0; i < nestingLevel - entry.getNestingLevel(); i++) getAR += "lw\n";
-		
-		return  exp.codeGeneration() +
-				"push " + entry.getOffset() + "\n" +     //metto offset sullo stack
-				"lfp\n" +
-				getAR +     //risalgo la catena statica
-				"add\n" +
-				"sw\n";     //carico sullo stack il valore all'indirizzo ottenuto
+		if (objFieldNode != null) {
+			ClassFieldNode fieldNode = (ClassFieldNode)objFieldNode;
+			String fieldCode = fieldNode.codeGeneration();
+			
+			// code gen for field is similar to the one used for accessing it
+			// the difference consists in replacing last LW with SW
+			int lastLWPos = fieldCode.lastIndexOf("lw\n");
+			return  exp.codeGeneration() +
+					fieldCode.substring(0, lastLWPos) +
+					"sw\n";
+		}
+		else {
+			IdNode var = (IdNode) idVariableNode;
+			SymbolTableEntry entry = var.getSTEntry();
+			
+			return exp.codeGeneration() +
+					"push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+					"lfp\n" +
+					Helpers.getActivationRecordCode(nestingLevel, entry.getNestingLevel()) +     //risalgo la catena statica
+					"add\n" +
+					"sw\n";     //carico sullo stack il valore all'indirizzo ottenuto
+		}
 	}
 	
 	// Method to retrieve string identifier of an object
