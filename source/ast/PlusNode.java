@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.TypeCheckException;
-;
 
 import java.util.ArrayList;
 import java.util.HashSet;

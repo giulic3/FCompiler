@@ -7,7 +7,6 @@ import java.util.HashSet;
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-;
 import utils.Helpers;
 import utils.SymbolTableEntry;
 
