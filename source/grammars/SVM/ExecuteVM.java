@@ -112,6 +112,9 @@ public class ExecuteVM {
 					break;
 				case SVMParser.HALT :
 					return;
+				case SVMParser.NEW:
+					int
+					break;
 			}
 		}
 	}

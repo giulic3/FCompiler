@@ -23,7 +23,7 @@ public class SVMParser extends Parser {
 		PUSH=1, POP=2, ADD=3, SUB=4, MULT=5, DIV=6, STOREW=7, LOADW=8, BRANCH=9, 
 		BRANCHEQ=10, BRANCHLESSEQ=11, JS=12, LOADRA=13, STORERA=14, LOADRV=15, 
 		STORERV=16, LOADFP=17, STOREFP=18, COPYFP=19, LOADHP=20, STOREHP=21, PRINT=22, 
-		HALT=23, COL=24, LABEL=25, NUMBER=26, WHITESP=27, ERR=28;
+		HALT=23, NEW=24, COL=25, LABEL=26, NUMBER=27, WHITESP=28, ERR=29;
 	public static final int
 		RULE_assembly = 0, RULE_simpleCmd = 1, RULE_composedCmd = 2;
 	public static final String[] ruleNames = {
@@ -33,13 +33,14 @@ public class SVMParser extends Parser {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'push'", "'pop'", "'add'", "'sub'", "'mult'", "'div'", "'sw'", 
 		"'lw'", "'b'", "'beq'", "'bleq'", "'js'", "'lra'", "'sra'", "'lrv'", "'srv'", 
-		"'lfp'", "'sfp'", "'cfp'", "'lhp'", "'shp'", "'print'", "'halt'", "':'"
+		"'lfp'", "'sfp'", "'cfp'", "'lhp'", "'shp'", "'print'", "'halt'", "'new'", 
+		"':'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "PUSH", "POP", "ADD", "SUB", "MULT", "DIV", "STOREW", "LOADW", "BRANCH", 
 		"BRANCHEQ", "BRANCHLESSEQ", "JS", "LOADRA", "STORERA", "LOADRV", "STORERV", 
-		"LOADFP", "STOREFP", "COPYFP", "LOADHP", "STOREHP", "PRINT", "HALT", "COL", 
-		"LABEL", "NUMBER", "WHITESP", "ERR"
+		"LOADFP", "STOREFP", "COPYFP", "LOADHP", "STOREHP", "PRINT", "HALT", "NEW", 
+		"COL", "LABEL", "NUMBER", "WHITESP", "ERR"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -424,7 +425,7 @@ public class SVMParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\36\63\4\2\t\2\4\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\37\63\4\2\t\2\4\3"+
 		"\t\3\4\4\t\4\3\2\7\2\n\n\2\f\2\16\2\r\13\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3#\n\3\3\4\3\4"+
 		"\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4\61\n\4\3\4\2\2\5\2\4\6\2"+
@@ -437,9 +438,9 @@ public class SVMParser extends Parser {
 		"\"\21\3\2\2\2\"\22\3\2\2\2\"\23\3\2\2\2\"\24\3\2\2\2\"\25\3\2\2\2\"\26"+
 		"\3\2\2\2\"\27\3\2\2\2\"\30\3\2\2\2\"\31\3\2\2\2\"\32\3\2\2\2\"\33\3\2"+
 		"\2\2\"\34\3\2\2\2\"\35\3\2\2\2\"\36\3\2\2\2\"\37\3\2\2\2\" \3\2\2\2\""+
-		"!\3\2\2\2#\5\3\2\2\2$%\7\3\2\2%\61\7\34\2\2&\'\7\3\2\2\'\61\7\33\2\2("+
-		")\7\33\2\2)\61\7\32\2\2*+\7\13\2\2+\61\7\33\2\2,-\7\f\2\2-\61\7\33\2\2"+
-		"./\7\r\2\2/\61\7\33\2\2\60$\3\2\2\2\60&\3\2\2\2\60(\3\2\2\2\60*\3\2\2"+
+		"!\3\2\2\2#\5\3\2\2\2$%\7\3\2\2%\61\7\35\2\2&\'\7\3\2\2\'\61\7\34\2\2("+
+		")\7\34\2\2)\61\7\33\2\2*+\7\13\2\2+\61\7\34\2\2,-\7\f\2\2-\61\7\34\2\2"+
+		"./\7\r\2\2/\61\7\34\2\2\60$\3\2\2\2\60&\3\2\2\2\60(\3\2\2\2\60*\3\2\2"+
 		"\2\60,\3\2\2\2\60.\3\2\2\2\61\7\3\2\2\2\5\13\"\60";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
