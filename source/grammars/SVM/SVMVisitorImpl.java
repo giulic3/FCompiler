@@ -59,6 +59,14 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 			SVMParser.code[SVMParser.i++] = SVMParser.PRINT;
 		else if (ctx.NEW() != null)
 			SVMParser.code[SVMParser.i++] = SVMParser.NEW;
+        else if (ctx.LABEL() != null) {
+			SVMParser.labelRef.put(SVMParser.i, ctx.LABEL().getText());
+			SVMParser.code[SVMParser.i++] = SVMParser.LABEL; // non so se ci vuole il ++
+		}
+		else if (ctx.CPHEAD() != null)
+			SVMParser.code[SVMParser.i++] = SVMParser.CPHEAD;
+        else if (ctx.JSMETH() != null)
+        	SVMParser.code[SVMParser.i++] = SVMParser.JSMETH;
 		else
 			SVMParser.code[SVMParser.i++] = SVMParser.HALT;
 		

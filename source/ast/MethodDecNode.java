@@ -90,7 +90,7 @@ public class MethodDecNode extends FunDecNode {
 		HashMap<String, SymbolTableEntry> methodContentHM = env.getSymTable().get(env.getNestingLevel());
 		
 		ArrayList<Node> parTypes = new ArrayList<>();
-		int paroffset = 0;
+		int paroffset = 1;
 		
 		for (Node par : parList) {
 			VarNode arg = (VarNode)par;
@@ -180,9 +180,9 @@ public class MethodDecNode extends FunDecNode {
 				loadRetVal +
 				"lra\n" +
 				"js\n";
-		//Helpers.appendFuncAssembly(funcCode);
+		Helpers.appendFuncAssembly(funcCode);
 		
-		return funcCode;
+		return funLabel + "\n";
 	}
 	
 	public String getID() {

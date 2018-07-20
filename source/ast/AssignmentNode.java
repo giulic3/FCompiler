@@ -82,8 +82,6 @@ public class AssignmentNode implements Node {
 				if (idVariableNode.typeCheck() instanceof ClassType) {
 					entry.setType(exp.typeCheck());
 					var.setSTEntry(entry);
-					
-					System.out.println(((IdNode)idVariableNode).getSTEntry());
 				}
 			}
 		}

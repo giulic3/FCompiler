@@ -200,8 +200,8 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String codeGeneration(){
-		ArrayList<Node> methodsList = type.getMethodsList(true, false);
-		ArrayList<String> dt = new ArrayList<>();
+		ArrayList<Node> methodsList = type.getMethodsList(false, false);
+		ArrayList<String> dt = (superClassID != null) ? new ArrayList<>(Helpers.getDispatchTable(superClassID)) : new ArrayList<>();
 		Helpers.addDispatchTable(id, dt);
 		
 		for (Node m: methodsList) {
@@ -210,7 +210,11 @@ public class BlockClassDecNode implements Node {
 			int offset = entry.getOffset();
 			
 			String methodLabel = Helpers.newFuncLabel();
-			dt.add(offset, methodLabel);
+			
+			if (dt.size() > 0 && offset < dt.size())
+				dt.set(offset, methodLabel);
+			else
+				dt.add(offset, methodLabel);
 		}
 		
 		for (Node m: methodsList) {

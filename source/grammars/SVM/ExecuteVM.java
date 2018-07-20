@@ -126,6 +126,14 @@ public class ExecuteVM {
 					}
 					push(startPointer);
 					break;
+				case SVMParser.CPHEAD:
+					int top = pop();
+					push(top);
+					push(top);
+					break;
+				case SVMParser.JSMETH:
+					int codeAddress = pop();
+					push(code[codeAddress]);
 			}
 		}
 	}

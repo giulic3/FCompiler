@@ -2,6 +2,7 @@ package ast;
 
 import ast.types.ClassType;
 import ast.types.FunType;
+import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
@@ -106,29 +107,22 @@ public class ClassMethodNode extends FunExpNode {
 		for (int i = args.size()-1; i >= 0; i--)
 			parAssembly += args.get(i).codeGeneration();
 		
-		int objectOffset = ((IdNode)objectNode).getSTEntry().getOffset();
-		int entryOffset = entry.getOffset();
+		IdNode obj = (IdNode)objectNode;
+		int objOffset = obj.getSTEntry().getOffset();
+		
 		return  "lfp\n" +
-				//"push " + Helpers.getDispatchTableLabelForClass(classID)
 				parAssembly +
-//				"push " + objectOffset + "\n" +
-//				"lfp\n" +
-//				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
-//				"add\n" +
-//				"lw\n" +
-				objectNode.codeGeneration() +
-				//"lfp\n" +
-				//Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
-				//"add\n" +
-				//"push 1\n" +
-				//"add\n" +
-				//"copy\n" +
-				"lw\n" +
-				//"lfp\n" +
-				//"add\n" +
-				"push " + entryOffset + "\n" +
+				//objectNode.codeGeneration() +
+				"push " + objOffset + "\n" +
+				"lfp\n" +
+				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
 				"add\n" +
-				//"lc\n" +
+				"lw\n" +
+				"cp\n" +
+				"lw\n" +
+				"push " + entry.getOffset() + "\n" +
+				"add\n" +
+				"jsmeth\n" +
 				"js\n";
 	}
 	
