@@ -90,7 +90,7 @@ public class MethodDecNode extends FunDecNode {
 		HashMap<String, SymbolTableEntry> methodContentHM = env.getSymTable().get(env.getNestingLevel());
 		
 		ArrayList<Node> parTypes = new ArrayList<>();
-		int paroffset = 1;
+		int paroffset = 0;
 		
 		for (Node par : parList) {
 			VarNode arg = (VarNode)par;
@@ -123,11 +123,14 @@ public class MethodDecNode extends FunDecNode {
 		for (Node m:inheritedMethods) {
 			MethodDecNode method = (MethodDecNode) m;
 			if (method.getID().equals(this.name)) {
-				for (int i = 0; i < parList.size(); i++) {
-					if (!Helpers.subtypeOf(method.parList.get(i).typeCheck(), parList.get(i).typeCheck()))
+				FunType currentType = (FunType)this.type;
+				FunType methodType = (FunType)method.getSTEntry().getType();
+				
+				for (int i = 0; i < currentType.getParList().size(); i++)
+					if (!Helpers.subtypeOf(methodType.getParList().get(i), currentType.getParList().get(i)))
 						throw new TypeCheckException("Method Dec (parameter overloading not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-				}
-				if (!Helpers.subtypeOf(((FunType)this.type).getReturnType(),((FunType)method.type).getReturnType()))
+				
+				if (!Helpers.subtypeOf(currentType.getReturnType(), methodType.getReturnType()))
 					throw new TypeCheckException("Method Dec (return type overloading not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
@@ -177,9 +180,9 @@ public class MethodDecNode extends FunDecNode {
 				loadRetVal +
 				"lra\n" +
 				"js\n";
-		Helpers.appendFuncAssembly(funcCode);
+		//Helpers.appendFuncAssembly(funcCode);
 		
-		return funLabel + "\n";
+		return funcCode;
 	}
 	
 	public String getID() {

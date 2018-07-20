@@ -118,12 +118,12 @@ public class ExecuteVM {
 				case SVMParser.NEW:
 					// mi prendo l'heap pointer attuale per sapere dove inizia il nuovo oggetto
 					int startPointer = hp;
-					//int dispTB = pop();
+					int dispTB = pop();
 					int nargs = pop();
+					pushHeap(dispTB);
 					for(int i=0; i < nargs; i++){
 						pushHeap(pop());
 					}
-					//pushHeap(dispTB);
 					push(startPointer);
 					break;
 			}

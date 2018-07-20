@@ -161,19 +161,28 @@ let
 in
     b.f();
 */
-/*
+
 class A (int x = 20, bool cond = true, int y = 50) {
-    void f() print(x);
+    void f(int x, int y, bool ciao) print(x,y, ciao);
 };
 let
     A a = new A();
     A b = new A();
-    int c = 34;
-    int d = 54;
+   // int c = 34;
+   // int d = 54;
 in
-    print(a.x, a.cond, a.y)
-    a.y = 1234
-    print(a.x, a.cond, a.y)
-    print(a.x, a.cond, a.y, b.x, b.cond, b.y)
+    a.f(123,321, false)
+    b.f(1, 2, true);
+   /*// print(a.x, a.cond, a.y)
+    //a.y = 1234
+    //print(a.x, a.cond, a.y)
+    //print(a.x, a.cond, a.y, b.x, b.cond, b.y)
     print(c)
-    print(d);
+    print(d);*/
+/*
+let
+    int x = 10;
+    int f(int y, bool cond) let int z = y+x in return z*2;
+    int y = 20;
+in
+    print(f(y, true));*/

@@ -106,15 +106,29 @@ public class ClassMethodNode extends FunExpNode {
 		for (int i = args.size()-1; i >= 0; i--)
 			parAssembly += args.get(i).codeGeneration();
 		
+		int objectOffset = ((IdNode)objectNode).getSTEntry().getOffset();
+		int entryOffset = entry.getOffset();
 		return  "lfp\n" +
+				//"push " + Helpers.getDispatchTableLabelForClass(classID)
 				parAssembly +
-				"lfp\n" +
-				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
-				"push " + entry.getOffset() + "\n" +
-				"lfp\n" +
-				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
-				"add\n" +
+//				"push " + objectOffset + "\n" +
+//				"lfp\n" +
+//				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+//				"add\n" +
+//				"lw\n" +
+				objectNode.codeGeneration() +
+				//"lfp\n" +
+				//Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				//"add\n" +
+				//"push 1\n" +
+				//"add\n" +
+				//"copy\n" +
 				"lw\n" +
+				//"lfp\n" +
+				//"add\n" +
+				"push " + entryOffset + "\n" +
+				"add\n" +
+				//"lc\n" +
 				"js\n";
 	}
 	

@@ -68,7 +68,7 @@ public class Helpers {
 	}
 	
 	public static ArrayList<String> getDispatchTable(String classID) {
-		return dispatchTables.get(classID);
+		return dispatchTables.get(getDispatchTableLabelForClass(classID));
 	}
 	
 	public static void addDispatchTable(String classID, ArrayList<String> dt) {
@@ -81,7 +81,7 @@ public class Helpers {
 		for (Map.Entry<String, ArrayList<String>> dt : dispatchTables.entrySet()) {
 			code += dt.getKey() + ":\n";
 			for (String metLabel: dt.getValue()) {
-				code += metLabel + "\n";
+				code += metLabel;
 			}
 		}
 		

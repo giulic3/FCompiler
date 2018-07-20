@@ -1,7 +1,9 @@
 package ast;
 
 import ast.types.VoidType;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
+import utils.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,9 +11,11 @@ import java.util.HashSet;
 public class PrintNode implements Node {
 	
 	private ArrayList<Node> exps;
+	private ParserRuleContext ctx;
 	
-	public PrintNode(ArrayList<Node> exps) {
+	public PrintNode(ArrayList<Node> exps, ParserRuleContext ctx) {
 		this.exps = exps;
+		this.ctx = ctx;
 	}
 	
 	public String toPrint(String indent) {
@@ -25,8 +29,10 @@ public class PrintNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		for (Node n: exps)
-			n.typeCheck();
+		for (Node n: exps) {
+			if (n.typeCheck() instanceof VoidType)
+				throw new TypeCheckException("Print (void exp not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		}
 		
 		return new VoidType();
 	}

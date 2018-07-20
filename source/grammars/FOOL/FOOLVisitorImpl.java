@@ -295,7 +295,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		for (ExpContext exp: ctx.exp())
 			exps.add(visit(exp));
 		
-		return new PrintNode(exps);
+		return new PrintNode(exps, ctx);
 	}
 	
 	public Node visitMethodStm(MethodStmContext ctx) {

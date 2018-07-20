@@ -39,12 +39,13 @@ class A {
     bool overriddenMethod(bool a, bool b) return true;
 };
 
-class B { // con 'extends' A il test passa
-    int overridingMethod(int x, int y) return 1;
+class B extends A { // con 'extends' A il test passa
+    int overriddenMethod(int x, int y) return 1;
 };
 
 let
     A a = new A();
     B b = new B();
 in
-    b = a;
+    //b = a;
+    a = b;
