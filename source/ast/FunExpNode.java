@@ -116,6 +116,21 @@ public class FunExpNode implements Node {
 		for (int i = args.size()-1; i >= 0; i--)
 			parAssembly += args.get(i).codeGeneration();
 		
+		if (classID != null) {
+			return  "lfp\n" +
+					parAssembly +
+					"lfp\n" +
+					"lw\n" +
+					"cp\n" +
+					"lw\n" +
+					"push " + entry.getOffset() + "\n" +
+					//"lw\n" +
+					//"lfp\n" +
+					"add\n" +
+					"jsmeth\n" +
+					"js\n";
+		}
+		
 		return  "lfp\n" +
 				parAssembly +
 				"lfp\n" +

@@ -202,20 +202,25 @@ in
 */
 
 class A (int x = 123, bool cond = true) {
-    int f(int z) return z;
+    int m(int z) return z;
 };
 class B extends A (int y = 456) {
-    int g(int h) return h+y;
-    int f(int z) return z-1;
+    //int g(int h) print(2) return f(3);
+    //int f(int z) print(5) return g(2);
+    void g(int par) if (par >= 1) then { f(par-1) } print(-par);
+    void f(int par) if (par >= 1) then { g(par-1) } print(par);
 };
 let
     A a = new A();
     B b = new B();
+    B c = new B();
 in
+    b.g(6);
     //print(a.x, a.cond)
     //print(a.f(23))
-    print(b.f(78))
-    a = b
+    //print(b.f(78));
+    //print(c.g(2));
+    //a = b
     //print(a.g(11));
 
 /*
