@@ -108,14 +108,14 @@ public class ClassMethodNode extends FunExpNode {
 			parAssembly += args.get(i).codeGeneration();
 		
 		IdNode obj = (IdNode)objectNode;
-		int objOffset = obj.getSTEntry().getOffset();
+		SymbolTableEntry objectEntry = obj.getSTEntry();
 		
 		return  "lfp\n" +
 				parAssembly +
 				//objectNode.codeGeneration() +
-				"push " + objOffset + "\n" +
+				"push " + objectEntry.getOffset() + "\n" +
 				"lfp\n" +
-				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
+				Helpers.getActivationRecordCode(callNestingLevel, objectEntry.getNestingLevel()) +
 				"add\n" +
 				"lw\n" +
 				"cp\n" +

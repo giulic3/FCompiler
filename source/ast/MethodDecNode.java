@@ -101,17 +101,22 @@ public class MethodDecNode extends FunDecNode {
 				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 		this.funEntry = entry;
+		
+		int currOffset = env.getOffset();
 
+		if (!decList.isEmpty())
+			env.setOffset(-2);  // TODO: it doesn't work! to be fixed!
+		
 		for (Node dec : decList) {
-			env.setOffset(env.getOffset() - 2);
 			res.addAll(dec.checkSemantics(env));
 		}
+		
+		env.setOffset(currOffset);
 		
 		if (env.getFunSecondCheck())
 			for (Node b : body){
 				if(b instanceof FunExpNode)
 					((FunExpNode)b).setClassID(classID);
-				//if (env.getFunSecondCheck()) // TODO: gestire doppia passata metodi
 				res.addAll(b.checkSemantics(env));
 			}
 		

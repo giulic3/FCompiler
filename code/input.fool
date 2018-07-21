@@ -200,7 +200,7 @@ in
     //n.x = 9876
     //print(n.getY());
 */
-
+/*
 class A (int x = 123, bool cond = true) {
     int m(int z) return z;
 };
@@ -215,14 +215,14 @@ let
     B b = new B();
     B c = new B();
 in
-    b.g(1);
-    //print(a.x, a.cond)
-    //print(a.f(23))
-    //print(b.f(78));
-    //print(c.g(2));
-    //a = b
-    //print(a.g(11));
-
+    b.g(1)
+    print(a.x, a.cond)
+    print(a.m(23))
+    b.f(78)
+    c.g(2)
+    a = b;
+    //a.g(11);  // TODO: da risolvere, dopo assegnamento tra oggetti
+*/
 /*
 class Numero (int x = 2){
         int uno() return x;
@@ -242,3 +242,46 @@ let
 in
     f(5);
 */
+
+class A (int x = 3, bool y = true) {
+    void m(int x) print(x + 4 * y);
+    int f(bool x, int y)
+        let
+            int b = 4;
+            int c = 6;
+        in
+            b = b * 2
+            c = if (x) then { b * c } else { c * c }
+            return c;
+    void seq(int x) if (x >= 0) then { seq(x-1) } print(x);
+};
+
+class B extends A (int g = 0, A a = new A()){
+    void m(int x) print(x);
+    int j() return a.x;
+};
+
+class C (int x = 4, A a = new A()){
+    void g() a.f(true,5);
+};
+
+let
+    A a = new A();
+    B b = new B();
+    C c = new C();
+    //A a1 = new B();
+    void h(int x) if(x >= 0) then { g(x-1) } print(x);
+    void g(int x) if(x >= 0) then { h(x-1) } print(x);
+    void f()
+        let
+            int x = 1234;
+        in
+            print(x);
+in
+    f()           // funziona
+    h(4)          // funziona
+    a.m(3)        // funziona
+    b.m(true)     // funziona
+    //c.g();        // exception per offset dichiarazioni nel let (probabilmente)
+    //b.j();        // non stampa il valore di x dell'oggetto a
+    b.seq(6);     // funziona
