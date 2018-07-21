@@ -16,6 +16,7 @@ public class Environment {
 	private int offset;
 	private boolean secondCheck;
 	private boolean secondFunCheck;
+	private String definingClass = null;
 	
 	public Environment() {
 		symTable = new ArrayList<>();
@@ -106,7 +107,13 @@ public class Environment {
 		symTable.get(0).put(type.getID(), curEntry);
 	}
 	
-
+	public void setDefiningClass(String classID) {
+		this.definingClass = classID;
+	}
+	
+	public String getDefiningClass() {
+		return this.definingClass;
+	}
 	
 
 }

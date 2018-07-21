@@ -140,6 +140,8 @@ public class BlockClassDecNode implements Node {
 		//int parOffset=1;
 		env.setOffset(1+classType.getFieldsList(true).size() - fields.size());
 		
+		env.setDefiningClass(id);
+		
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
 			res.addAll(field.checkSemantics(env));
@@ -177,6 +179,8 @@ public class BlockClassDecNode implements Node {
 		res.addAll(fin);
 		
 		env.settingFunSecondCheck(false);
+		
+		env.setDefiningClass(null);
 		
 		env.popScope();
 		

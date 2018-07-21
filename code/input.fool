@@ -207,15 +207,15 @@ class A (int x = 123, bool cond = true) {
 class B extends A (int y = 456) {
     //int g(int h) print(2) return f(3);
     //int f(int z) print(5) return g(2);
-    void g(int par) if (par >= 1) then { f(par-1) } print(-par);
-    void f(int par) if (par >= 1) then { g(par-1) } print(par);
+    void g(int par) if (par <= 10) then { f(par+1) } print(-par);
+    void f(int par) if (par <= 10) then { g(par+1) } print(par);
 };
 let
     A a = new A();
     B b = new B();
     B c = new B();
 in
-    b.g(6);
+    b.g(1);
     //print(a.x, a.cond)
     //print(a.f(23))
     //print(b.f(78));

@@ -107,11 +107,11 @@ public class MethodDecNode extends FunDecNode {
 			res.addAll(dec.checkSemantics(env));
 		}
 		
-		
+		if (env.getFunSecondCheck())
 			for (Node b : body){
 				if(b instanceof FunExpNode)
 					((FunExpNode)b).setClassID(classID);
-				if (env.getFunSecondCheck()) // TODO: gestire doppia passata metodi
+				//if (env.getFunSecondCheck()) // TODO: gestire doppia passata metodi
 				res.addAll(b.checkSemantics(env));
 			}
 		

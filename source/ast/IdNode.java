@@ -45,6 +45,7 @@ public class IdNode implements Node {
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
+		if (env.getDefiningClass() != null) classID = env.getDefiningClass();
 		
 		//discriminare se l'id node non appartiene ad una classe controllo classname != null
 		
