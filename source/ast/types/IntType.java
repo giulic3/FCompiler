@@ -6,6 +6,8 @@ import utils.Environment;
 
 public class IntType implements Node {
 	
+	private String classID = null;
+	
 	/**
 	 *
 	 * Nodo indicativo del tipo Intero
@@ -37,5 +39,9 @@ public class IntType implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }

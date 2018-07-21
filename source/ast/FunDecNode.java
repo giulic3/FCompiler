@@ -21,7 +21,9 @@ public class FunDecNode implements Node {
 	protected ParserRuleContext ctx;
 
 	protected SymbolTableEntry funEntry;
-
+	private String classID = null;
+	
+	
 	public FunDecNode (String name, Node type, ArrayList<Node> decList, ArrayList<Node> parList, ArrayList<Node> body, ParserRuleContext ctx) {
 		this.ctx = ctx;
 		this.name = name;
@@ -186,6 +188,10 @@ public class FunDecNode implements Node {
 	
 	public String getID() {
 		return name;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 
 }

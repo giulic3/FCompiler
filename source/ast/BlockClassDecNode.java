@@ -18,6 +18,7 @@ public class BlockClassDecNode implements Node {
 	private ArrayList<Node> methods;
 	private ParserRuleContext ctx;
 	private ClassType type;
+	private String classID = null;
 	
 	/**
 	 *
@@ -235,6 +236,11 @@ public class BlockClassDecNode implements Node {
 	
 	public String getSuperclassID() {
 		return superClassID;
+	}
+	
+	// non usare assolutamente qui
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }
 

@@ -72,6 +72,9 @@ public class FunExpNode implements Node {
 				if (funType.getParList().size() != args.size())
 					res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
 							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				else
+					for (Node arg : args)
+						res.addAll(arg.checkSemantics(env));
 			}
 			else {
 				res.add("Method " + this.id + " not declared at line "
@@ -146,5 +149,4 @@ public class FunExpNode implements Node {
 	public String getID() {
 		return id;
 	}
-	
 }

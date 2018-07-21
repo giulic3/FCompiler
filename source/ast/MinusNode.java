@@ -14,6 +14,7 @@ public class MinusNode implements Node {
 	
 	private Node value;
 	private ParserRuleContext ctx;
+	private String classID = null;
 	
 	public MinusNode(Node value, ParserRuleContext ctx) {
 		this.value = value;
@@ -52,5 +53,9 @@ public class MinusNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }

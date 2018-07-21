@@ -14,7 +14,7 @@ import utils.SymbolTableEntry;
 public class IdNode implements Node {
 
 	private String id;
-	private String classID;
+	private String classID = null;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
 	private ParserRuleContext ctx;
@@ -110,5 +110,9 @@ public class IdNode implements Node {
 				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +     //risalgo la catena statica
 				"add\n" +
 				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }

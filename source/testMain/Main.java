@@ -143,7 +143,7 @@ public class Main {
 	public static void main(String[] args) throws  Exception{
 
 		//try {
-			File inputFile = new File("code/input.fool");
+			File inputFile = new File("code/completeTest1.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 			String output = run(input);
 		//}

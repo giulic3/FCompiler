@@ -136,4 +136,8 @@ public class ClassType implements Node {
 	public String getID() {
 		return classID;
 	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
+	}
 }

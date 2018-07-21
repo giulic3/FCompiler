@@ -126,4 +126,8 @@ public class VarNode implements Node {
 	public String getID() {
 		return id;
 	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
+	}
 }

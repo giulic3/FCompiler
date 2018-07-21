@@ -5,18 +5,18 @@ class A (int x=3, bool y=true){
             int b=4;
             int c=6;
         in
-            b=b*2;
+            b=b*2
             c=if(x) then { b*c } else { c*c }
             return c;
     void seq(int x) if(x>=0) then { seq(x-1) } print(x);
 };
 
 class B extends A (int g=0, A a = new A()){
-    void m(bool x) print(not x); //dovrebbe dare errore
+    void m(int x) print(x);
 };
 
-class C (int x=4, A a = new a()){
-    void g() a.f(1,5);
+class C (int x=4, A a = new A()){
+    void g() a.f(true,5);
 }
 
 let
@@ -27,8 +27,8 @@ let
     void h(int x)  if(x>=0) then { g(x-1) } print(x);
     void g(int x)  if(x>=0) then { h(x-1) } print(x);
 in
-    h(4);
-    a.m(3);
-    b.m(true);
-    c.g();
+    h(4)
+    a.m(3)
+    b.m(true)
+    c.g()
     b.seq(6);

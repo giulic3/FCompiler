@@ -10,6 +10,7 @@ public class BlockLetInStmsNode implements Node {
 	
 	private ArrayList<Node> stms;
 	private ArrayList<Node> decs;
+	private String classID = null;
 	
 	/**
 	 *
@@ -119,6 +120,10 @@ public class BlockLetInStmsNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }
 

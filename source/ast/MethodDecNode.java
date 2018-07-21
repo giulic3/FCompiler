@@ -107,13 +107,12 @@ public class MethodDecNode extends FunDecNode {
 			res.addAll(dec.checkSemantics(env));
 		}
 		
-		
-			for (Node b : body){
-				if(b instanceof FunExpNode)
-					((FunExpNode)b).setClassID(classID);
-				if (env.getFunSecondCheck()) // TODO: gestire doppia passata metodi
+		if (env.getFunSecondCheck()) { 				// TODO: gestire doppia passata metodi
+			for (Node b : body) {
+				b.setClassID(classID);
 				res.addAll(b.checkSemantics(env));
 			}
+		}
 		
 		env.popScope();
 		
@@ -189,5 +188,9 @@ public class MethodDecNode extends FunDecNode {
 	
 	public String getID() {
 		return name;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }

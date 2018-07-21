@@ -2,7 +2,6 @@ package ast;
 
 import ast.types.ClassType;
 import ast.types.FunType;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
@@ -130,6 +129,10 @@ public class ClassMethodNode extends FunExpNode {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return funNode.getID();
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }
 

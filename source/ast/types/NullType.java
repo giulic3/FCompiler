@@ -7,6 +7,8 @@ import java.util.HashSet;
 
 public class NullType extends ClassType {
 	
+	private String classID = null;
+	
 	/**
 	 *
 	 * Nodo indicativo del tipo NULL, è sottotipo di una classe perchè si intende che si
@@ -40,6 +42,10 @@ public class NullType extends ClassType {
 	
 	public String getID() {
 		return "Null Type";
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 	
 	

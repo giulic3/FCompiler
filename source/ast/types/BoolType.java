@@ -7,6 +7,8 @@ import utils.Environment;
 
 public class BoolType implements Node {
 	
+	private String classID = null;
+	
 	/**
 	 *
 	 * Nodo indicativo del tipo Booleano, è gestito come sottotipo di Integer in FOOL.
@@ -37,5 +39,9 @@ public class BoolType implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID(){
 		return null;
+	}
+	
+	public void setClassID(String id) {
+		this.classID = id;
 	}
 }
