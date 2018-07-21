@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.ListIterator;
 
 import ast.types.ClassType;
-import sun.awt.Symbol;
 import utils.SymbolTableEntry;
 
 
