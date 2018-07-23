@@ -242,7 +242,7 @@ let
 in
     f(5);
 */
-
+/*
 class A (int x = 3, bool y = true) {
     void m(int x) print(x + 4 * y);
     int f(bool x, int y)
@@ -278,10 +278,55 @@ let
         in
             print(x);
 in
-    f()           // funziona
-    h(4)          // funziona
-    a.m(3)        // funziona
-    b.m(true)     // funziona
+    //f()           // funziona
+    //h(4)          // funziona
+    //a.m(3)        // funziona
+    //b.m(true)     // funziona
     //c.g();        // exception per offset dichiarazioni nel let (probabilmente)
-    //b.j();        // non stampa il valore di x dell'oggetto a
-    b.seq(6);     // funziona
+    print(b.j());   // funziona ma necessita della print
+    b.seq(6);       // funziona
+*/
+/*
+class A (int x = 100) {
+    void f() print(x);
+};
+class B extends A (int y = 200, A a = new A()) {
+    void g() a.x = y
+             //x = y
+             a.f();
+};
+let
+    B b = new B();
+    A a1 = new A();
+in
+    b.f()
+    b.g()
+    a1.x = 400
+    b.a = a1
+    b.f()
+    b.x = a1.x
+    b.f();
+*/
+/*
+// BELLISSIMO FUNZIONA!
+let
+    int fattoriale(int n)
+        return
+        if (n <= -1) then { 0 }
+        else {
+            if (n == 1 || n == 0) then { 1 }
+            else { n * fattoriale(n-1) }
+        }
+in
+    print(fattoriale(5));   // stampa 5! = 120
+// BELLISSIMO FUNZIONA!
+let
+    int fibonacci(int n)
+        return
+            if (n <= -1) then { 0 }
+            else {
+                if (n == 1 || n == 0) then { 1 }
+                else { fibonacci(n-1) + fibonacci(n-2) }
+in
+    print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
+*/
