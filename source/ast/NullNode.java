@@ -24,7 +24,7 @@ public class NullNode implements Node {
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		return "push " + Integer.toString(Integer.MIN_VALUE) + "\n";
 	}
 	
 	// Method to retrieve string identifier of an object

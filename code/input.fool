@@ -215,14 +215,15 @@ let
     B b = new B();
     B c = new B();
 in
-    b.g(1)
-    print(a.x, a.cond)
-    print(a.m(23))
-    b.f(78)
-    c.g(2)
-    a = b;
-    //a.g(11);  // TODO: da risolvere, dopo assegnamento tra oggetti
+    //b.g(1)
+    //print(a.x, a.cond)
+    //print(a.m(23))
+    //b.f(78)
+    //c.g(2)
+    a = b
+    print(a.g(11));  // TODO: da risolvere, dopo assegnamento tra oggetti
 */
+
 /*
 class Numero (int x = 2){
         int uno() return x;
@@ -330,3 +331,13 @@ let
 in
     print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
 */
+
+class A (int x = 50, A a = null) {
+    void f() print(x);
+};
+
+let
+    A b = new A();
+    int x = 2147483647;
+in
+    b.f();
