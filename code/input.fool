@@ -332,12 +332,17 @@ in
     print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
 */
 
-class A (int x = 50, A a = null) {
+class B {
+    void f() print(2);
+};
+
+class A (int x = 50, A a = new B()) { // TODO: should throw type check error
     void f() print(x);
+    void g() let A a = new A(); in print(a.x);
 };
 
 let
     A b = new A();
-    int x = 2147483647;
+    //int x = 2147483647;
 in
-    b.f();
+    b.g();

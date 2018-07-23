@@ -59,6 +59,10 @@ public class VarNode implements Node {
 		this.type = type;
 	}
 	
+	public Node getExp() {
+		return this.exp;
+	}
+	
 	public String toPrint(String s){
 		if (exp != null)
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");

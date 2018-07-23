@@ -145,6 +145,19 @@ public class BlockClassDecNode implements Node {
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
 			res.addAll(field.checkSemantics(env));
+			
+			if (field.getType() instanceof ClassType) {
+				Node expNode = field.getExp();
+				if (expNode instanceof NewExpNode) {
+					SymbolTableEntry newEntry = ((NewExpNode)expNode).getSTEntry();
+					String newClassID = newEntry.getType().getID();
+					
+					if (id.equals(newClassID))
+						res.add("Object inizialization can't have same type of defining class at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				}
+				else if (!(expNode instanceof NullNode))
+					res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
 		}
 		
 		ArrayList<Node> inheritedMethods = classType.getMethodsList(true, true);
