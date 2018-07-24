@@ -4,6 +4,9 @@ import ast.Node;
 import ast.types.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Helpers {
 	
@@ -86,5 +89,66 @@ public class Helpers {
 		}
 		
 		return code;
+	}
+	
+	public static List<String> getOrderedListOfErrors(HashSet<String> set) {
+		
+		Pattern p = Pattern.compile("[0-9]+:[0-9]+");
+		
+		ArrayList<SemanticError> errorsWithLine = new ArrayList<>();
+		ArrayList<String> errorsWithoutLine = new ArrayList<>();
+		
+		for (String s: set) {
+			Matcher m = p.matcher(s);
+			if (m.find()) {
+				String lineColumn = m.group(0);
+				String[] parts = lineColumn.split(":");
+				SemanticError t = new SemanticError(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), s);
+				errorsWithLine.add(t);
+			}
+			else
+				errorsWithoutLine.add(s);
+		}
+		
+		Collections.sort(errorsWithLine, new SemanticError.SortByRowColumn());
+		
+		List<String> errors = errorsWithLine.stream().map(SemanticError::getError).collect(Collectors.toList());
+		errors.addAll(errorsWithoutLine);
+		
+		return errors;
+	}
+}
+
+class SemanticError {
+	
+	private final Integer row;
+	private final Integer column;
+	private final String error;
+	
+	public SemanticError(Integer row, Integer column, String error) {
+		this.row = row;
+		this.column = column;
+		this.error = error;
+	}
+	
+	@Override
+	public String toString() {
+		return "Semantic Error: row: " + row + ", column: " + column + ", error: " + error;
+	}
+	
+	public String getError() {
+		return error;
+	}
+	
+	static class SortByRowColumn implements Comparator<SemanticError> {
+		public int compare(SemanticError t1, SemanticError t2) {
+			if (t1.row < t2.row) return -1;
+			else if (t1.row > t2.row) return 1;
+			else {
+				if (t1.column < t2.column) return -1;
+				else if (t1.column > t2.column) return 1;
+				else return 0;
+			}
+		}
 	}
 }

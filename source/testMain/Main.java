@@ -10,6 +10,8 @@ import grammars.SVM.SVMParser;
 import grammars.SVM.SVMVisitorImpl;
 import org.antlr.v4.runtime.*;
 import utils.Environment;
+import utils.Helpers;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -38,9 +40,9 @@ public class Main {
 		HashSet<String> err = ast.checkSemantics(env);
 		
 		if (err.size() > 0) {
-			for(String e:err){
+			for(String e: Helpers.getOrderedListOfErrors(err))
 				System.out.print(e);
-			}
+			
 			 //System.exit(2);  //TODO temporary, only to allow testing of multiple files in a single run
 			return null; // TODO maybe
 		}
