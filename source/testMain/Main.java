@@ -99,8 +99,18 @@ public class Main {
 		System.out.println("Code Array:");
 		System.out.println(Arrays.toString(SVMParser.code));
 		
-		System.out.println("Virtual Machine execution result:");
 		vm.cpu();
+		
+		if (!vm.errorBuffer.isEmpty()) {
+			System.out.println("Some errors occurred during execution:");
+			for (String e: vm.errorBuffer)
+				System.out.println(e);
+		}
+		else {
+			System.out.println("Virtual Machine execution result:");
+			for (String res: vm.outputBuffer)
+				System.out.println(res);
+		}
 	}
 
 	public static void testWithThreads(File file) {

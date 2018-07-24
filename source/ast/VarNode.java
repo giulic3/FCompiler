@@ -77,6 +77,12 @@ public class VarNode implements Node {
 		
 		res.addAll(type.checkSemantics(env));
 		
+		// necessary to set the correct class type as defined in the symbol table
+		if (type instanceof ClassType) {
+			SymbolTableEntry classDef = env.getClassEntry(type.getID());
+			if (classDef != null) type = classDef.getType();
+		}
+		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		int FieldOrVarOffset = (classID!=null) ? env.increaseOffset() : env.decreaseOffset();

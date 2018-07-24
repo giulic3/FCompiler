@@ -331,7 +331,7 @@ let
 in
     print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
 */
-
+/*
 class B {
     void f() print(2);
 };
@@ -340,13 +340,27 @@ class C extends B {
     void h() print(3);
 };
 
-class A extends C (int x = 50, B a = new C()) {
-    void f() print(x);
-    void g() let A a = new A(); in print(a.x);
+class A extends C (int x = 50, A a = null) {
+    void f() print(a.x);
+    void g() /*let A a = new A(); in*/ a = new A() print(a.x) h() f();
 };
 
 let
     A b = new A();
     //int x = 2147483647;
 in
+    //b = null
+    b.a = new A()
+    b.f();
+    print(b.x);
     b.g();
+*/
+
+class A (int x = 10, A a = null) {
+    void f() print(a.x);
+};
+let
+    A a = new A();
+in
+    //a.a = new A()
+    a.f();
