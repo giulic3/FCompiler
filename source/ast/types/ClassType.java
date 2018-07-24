@@ -80,10 +80,10 @@ public class ClassType implements Node {
 			Set<String> superClassList = superType.getSuperList(true);
 			classList.addAll(superClassList);
 		}
-		if(superType!=null) {
-			classList.add(superType.classID);
-		}
-		else
+		//if(superType!=null) {
+		//	classList.add(superType.classID);
+		//}
+		//else
 			classList.add(classID);
 		return classList;
 	}

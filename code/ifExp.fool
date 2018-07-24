@@ -1,4 +1,5 @@
 let
+    int y = true;
     bool x = 1;
 in
     x = if ( true ) then { 1 } else { 2 };

@@ -109,7 +109,12 @@ public class VarNode implements Node {
 	
 	public Node typeCheck() throws Exception {
 		if(exp!=null) {
-			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
+			Node expTypeCheck = exp.typeCheck();
+			
+			if (exp instanceof ClassType && !Helpers.subtypeOf(expTypeCheck, this.entry.getStaticType())) {
+				throw new TypeCheckException("Object Initialization", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+			}
+			if (!Helpers.subtypeOf(expTypeCheck, type)) {
 				throw new TypeCheckException("Var", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}

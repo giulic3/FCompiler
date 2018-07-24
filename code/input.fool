@@ -336,7 +336,11 @@ class B {
     void f() print(2);
 };
 
-class A (int x = 50, A a = new B()) { // TODO: should throw type check error
+class C extends B {
+    void h() print(3);
+};
+
+class A extends C (int x = 50, B a = new C()) {
     void f() print(x);
     void g() let A a = new A(); in print(a.x);
 };

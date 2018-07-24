@@ -1,7 +1,32 @@
 package testMain;
 
 import java.io.File;
+import java.util.logging.*;
 
+
+class MyFormatter extends Formatter {
+	// Create a DateFormat to format the logger timestamp.
+	//private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss.SSS");
+	
+	public String format(LogRecord record) {
+		StringBuilder builder = new StringBuilder(1000);
+		//builder.append(df.format(new Date(record.getMillis()))).append(" - ");
+		//builder.append("[").append(record.getSourceClassName()).append(".");
+		//builder.append(record.getSourceMethodName()).append("] - ");
+		//builder.append("[").append(record.getLevel()).append("] - ");
+		builder.append(formatMessage(record));
+		builder.append("\n");
+		return builder.toString();
+	}
+	
+	public String getHead(Handler h) {
+		return super.getHead(h);
+	}
+	
+	public String getTail(Handler h) {
+		return super.getTail(h);
+	}
+}
 
 public class TestThread implements Runnable {
 
@@ -23,8 +48,21 @@ public class TestThread implements Runnable {
 	}
 	@Override
 	public void run()  {
-
+		
 		Thread t = Thread.currentThread();
+		
+		/*Logger logger = Logger.getLogger(TestThread.class.getName());
+		logger.setUseParentHandlers(false);
+		
+		MyFormatter formatter = new MyFormatter();
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setFormatter(formatter);
+		
+		logger.addHandler(handler);
+		
+		logger.log(Level.INFO, t.getName());
+		logger.log(Level.INFO, ANSI_BLUE + file.getName() + ANSI_RESET);*/
+		
 		System.out.println(t.getName());
 		//checks if this thread is alive
 		//System.out.println(ANSI_GREEN + ", status = " + t.isAlive() + ANSI_RESET);

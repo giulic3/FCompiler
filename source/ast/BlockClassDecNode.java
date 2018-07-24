@@ -153,7 +153,7 @@ public class BlockClassDecNode implements Node {
 					String newClassID = newEntry.getType().getID();
 					
 					if (id.equals(newClassID))
-						res.add("Object inizialization can't have same type of defining class at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+						res.add("Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				}
 				else if (!(expNode instanceof NullNode))
 					res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
