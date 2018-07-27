@@ -355,7 +355,7 @@ in
     print(b.x);
     b.g();
 */
-
+/*
 class A (int x = 10, A a = null) {
     void f() print(a.x);
 };
@@ -364,3 +364,51 @@ let
 in
     //a.a = new A()
     a.f();
+*/
+/*
+class A {       // TODO: non funziona, errore semantico
+    int uno() return 1;
+    int due(B x) return x.uno();
+};
+
+class B extends A {
+    int uno() return 2;
+};
+
+let
+    A a = new A();
+    B b = new B();
+in
+    print(a.due(b));
+*/
+/*
+class A {
+    int uno() return 1;
+};
+class B extends A {
+    int uno() return 2;
+};
+class C extends A {
+    int uno() return 3;
+};
+
+let
+    B b = new B();
+    C c = new C();
+    A a = if (4 >= 3) then { b } else { c };
+in
+    print(a.uno());
+*/
+
+let
+    int x = 24;
+    int f(int y, int m) {
+        let
+            int u = 0;
+        in
+            if (y == 0) then { u = x }
+            else { u = f(y-1, y*m) }
+            return u;
+    };
+in
+    print(f(5,1));
