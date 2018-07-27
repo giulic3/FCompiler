@@ -60,4 +60,12 @@ public class FunType implements Node {
 		return null;
 	}
 	
+	public void updateReturnType(Node rt) {
+		this.returnType = rt;
+	}
+	
+	public void updateParameter(int index, Node p) {
+		parTypesList.set(index, p);
+	}
+	
 }  

@@ -221,9 +221,25 @@ in
     //b.f(78)
     //c.g(2)
     a = b
-    print(a.g(11));  // TODO: da risolvere, dopo assegnamento tra oggetti
+    a.g(11);
+    //print(a.g(11));
 */
+/*
+class A {
+    int f() return 1;
+};
+class B extends A {
+    int f() return 2;
+    int g() return 3;
+};
 
+let
+    A a = null;
+    B func(A a) print(a.f()) return new B();
+in
+    a = func(new A())
+    print(a.g());
+*/
 /*
 class Numero (int x = 2){
         int uno() return x;
@@ -365,7 +381,7 @@ in
     //a.a = new A()
     a.f();
 */
-/*
+
 class A {       // TODO: non funziona, errore semantico
     int uno() return 1;
     int due(B x) return x.uno();
@@ -380,7 +396,7 @@ let
     B b = new B();
 in
     print(a.due(b));
-*/
+
 /*
 class A {
     int uno() return 1;
@@ -399,7 +415,7 @@ let
 in
     print(a.uno());
 */
-
+/*
 let
     int x = 24;
     int f(int y, int m) {
@@ -412,3 +428,4 @@ let
     };
 in
     print(f(5,1));
+*/

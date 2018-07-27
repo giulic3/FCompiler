@@ -53,6 +53,14 @@ public class MethodDecNode extends FunDecNode {
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		//env.setOffset(env.getOffset()-1);
+		
+		if (type instanceof FunType && ((FunType)type).getReturnType() instanceof ClassType) {
+			Node rt = ((FunType)type).getReturnType();
+			ClassType curType = (ClassType)rt;
+			SymbolTableEntry classEntry = env.getClassEntry(curType.getID());
+			((FunType)type).updateReturnType(classEntry.getType());
+		}
+		
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.increaseOffset(),type); //separo introducendo "entry"
 		entry.setClassName(classID);
 		
@@ -92,14 +100,22 @@ public class MethodDecNode extends FunDecNode {
 		ArrayList<Node> parTypes = new ArrayList<>();
 		int paroffset = 1;
 		
+		// TODO: highly experimental
+		int currentOffset = env.getOffset();
+		env.setOffset(1);
+		
 		for (Node par : parList) {
 			VarNode arg = (VarNode)par;
 			parTypes.add(arg.getType());
-			SymbolTableEntry parEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
+			res.addAll(arg.checkSemantics(env));
+			//SymbolTableEntry parEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
 			
-			if (methodContentHM.put(arg.getID(), parEntry) != null)
-				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			//if (methodContentHM.put(arg.getID(), parEntry) != null)
+			//	res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
+		env.setOffset(currentOffset);
+		// TODO: end highly experimental
+		
 		this.funEntry = entry;
 		
 		int currOffset = env.getOffset();

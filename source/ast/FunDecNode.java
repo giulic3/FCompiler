@@ -2,6 +2,8 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import ast.types.ClassType;
 import ast.types.FunType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -48,6 +50,13 @@ public class FunDecNode implements Node {
 		
 		int offset = env.decreaseOffset();
 		
+		if (type instanceof FunType && ((FunType)type).getReturnType() instanceof ClassType) {
+			Node rt = ((FunType)type).getReturnType();
+			ClassType curType = (ClassType)rt;
+			SymbolTableEntry classEntry = env.getClassEntry(curType.getID());
+			((FunType)type).updateReturnType(classEntry.getType());
+		}
+		
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), offset, type); //separo introducendo "entry"
 		
 		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni
@@ -74,14 +83,21 @@ public class FunDecNode implements Node {
 		ArrayList<Node> parTypes = new ArrayList<>();
 		int paroffset = 1;
 		
+		// TODO: highly experimental
+		int currentOffset = env.getOffset();
+		env.setOffset(1);
+		
 		for (Node par : parList) {
 			VarNode arg = (VarNode) par;
 			parTypes.add(arg.getType());
-			SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
+			res.addAll(arg.checkSemantics(env));
+			//SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
 			
-			if (funContentHM.put(arg.getID(), funEntry) != null)
-				res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
+			//if (funContentHM.put(arg.getID(), funEntry) != null)
+			//	res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
+		env.setOffset(currentOffset);
+		// TODO: end highly experimental
 		
 		this.funEntry = entry;
 		

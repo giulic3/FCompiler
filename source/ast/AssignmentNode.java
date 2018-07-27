@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import ast.types.NullType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -57,7 +58,7 @@ public class AssignmentNode implements Node {
 		else
 			res.addAll(idVariableNode.checkSemantics(env));
 		
-		// Necessary to update object type after assignemnt/initialization
+		// Handles object type update after initialization
 		if (exp instanceof NewExpNode) {
 			NewExpNode newNode = (NewExpNode) exp;
 			SymbolTableEntry newEntry = newNode.getSTEntry();
@@ -65,6 +66,31 @@ public class AssignmentNode implements Node {
 				IdNode curNode = (IdNode)idVariableNode;
 				SymbolTableEntry varEntry = curNode.getSTEntry();
 				varEntry.setType(newEntry.getType());
+				curNode.setSTEntry(varEntry);
+			}
+		}
+		
+		// Handles object type update after assignement
+		if (exp instanceof IdNode) {
+			IdNode expNode = (IdNode)exp;
+			SymbolTableEntry expEntry = expNode.getSTEntry();
+			if (expEntry != null && expEntry.getType() instanceof ClassType && idVariableNode != null) {
+				IdNode curNode = (IdNode)idVariableNode;
+				SymbolTableEntry varEntry = curNode.getSTEntry();
+				varEntry.setType(expEntry.getType());
+				curNode.setSTEntry(varEntry);
+			}
+		}
+		
+		// Handles object type update after assignment from fun call
+		if (exp instanceof FunExpNode) {
+			FunExpNode funNode = (FunExpNode)exp;
+			SymbolTableEntry funEntry = funNode.getSTEntry();
+			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType && idVariableNode != null) {
+				IdNode curNode = (IdNode)idVariableNode;
+				SymbolTableEntry varEntry = curNode.getSTEntry();
+				FunType funType = (FunType)funEntry.getType();
+				varEntry.setType(funType.getReturnType());
 				curNode.setSTEntry(varEntry);
 			}
 		}

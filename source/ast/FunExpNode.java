@@ -152,4 +152,8 @@ public class FunExpNode implements Node {
 		return id;
 	}
 	
+	public SymbolTableEntry getSTEntry() {
+		return this.entry;
+	}
+	
 }
