@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -102,6 +103,25 @@ public class VarNode implements Node {
 			if (newEntry != null) {
 				entry.setType(newEntry.getType());
 				setType(newEntry.getType());
+			}
+		}
+		
+		if (exp instanceof IdNode) {
+			IdNode expNode = (IdNode)exp;
+			SymbolTableEntry expEntry = expNode.getSTEntry();
+			if (expEntry != null && expEntry.getType() instanceof ClassType) {
+				entry.setType(expEntry.getType());
+				setType(expEntry.getType());
+			}
+		}
+		
+		if (exp instanceof FunExpNode) {
+			FunExpNode funNode = (FunExpNode)exp;
+			SymbolTableEntry funEntry = funNode.getSTEntry();
+			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType) {
+				FunType funType = (FunType)funEntry.getType();
+				entry.setType(funType.getReturnType());
+				setType(funType.getReturnType());
 			}
 		}
 		
