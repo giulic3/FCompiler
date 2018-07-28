@@ -164,6 +164,11 @@ public class MethodDecNode extends FunDecNode {
 		for(Node b : body){
 			b.typeCheck();
 		}
+		
+		// check if the type of the last stms or exp in body is subtype of the function return type
+		if (!Helpers.subtypeOf(body.get(body.size()-1).typeCheck(), ((FunType)type).getReturnType()))
+			throw new TypeCheckException("Method Return", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		
 		return ((FunType)type).getReturnType();
 	}
 	

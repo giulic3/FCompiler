@@ -259,7 +259,7 @@ let
 in
     f(5);
 */
-/*
+
 class A (int x = 3, bool y = true) {
     void m(int x) print(x + 4 * y);
     int f(bool x, int y)
@@ -279,14 +279,14 @@ class B extends A (int g = 0, A a = new A()){
 };
 
 class C (int x = 4, A a = new A()){
-    void g() a.f(true,5);
+    void g() print(a.f(true,5));
 };
 
 let
     A a = new A();
     B b = new B();
     C c = new C();
-    //A a1 = new B();
+    A a1 = new B();
     void h(int x) if(x >= 0) then { g(x-1) } print(x);
     void g(int x) if(x >= 0) then { h(x-1) } print(x);
     void f()
@@ -295,14 +295,14 @@ let
         in
             print(x);
 in
-    //f()           // funziona
-    //h(4)          // funziona
-    //a.m(3)        // funziona
-    //b.m(true)     // funziona
-    //c.g();        // exception per offset dichiarazioni nel let (probabilmente)
-    print(b.j());   // funziona ma necessita della print
+    f()           // funziona
+    h(4)          // funziona
+    a.m(3)        // funziona
+    b.m(true)     // funziona
+    c.g()          // risolto
+    print(b.j())   // funziona ma necessita della print
     b.seq(6);       // funziona
-*/
+
 /*
 class A (int x = 100) {
     void f() print(x);
@@ -381,7 +381,7 @@ in
     //a.a = new A()
     a.f();
 */
-
+/*
 class A {       // TODO: non funziona, errore semantico
     int uno() return 1;
     int due(B x) return x.uno();
@@ -396,7 +396,7 @@ let
     B b = new B();
 in
     print(a.due(b));
-
+*/
 /*
 class A {
     int uno() return 1;
@@ -428,4 +428,24 @@ let
     };
 in
     print(f(5,1));
+*/
+/*
+class SUPER {
+    int g() return 200;
+};
+
+class A extends SUPER (int z = 50) {
+    //int g() return 99; // TODO: nullExc if declared after f(); should be solved with double passing
+    int f(bool cond)
+        let
+            int x = if (cond) then { g() - z } else { 3 };
+            int y = x * 2;
+        in
+            return y;
+};
+
+let
+    A a = new A();
+in
+    print(a.f(true));
 */
