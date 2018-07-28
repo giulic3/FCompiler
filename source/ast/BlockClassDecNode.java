@@ -98,9 +98,9 @@ public class BlockClassDecNode implements Node {
 		this.type = classType;
 		
 		SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.increaseOffset(), classType);
-		
-		if (classDecHM.put("Class$"+id, classEntry) != null)
-			res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		if(!env.getSecondCheck())
+			if (classDecHM.put("Class$"+id, classEntry) != null)
+				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		
 		//}
 		// Executing second check on class definitions and everything inside

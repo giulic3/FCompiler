@@ -41,8 +41,13 @@ public class ProgNode  implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		
 		HashSet<String> errors = new HashSet<>();
+		HashSet<String> tmp = new HashSet<>();
 		
 		env.pushScope();
+		
+		for(Node b:blocks)
+			if (b instanceof BlockClassDecNode)
+				tmp.addAll(b.checkSemantics(env));
 		
 		env.settingSecondCheck();
 		

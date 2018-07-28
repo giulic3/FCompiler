@@ -14,7 +14,7 @@ in
     z = if (true && false) then {x} else {y};*/
 
 /*class A (int field = 1) {
-    void setter(int value) field = value;   // TODO: da permettere!!
+    void setter(int value) field = value;
 };
 
 let
@@ -23,7 +23,7 @@ in
     a.setter(5);
     print(a.field);*/
 
-/*  NON FUNZIONA
+/*
 let
     int f(int x, int y) let int z = y-2; in print(x) print(y) print(z) return x*z;
     int h = 2;
@@ -394,9 +394,10 @@ class B extends A {
 let
     A a = new A();
     B b = new B();
+    A c = b;
 in
-    print(a.due(b));
-*/
+    print(a.due(c));
+
 /*
 class A {
     int uno() return 1;
