@@ -450,7 +450,7 @@ let
 in
     print(a.f(true));
 */
-
+/*
 class A (int x = 10) {
     A generate() return new A();
 };
@@ -464,3 +464,18 @@ in
     b.x = 250
     print(b.x)
     print(x);
+*/
+
+class A (int x = 10) {
+    int f() return x;
+};
+class B extends A {
+    int f() x = 20 return x;
+    int g() x = 30 return x;
+};
+
+let
+    A a = if (false) then { new A() } else { new B() };
+in
+    print(a.f());   // non funziona con g() ma credo sia corretto (neanche Java lo permette)
+                    // di conseguenza, tale inizializzazione di a è valida solo per usare metodi overridden
