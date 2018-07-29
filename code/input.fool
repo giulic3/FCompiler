@@ -14,7 +14,7 @@ in
     z = if (true && false) then {x} else {y};*/
 
 /*class A (int field = 1) {
-    void setter(int value) field = value;   // TODO: da permettere!!
+    void setter(int value) field = value;
 };
 
 let
@@ -23,7 +23,7 @@ in
     a.setter(5);
     print(a.field);*/
 
-/*  NON FUNZIONA
+/*
 let
     int f(int x, int y) let int z = y-2; in print(x) print(y) print(z) return x*z;
     int h = 2;
@@ -200,14 +200,14 @@ in
     //n.x = 9876
     //print(n.getY());
 */
-
+/*
 class A (int x = 123, bool cond = true) {
     int m(int z) return z;
 };
 class B extends A (int y = 456) {
     //int g(int h) print(2) return f(3);
     //int f(int z) print(5) return g(2);
-    void g(int par) if (par <= 10) then { f(par+1) } print(par);
+    void g(int par) if (par <= 10) then { f(par+1) } print(-par);
     void f(int par) if (par <= 10) then { g(par+1) } print(par);
 };
 let
@@ -215,14 +215,31 @@ let
     B b = new B();
     B c = new B();
 in
-    b.g(1);
+    //b.g(1)
     //print(a.x, a.cond)
-    //print(a.f(23))
-    //print(b.f(78));
-    //print(c.g(2));
-    //a = b
+    //print(a.m(23))
+    //b.f(78)
+    //c.g(2)
+    a = b
+    a.g(11);
     //print(a.g(11));
+*/
+/*
+class A {
+    int f() return 1;
+};
+class B extends A {
+    int f() return 2;
+    int g() return 3;
+};
 
+let
+    A a = null;
+    B func(A a) print(a.f()) return new B();
+in
+    a = func(new A())
+    print(a.g());
+*/
 /*
 class Numero (int x = 2){
         int uno() return x;
@@ -242,3 +259,223 @@ let
 in
     f(5);
 */
+/*
+class A (int x = 3, bool y = true) {
+    void m(int x) print(x + 4 * y);
+    int f(bool x, int y)
+        let
+            int b = 4;
+            int c = 6;
+        in
+            b = b * 2
+            c = if (x) then { b * c } else { c * c }
+            return c;
+    void seq(int x) if (x >= 0) then { seq(x-1) } print(x);
+};
+
+class B extends A (int g = 0, A a = new A()){
+    void m(int x) print(x);
+    int j() return a.x;
+};
+
+class C (int x = 4, A a = new A()){
+    void g() print(a.f(true,5));
+};
+
+let
+    A a = new A();
+    B b = new B();
+    C c = new C();
+    A a1 = new B();
+    void h(int x) if(x >= 0) then { g(x-1) } print(x);
+    void g(int x) if(x >= 0) then { h(x-1) } print(x);
+    void f()
+        let
+            int x = 1234;
+        in
+            print(x);
+in
+    f()           // funziona
+    h(4)          // funziona
+    a.m(3)        // funziona
+    b.m(true)     // funziona
+    c.g()          // risolto
+    print(b.j())   // funziona ma necessita della print
+    b.seq(6);       // funziona
+*/
+/*
+class A (int x = 100) {
+    void f() print(x);
+};
+class B extends A (int y = 200, A a = new A()) {
+    void g() a.x = y
+             //x = y
+             a.f();
+};
+let
+    B b = new B();
+    A a1 = new A();
+in
+    b.f()
+    b.g()
+    a1.x = 400
+    b.a = a1
+    b.f()
+    b.x = a1.x
+    b.f();
+*/
+/*
+// BELLISSIMO FUNZIONA!
+let
+    int fattoriale(int n)
+        return
+        if (n <= -1) then { 0 }
+        else {
+            if (n == 1 || n == 0) then { 1 }
+            else { n * fattoriale(n-1) }
+        }
+in
+    print(fattoriale(5));   // stampa 5! = 120
+// BELLISSIMO FUNZIONA!
+let
+    int fibonacci(int n)
+        return
+            if (n <= -1) then { 0 }
+            else {
+                if (n == 1 || n == 0) then { 1 }
+                else { fibonacci(n-1) + fibonacci(n-2) }
+in
+    print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
+*/
+/*
+class B {
+    void f() print(2);
+};
+
+class C extends B {
+    void h() print(3);
+};
+
+class A extends C (int x = 50, A a = null) {
+    void f() print(a.x);
+    void g() /*let A a = new A(); in*/ a = new A() print(a.x) h() f();
+};
+
+let
+    A b = new A();
+    //int x = 2147483647;
+in
+    //b = null
+    b.a = new A()
+    b.f();
+    print(b.x);
+    b.g();
+*/
+/*
+class A (int x = 10, A a = null) {
+    void f() print(a.x);
+};
+let
+    A a = new A();
+in
+    //a.a = new A()
+    a.f();
+*/
+/*
+class A {       // risolto errore semantico
+    int uno() return 1;
+    int due(B x) return x.uno();
+};
+
+class B extends A {
+    int uno() return 2;
+};
+
+let
+    A a = new A();
+    B b = new B();
+    A c = b;    // l'inizializzazione dovrebbe andare anche con funzioni, metodi e campi (vedi esempio alla fine)
+in
+    print(a.due(c));
+*/
+/*
+class A {
+    int uno() return 1;
+};
+class B extends A {
+    int uno() return 2;
+};
+class C extends A {
+    int uno() return 3;
+};
+
+let
+    B b = new B();
+    C c = new C();
+    A a = if (4 >= 3) then { b } else { c };
+in
+    print(a.uno());
+*/
+/*
+let
+    int x = 24;
+    int f(int y, int m) {
+        let
+            int u = 0;
+        in
+            if (y == 0) then { u = x }
+            else { u = f(y-1, y*m) }
+            return u;
+    };
+in
+    print(f(5,1));
+*/
+/*
+class SUPER {
+    int g() return 200;
+};
+
+class A extends SUPER (int z = 50) {
+    //int g() return 99; // TODO: nullExc if declared after f(); should be solved with double passing
+    int f(bool cond)
+        let
+            int x = if (cond) then { g() - z } else { 3 };
+            int y = x * 2;
+        in
+            return y;
+};
+
+let
+    A a = new A();
+in
+    print(a.f(true));
+*/
+/*
+class A (int x = 10) {
+    A generate() return new A();
+};
+
+let
+    A a = new A();
+    A b = a.generate();
+    int x = b.x;
+in
+    print(a.x)
+    b.x = 250
+    print(b.x)
+    print(x);
+*/
+
+class A (int x = 10) {
+    int f() return x;
+};
+class B extends A {
+    int f() x = 20 return x;
+    int g() x = 30 return x;
+};
+
+let
+    A a = if (false) then { new A() } else { new B() };
+in
+    print(a.f());   // non funziona con g() ma credo sia corretto (neanche Java lo permette)
+                    // di conseguenza, tale inizializzazione di a è valida solo per usare metodi overridden

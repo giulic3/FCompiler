@@ -6,6 +6,8 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 	
 	public Void visitAssembly(AssemblyContext ctx) {
 		
+		SVMParser.resetSVM();
+		
 		for (int i = 0; i < ctx.simpleCmd().size(); i++)
 			visit(ctx.simpleCmd(i));
 		

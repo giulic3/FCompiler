@@ -5,10 +5,5 @@ class A (int field = 1) {
 let
     A a = new A();
 in
-    a.setter(5);
+    a.setter(5)
     print(a.field);
-
-/* TODO da migliorare, al momento non e' possibile avere assegnamenti a campi all'interno delle classi stesse (solo dot notation)
-Variable field not declared at line: 2:27
-
-*/

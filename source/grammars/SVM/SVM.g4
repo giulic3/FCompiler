@@ -14,6 +14,12 @@ public static int[] code = new int[ExecuteVM.CODESIZE];
 static int i = 0;
 static HashMap<String,Integer> labelAdd = new HashMap<String,Integer>();
 static HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
+static void resetSVM() {
+    code = new int[ExecuteVM.CODESIZE];
+    i = 0;
+    labelAdd = new HashMap<String,Integer>();
+    labelRef = new HashMap<Integer,String>();
+}
 }
 
 /*------------------------------------------------------------------

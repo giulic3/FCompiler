@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="FOOL Tests" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="testMain.TestThread" />
+  <configuration default="false" name="FOOL YAML Tests" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="testMain.TestSuite" />
     <module name="FCompiler" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <method />
