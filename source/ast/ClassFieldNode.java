@@ -17,7 +17,6 @@ public class ClassFieldNode implements Node {
 	private int callNestingLevel;
 	private boolean isExp;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	/**
 	 *
@@ -44,36 +43,38 @@ public class ClassFieldNode implements Node {
 		
 		HashSet<String> res = new HashSet<String>();
 		
-		res.addAll(obj.checkSemantics(env));
+		HashSet<String> objectErrors = obj.checkSemantics(env);
+		if (objectErrors.size() > 0) {
+			res.addAll(objectErrors);
+			return res;
+		}
 		
-		SymbolTableEntry entry = env.getActiveDec(obj.getID());
-		if (entry == null)
-			res.add("Object " + obj.getID() + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		else {
-			SymbolTableEntry classEntry = env.getClassEntry(entry.getType().getID());
-			if (classEntry != null) {
-				ClassType classDef = (ClassType) classEntry.getType();
-				ArrayList<Node> fields = classDef.getFieldsList(true);
-				
-				int i = 0;
-				VarNode foundField = null;
-				while (foundField == null && i < fields.size()) {
-					VarNode m = (VarNode) fields.get(i);
-					if (m.getID().equals(id.getID())) foundField = m;
-					i++;
-				}
-				
-				if (foundField == null) {
-					res.add("Class field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-				}
-				else {
-					((IdNode) id).setSTEntry(foundField.getSTEntry());
-				}
-				this.entry = entry;
-				this.callNestingLevel = env.getNestingLevel();
+		IdNode objIdNode = (IdNode)obj;
+		SymbolTableEntry objEntry = objIdNode.getSTEntry();
+		
+		if (objEntry.getType() instanceof ClassType) {
+			ClassType classDef = (ClassType)objEntry.getType();
+			
+			ArrayList<Node> fields = classDef.getFieldsList(true);
+			
+			int i = fields.size()-1;
+			VarNode foundField = null;
+			while (foundField == null && i>=0) {
+				VarNode f = (VarNode)fields.get(i);
+				if (f.getID().equals(id.getID())) foundField = f;
+				i--;
 			}
-			else
-				res.add("Type of object " + obj.getID() + " is not defined at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			
+			if (foundField == null)
+				res.add("Field " + id.getID() + " is not defined in class " + classDef.getID() + " at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			else {
+				((IdNode)id).setSTEntry(foundField.getSTEntry());
+			}
+			this.entry = objEntry;
+			this.callNestingLevel = env.getNestingLevel();
+		}
+		else {
+			res.add("Wrong usage of class field on object at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		
 		return res;
@@ -103,9 +104,5 @@ public class ClassFieldNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

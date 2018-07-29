@@ -15,7 +15,6 @@ public class NewExpNode implements Node {
 	protected SymbolTableEntry entry = null;
 	protected int callNestingLevel;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	public NewExpNode(String ID, ParserRuleContext ctx){
 		this.id = ID;
@@ -71,9 +70,5 @@ public class NewExpNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return id;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

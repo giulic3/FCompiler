@@ -53,6 +53,8 @@ public class FunExpNode implements Node {
 	public HashSet<String> checkSemantics(Environment env) {
 		HashSet<String> res = new HashSet<String>();
 		
+		if (env.getDefiningClass() != null) classID = env.getDefiningClass();
+		
 		ArrayList<Node> methods = new ArrayList<>();
 		
 		if(classID != null){
@@ -149,4 +151,9 @@ public class FunExpNode implements Node {
 	public String getID() {
 		return id;
 	}
+	
+	public SymbolTableEntry getSTEntry() {
+		return this.entry;
+	}
+	
 }

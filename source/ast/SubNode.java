@@ -13,7 +13,6 @@ public class SubNode implements Node {
 	private Node leftOperand;
 	private Node rightOperand;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	
 	public SubNode(Node l, Node r, ParserRuleContext ctx) {
@@ -30,8 +29,6 @@ public class SubNode implements Node {
 		HashSet<String> res = new HashSet<String>();
 		
 		//check semantics in the left and in the right exp
-		leftOperand.setClassID(classID);
-		rightOperand.setClassID(classID);
 		res.addAll(leftOperand.checkSemantics(env));
 		res.addAll(rightOperand.checkSemantics(env));
 		
@@ -55,9 +52,5 @@ public class SubNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

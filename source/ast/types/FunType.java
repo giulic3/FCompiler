@@ -11,7 +11,6 @@ public class FunType implements Node {
 	
 	private ArrayList<Node> parTypesList;
 	private Node returnType;
-	private String classID = null;
 	
 	/**
 	 *
@@ -61,8 +60,12 @@ public class FunType implements Node {
 		return null;
 	}
 	
-	public void setClassID(String id) {
-		this.classID = id;
+	public void updateReturnType(Node rt) {
+		this.returnType = rt;
+	}
+	
+	public void updateParameter(int index, Node p) {
+		parTypesList.set(index, p);
 	}
 	
 }  

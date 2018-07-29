@@ -12,7 +12,6 @@ public class PrintNode implements Node {
 	
 	private ArrayList<Node> exps;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	public PrintNode(ArrayList<Node> exps, ParserRuleContext ctx) {
 		this.exps = exps;
@@ -62,9 +61,5 @@ public class PrintNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

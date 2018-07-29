@@ -18,7 +18,6 @@ public class BlockClassDecNode implements Node {
 	private ArrayList<Node> methods;
 	private ParserRuleContext ctx;
 	private ClassType type;
-	private String classID = null;
 	
 	/**
 	 *
@@ -99,9 +98,9 @@ public class BlockClassDecNode implements Node {
 		this.type = classType;
 		
 		SymbolTableEntry classEntry = new SymbolTableEntry(env.getNestingLevel(), env.increaseOffset(), classType);
-		
-		if (classDecHM.put("Class$"+id, classEntry) != null)
-			res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+		if(!env.getSecondCheck())
+			if (classDecHM.put("Class$"+id, classEntry) != null)
+				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		
 		//}
 		// Executing second check on class definitions and everything inside
@@ -141,9 +140,24 @@ public class BlockClassDecNode implements Node {
 		//int parOffset=1;
 		env.setOffset(1+classType.getFieldsList(true).size() - fields.size());
 		
+		env.setDefiningClass(id);
+		
 		for (Node f: fields) {
 			VarNode field = (VarNode)f;
 			res.addAll(field.checkSemantics(env));
+			
+			if (field.getType() instanceof ClassType) {
+				Node expNode = field.getExp();
+				if (expNode instanceof NewExpNode) {
+					SymbolTableEntry newEntry = ((NewExpNode)expNode).getSTEntry();
+					String newClassID = newEntry.getType().getID();
+					
+					if (id.equals(newClassID))
+						res.add("Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				}
+				else if (!(expNode instanceof NullNode))
+					res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+			}
 		}
 		
 		ArrayList<Node> inheritedMethods = classType.getMethodsList(true, true);
@@ -178,6 +192,8 @@ public class BlockClassDecNode implements Node {
 		res.addAll(fin);
 		
 		env.settingFunSecondCheck(false);
+		
+		env.setDefiningClass(null);
 		
 		env.popScope();
 		
@@ -236,11 +252,6 @@ public class BlockClassDecNode implements Node {
 	
 	public String getSuperclassID() {
 		return superClassID;
-	}
-	
-	// non usare assolutamente qui
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }
 

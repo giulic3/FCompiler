@@ -9,7 +9,6 @@ import java.util.HashSet;
 public class ProgNode  implements Node {
 	
 	private ArrayList<Node> blocks;
-	private String classID = null;
 	
 	
 	/**
@@ -43,8 +42,13 @@ public class ProgNode  implements Node {
 	public HashSet<String> checkSemantics(Environment env){
 		
 		HashSet<String> errors = new HashSet<>();
+		HashSet<String> tmp = new HashSet<>();
 		
 		env.pushScope();
+		
+		for(Node b:blocks)
+			if (b instanceof BlockClassDecNode)
+				tmp.addAll(b.checkSemantics(env));
 		
 		env.settingSecondCheck();
 		
@@ -85,9 +89,5 @@ public class ProgNode  implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

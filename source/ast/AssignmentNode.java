@@ -1,6 +1,8 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.FunType;
+import ast.types.NullType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -49,13 +51,49 @@ public class AssignmentNode implements Node {
 		
 		HashSet<String> res = new HashSet<String>();
 		
+		res.addAll(exp.checkSemantics(env));
+		
 		if (objFieldNode != null)
 			res.addAll(objFieldNode.checkSemantics(env));
-		else{
+		else
 			res.addAll(idVariableNode.checkSemantics(env));
+		
+		// Handles object type update after initialization
+		if (exp instanceof NewExpNode) {
+			NewExpNode newNode = (NewExpNode) exp;
+			SymbolTableEntry newEntry = newNode.getSTEntry();
+			if (newEntry != null && idVariableNode != null) {
+				IdNode curNode = (IdNode)idVariableNode;
+				SymbolTableEntry varEntry = curNode.getSTEntry();
+				varEntry.setType(newEntry.getType());
+				curNode.setSTEntry(varEntry);
+			}
 		}
 		
-		res.addAll(exp.checkSemantics(env));
+		// Handles object type update after assignement
+		if (exp instanceof IdNode) {
+			IdNode expNode = (IdNode)exp;
+			SymbolTableEntry expEntry = expNode.getSTEntry();
+			if (expEntry != null && expEntry.getType() instanceof ClassType && idVariableNode != null) {
+				IdNode curNode = (IdNode)idVariableNode;
+				SymbolTableEntry varEntry = curNode.getSTEntry();
+				varEntry.setType(expEntry.getType());
+				curNode.setSTEntry(varEntry);
+			}
+		}
+		
+		// Handles object type update after assignment from fun call
+		if (exp instanceof FunExpNode) {
+			FunExpNode funNode = (FunExpNode)exp;
+			SymbolTableEntry funEntry = funNode.getSTEntry();
+			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType && idVariableNode != null) {
+				IdNode curNode = (IdNode)idVariableNode;
+				SymbolTableEntry varEntry = curNode.getSTEntry();
+				FunType funType = (FunType)funEntry.getType();
+				varEntry.setType(funType.getReturnType());
+				curNode.setSTEntry(varEntry);
+			}
+		}
 		
 		nestingLevel = env.getNestingLevel();
 		
@@ -75,12 +113,21 @@ public class AssignmentNode implements Node {
 			IdNode var = (IdNode)idVariableNode;
 			SymbolTableEntry entry = var.getSTEntry();
 			
-			if (!Helpers.subtypeOf(exp.typeCheck(), idVariableNode.typeCheck()) || !Helpers.subtypeOf(exp.typeCheck(), entry.getStaticType())) {
+			Node idVarNodeTC = idVariableNode.typeCheck();
+			Node expTC = exp.typeCheck();
+			
+			// to allow reinstantiation of a null object
+			if (idVarNodeTC instanceof NullType && Helpers.subtypeOf(expTC, entry.getStaticType())) {
+				entry.setType(expTC);
+				var.setSTEntry(entry);
+				return new VoidType();
+			}
+			else if (!Helpers.subtypeOf(expTC, idVarNodeTC) || !Helpers.subtypeOf(expTC, entry.getStaticType())) {
 				throw new TypeCheckException("Assignment", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 			else {
-				if (idVariableNode.typeCheck() instanceof ClassType) {
-					entry.setType(exp.typeCheck());
+				if (idVarNodeTC instanceof ClassType) {
+					entry.setType(expTC);
 					var.setSTEntry(entry);
 				}
 			}

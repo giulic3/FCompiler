@@ -11,7 +11,6 @@ public class DivNode implements Node {
 	private Node leftOperand;
 	private Node rightOperand;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	/**
 	 *
@@ -63,9 +62,5 @@ public class DivNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

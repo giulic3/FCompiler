@@ -14,7 +14,7 @@ import utils.SymbolTableEntry;
 public class IdNode implements Node {
 
 	private String id;
-	private String classID = null;
+	private String classID;
 	private SymbolTableEntry entry;
 	private int nestinglevel;
 	private ParserRuleContext ctx;
@@ -45,6 +45,7 @@ public class IdNode implements Node {
 	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 
+		if (env.getDefiningClass() != null) classID = env.getDefiningClass();
 		
 		//discriminare se l'id node non appartiene ad una classe controllo classname != null
 		
@@ -110,9 +111,5 @@ public class IdNode implements Node {
 				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +     //risalgo la catena statica
 				"add\n" +
 				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

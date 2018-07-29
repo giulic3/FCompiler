@@ -6,8 +6,6 @@ import java.util.HashSet;
 
 public class NullNode implements Node {
 	
-	private String classID = null;
-	
 	public NullNode() {}
 	
 	public String toPrint(String indent) {
@@ -26,16 +24,12 @@ public class NullNode implements Node {
 	
 	public String codeGeneration() {
 		// TODO: da implementare
-		return null;
+		return "push " + Integer.toString(Integer.MAX_VALUE) + "\n";
 	}
 	
 	// Method to retrieve string identifier of an object
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

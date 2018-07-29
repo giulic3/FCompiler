@@ -19,7 +19,6 @@ public class AndNode implements Node {
 	private Node left;
 	private Node right;
 	private ParserRuleContext ctx;
-	private String classID = null;
 
 	public AndNode (Node l, Node r, ParserRuleContext ctx) {
 		left = l;
@@ -84,9 +83,5 @@ public class AndNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

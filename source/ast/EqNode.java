@@ -12,7 +12,6 @@ public class EqNode implements Node {
 	private Node left;
 	private Node right;
 	private ParserRuleContext ctx;
-	private String classID = null;
 	
 	
 	/**
@@ -76,9 +75,5 @@ public class EqNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -59,6 +60,10 @@ public class VarNode implements Node {
 		this.type = type;
 	}
 	
+	public Node getExp() {
+		return this.exp;
+	}
+	
 	public String toPrint(String s){
 		if (exp != null)
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
@@ -72,6 +77,12 @@ public class VarNode implements Node {
 		if (exp!=null) res.addAll(exp.checkSemantics(env));
 		
 		res.addAll(type.checkSemantics(env));
+		
+		// necessary to set the correct class type as defined in the symbol table
+		if (type instanceof ClassType) {
+			SymbolTableEntry classDef = env.getClassEntry(type.getID());
+			if (classDef != null) type = classDef.getType();
+		}
 		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
@@ -95,6 +106,25 @@ public class VarNode implements Node {
 			}
 		}
 		
+		if (exp instanceof IdNode) {
+			IdNode expNode = (IdNode)exp;
+			SymbolTableEntry expEntry = expNode.getSTEntry();
+			if (expEntry != null && expEntry.getType() instanceof ClassType) {
+				entry.setType(expEntry.getType());
+				setType(expEntry.getType());
+			}
+		}
+		
+		if (exp instanceof FunExpNode) {
+			FunExpNode funNode = (FunExpNode)exp;
+			SymbolTableEntry funEntry = funNode.getSTEntry();
+			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType) {
+				FunType funType = (FunType)funEntry.getType();
+				entry.setType(funType.getReturnType());
+				setType(funType.getReturnType());
+			}
+		}
+		
 		if (hm.put(ID, entry) != null)
 			res.add("Var or Par id " + id + " already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		else
@@ -105,7 +135,12 @@ public class VarNode implements Node {
 	
 	public Node typeCheck() throws Exception {
 		if(exp!=null) {
-			if (!Helpers.subtypeOf(exp.typeCheck(), type)) {
+			Node expTypeCheck = exp.typeCheck();
+			
+			if (exp instanceof ClassType && !Helpers.subtypeOf(expTypeCheck, this.entry.getStaticType())) {
+				throw new TypeCheckException("Object Initialization", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+			}
+			if (!Helpers.subtypeOf(expTypeCheck, type)) {
 				throw new TypeCheckException("Var", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 			}
 		}
@@ -125,9 +160,5 @@ public class VarNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return id;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }

@@ -20,7 +20,6 @@ public class IfNode implements Node {
 	private ArrayList<Node> thStms;
 	private ArrayList<Node> elStms;
 	private ParserRuleContext ctx;
-	private String classID = null;
 
 	// IfExp
 	public IfNode(Node cond, Node th, Node el, ParserRuleContext ctx) {
@@ -92,22 +91,16 @@ public class IfNode implements Node {
 		
 		// IfExp
 		if (th != null) {
-			th.setClassID(this.classID);
-			el.setClassID(this.classID);
 			res.addAll(th.checkSemantics(env));
 			res.addAll(el.checkSemantics(env));
 		}
 		// IfStms
 		else {
-			for (Node stm: thStms) {
-				stm.setClassID(this.classID);
+			for (Node stm: thStms)
 				res.addAll(stm.checkSemantics(env));
-			}
 			
-			for (Node stm: elStms) {
-				stm.setClassID(this.classID);
+			for (Node stm: elStms)
 				res.addAll(stm.checkSemantics(env));
-			}
 		}
 		
 		return res;
@@ -180,9 +173,5 @@ public class IfNode implements Node {
 	// In nodes where identifier is not significant, null is returned
 	public String getID() {
 		return null;
-	}
-	
-	public void setClassID(String id) {
-		this.classID = id;
 	}
 }
