@@ -18,4 +18,9 @@ public class TypeCheckException extends Exception {
 		return "Type check error: wrong type in " + nodeCause + " at line " + errorLine + ":" + errorColumn + "\n";
 	}
 	
+	@Override
+	public String getMessage() {
+		return this.toString();
+	}
+	
 }

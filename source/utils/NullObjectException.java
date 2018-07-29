@@ -9,4 +9,9 @@ public class NullObjectException extends Exception {
 	public String toString() {
 		return "Trying to either use or access uninitialized object\n";
 	}
+	
+	@Override
+	public String getMessage() {
+		return this.toString();
+	}
 }

@@ -15,18 +15,16 @@ import utils.Helpers;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public class Main {
 	
-	private static Node lexicalAndSyntacticAnalysis(CharStream input) /*throws LexerException*/ {
+	private static Node lexicalAndSyntacticAnalysis(CharStream input) throws Exception {
 		FOOLLexer lexer = new FOOLLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		if (lexer.lexicalErrors > 0) {
-			System.out.println("Lexer errors");
-			//throw new LexerException(lexer.errors);
-		}
+		if (lexer.lexicalErrors > 0)
+			throw new Exception("Lexer errors occurred");
+		
 		FOOLParser parser = new FOOLParser(tokens);
 		FOOLVisitorImpl visitor = new FOOLVisitorImpl();
 		
@@ -35,16 +33,16 @@ public class Main {
 		return visitor.visit(res); //generazione AST
 	}
 	
-	private static Node semanticAnalysis(Node ast, boolean visualizeAST){
+	private static Node semanticAnalysis(Node ast, boolean visualizeAST) throws Exception {
 		Environment env = new Environment();
 		HashSet<String> err = ast.checkSemantics(env);
 		
 		if (err.size() > 0) {
+			StringBuilder errors = new StringBuilder();
 			for(String e: Helpers.getOrderedListOfErrors(err))
-				System.out.print(e);
+				errors.append(e);
 			
-			 //System.exit(2);  //TODO temporary, only to allow testing of multiple files in a single run
-			return null; // TODO maybe
+			throw new Exception(errors.toString());
 		}
 		
 		if(visualizeAST) {
@@ -54,38 +52,49 @@ public class Main {
 		return ast; //type-checking bottom-up
 	}
 	
-	
-	public static String run(CharStream input) throws Exception {
+	public static String run(CharStream input, boolean testing) {
 		String result = "";
 		
-		System.out.println("Lexer & parser...");
-		
-		Node ast = lexicalAndSyntacticAnalysis(input);
-		
-		System.out.println("Visualizing AST...");
-		
-		ast = semanticAnalysis(ast, true);
-		if(ast!=null) {
-			Node type = ast.typeCheck(); //type-checking bottom-up
-			System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
-			System.out.println();
+		try {
+			if (!testing) System.out.println("Lexer & parser...");
 			
-			// Code Generation
-			codeGen(ast);
+			Node ast = lexicalAndSyntacticAnalysis(input);
+			
+			if (!testing) System.out.println("Visualizing AST...");
+			
+			ast = semanticAnalysis(ast, !testing);
+			if (ast != null) {
+				Node type = ast.typeCheck(); //type-checking bottom-up
+				
+				if (!testing) {
+					System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
+					System.out.println();
+				}
+				
+				// Code Generation
+				result = codeGen(ast, testing);
+			}
+		}
+		catch (Exception e) {
+			result = e.getMessage();
 		}
 		
 		return result;
 	}
 	
-	public static void codeGen(Node ast) throws Exception {
+	public static String codeGen(Node ast, boolean testing) throws Exception {
+		StringBuilder result = new StringBuilder();
+		
 		String assembly = ast.codeGeneration();
-		System.out.println(assembly);
+		if (!testing) System.out.println(assembly);
+		
+		File asmInputFile = new File("code/output.fool.asm");
+		if (asmInputFile.exists()) asmInputFile.delete();
 		
 		BufferedWriter asmOutput = new BufferedWriter(new FileWriter("code/output.fool.asm"));
 		asmOutput.write(assembly);
 		asmOutput.close();
 		
-		File asmInputFile = new File("code/output.fool.asm");
 		CharStream input = CharStreams.fromFileName(asmInputFile.getAbsolutePath());
 		
 		SVMLexer asmLexer = new SVMLexer(input);
@@ -95,24 +104,23 @@ public class Main {
 		
 		asmVisitor.visit(asmParser.assembly());
 		
-		System.out.println("Starting Virtual Machine...");
+		if (!testing) System.out.println("Starting Virtual Machine...");
 		ExecuteVM vm = new ExecuteVM(SVMParser.code);
-		
-		System.out.println("Code Array:");
-		System.out.println(Arrays.toString(SVMParser.code));
 		
 		vm.cpu();
 		
 		if (!vm.errorBuffer.isEmpty()) {
-			System.out.println("Some errors occurred during execution:");
+			if (!testing) result.append("Some errors occurred during execution:\n");
 			for (String e: vm.errorBuffer)
-				System.out.println(e);
+				result.append(e).append("\n");
 		}
 		else {
-			System.out.println("Virtual Machine execution result:");
+			if (!testing) result.append("Virtual Machine execution result:\n");
 			for (String res: vm.outputBuffer)
-				System.out.println(res);
+				result.append(res).append("\n");
 		}
+		
+		return result.toString();
 	}
 
 	public static void testWithThreads(File file) {
@@ -120,7 +128,7 @@ public class Main {
 
 			String output = "";
 			CharStream input = CharStreams.fromFileName(file.getAbsolutePath());
-			output += run(input);
+			output += run(input, true);
 		}
 		catch (Exception e) {
 			// printStackTrace method
@@ -132,43 +140,35 @@ public class Main {
 		}
 	}
 
-	public static String testWithYaml(String testID, CharStream input, String expectedResult, boolean enableLogging, boolean showAST, boolean noColors) {
+	public static String test(CharStream input, String expectedResult) {
 		String actualResult = "";
 
 		try {
-			actualResult = run(input);
+			actualResult = run(input, true);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		StringBuilder output = new StringBuilder();
-		output.append("-Expected: ").append(expectedResult).append("\n")
-				.append("-Got: ").append(actualResult).append("\n");
+		output.append("- Expected: ").append(expectedResult).append("\n")
+				.append("- Got: ").append(actualResult).append("\n");
 		if (actualResult.trim().equals(expectedResult.trim())) {
-			output.append("Test PASSED!");
+			output.append(Helpers.ANSI_GREEN).append("Test PASSED!\n");
 		} else {
-			output.append("Test FAILED!");
+			output.append(Helpers.ANSI_RED).append("Test FAILED!\n");
 		}
 
 		return output.toString();
 	}
 	
-	public static void main(String[] args) throws  Exception{
-
-		//try {
+	public static void main(String[] args) {
+		try {
 			File inputFile = new File("code/input.fool");
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
-			String output = run(input);
-		//}
-		/*catch (Exception E) {
-			System.out.println(E);
-		}*/
-		/*ast.typeCheck();
-		
-		Node boolNode = new BoolValNode(true);
-		Node intNode = new IntValNode(2);
-		
-		Node prova = new AndNode(boolNode, intNode);
-		prova.typeCheck();*/
-		
+			String output = run(input, false);
+			System.out.println(output);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
