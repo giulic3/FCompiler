@@ -123,23 +123,6 @@ public class Main {
 		return result.toString();
 	}
 
-	public static void testWithThreads(File file) {
-		try {
-
-			String output = "";
-			CharStream input = CharStreams.fromFileName(file.getAbsolutePath());
-			output += run(input, true);
-		}
-		catch (Exception e) {
-			// printStackTrace method
-			// prints line numbers + call stack
-			e.printStackTrace();
-
-			// Prints what exception has been thrown
-			System.out.println(e);
-		}
-	}
-
 	public static String test(CharStream input, String expectedResult) {
 		String actualResult = "";
 
