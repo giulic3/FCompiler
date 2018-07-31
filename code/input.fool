@@ -345,7 +345,7 @@ let
                 if (n == 1 || n == 0) then { 1 }
                 else { fibonacci(n-1) + fibonacci(n-2) }
 in
-    print(fibonacci(7));    // stampa fib(4) = 8+13 = 21
+    print(fibonacci(7));    // stampa fib(7) = 8+13 = 21
 */
 /*
 class B {
@@ -465,7 +465,7 @@ in
     print(b.x)
     print(x);
 */
-
+/*
 class A (int x = 10) {
     int f() return x;
 };
@@ -479,3 +479,23 @@ let
 in
     print(a.f());   // non funziona con g() ma credo sia corretto (neanche Java lo permette)
                     // di conseguenza, tale inizializzazione di a è valida solo per usare metodi overridden
+*/
+
+class Auto(int porte = 5, int marce = 6, int marciaCorrente = 0) {
+        void cambiaNumPorte(int p)
+            porte = p;
+        //void inserisciMarcia(int m)
+        //    if ((m >= 0) && (m <= marce)) then { marciaCorrente = m };
+    };
+    let
+        //Auto a = new Auto();
+        Auto b = new Auto();
+    in
+        if ((4 >= 5) || (4 >= 5)) then { print(4) };
+        //print(a.porte, a.marce, a.marciaCorrente)
+        //b.cambiaNumPorte(3)
+        //b.inserisciMarcia(1)
+        //b.inserisciMarcia(7)
+        //if ((1 >= 0) && (1 <= b.marce)) then { b.marciaCorrente = 1 }
+        if ((7 == 7) && (7 == 6)) then { b.marciaCorrente = 7 }
+        print(b.porte, b.marce, b.marciaCorrente);

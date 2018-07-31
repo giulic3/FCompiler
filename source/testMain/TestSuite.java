@@ -26,10 +26,13 @@ public class TestSuite {
 			StringBuilder testOutput = new StringBuilder();
 			for (String curTest : tests.keySet()) {
 				ArrayList<String> testContent = tests.get(curTest);
-				String code = String.valueOf(testContent.get(0));
+				String code = testContent.get(0);
 				String result = testContent.get(1);
 				
-				String resString = Helpers.ANSI_YELLOW + "Current Test: " + curTest + Helpers.ANSI_RESET + "\n";
+				String[] titleParts = curTest.split(" - ");
+				String testNumber = titleParts[0].replaceFirst("^test", "");
+				
+				String resString = Helpers.ANSI_YELLOW + "Current Test: " + titleParts[1] + " (" + testNumber + ")" + Helpers.ANSI_RESET + "\n";
 				testOutput.append(resString).append(code).append("\n");
 				
 				CharStream testInput = CharStreams.fromString(code);
@@ -45,7 +48,7 @@ public class TestSuite {
 			String color = (testPassed == tests.keySet().size()) ? Helpers.ANSI_GREEN : Helpers.ANSI_RED;
 			String totalRes = (testPassed == tests.keySet().size()) ? color + "NO ERRORS OCCURRED." : color + "SOME TESTS FAILED.";
 			testOutput.append(totalRes);
-			String passedStats = " TEST PASSED " + testPassed + "/" + tests.keySet().size() + "\n";
+			String passedStats = " PASSED TESTS: " + testPassed + "/" + tests.keySet().size() + "\n";
 			testOutput.append(color).append(passedStats);
 			System.out.println(testOutput);
 		}

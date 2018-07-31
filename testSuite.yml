@@ -1,34 +1,239 @@
-test1 - Var asm:
+# BASIC TESTS
+
+test1 - Int Variable Declaration and Initialization:
 -   let
         int x = 10;
     in
         print(x);
 -   "10"
 
-test2 - Sum:
+test2 - Bool Variable Declaration and Initialization:
+-   let
+        bool x = true;
+    in
+        print(x);
+-   "1"
+
+test3 - Bool Variable Declaration with Subtyping:
+-   let
+        bool x = 0;
+    in
+        print(x);
+-   "Type check error: wrong type in Var at line 1:4"
+
+test4 - Int Variable Declaration with Subtyping:
+-   let
+        int x = true;
+    in
+        print(x);
+-   "1"
+
+test5 - Sum and Difference:
+-   let
+        int x = 11;
+        int y = 5;
+    in
+        print(x + y, x - y);
+-   "16\n6"
+
+test6 - Multiplication and Division:
+-   let
+        int x = 24;
+        int y = 6;
+    in
+        print(x * y, x / y);
+-   "144\n4"
+
+test7 - Division by Zero:
 -   let
         int x = 5;
-        int y = 4;
-        int z = x + y;
+    in
+        print(x / 0);
+-   "One or more divisions by zero have been detected. Check your math!"
+
+test8 - Minus Unary Operator:
+-   let
+        int x = -7;
+    in
+        print(x)
+        x = -x
+        print(x);
+-   "-7\n7"
+
+test9 - Equal, Less Or Equal, Greater Or Equal Operators:
+-   let
+        bool eq = 2 == 2;
+        bool le = 3 <= 4;
+        bool ge = 5 >= 1;
+    in
+        print(eq, le, ge);
+-   "1\n1\n1"
+
+test10 - And, Or, Not Operators:
+-   let
+        bool x = true;
+        bool y = false;
+    in
+        print(x && y, x || y, not x, not y);
+-   "0\n1\n0\n1"
+
+test11 - Boolean Operators on Non-Boolean Variables:
+-   let
+        bool x = true;
+        bool res = x && 1;
+    in
+        print(res);
+-   "Type check error: wrong type in And at line 1:30"
+
+test12 - Precedence Between Boolean Operators:
+-   let
+        bool x = false;
+        int y = 7;
+        bool z = x || true + not x * y == 2 + y - not x;
     in
         print(z);
--   "9"
+-   "1"  # z = ((x || true) + ((not x) * y)) == (2 + (y - (not x)))
 
-test3 - Prova Errore semantico:
+test13 - Not and Minus Operators Coexistence:
 -   let
-        int f()  let
-            int y = 0;
+        int x = -5;
+        bool y = not (5 == x);
+        int z = - (not y + x);
+    in
+        print(x, y, z);
+-   "-5\n1\n5"
+
+test14 - Simple Function Definition:
+-   let
+        int succ(int x)
+            return x + 1;
+    in
+        print(succ(3));
+-   "4"
+
+test15 - Function Definition With Local Declarations:
+-   let
+        void f(int z) let
+            int x = 5;
+            int y = 4;
         in
-            y = y + 1;
+            x = y * z - x
+            print(x, y, z);
     in
-        print(ciao);
--   "Variable ciao not declared at line: 1:51"
+        f(3);
+-   "7\n4\n3"
 
-test4 - Prova Errore type check:
+test16 - Complex Function With Multiple Statements:
 -   let
-        bool b = 1;
+        int g(int x, int y)
+            x = y - x * 2
+            y = 3 * x
+            return x + y;
     in
-        print(b);
--   "Type check error: wrong type in Var at line 1:4"
+        print(g(2,5));
+-   "4"
+
+test17 - Recursive Function (Fibonacci):
+-   let
+        int fibonacci(int n)
+            return
+                if (n <= -1) then { 0 }
+                else {
+                    if (n == 1 || n == 0) then { 1 }
+                    else { fibonacci(n-1) + fibonacci(n-2) }
+                };
+    in
+        print(fibonacci(7));
+-   "21"
+
+test18 - Recursive Function (Factorial):
+-   let
+        int factorial(int n)
+            return
+                if (n <= -1) then { 0 }
+                else {
+                    if (n == 1 || n == 0) then { 1 }
+                    else { n * factorial(n-1) }
+                };
+    in
+        print(factorial(5));
+-   "120"
+
+test19 - Mutually Recursive Functions:
+-   let
+        void h(int x)
+            if (x >= 1) then { g(x-1) }
+            print(-x);
+        void g(int x)
+            if(x >= 1) then { h(x-1) }
+            print(x);
+    in
+        h(5);
+- "0\n-1\n2\n-3\n4\n-5"
+
+test20 - Use of Externally-Declared Variables:
+-   let
+        int f() let
+            int z = x + y;
+        in
+            return z * x - y;
+        int x = 10;
+        int y = 13;
+    in
+        print(f());
+-   "217"
+
+test21 - Use of Externally-Declared Variables and Shading:
+-   let
+        int x = 10;
+        int g(int x, int y)
+            return x * y - z * y;
+        int z = 5;
+    in
+        print(g(3,5));
+-   "-10"
+
+test22 - Multiple LetIn Blocks:
+-   let
+        int x = 23;
+        bool y = true;
+        int z = if (y && false) then { x } else { -x };
+    in
+        print(x, y, z);
+    let
+        int a = 32;
+        int x = a * 2;
+    in
+        print(a, x);
+-   "23\n1\n-23\n32\n64"
+
+test23 - Minimal Class Declaration:
+-   class Empty {
+        void amIEmpty()
+            print(true);
+    };
+    let
+        Empty e = new Empty();
+    in
+        e.amIEmpty();
+-   "1"
+
+test24 - Class Declaration with Fields and Methods:
+-   class Auto(int porte = 5, int marce = 6, int marciaCorrente = 0) {
+        void cambiaNumPorte(int p)
+            porte = p;
+        void inserisciMarcia(int m)
+            if ((m >= 0) && (m <= marce)) then { marciaCorrente = m };
+    };
+    let
+        Auto a = new Auto();
+        Auto b = new Auto();
+    in
+        print(a.porte, a.marce, a.marciaCorrente)
+        b.cambiaNumPorte(3)
+        b.inserisciMarcia(1)
+        b.inserisciMarcia(7)
+        print(b.porte, b.marce, b.marciaCorrente);
+-   "5\n6\n0\n3\n6\n1"
 
 # NEW TESTS SHOULD BE ADDED HERE

@@ -132,8 +132,17 @@ public class Main {
 			e.printStackTrace();
 		}
 		StringBuilder output = new StringBuilder();
-		output.append("- Expected: ").append(expectedResult).append("\n")
-				.append("- Got: ").append(actualResult).append("\n");
+		
+		String newLine = "";
+		
+		if (expectedResult.contains("\n"))
+			newLine = "\n";
+		
+		output.append("- Expected: ").append(newLine)
+				.append(expectedResult).append("\n")
+				.append("- Got: ").append(newLine)
+				.append(actualResult).append("\n");
+		
 		if (actualResult.trim().equals(expectedResult.trim())) {
 			output.append(Helpers.ANSI_GREEN).append("Test PASSED!\n");
 		} else {

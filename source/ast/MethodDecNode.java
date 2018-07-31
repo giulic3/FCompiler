@@ -121,11 +121,12 @@ public class MethodDecNode extends FunDecNode {
 		int currOffset = env.getOffset();
 
 		if (!decList.isEmpty())
-			env.setOffset(-2);  // TODO: it doesn't work! to be fixed!
+			env.setOffset(-2);
 		
-		for (Node dec : decList) {
-			res.addAll(dec.checkSemantics(env));
-		}
+		if (env.getFunSecondCheck())
+			for (Node dec : decList) {
+				res.addAll(dec.checkSemantics(env));
+			}
 		
 		env.setOffset(currOffset);
 		

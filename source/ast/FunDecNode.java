@@ -105,14 +105,13 @@ public class FunDecNode implements Node {
 		if(!decList.isEmpty())
 			env.setOffset(-2);
 			
-		for (Node dec : decList) {
-			res.addAll(dec.checkSemantics(env));
-		}
-		
-		if (env.getFunSecondCheck())
-			for (Node b : body) {
+		if (env.getFunSecondCheck()) {
+			for (Node dec : decList)
+				res.addAll(dec.checkSemantics(env));
+			
+			for (Node b : body)
 				res.addAll(b.checkSemantics(env));
-			}
+		}
 		
 		env.popScope();
 		
