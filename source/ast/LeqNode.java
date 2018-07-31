@@ -63,8 +63,9 @@ public class LeqNode implements Node {
 		
 		String l1 = Helpers.newLabel();
 		String l2 = Helpers.newLabel();
-		return left.codeGeneration()+
-				right.codeGeneration()+
+		
+		return  left.codeGeneration() +
+				right.codeGeneration() +
 				"bleq "+ l1 +"\n"+
 				"push 0\n"+
 				"b " + l2 + "\n" +

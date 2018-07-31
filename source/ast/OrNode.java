@@ -48,13 +48,10 @@ public class OrNode implements Node {
 		String exitLabel = Helpers.newLabel();
 		String atLeastOneTrue = Helpers.newLabel();
 		
-		String leftAssembly = left.codeGeneration();
-		String rightAssembly = right.codeGeneration();
-		
-		return  leftAssembly +
+		return  left.codeGeneration() +
 				"push 1\n" +
 				"beq " + atLeastOneTrue + "\n" +
-				rightAssembly +
+				right.codeGeneration() +
 				"push 1\n" +
 				"beq " + atLeastOneTrue + "\n" +
 				"push 0\n" +

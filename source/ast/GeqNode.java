@@ -61,8 +61,9 @@ public class GeqNode implements Node {
 		
 		String l1 = Helpers.newLabel();
 		String l2 = Helpers.newLabel();
-		return right.codeGeneration()+
-				left.codeGeneration()+
+		
+		return  right.codeGeneration() +
+				left.codeGeneration() +
 				"bleq "+ l1 +"\n"+
 				"push 0\n"+
 				"b " + l2 + "\n" +

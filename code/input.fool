@@ -484,18 +484,62 @@ in
 class Auto(int porte = 5, int marce = 6, int marciaCorrente = 0) {
         void cambiaNumPorte(int p)
             porte = p;
-        //void inserisciMarcia(int m)
-        //    if ((m >= 0) && (m <= marce)) then { marciaCorrente = m };
+        void inserisciMarcia(int m)
+            if ((m >= 0) && (m <= marce)) then { marciaCorrente = m };
     };
     let
-        //Auto a = new Auto();
+        Auto a = new Auto();
         Auto b = new Auto();
     in
-        if ((4 >= 5) || (4 >= 5)) then { print(4) };
-        //print(a.porte, a.marce, a.marciaCorrente)
-        //b.cambiaNumPorte(3)
-        //b.inserisciMarcia(1)
-        //b.inserisciMarcia(7)
-        //if ((1 >= 0) && (1 <= b.marce)) then { b.marciaCorrente = 1 }
-        if ((7 == 7) && (7 == 6)) then { b.marciaCorrente = 7 }
+        print(a.porte, a.marce, a.marciaCorrente)
+        b.cambiaNumPorte(3)
+        b.inserisciMarcia(1)
+        b.inserisciMarcia(7)
         print(b.porte, b.marce, b.marciaCorrente);
+
+/*
+class somma(int x=1, int y=1){
+    int sum()
+        return x+y;
+};
+
+class mult extends somma{
+    int mul()
+        return x*y;
+
+};
+
+class sommaEincrementa extends mult{
+    int sum()
+        return x+y+1;
+
+};
+
+let
+    somma a = new somma();
+    mult b = new mult();
+    somma c = new mult();
+    sommaEincrementa d = new sommaEincrementa();
+in
+    a.x=3
+    a.y=5
+    b.x=2
+    b.y=7
+    c.x=9
+    c.y=3
+    d.x=3
+    d.y=7
+    print(a.sum())
+    print(b.sum())
+    print(b.mul())
+    print(c.sum())
+    print(c.mul())
+    print(d.sum())
+    print(d.mul());
+*/
+/*
+let
+    int x = 5;
+in
+    if ((5 == 5) && (0 == 0)) then { print(5) } else { print(0) };
+*/

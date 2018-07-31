@@ -60,16 +60,13 @@ public class AndNode implements Node {
 		String equalValues = Helpers.newLabel();
 		String bothTrue = Helpers.newLabel();
 		
-		String leftAssembly = left.codeGeneration();
-		String rightAssembly = right.codeGeneration();
-		
-		return  leftAssembly +
-				rightAssembly +
+		return  left.codeGeneration() +
+				right.codeGeneration() +
 				"beq " + equalValues + "\n" +
 				"push 0\n" +
 				"b " + exitLabel + "\n" +
 				equalValues + ":\n" +
-				leftAssembly +
+				left.codeGeneration() +
 				"push 1\n" +
 				"beq " + bothTrue + "\n" +
 				"push 0\n" +
