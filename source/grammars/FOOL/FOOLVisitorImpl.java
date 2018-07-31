@@ -54,6 +54,7 @@ public class FOOLVisitorImpl extends FOOLBaseVisitor<Node> {
 		//add argument declarations
 		for(VardecContext par : ctx.vardec()) {
 			VarNode parNode = (VarNode)visit(par);
+			parNode.setIsParam(true);
 			pars.add(parNode);
 			parTypes.add(parNode.getType());
 			//res.addPar( new VarNode(vc.ID().getText(), visit( vc.type() ), null));

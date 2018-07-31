@@ -20,6 +20,7 @@ public class VarNode implements Node {
 	private Node exp;
 	private String classID = null;
 	private SymbolTableEntry entry;
+	private boolean isParam = false;
 	
 	public VarNode(String i, Node t, ParserRuleContext ctx) {
 		this.ctx=ctx;
@@ -64,6 +65,10 @@ public class VarNode implements Node {
 		return this.exp;
 	}
 	
+	public void setIsParam(boolean b) {
+		isParam = b;
+	}
+	
 	public String toPrint(String s){
 		if (exp != null)
 			return s + "Var Node: " + id + " (type: " + type.toPrint("") + ")\n" + exp.toPrint(s+"\t");
@@ -86,7 +91,7 @@ public class VarNode implements Node {
 		
 		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		int FieldOrVarOffset = (classID!=null) ? env.increaseOffset() : env.decreaseOffset();
+		int FieldOrVarOffset = (classID != null || isParam) ? env.increaseOffset() : env.decreaseOffset();
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), FieldOrVarOffset, type); //separo introducendo "entry"
 		entry.setStaticType(type);
 		

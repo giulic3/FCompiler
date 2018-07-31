@@ -1,5 +1,6 @@
 package grammars.SVM;
 
+import utils.DivisionByZeroException;
 import utils.NullObjectException;
 
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class ExecuteVM {
 					case SVMParser.DIV:
 						v1 = pop();
 						v2 = pop();
+						if (v1 == 0)
+							throw new DivisionByZeroException();
 						push(v2 / v1);
 						break;
 					case SVMParser.SUB:
@@ -149,7 +152,7 @@ public class ExecuteVM {
 				}
 			}
 		}
-		catch (NullObjectException e) {
+		catch (NullObjectException | DivisionByZeroException e) {
 			errorBuffer.add(e.toString());
 		}
 	}
