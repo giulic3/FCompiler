@@ -78,7 +78,7 @@ public class MethodDecNode extends FunDecNode {
 				if (method.getID().equals(this.name)) {
 
 					if (method.parList.size() != this.parList.size())
-						res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
+						res.add("Method overloading (wrong number of parameters) '" + this.name + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 					else { // current method is overriding a superclass method, so we set the offset of the superclass
 						entry.setOffset(method.getSTEntry().getOffset());
