@@ -18,9 +18,6 @@ public class ClassType implements Node {
 	
 	private ParserRuleContext ctx;
 	
-	// campi TODO : arraylist? hashmap?
-	// metodi
-	
 	/**
 	 *
 	 * Nodo indicativo del tipo Classe, ogni classe è un istanza di questo tipo.
@@ -47,10 +44,6 @@ public class ClassType implements Node {
 		return classID;
 	}
 	
-	public ClassType getSuperType() {
-		return superType;
-	}
-	
 	public void setFields(ArrayList<Node> fields){
 		this.fields = fields;
 	}
@@ -60,7 +53,6 @@ public class ClassType implements Node {
 	}
 	
 	public ArrayList<Node> getFieldsList(boolean incInherited) {
-		// TODO: risalire la gerarchia delle classi per includere anche i campi ereditati se incInherited = true (da verificare)
 		ArrayList<Node> fieldsList = new ArrayList<>();
 		
 		if (incInherited && superType != null) {
@@ -73,23 +65,18 @@ public class ClassType implements Node {
 	}
 	
 	public Set<String> getSuperList(boolean incInherited) {
-		// TODO: risalire la gerarchia delle classi per
 		Set<String> classList = new HashSet<>();
 		
 		if (incInherited && superType != null) {
 			Set<String> superClassList = superType.getSuperList(true);
 			classList.addAll(superClassList);
 		}
-		//if(superType!=null) {
-		//	classList.add(superType.classID);
-		//}
-		//else
-			classList.add(classID);
+		classList.add(classID);
+		
 		return classList;
 	}
 	
 	public ArrayList<Node> getMethodsList(boolean incInherited, boolean excludeCurrent) {
-		// TODO: risalire la gerarchia delle classi per includere anche i metodi ereditati se incInherited = true (da verificare)
 		ArrayList<Node> methodsList = new ArrayList<>();
 		
 		if (incInherited && superType != null) {
@@ -107,29 +94,24 @@ public class ClassType implements Node {
 	}
 	
 	public String toPrint(String indent) {
-		return classID; // TODO: to be updated
+		return classID + " type";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: non dovrebbe servire
 		HashSet<String> res = new HashSet<String>();
 		
-		SymbolTableEntry entry = env.getClassEntry(classID); // DO NOT ADD Class$ (all class IDs in entries will be changed to Class$NameClass form)
+		SymbolTableEntry entry = env.getClassEntry(classID);
 		if (entry == null)
 			res.add("Class " + classID + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		
-		//this.superClassList=
 		
 		return res;
 	}
 	
 	public Node typeCheck() {
-		// TODO: da implementare
 		return this;
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		return null;
 	}
 	

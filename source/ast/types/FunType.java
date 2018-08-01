@@ -1,10 +1,9 @@
 package ast.types;
+
 import java.util.ArrayList;
 import java.util.HashSet;
-
 import ast.Node;
 import utils.Environment;
-;
 
 /* function type */
 public class FunType implements Node {
@@ -32,7 +31,6 @@ public class FunType implements Node {
 		return parTypesList;
 	}
 	
-	// TODO: this toPrint() should be checked
 	public String toPrint(String indent) {
 		String parlstr = "(";
 		
@@ -45,7 +43,7 @@ public class FunType implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 	
 	public Node typeCheck() {
@@ -62,10 +60,6 @@ public class FunType implements Node {
 	
 	public void updateReturnType(Node rt) {
 		this.returnType = rt;
-	}
-	
-	public void updateParameter(int index, Node p) {
-		parTypesList.set(index, p);
 	}
 	
 }  
