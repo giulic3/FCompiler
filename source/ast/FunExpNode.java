@@ -116,7 +116,6 @@ public class FunExpNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		String parAssembly = "";
 		for (int i = args.size()-1; i >= 0; i--)
 			parAssembly += args.get(i).codeGeneration();
@@ -129,8 +128,6 @@ public class FunExpNode implements Node {
 					"cp\n" +
 					"lw\n" +
 					"push " + entry.getOffset() + "\n" +
-					//"lw\n" +
-					//"lfp\n" +
 					"add\n" +
 					"jsmeth\n" +
 					"js\n";

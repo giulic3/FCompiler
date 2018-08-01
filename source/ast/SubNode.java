@@ -44,7 +44,6 @@ public class SubNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "sub\n";
 	}
 	

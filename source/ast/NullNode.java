@@ -13,17 +13,14 @@ public class NullNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 	
 	public Node typeCheck() {
-		// TODO: da implementare
 		return new NullType();
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		return "push " + Integer.toString(Integer.MAX_VALUE) + "\n";
 	}
 	

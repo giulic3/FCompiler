@@ -22,8 +22,7 @@ public class BoolValNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 	
 	public Node typeCheck() {
@@ -31,7 +30,6 @@ public class BoolValNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		return "push "+(value ? 1 : 0)+"\n";
 	}
 	

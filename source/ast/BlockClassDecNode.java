@@ -88,10 +88,7 @@ public class BlockClassDecNode implements Node {
 		HashSet<String> res = new HashSet<String>();
 		HashSet<String> tmp = new HashSet<String>();
 		
-		// Executing first check on class definitions
-		//if (!env.getSecondCheck()) {
 		HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
-		//env.setOffset(env.getOffset()-1); TODO: to be handled in code gen
 		
 		ClassType classType = new ClassType(id, null, fields, methods, ctx);
 		
@@ -101,13 +98,7 @@ public class BlockClassDecNode implements Node {
 		if(!env.getSecondCheck())
 			if (classDecHM.put("Class$"+id, classEntry) != null)
 				res.add("Class '" + id + "' already declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		
-		//}
-		// Executing second check on class definitions and everything inside
-		//	else {
-		// Handling superclass declaration
-		// TODO: check null!
-		
+				
 		if (superClassID != null) {
 			SymbolTableEntry superclassEntry = env.getClassEntry(superClassID);
 			if (superclassEntry == null)
@@ -116,8 +107,6 @@ public class BlockClassDecNode implements Node {
 				if (superClassID.equals(id))
 					res.add("Class '" + id + "' cannot extends itself at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				else {
-					//ClassType classType = (ClassType)env.getClassEntry(id).getType();
-					
 					ClassType superType = (ClassType)superclassEntry.getType();
 					
 					classType.setSuperType(superType);
@@ -248,10 +237,6 @@ public class BlockClassDecNode implements Node {
 	
 	public String getID() {
 		return id;
-	}
-	
-	public String getSuperclassID() {
-		return superClassID;
 	}
 }
 

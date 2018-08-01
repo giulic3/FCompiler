@@ -1,13 +1,10 @@
 package ast;
 
-import ast.types.BoolType;
 import ast.types.IntType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.TypeCheckException;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PlusNode implements Node {
@@ -27,11 +24,9 @@ public class PlusNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da implementare
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		//check semantics in the left and in the right exp
-		
 		res.addAll(leftOperand.checkSemantics(env));
 		res.addAll(rightOperand.checkSemantics(env));
 		
@@ -47,7 +42,6 @@ public class PlusNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "add\n";
 	}
 	

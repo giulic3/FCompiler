@@ -54,7 +54,6 @@ public class DivNode implements Node {
 	}
 
 	public String codeGeneration() {
-		// TODO: da controllare
 		return leftOperand.codeGeneration() + rightOperand.codeGeneration() + "div\n";
 	}
 	

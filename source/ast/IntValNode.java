@@ -25,7 +25,6 @@ public class IntValNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
 		HashSet<String> res = new HashSet<>();
 		
 		if (value == Integer.MAX_VALUE)
@@ -39,7 +38,6 @@ public class IntValNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		return  "push " + value + "\n";
 	}
 	
