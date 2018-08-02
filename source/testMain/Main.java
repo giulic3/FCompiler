@@ -52,46 +52,16 @@ public class Main {
 		return ast; //type-checking bottom-up
 	}
 	
-	public static String run(CharStream input, boolean testing) {
-		String result = "";
-		
-		try {
-			if (!testing) System.out.println("Lexer & parser...");
-			
-			Node ast = lexicalAndSyntacticAnalysis(input);
-			
-			if (!testing) System.out.println("Visualizing AST...");
-			
-			ast = semanticAnalysis(ast, !testing);
-			if (ast != null) {
-				Node type = ast.typeCheck(); //type-checking bottom-up
-				
-				if (!testing) {
-					System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
-					System.out.println();
-				}
-				
-				// Code Generation
-				result = codeGen(ast, testing);
-			}
-		}
-		catch (Exception e) {
-			result = e.getMessage();
-		}
-		
-		return result;
-	}
-	
-	public static String codeGen(Node ast, boolean testing) throws Exception {
+	private static String codeGen(Node ast, boolean verbose) throws Exception {
 		StringBuilder result = new StringBuilder();
 		
 		String assembly = ast.codeGeneration();
-		if (!testing) System.out.println(assembly);
+		if (verbose) System.out.println(assembly);
 		
-		File asmInputFile = new File("code/output.fool.asm");
+		File asmInputFile = new File("output.fool.asm");
 		if (asmInputFile.exists()) asmInputFile.delete();
 		
-		BufferedWriter asmOutput = new BufferedWriter(new FileWriter("code/output.fool.asm"));
+		BufferedWriter asmOutput = new BufferedWriter(new FileWriter("output.fool.asm"));
 		asmOutput.write(assembly);
 		asmOutput.close();
 		
@@ -104,18 +74,18 @@ public class Main {
 		
 		asmVisitor.visit(asmParser.assembly());
 		
-		if (!testing) System.out.println("Starting Virtual Machine...");
+		if (verbose) System.out.println("Starting Virtual Machine...");
 		ExecuteVM vm = new ExecuteVM(SVMParser.code);
 		
 		vm.cpu();
 		
 		if (!vm.errorBuffer.isEmpty()) {
-			if (!testing) result.append("Some errors occurred during execution:\n");
+			if (verbose) result.append("Some errors occurred during execution:\n");
 			for (String e: vm.errorBuffer)
 				result.append(e).append("\n");
 		}
 		else {
-			if (!testing) result.append("Virtual Machine execution result:\n");
+			if (verbose) result.append("Virtual Machine execution result:\n");
 			for (String res: vm.outputBuffer)
 				result.append(res).append("\n");
 		}
@@ -127,7 +97,7 @@ public class Main {
 		String actualResult = "";
 
 		try {
-			actualResult = run(input, true);
+			actualResult = run(input, false, false);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -152,15 +122,49 @@ public class Main {
 		return output.toString();
 	}
 	
-	public static void main(String[] args) {
+	public static void execute(String filePath, boolean verbose, boolean astOnly) {
 		try {
-			File inputFile = new File("code/input.fool");
+			File inputFile = new File(filePath);
 			CharStream input = CharStreams.fromFileName(inputFile.getAbsolutePath());
-			String output = run(input, false);
+			String output = run(input, verbose, astOnly);
 			System.out.println(output);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static String run(CharStream input, boolean verbose, boolean astOnly) {
+		String result = "";
+		
+		try {
+			if (verbose) System.out.println("Lexer & parser...");
+			
+			Node ast = lexicalAndSyntacticAnalysis(input);
+			
+			if (verbose) System.out.println("Visualizing AST...");
+			
+			ast = semanticAnalysis(ast, astOnly || verbose);
+			if (ast != null && !astOnly) {
+				Node type = ast.typeCheck(); //type-checking bottom-up
+				
+				if (verbose) {
+					System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
+					System.out.println();
+				}
+				
+				// Code Generation
+				result = codeGen(ast, verbose);
+			}
+		}
+		catch (Exception e) {
+			result = e.getMessage();
+		}
+		
+		return result;
+	}
+	
+	public static void main(String[] args) {
+		execute("code/input.fool", true, false);
 	}
 }
