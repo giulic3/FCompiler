@@ -15,6 +15,20 @@
 2. Aprire IntelliJ IDEA, selezionare File > Open, selezionare la cartella FCompiler appena decompressa e premere OK
 3. Nella tab Project sulla sinistra, fare click destro sulla cartella FCompiler/source/lib, e selezionare Add as Library…, quindi cliccare OK
 
+### FCompiler.jar: Istruzioni per l'uso
+```
+$ java -jar FCompiler.jar -h
+  usage: FCompiler.jar
+   -a,--ast                     Show AST after semantic checks (no effects
+                                in test mode)
+   -h,--help                    Show help message
+   -i,--input <FOOL-filepath>   Specify FOOL code input file (REQUIRED)
+   -t,--test                    Use input file as YAML test suite
+   -v,--verbose                 Use verbose execution showing everything,
+                                from AST to assembly (no effect in test
+                                mode)
+```
+
 ### Autori
   * [Giulia Cantini](https://github.com/giulic3) - giulia.cantini2@studio.unibo.it
   * [Matteo Del Vecchio](https://github.com/matteodelv) - matteo.delvecchio6@studio.unibo.it
