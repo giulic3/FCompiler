@@ -92,8 +92,11 @@ public class Main {
 		}
 		else {
 			if (verbose) result.append("Virtual Machine execution result:\n");
-			for (String res: vm.outputBuffer)
-				result.append(res).append("\n");
+			if (vm.outputBuffer.size() == 0)
+				result.append("Execution completed. No output shown.");
+			else
+				for (String res: vm.outputBuffer)
+					result.append(res).append("\n");
 		}
 		
 		return result.toString();
