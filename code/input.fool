@@ -543,9 +543,27 @@ let
 in
     if ((5 == 5) && (0 == 0)) then { print(5) } else { print(0) };
 */
-
+/*
 let
     int sum(int x)
         return x + y;
 in
     print(sum(2));
+*/
+/*
+let
+    int hide(int x) let
+        int x = 10;
+    in
+        return x;
+in
+    print(hide(20));
+*/
+
+let
+    int f(int x) let
+        int g() return 4;
+    in
+        return x + g();
+in
+    print(f(5));

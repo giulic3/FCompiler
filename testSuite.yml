@@ -392,36 +392,44 @@ test36 - Mutually Recursive Methods in a Class:
         a.g(4);
 -   "0\n-1\n2\n-3\n4"
 
-# THIS TEST NEEDS SEMANTIC ERROR CHECKS
 test37 - Scope Error in a Function:
 -   let
         int sum(int x)
             return x + y;
     in
         print(sum(2));
--   "ciao"
+-   "Variable y not declared at line: 1:30"
 
-test38 - Scope Error in a Let Statement:
+test38 - Scope Error in a Method:
+-   class A {
+        int sum(int x) return x + y;
+    };
+    let
+        A a = new A();
+    in
+        print(a.sum(2));
+-   "Variable y not declared at line: 1:36"
+
+test39 - Scope Error in a Let Statement:
 -   let
         int n = 11;
     in
         print(num);
 -   "Variable num not declared at line: 1:25"
 
-# THIS TEST NEEDS SEMANTIC ERROR CHECKS
-test39 - Scope Error Between Functions:
+test40 - Scope Error Between Functions:
 -   let
         int f(int x) let
             int y = 20;
         in
             return g(y) + x;
-        int g(int x)
+        int g(int y)
             return x + y;
     in
         print(f(5));
--   "ciao"
+-   "Variable x not declared at line: 1:73"
 
-test40 - Function Call with Wrong Number of Parameters:
+test41 - Function Call with Wrong Number of Parameters:
 -   let
         bool equal(int x, int y)
             return x == y;
@@ -429,7 +437,7 @@ test40 - Function Call with Wrong Number of Parameters:
         print(equal(10));
 -   "Function equal call with wrong number of parameters is not allowed at line 1:53"
 
-test41 - Ridiculous Naming:
+test42 - Ridiculous Naming:
 -   class A (int A = 50) {
         int A() return A;
     };
@@ -440,7 +448,7 @@ test41 - Ridiculous Naming:
         print(A.A());
 -   "50\n50"
 
-test42 - Ridiculous Naming with Function Parameters:
+test43 - Ridiculous Naming with Function Parameters:
 -   class A (int A = 20) {
         int A(int A) return A;
     };
@@ -452,7 +460,7 @@ test42 - Ridiculous Naming with Function Parameters:
         print(A.A);
 -   "20\n50"
 
-test43 - Ridiculous Naming with Function Parameters, Shading and Assignment:
+test44 - Ridiculous Naming with Function Parameters, Shading and Assignment:
 -   class A (int A = 20) {
         void A(int A) A = A;
     };
@@ -463,5 +471,143 @@ test43 - Ridiculous Naming with Function Parameters, Shading and Assignment:
         A.A(50)
         print(A.A);
 -   "20\n20"
+
+test45 - Shading On Function Parameter Because of Local Definition:
+-   let
+        int hide(int x) let
+            int x = 10;
+        in
+            return x;
+    in
+        print(hide(20));
+-   "Var or Par id x already declared at line 1:24"
+
+test46 - Object Initialization with Subtyping:
+-   class A {
+        void printOne() print(1);
+    };
+    class B extends A {
+        void printTwo() print(2);
+    };
+    let
+        A a = new B();
+    in
+        a.printTwo();
+-   "2"
+
+test47 - Conditional Object Initialization with Subtyping:
+-   class A {
+        int getOne() return 1;
+    };
+    class B extends A (int one = 11) {
+        int getOne() return one;
+    };
+    let
+        A a = if (true) then { new B() } else { new A() };
+    in
+        print(a.getOne());
+-   "11"
+
+test48 - Method Calling Other Methods:
+-   class A (int x = 10) {
+        int double() return x * 2;
+    };
+    class B extends A {
+        int sum() return x + x;
+    };
+    class C extends B {
+        bool equal() return sum() == double();
+    };
+    let
+        C c = new C();
+    in
+        print(c.equal());
+-   "1"
+
+test49 - Incompatible Assignment Between Objects:
+-   class A {
+        int get100() return 100;
+    };
+    class B {
+        int get200() return 200;
+    };
+    let
+        A a = new A();
+        B b = new B();
+    in
+        a = b;
+-   "Type check error: wrong type in Assignment at line 1:113"
+
+test50 - Assignment Between Compatible Objects:
+-   class A {
+        int get100() return 100;
+    };
+    class B extends A {
+        int get200() return 200;
+    };
+    let
+        A a = new A();
+        B b = new B();
+    in
+        print(a.get100())
+        a = b
+        print(a.get200());
+-   "100\n200"
+
+test51 - Subtyping in Function Call:
+-   class A (int x = 15) {
+        void setX(int newX) x = newX;
+        int getX() return x;
+    };
+    class B extends A {
+        void doubleX() x = x * 2;
+    };
+    let
+        int f(A a) return a.getX();
+        B b = new B();
+    in
+        print(f(b))
+        b.doubleX()
+        print(f(b));
+-   "15\n30"
+
+test52 - Circular Class Extension:
+-   class C extends B {
+        int get3() return 3;
+    };
+    class B extends A {
+        int get2() return 2;
+    };
+    class A extends C {
+        int get1() return 1;
+    };
+    let
+        B a = new B();
+    in
+        print(a.get2());
+-   "Superclass 'B' not declared at line 1:0\nSuperclass 'A' not declared at line 1:44"
+
+test53 - Use of Subclass Type Inside Superclass:
+-   class A (B b = null) {
+        void initB() b = new B();
+    };
+    class B extends A (int x = 100) {
+        int getX() return x;
+    };
+    let
+        A a = new A();
+    in
+        a.initB();
+-   "Class B not declared at line 1:9\nClass B not declared at line 1:40"
+
+test54 - Function Definition Inside Function:
+-   let
+        int f(int x) let
+            int g() return 4;
+        in
+            return x + g();
+    in
+        print(f(5));
+-   "Syntax not allowed by FOOL Language at line 1:26"
 
 # NEW TESTS SHOULD BE ADDED HERE

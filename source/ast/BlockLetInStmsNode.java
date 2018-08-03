@@ -62,7 +62,13 @@ public class BlockLetInStmsNode implements Node {
 		
 		//if (tmp.size() > 0)
 		for(Node dec : decs){
-			tmp.addAll(dec.checkSemantics(env));
+			HashSet<String> funErrors = new HashSet<>();
+			if (dec instanceof FunDecNode) {
+				funErrors = dec.checkSemantics(env);
+				res.addAll(funErrors);
+				tmp.addAll(funErrors);
+			}
+			else tmp.addAll(dec.checkSemantics(env));
 		}
 		
 		env.settingFunSecondCheck(false);

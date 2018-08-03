@@ -11,6 +11,7 @@ import grammars.SVM.SVMVisitorImpl;
 import org.antlr.v4.runtime.*;
 import utils.Environment;
 import utils.Helpers;
+import utils.LexerParserErrorListener;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,13 +20,18 @@ import java.util.HashSet;
 
 public class Main {
 	
-	private static Node lexicalAndSyntacticAnalysis(CharStream input) throws Exception {
+	private static Node lexicalAndSyntacticAnalysis(CharStream input) {
 		FOOLLexer lexer = new FOOLLexer(input);
+		LexerParserErrorListener errorListener = new LexerParserErrorListener();
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errorListener);
+		
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		if (lexer.lexicalErrors > 0)
-			throw new Exception("Lexer errors occurred");
 		
 		FOOLParser parser = new FOOLParser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errorListener);
+		
 		FOOLVisitorImpl visitor = new FOOLVisitorImpl();
 		
 		FOOLParser.ProgContext res = parser.prog();

@@ -52,11 +52,11 @@ public class ProgNode  implements Node {
 		
 		env.settingSecondCheck();
 		
-		if (errors.size() ==0)
-			for(Node b:blocks)
-				errors.addAll(b.checkSemantics(env));
+		if (tmp.size() > 0)
+			return tmp;
 		
-		// QUI NON SERVE LA POPSCOPE!!!
+		for(Node b:blocks)
+			errors.addAll(b.checkSemantics(env));
 		
 		return errors;
 	}
