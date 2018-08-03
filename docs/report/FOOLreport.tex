@@ -210,8 +210,6 @@ dalla keyword \textit{in}.\\
 class A (int x = 1, int y = 2) {
   void m() print(0);
 }
-
-class
 \end{lstlisting}
 
 Le espressioni sono state estese a comprendere gli operatori $<=, >=, ||, \&\&, /, - $
@@ -330,6 +328,8 @@ L'interfaccia Node, implementata da tutti i nodi dell'ast è stata modificata ne
   \item \textbf{FunExpNode} rappresenta la chiamata di una funzione, in esso sono memorizzati l'id della funzione,
   gli argomenti, il nesting level e una variabile di supporto classID per gestire la chiamata di metodo che avviene senza dot notation.
   Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
+
+
 \end{itemize}
 
 \subsection{Nodi per la gestione delle classi}
@@ -339,7 +339,7 @@ L'interfaccia Node, implementata da tutti i nodi dell'ast è stata modificata ne
   \item \textbf{ClassMethodNode} rappresenta la chiamata di metodo (o.m()), è sottoclasse di FunExpNode
   \item \textbf{ClassFieldNode} rappresenta il campo di una classe
   \item \textbf{MethodDecNode} rappresenta la dichiarazione di metodo
-  \item \textbf{ClassType} rappresenta il tipo classe, memorizza l'id, l'id del supertipo, la lista dei campi e dei metodi.
+  \item \textbf{ClassType} rappresenta il tipo classe, memorizza l'id, l'id dell'eventuale superclasse, la lista dei campi e dei metodi.
   Contiene getter e setter per gestire questi campi.
 \end{itemize}
 \section{Analisi semantica}
@@ -401,9 +401,45 @@ I tipi su cui si basa il sistema di tipaggio di FOOL sono i seguenti:
   \item VoidType
 \end{itemize}
 
+Il sottotipaggio viene controllato utilizzando la funzione
+\begin{itemize}
+\item public static boolean subtypeOf(Node a, Node b)
+\end{itemize}
+che restituisce \textit{true} se il nodo a è sottotipo del nodo b (in Helpers).
+In particolare, bool è sottotipo di int, void è sottotipo di classe, mentre una classe è sottoclasse di un'altra se
+intersecando la lista delle superclassi della prima con la lista delle superclassi della seconda si ottiene un insieme non vuoto.\\
+Il sottotipaggio tra funzioni/metodi viene gestito all'interno delle typeCheck() di FunDecNode e MethodDecNode, come da specifica, il controllo viene eseguito
+su tipo di ritorno e tipi e numero dei parametri per verificare che i tipi delle funzioni siano compatibili.\\
+\newline
+Si sono implementate le regole di tipaggio per tutti i costrutti:
 
-% TODO inserire almeno l'albero del condizionale
-% come si sono implementate le nozioni di sottotipaggio per funzioni/metodi e classi
+%TODO controllare che siano giuste
+% TODO mancano i tipi base
+\begin{itemize}
+  \item gli operatori logici e relazionali
+$$ \frac{\Gamma\vdash e : Bool}{\vdash ! e : Bool}[Not] $$
+
+$$ \frac{\Gamma \vdash e_1 : Bool \qquad \Gamma \vdash e_2 : Bool}{\Gamma \vdash e_1 \ && \ e_2 : Bool}[And] \qquad \frac{\Gamma \vdash e_1 : Bool \qquad \Gamma \vdash e_2 : Bool}{\Gamma \vdash e_1 \ || \ e_2 : Bool}[Or] $$
+
+$$ \frac{\Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T \qquad T_2<:T}{\Gamma \vdash e_1 \ == \ e_2 : Bool}[Equal] $$
+
+$$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ <= \ e_2 : Bool}[LessEqual] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ >= \ e_2 : Bool}[GreaterEqual] $$
+
+  \item gli operatori aritmetici
+  $$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ + \ e_2 : Int}[Plus] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ - \ e_2 : Int}[Sub] $$
+  $$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ + \ e_2 : Int}[Times] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ - \ e_2 : Int}[Div] $$
+
+  \item le funzioni/i metodi
+  $$ \frac{\Gamma [p_1 \rightarrow T_1] \ ... \ [p_n \rightarrow T_n] \vdash e : T}{\Gamma \vdash T \ foo(T_1 \ p_1, ..., T_n \ p_n) \ e;
+: \ (T_1, ..., T_n) \rightarrow T}[FunDec] $$
+
+$$ \frac{\Gamma \vdash foo : (T_1, ..., T_n) \rightarrow T \qquad a_1 : ST_1 <: T_1 \ \ldots \ a_n : ST_n <: T_n}{\Gamma \vdash foo(ST_1 \ a_1,...,ST_n \ a_n) : T}[FunExp] $$
+
+\item le classi
+$$ \frac{\Gamma [a_1 \rightarrow T_1]...[a_n \rightarrow T_n][f_1p_1 \rightarrow F_1T_1]...[f_1p_n \rightarrow F_1T_n] \vdash e_1 : F_1 \ ... \ \Gamma [a_1 \rightarrow T_1]...[a_n \rightarrow T_n][f_np_1 \rightarrow F_nT_1] \ ... \ [f_np_n \rightarrow F_nT_n] \vdash e_n : F_n}{\Gamma \vdash class \ A \ (T_1 \ a_1, ..., T_n \ a_n) \ {F_1 \ f_1(F_1T_1 \ f_1p_1, ..., F_1T_n \ f_1p_n) \ e_1; \ ... \ F_n \ f_n(F_nT_1 \ f_np_1, ..., F_nT_n \ f_np_n) \ e_n;} : Class}[ClassDef] $$
+\item il condizionale
+$$ \frac{\Gamma \vdash c : Bool \qquad \Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T \qquad T_2 <: T}{\Gamma \vdash if \ \ (c) \ \ then \ \ {e_1} \ \ else \ \ {e_2} : T}[IfExp] $$
+$$ \frac{\Gamma \vdash c : Bool \qquad \Gamma \vdash s_1 : T_1 \qquad \Gamma \vdash s_2 : T_2 \qquad T_1 <: Void \qquad T_2 <: Void}{\Gamma \vdash if \ \ (c) \ \ then \ \ {s_1} \ \ else \ \ {s_2} : Void}[IfStm] $$
 
 \section{Generazione del codice}
 
@@ -411,7 +447,6 @@ I tipi su cui si basa il sistema di tipaggio di FOOL sono i seguenti:
 \subsection{Layout di un oggetto}
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
 \subsection{Dynamic dispatch}
-\subsection{Garbage collector (???)}
 
 \section{Conclusioni}
 
