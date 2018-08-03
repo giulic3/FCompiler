@@ -1,11 +1,8 @@
 package ast.types;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
 import ast.Node;
 import utils.Environment;
-;
 
 public class VoidType implements Node {
 	
@@ -17,22 +14,19 @@ public class VoidType implements Node {
 	public VoidType() {
 	}
 	
-	// TODO: da controllare
 	public String toPrint(String indent) {
-		return indent+"VoidType";
+		return indent + " VoidType";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 	
 	public Node typeCheck() {
-		return new VoidType(); // TODO: da controllare
+		return new VoidType();
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		return null;
 	}
 	

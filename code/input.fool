@@ -480,7 +480,7 @@ in
     print(a.f());   // non funziona con g() ma credo sia corretto (neanche Java lo permette)
                     // di conseguenza, tale inizializzazione di a è valida solo per usare metodi overridden
 */
-
+/*
 class Auto(int porte = 5, int marce = 6, int marciaCorrente = 0) {
         void cambiaNumPorte(int p)
             porte = p;
@@ -496,7 +496,7 @@ class Auto(int porte = 5, int marce = 6, int marciaCorrente = 0) {
         b.inserisciMarcia(1)
         b.inserisciMarcia(7)
         print(b.porte, b.marce, b.marciaCorrente);
-
+*/
 /*
 class somma(int x=1, int y=1){
     int sum()
@@ -543,3 +543,9 @@ let
 in
     if ((5 == 5) && (0 == 0)) then { print(5) } else { print(0) };
 */
+
+let
+    int sum(int x)
+        return x + y;
+in
+    print(sum(2));

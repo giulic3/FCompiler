@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -13,7 +12,6 @@ public class NewExpNode implements Node {
 	
 	protected String id;
 	protected SymbolTableEntry entry = null;
-	protected int callNestingLevel;
 	private ParserRuleContext ctx;
 	
 	public NewExpNode(String ID, ParserRuleContext ctx){
@@ -30,11 +28,8 @@ public class NewExpNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da implementare
 		HashSet<String> res = new HashSet<String>();
 		
-		// TODO: handle offset
-		// TODO: IMPORTANT: define unique key management for classes
 		SymbolTableEntry entry = env.getClassEntry(id);
 		if (entry == null)
 			res.add("Class " + id + " not declared at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
@@ -57,9 +52,6 @@ public class NewExpNode implements Node {
 			argsCode.append(fields.get(i).codeGeneration());
 			i--;
 		}
-		
-		//for (Node a: fields)
-		//	argsCode.append(a.codeGeneration());
 		
 		return argsCode + "push " + fields.size() + "\n" +
 				"push " + Helpers.getDispatchTableLabelForClass(id) + "\n" +

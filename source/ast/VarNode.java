@@ -154,7 +154,6 @@ public class VarNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		if (exp != null)
 			return exp.codeGeneration();
 		

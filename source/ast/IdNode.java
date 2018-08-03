@@ -3,7 +3,6 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import ast.types.ClassType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
@@ -77,10 +76,7 @@ public class IdNode implements Node {
 			if (found == null)
 				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			else {
-				//if (found instanceof VarNode)
-					this.entry = ((VarNode)found).getSTEntry();
-				//else
-					//this.entry = new SymbolTableEntry(1, 0, found);
+				this.entry = ((VarNode)found).getSTEntry();
 			}
 		}
 		else
@@ -90,22 +86,10 @@ public class IdNode implements Node {
 	}
 
 	public Node typeCheck () {
-		/*
-		if (entry.getType() instanceof FunType) { //
-			System.out.println("Wrong usage of function identifier");
-			System.exit(0);
-		}
-		*/
-		
-		/* da cambiare anche il tipo in STEntry*/
 		return entry.getType();
-		//return new IntType();
-		
 	}
 
 	public String codeGeneration() {
-		// TODO: da controllare
-		
 		return  "push " + entry.getOffset() + "\n" +     //metto offset sullo stack
 				"lfp\n" +
 				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +     //risalgo la catena statica

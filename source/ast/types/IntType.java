@@ -14,14 +14,12 @@ public class IntType implements Node {
 	public IntType() {
 	}
 	
-	// TODO: da controllare
 	public String toPrint(String indent) {
 		return "IntType";
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 	
 	public Node typeCheck() {
@@ -29,7 +27,6 @@ public class IntType implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		return null;
 	}
 	

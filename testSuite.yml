@@ -236,4 +236,232 @@ test24 - Class Declaration with Fields and Methods:
         print(b.porte, b.marce, b.marciaCorrente);
 -   "5\n6\n0\n3\n6\n1"
 
+test25 - Subclass Declaration:
+-   class A (int x = 10) {
+        int getX() return x;
+    };
+    class B extends A (int y = 20) {
+        int getY() return y;
+    };
+    let
+        B b = new B();
+    in
+        print(b.getX(), b.getY());
+-   "10\n20"
+
+test26 - Class Field Overriding:
+-   class A (bool field = false) {
+        bool notField() return not field;
+    };
+    class B extends A (bool field = true) {
+        void printField() print(field);
+    };
+    let
+        B b = new B();
+    in
+        b.printField();
+-   "Class field 'field' is already declared in one of its superclasses at line 1:68"
+
+test27 - Class Method Overriding:
+-   class A {
+        int f(int x) return x + 1;
+    };
+    class B extends A {
+        int f(int x) return x * x;
+    };
+    let
+        A a = new A();
+        B b = new B();
+    in
+        print(a.f(5))
+        print(b.f(5));
+-   "6\n25"
+
+test28 - Wrong Method Overriding (Return Type):
+-   class A {
+        int f(int x) return x + 1;
+    };
+    class B extends A {
+        void f(int x) print(x == x);
+    };
+    let
+        B b = new B();
+    in
+        print(b.f(5));
+-   "Type check error: wrong type in Method Dec (return type overloading not allowed) at line 1:60"
+
+test29 - Wrong Method Overriding (Number of Params):
+-   class A {
+        int f(int x) return x + 1;
+    };
+    class B extends A {
+        int f(int x, int y) return x + y;
+    };
+    let
+        A a = new A();
+        B b = new B();
+    in
+        print(a.f(5))
+        print(b.f(5,4));
+-   "Method overloading (wrong number of parameters) 'f' is not allowed at line 1:60"
+
+test30 - Wrong Method Overriding (Param Type):
+-   class A {
+        int f(int x) return x + 1;
+    };
+    class B extends A {
+        int f(bool x) return x;
+    };
+    let
+        B b = new B();
+    in
+        print(b.f(true));
+-   "Type check error: wrong type in Method Dec (parameter overloading not allowed) at line 1:60"
+
+test31 - Object Initialization with Null:
+-   class A (int x = 25) {
+        int doubleX() return x * 2;
+    };
+    let
+        A a = null;
+    in
+        print(a.x);
+-   "Trying to either use or access uninitialized object"
+
+test32 - Object Delayed Initialization:
+-   class A (int x = 25) {
+        int doubleX() return x * 2;
+    };
+    let
+        A a = null;
+    in
+        a = new A()
+        print(a.x);
+-   "25"
+
+test33 - Object Initialization Through Function Call:
+-   class A (int x = 1234) {
+        int negative() return -x;
+    };
+    let
+        A a = null;
+        A generateObject()
+            return new A();
+    in
+        a = generateObject()
+        print(a.negative());
+-   "-1234"
+
+test34 - "Recursive" Class Declaration:
+-   class A (A a = new A()) {
+        int f() return 1;
+    };
+    let
+        A a = new A();
+    in
+        print(a.f());
+-   "Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line 1:0"
+
+test35 - Assignment Between Objects:
+-   class A (int x = 2) {
+        void printX() print(x);
+    };
+    let
+        A a1 = new A();
+        A a2 = new A();
+    in
+        a1.printX()
+        a2.printX()
+        a2.x = 100
+        a1 = a2
+        a1.printX();
+-   "2\n2\n100"
+
+test36 - Mutually Recursive Methods in a Class:
+-   class A {
+        void h(int x)
+            if (x >= 1) then { g(x-1) }
+            print(-x);
+        void g(int x)
+            if(x >= 1) then { h(x-1) }
+            print(x);
+    };
+    let
+        A a = new A();
+    in
+        a.g(4);
+-   "0\n-1\n2\n-3\n4"
+
+# THIS TEST NEEDS SEMANTIC ERROR CHECKS
+test37 - Scope Error in a Function:
+-   let
+        int sum(int x)
+            return x + y;
+    in
+        print(sum(2));
+-   "ciao"
+
+test38 - Scope Error in a Let Statement:
+-   let
+        int n = 11;
+    in
+        print(num);
+-   "Variable num not declared at line: 1:25"
+
+# THIS TEST NEEDS SEMANTIC ERROR CHECKS
+test39 - Scope Error Between Functions:
+-   let
+        int f(int x) let
+            int y = 20;
+        in
+            return g(y) + x;
+        int g(int x)
+            return x + y;
+    in
+        print(f(5));
+-   "ciao"
+
+test40 - Function Call with Wrong Number of Parameters:
+-   let
+        bool equal(int x, int y)
+            return x == y;
+    in
+        print(equal(10));
+-   "Function equal call with wrong number of parameters is not allowed at line 1:53"
+
+test41 - Ridiculous Naming:
+-   class A (int A = 50) {
+        int A() return A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        print(A.A());
+-   "50\n50"
+
+test42 - Ridiculous Naming with Function Parameters:
+-   class A (int A = 20) {
+        int A(int A) return A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        A.A = A.A(50)
+        print(A.A);
+-   "20\n50"
+
+test43 - Ridiculous Naming with Function Parameters, Shading and Assignment:
+-   class A (int A = 20) {
+        void A(int A) A = A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        A.A(50)
+        print(A.A);
+-   "20\n20"
+
 # NEW TESTS SHOULD BE ADDED HERE

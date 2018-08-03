@@ -45,7 +45,7 @@ public class ExecuteVM {
 						v1 = pop();
 						v2 = pop();
 						if (v1 == Integer.MAX_VALUE || v2 == Integer.MAX_VALUE)
-							throw new NullObjectException();    // TODO: probably needed somewhere else
+							throw new NullObjectException();
 						push(v2 + v1);
 						break;
 					case SVMParser.MULT:
@@ -70,7 +70,6 @@ public class ExecuteVM {
 						memory[address] = pop();
 						break;
 					case SVMParser.LOADW: //
-						//push(memory[pop()]);
 						push(checkMemory(pop()));
 						break;
 					case SVMParser.BRANCH:
@@ -126,7 +125,7 @@ public class ExecuteVM {
 							outputBuffer.add(Integer.toString(checkMemory(sp)));
 						else
 							errorBuffer.add("Empty Stack!");
-						pop();  // TODO: HIGHLY EXPERIMENTAL
+						pop();
 						break;
 					case SVMParser.HALT:
 						return;

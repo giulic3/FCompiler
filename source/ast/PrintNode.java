@@ -38,7 +38,6 @@ public class PrintNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da controllare
 		String res = "";
 		
 		for (Node e: exps)
@@ -48,8 +47,7 @@ public class PrintNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		for (Node exp: exps)
 			res.addAll(exp.checkSemantics(env));

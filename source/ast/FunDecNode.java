@@ -47,7 +47,6 @@ public class FunDecNode implements Node {
 		HashSet<String> res = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		//env.setOffset(env.getOffset()-1);
 		
 		int offset = env.decreaseOffset();
 		
@@ -60,13 +59,10 @@ public class FunDecNode implements Node {
 		
 		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), offset, type); //separo introducendo "entry"
 		
-		// TODO: aggiungere controlli su numero dei parametri e ridefinizione delle funzioni
-		
 		String funID = "Function$" + name;
 		
 		if(!env.getFunSecondCheck()) {
 			if(hm.get(funID) != null) {
-				//this.funEntry = hm.get(funID);
 				res.add("Function " + name + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
 			else
@@ -79,26 +75,16 @@ public class FunDecNode implements Node {
 		
 		env.pushScope();
 		
-		HashMap<String, SymbolTableEntry> funContentHM = env.getSymTable().get(env.getNestingLevel());
-		
 		ArrayList<Node> parTypes = new ArrayList<>();
-		int paroffset = 1;
 		
-		// TODO: highly experimental
 		int currentOffset = env.getOffset();
 		env.setOffset(1);
-		
 		for (Node par : parList) {
 			VarNode arg = (VarNode) par;
 			parTypes.add(arg.getType());
 			res.addAll(arg.checkSemantics(env));
-			//SymbolTableEntry funEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
-			
-			//if (funContentHM.put(arg.getID(), funEntry) != null)
-			//	res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 		env.setOffset(currentOffset);
-		// TODO: end highly experimental
 		
 		this.funEntry = entry;
 		
@@ -159,7 +145,6 @@ public class FunDecNode implements Node {
 	}
 
 	public String codeGeneration() {
-		// TODO: da controllare
 		String decAssembly = "";
 		String decPopAssembly = "";
 		String parPopAssembly = "";

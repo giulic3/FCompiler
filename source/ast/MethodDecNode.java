@@ -16,7 +16,7 @@ import java.util.HashSet;
 public class MethodDecNode extends FunDecNode {
 	
 	private String classID;
-	ArrayList<Node> inheritedMethods;
+	private ArrayList<Node> inheritedMethods;
 	
 	public MethodDecNode(FunDecNode funNode, String classID) {
 		super(funNode.name, funNode.type, funNode.decList, funNode.parList, funNode.body, funNode.ctx);
@@ -52,7 +52,6 @@ public class MethodDecNode extends FunDecNode {
 		HashSet<String> res = new HashSet<String>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
-		//env.setOffset(env.getOffset()-1);
 		
 		if (type instanceof FunType && ((FunType)type).getReturnType() instanceof ClassType) {
 			Node rt = ((FunType)type).getReturnType();
@@ -78,7 +77,7 @@ public class MethodDecNode extends FunDecNode {
 				if (method.getID().equals(this.name)) {
 
 					if (method.parList.size() != this.parList.size())
-						res.add("Method overloading (wrong number of parameters) '" + this.toPrint("") + "' is not allowed at line "
+						res.add("Method overloading (wrong number of parameters) '" + this.name + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 					else { // current method is overriding a superclass method, so we set the offset of the superclass
 						entry.setOffset(method.getSTEntry().getOffset());
@@ -95,26 +94,17 @@ public class MethodDecNode extends FunDecNode {
 		
 		env.pushScope();
 		
-		HashMap<String, SymbolTableEntry> methodContentHM = env.getSymTable().get(env.getNestingLevel());
-		
 		ArrayList<Node> parTypes = new ArrayList<>();
-		int paroffset = 1;
 		
-		// TODO: highly experimental
 		int currentOffset = env.getOffset();
-		env.setOffset(1);
 		
+		env.setOffset(1);
 		for (Node par : parList) {
 			VarNode arg = (VarNode)par;
 			parTypes.add(arg.getType());
 			res.addAll(arg.checkSemantics(env));
-			//SymbolTableEntry parEntry = new SymbolTableEntry(env.getNestingLevel(), paroffset++, arg.getType());
-			
-			//if (methodContentHM.put(arg.getID(), parEntry) != null)
-			//	res.add("Parameter name " + arg.getID() + " already declared at line: " + arg.getCtx().start.getLine() + ":" + arg.getCtx().start.getCharPositionInLine() + "\n");
 		}
 		env.setOffset(currentOffset);
-		// TODO: end highly experimental
 		
 		this.funEntry = entry;
 		

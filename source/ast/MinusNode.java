@@ -5,9 +5,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
 import utils.TypeCheckException;
-
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class MinusNode implements Node {
@@ -25,12 +22,10 @@ public class MinusNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da implementare
 		return value.checkSemantics(env);
 	}
 	
 	public Node typeCheck() throws Exception {
-		// TODO: da implementare
 		if(!Helpers.subtypeOf(new IntType(), value.typeCheck())){
 			throw new TypeCheckException("Unary Minus", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
@@ -38,14 +33,12 @@ public class MinusNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		// TODO: da implementare
 		// push(-pop), si assume che value.codegen lasci il risultato sulla cima dello
 		// stack, prendiamo questo valore, facciamo pop, mettiamo il meno davanti e
 		// rifacciamo push. (il codice fenerato da value.codegen() deve essere eseguito prima
 		// di quello di minus, quindi deve comparire prima nella stringa. Il risultato sarà codestring + minus.codegen).
 		String valCodeGen = value.codeGeneration();
 		return "push -1\n" + valCodeGen + "mult\n";
-		
 	}
 	
 	// Method to retrieve string identifier of an object

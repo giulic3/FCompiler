@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class TestSuite {
 	
-	public static void main(String[] args) {
+	public static void startTestSuite(String filePath) {
 		try {
 			Yaml yaml = new Yaml();
-			File yamlTestsFile = new File("testSuite.yml");
+			File yamlTestsFile = new File(filePath);
 			InputStream input = new FileInputStream(yamlTestsFile);
 			
 			Map<String, ArrayList<String>> tests = yaml.load(input);
@@ -49,11 +49,15 @@ public class TestSuite {
 			String totalRes = (testPassed == tests.keySet().size()) ? color + "NO ERRORS OCCURRED." : color + "SOME TESTS FAILED.";
 			testOutput.append(totalRes);
 			String passedStats = " PASSED TESTS: " + testPassed + "/" + tests.keySet().size() + "\n";
-			testOutput.append(color).append(passedStats);
+			testOutput.append(color).append(passedStats).append(Helpers.ANSI_RESET);
 			System.out.println(testOutput);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		startTestSuite("testSuite.yml");
 	}
 }

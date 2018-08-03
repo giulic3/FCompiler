@@ -92,7 +92,6 @@ public class ClassFieldNode implements Node {
 	public String codeGeneration() {
 		SymbolTableEntry fieldEntry = ((IdNode)id).getSTEntry();
 		
-		// TODO: check if static chain climbing is needed
 		// gli offset dei campi partono da 0
 		return  obj.codeGeneration() +
 				"push " + fieldEntry.getOffset() + "\n" +

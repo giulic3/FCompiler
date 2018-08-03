@@ -23,13 +23,10 @@ public class NotNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		// TODO: da controllare
 		return value.checkSemantics(env);
 	}
 	
 	public Node typeCheck() throws Exception {
-		// TODO: da controllare
-		
 		if (!Helpers.subtypeOf(value.typeCheck(), new BoolType()))
 			throw new TypeCheckException("Not", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		
