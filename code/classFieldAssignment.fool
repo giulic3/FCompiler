@@ -5,5 +5,10 @@ class A (int field = 1) {
 let
     A a = new A();
 in
+    print(a.field)
     a.setter(5)
     print(a.field);
+
+/*
+    Risultato atteso: 1, 5
+*/

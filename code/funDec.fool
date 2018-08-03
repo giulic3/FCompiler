@@ -1,14 +1,19 @@
 let
-    int f(int a, int b)  let
+    int f(int a, int b) let
         int y = 0;
     in
         y = y + 1;
 in
     f(3,4);
+
 let
-    int f()  let
+    int f() let
         int y = 0;
     in
         y = y + 1;
 in
     print(ciao);
+
+/*
+    Risultato atteso: Variable ciao not declared
+*/
