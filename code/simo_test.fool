@@ -1,0 +1,37 @@
+class somma(int x=1, int y=1){
+    int sum() return x+y;
+};
+
+class mult extends somma{
+    int mul() return x*y;
+};
+
+class sommaEincrementa extends mult{
+    int sum() return x+y+1;
+};
+
+let
+    somma a = new somma();
+    mult b = new mult();
+    somma c = new mult();
+    sommaEincrementa d = new sommaEincrementa();
+    somma final = null;
+in
+    final = if (a.x==1) then {b} else {d}
+    a.x=3
+    a.y=5
+    b.x=2
+    b.y=7
+    c.x=9
+    c.y=3
+    d.x=3
+    d.y=7
+    print(a.sum())
+    print(b.sum())
+    print(b.mul())
+    print(c.sum())
+    print(c.mul())
+    print(d.sum())
+    print(d.mul())
+    print(final.sum())
+    print(final.mul());
