@@ -392,4 +392,76 @@ test36 - Mutually Recursive Methods in a Class:
         a.g(4);
 -   "0\n-1\n2\n-3\n4"
 
+# THIS TEST NEEDS SEMANTIC ERROR CHECKS
+test37 - Scope Error in a Function:
+-   let
+        int sum(int x)
+            return x + y;
+    in
+        print(sum(2));
+-   "ciao"
+
+test38 - Scope Error in a Let Statement:
+-   let
+        int n = 11;
+    in
+        print(num);
+-   "Variable num not declared at line: 1:25"
+
+# THIS TEST NEEDS SEMANTIC ERROR CHECKS
+test39 - Scope Error Between Functions:
+-   let
+        int f(int x) let
+            int y = 20;
+        in
+            return g(y) + x;
+        int g(int x)
+            return x + y;
+    in
+        print(f(5));
+-   "ciao"
+
+test40 - Function Call with Wrong Number of Parameters:
+-   let
+        bool equal(int x, int y)
+            return x == y;
+    in
+        print(equal(10));
+-   "Function equal call with wrong number of parameters is not allowed at line 1:53"
+
+test41 - Ridiculous Naming:
+-   class A (int A = 50) {
+        int A() return A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        print(A.A());
+-   "50\n50"
+
+test42 - Ridiculous Naming with Function Parameters:
+-   class A (int A = 20) {
+        int A(int A) return A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        A.A = A.A(50)
+        print(A.A);
+-   "20\n50"
+
+test43 - Ridiculous Naming with Function Parameters, Shading and Assignment:
+-   class A (int A = 20) {
+        void A(int A) A = A;
+    };
+    let
+        A A = new A();
+    in
+        print(A.A)
+        A.A(50)
+        print(A.A);
+-   "20\n20"
+
 # NEW TESTS SHOULD BE ADDED HERE
