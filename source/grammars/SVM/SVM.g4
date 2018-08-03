@@ -5,10 +5,6 @@ package grammars.SVM;
 import java.util.HashMap;
 }
 
-@lexer::members {
-public int lexicalErrors=0;
-}
-
 @parser::members {
 public static int[] code = new int[ExecuteVM.CODESIZE];
 static int i = 0;
@@ -71,5 +67,3 @@ LABEL	 : ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 NUMBER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
 
 WHITESP  : ( '\t' | ' ' | '\r' | '\n' )+   -> channel(HIDDEN);
-
-ERR   	 : . { System.err.println("Invalid char: "+ getText()); lexicalErrors++;  } -> channel(HIDDEN);

@@ -4,13 +4,6 @@ grammar FOOL;
 package grammars.FOOL;
 }
 
-@lexer::members {
-   //there is a much better way to do this, check the ANTLR guide
-   //I will leave it like this for now just because it is quick
-   //but it doesn't work well
-   public int lexicalErrors=0;
-}
-
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
@@ -134,16 +127,3 @@ ID              : CHAR (CHAR | DIGIT)* ;
 WS              : (' '|'\t'|'\n'|'\r')-> skip;
 LINECOMENTS    : '//' (~('\n'|'\r'))* -> skip;
 BLOCKCOMENTS    : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMENTS)* '*/' -> skip;
-
-
- //VERY SIMPLISTIC ERROR CHECK FOR THE LEXING PROCESS, THE OUTPUT GOES DIRECTLY TO THE TERMINAL
- //THIS IS WRONG!!!!
-
- /*
- this moves lexer errors to the parser:
- https://stackoverflow.com/questions/18782388/antlr4-lexer-error-reporting-length-of-offending-characters
- to handle errors:
- https://stackoverflow.com/questions/39533809/antlr4-how-to-detect-unrecognized-token-and-given-sentence-is-invalid
- ANTLR Reference guide, chapter 9
- */
-ERR     : . { System.out.println("Invalid char: "+ getText()); lexicalErrors++; } -> channel(HIDDEN); 

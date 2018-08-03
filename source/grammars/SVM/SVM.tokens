@@ -28,7 +28,6 @@ COL=27
 LABEL=28
 NUMBER=29
 WHITESP=30
-ERR=31
 'push'=1
 'pop'=2
 'add'=3
