@@ -22,7 +22,7 @@ public class ProgNode  implements Node {
 	
 	/**
 	 *
-	 * Da inizio alla generazione della stringa per la stampa del <em>ast</em>
+	 * Dà inizio alla generazione della stringa per la stampa del <em>ast</em>
 	 *
 	 * */
 	public String toPrint(String indent){
@@ -36,7 +36,7 @@ public class ProgNode  implements Node {
 	
 	/**
 	 *
-	 * Da inizio ai controlli semantici sui nodi del <em>ast</em>
+	 * Dà inizio ai controlli semantici sui nodi del <em>ast</em>
 	 *
 	 * */
 	public HashSet<String> checkSemantics(Environment env){
@@ -63,7 +63,7 @@ public class ProgNode  implements Node {
 	
 	/**
 	 *
-	 * Da inizio ai controlli sui tipi
+	 * Dà inizio ai controlli sui tipi
 	 *
 	 * */
 	public Node typeCheck() throws Exception{
@@ -75,7 +75,7 @@ public class ProgNode  implements Node {
 	
 	/**
 	 *
-	 * Da inizio ai controlli sui tipi
+	 * Dà inizio ai controlli sui tipi
 	 *
 	 * */
 	public String codeGeneration(){

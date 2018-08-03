@@ -52,7 +52,7 @@
 
 \section{Introduzione}
 
-Il progetto consiste nell'implementazione di un compilatore per un linguaggio FOOL (Functional Object Oriented Language) che traduce in bytecode
+Il progetto consiste nell'implementazione di un compilatore per il linguaggio FOOL (Functional Object Oriented Language) che traduce in bytecode
 eseguibile da una stack machine SVM (Simplified Virtual Machine).\\
 
 Di seguito si riportano le specifiche fornite per il progetto.
@@ -61,7 +61,7 @@ Di seguito si riportano le specifiche fornite per il progetto.
 
 \subsubsection{Espressioni}
 
-Estensione delle espressioni con operatori $<=, >=, ||, \&\&, /, - $
+Estensione delle espressioni con operatori $ <=,  >=, || , \&\&, / ,  - $
    e not.
 
 \subsubsection{Comandi}
@@ -113,9 +113,9 @@ In particolare
   \item Gli oggetti nascono come istanza di classi
   \item I campi sono modificabili
   \item Il linguaggio ha il comando di assegnamento
-  \item Non è possibile dichiarare funzioni annidate. Le funzioni NON possono
+  \item Non è possibile dichiarare funzioni annidate. Le funzioni non possono
     essere passate come parametri
-  \item É possibile avere funzioni/metodi mutuamente ricorsive.
+  \item È possibile avere funzioni/metodi mutuamente ricorsivi.
 
 \end{itemize}
 
@@ -125,18 +125,18 @@ Il compilatore deve comprendere un type-checker che controlli il corretto uso de
 In particolare:
 
 \begin{itemize}
-  \item esiste il tipo void, oltre al tipo classe
+  \item Esiste il tipo void, oltre al tipo classe
 
   \item Si deve considerare una nozione di subtyping fra classi e tipi di funzioni. Il tipo
   di una funzione f1 è sottotipo del tipo di una funzione f2 se il tipo ritornato da f1
   è sottotipo del tipo ritornato da f2, se hanno il medesimo numero di parametri, e se
-  ogni tipo di parametro di f1 è sopratipo del corrisponde tipo di parametro di f2.
+  ogni tipo di parametro di f1 è sopratipo del corrisponde tipo di parametro di f2.\\
   Una classe C1 è sottotipo di una classe C2 se C1 estende C2 e se i campi e metodi che
   vengono sovrascritti sono sottotipi rispetto ai campi e metodi corrispondenti di C2.
   Inoltre, C1 è sottotipo di C2 se esiste una classe C3 sottotipo di C2 di cui C1 è
   sottotipo.
 
-  \item definire e implementare le regole di tipaggio per tutti i costrutti, in
+  \item Definire e implementare le regole di tipaggio per tutti i costrutti, in
   particolare per il condizionale.
 \end{itemize}
 
@@ -147,7 +147,7 @@ virtual machine) la cui sintassi è definita nel file SVM.g. Tale esecutore ha u
 memoria in cui gli indirizzi alti sono usati per uno stack. Uno stack pointer punta alla
 locazione successiva alla prossima locazione libera per lo stack (se la memoria ha
 indirizzi da 0 a MEMSIZE-1, lo stack pointer inizialmente punta a MEMSIZE).
-In questo modo, quando lo stack non e` vuoto, lo stack pointer punta al top dello stack.\\
+In questo modo, quando lo stack non è vuoto, lo stack pointer punta al top dello stack.\\
 
 Il programma è collocato in una memoria separata puntata dall’instruction pointer
 (che punta alla prossima istruzione da eseguire). Gli altri registri della macchina
@@ -159,9 +159,8 @@ il valore 0.\\
 
 \begin{itemize}
   \item Implementare tutte le operazioni per le nuove espressioni
-  \item Implementare il dynamic dispatch ==> implementare e definire layout oggetti e classi
-(vedi lezioni)
-  \item La generazione di codice oggetto e` fatta utilizzando una grammatica con attributi,
+  \item Implementare il dynamic dispatch $==>$ implementare e definire layout oggetti e classi
+  \item La generazione di codice oggetto è fatta utilizzando una grammatica con attributi,
 vedere SVM.g4).
 Definire una grammatica SENZA attributi (come FOOL.g4) e definire una visita
 dell'albero sintattico per generare il codice.
@@ -169,10 +168,7 @@ dell'albero sintattico per generare il codice.
 
 \subsubsection{Opzionali}
 
-La deallocazione degli oggetti nello heap (garbage collection) NON È OBBLIGATORIA.
-Chi è interessato può scrivere il modulo relativo.
-
-
+La deallocazione degli oggetti nello heap (garbage collection) non è obbligatoria.
 
 \section{Struttura del progetto}
 
@@ -185,19 +181,23 @@ Il codice sorgente del progetto è contenuto nella sottodirectory source/ che è
     in particolare, contiene quei nodi che rappresentano dei tipi all'interno della grammatica
   \end{itemize}
   \item \textbf{grammars/}
-    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'ast
+    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'ast e del bytecode
   \item \textbf{lib/}
-    contiene la libreria (.jar) di ANTLRv4
+    contiene i jar delle libreria di ANTLRv4, di commons-cli per eseguire il progetto da riga di comando
+    e la libreria YAML di supporto al testing
   \item \textbf{testMain/}
-    contiene le classi principali delle due rispettive configurazioni di run, Main.java per l'esecuzione standard
-    e TestThread.java per l'esecuzione dei test su file .fool multipli (contenuti nella cartella FCompiler/code)
+    contiene le classi principali per l'esecuzione del progetto, ovvero le
+    due configurazioni di run, Main.java per l'esecuzione standard
+    e TestSuite.java per l'esecuzione dei test contenuti nel file testSuite.yml in formato YAML e il CommandLineMain
+    per l'esecuzione da riga di comando.
   \item \textbf{utils/}
     contiene le classi di supporto per la symbol table, il type checking e altre funzioni ausiliarie.
+    % TODO scrivere di più in questo ultimo punto?
 
 \end{itemize}
 
 Il progetto è stato sviluppato usando IntelliJ IDEA, si consulti il file README.md per le istruzioni
-su come aprire ed eseguire il progetto con il suddetto IDE oppure utilizzando Eclipse.
+su come aprire ed eseguire il progetto con il suddetto IDE oppure utilizzando Eclipse o il terminale.
 
 \section{Caratteristiche del linguaggio e grammatica}
 
@@ -205,10 +205,8 @@ Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocc
 oppure una sequenza di dichiarazioni introdotte dalla keyword \textit{let}, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta
 dalla keyword \textit{in}.\\
 
-% TODO inserisci esempio di programma, prenderlo anche dai test
 
 \begin{lstlisting}
-
 class A (int x = 1, int y = 2) {
   void m() print(0);
 }
@@ -220,7 +218,6 @@ Le espressioni sono state estese a comprendere gli operatori $<=, >=, ||, \&\&, 
    e not nella seguente maniera:\\
 
 \begin{lstlisting}
-
 exp   : left=operand (operator=(EQ | LEQ | GEQ ) right=exp)? ;
 
 operand:  left=term (operator=(PLUS | MINUS) right=operand)? ;
@@ -248,7 +245,6 @@ value  :
 Sono stati aggiunti gli statement\\
 
 \begin{lstlisting}
-
 stm : (var | object=var DOT fieldName=ID) ASM exp #varStmAssignment
   | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
   | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
@@ -266,7 +262,6 @@ o una chiamata di funzione/metodo.\\
 Una dichiarazione di classe viene fatta nel modo seguente:\\
 
 \begin{lstlisting}
-
 class hero {
     bool iAmBatman() return true;
 };
@@ -299,48 +294,65 @@ Ulteriori caratteristiche del linguaggio sono le seguenti:\\
   \item Una variabile può avere tipo intero, booleano o classe (se è un oggetto).
   \item Una funzione può avere tipo di ritorno void
   \item È stato inserito il tipo null che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
-  \item Una funzione puo' opzionalmente avere un blocco let in all'interno del suo body, che e' formato da
+  \item Una funzione può opzionalmente avere un blocco \textit{let in} all'interno del suo body, che è formato da
   statement oppure statement ed eventualmente un'espressione preceduta dalla keyword \textit{return} nel caso in
   cui il suo tipo di ritorno sia diverso da void.
   %TODO completare...
 \end{itemize}
 
 \section{Analisi lessicale e sintattica (AST)}
-L'interfaccia Node, implementata da tutti i nodi dell'ast e' stata modificata nel seguente modo:\\
+L'interfaccia Node, implementata da tutti i nodi dell'ast è stata modificata nel seguente modo:\\
 \begin{itemize}
-  \item il metodo \textbf{checkSemantics()} ha come tipo di ritorno HashSet$<$String$>$ invece di ArrayList$<$Semantic Error$>$
-  questo perche` si e` eliminata la classe Semantic Error, che rappresentava solo una stringa e si e`
+  \item il metodo \textbf{checkSemantics()} ha come tipo di ritorno HashSet$<$String$>$ invece di ArrayList$<$Semantic Error$>$;
+  l'oggetto di tipo String rappresenta la stringa che contiene l'errore semantico e si è
   optato per una gestione degli errori con HashSet per facilitare il controllo sull'inserimento
   di duplicati.
   \item il metodo \textbf{typeCheck()} adesso solleva un'eccezione quando viene rilevato un errore di tipo
   (vedi file source/utils/TypeCheckException.java).
-  \item e` stato aggiunto il metodo \textbf{getID()} che restituisce l'identificatore di un oggetto sotto forma di stringa.
+  \item è stato aggiunto il metodo \textbf{getID()} che restituisce l'identificatore di un oggetto sotto forma di stringa.
 \end{itemize}
 
-\subsection{Nodi degli operatori}
-% TODO completare
+
+%\subsection{Nodi degli operatori}
+%La grammatica iniziale è stata estesa a comprendere gli operatori:
+
+%\begin{itemize}
+%  \item relazionali ($==, <=, >=$)
+%  \item aritmetici ($+,-,*,/,-$ unario)
+%  \item logici (and, or, not)
+%\end{itemize}
+
 \subsection{Nodi delle funzioni}
-% TODO completare
 \begin{itemize}
-  \item \textbf{FunDecNode}
-  \item \textbf{FunExpNode}
+  \item \textbf{FunDecNode} rappresenta la dichiarazione di una funzione, in esso sono memorizzati
+  il nome della funzione, il suo tipo di ritorno, la lista dei parametri, la lista delle dichiarazioni e il corpo della funzione.\\
+  Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
+  \item \textbf{FunExpNode} rappresenta la chiamata di una funzione, in esso sono memorizzati l'id della funzione,
+  gli argomenti, il nesting level e una variabile di supporto classID per gestire la chiamata di metodo che avviene senza dot notation.
+  Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
 \end{itemize}
 
 \subsection{Nodi per la gestione delle classi}
-% TODO spiegare e eventualmente cambiare i nomi...
 \begin{itemize}
-  \item \textbf{BlockClassDecNode}
-  \item \textbf{ClassMethodNode}
-  \item \textbf{ClassFieldNode}
-  \item \textbf{MethodDecNode}
-  \item \textbf{ClassType}
+  \item \textbf{BlockClassDecNode} rappresenta la dichiarazione di una classe, e contiene oltre ai metodi implementati dell'
+  interfaccia Node, le utility getMethods() e getFields()
+  \item \textbf{ClassMethodNode} rappresenta la chiamata di metodo (o.m()), è sottoclasse di FunExpNode
+  \item \textbf{ClassFieldNode} rappresenta il campo di una classe
+  \item \textbf{MethodDecNode} rappresenta la dichiarazione di metodo
+  \item \textbf{ClassType} rappresenta il tipo classe, memorizza l'id, l'id del supertipo, la lista dei campi e dei metodi.
+  Contiene getter e setter per gestire questi campi.
 \end{itemize}
 \section{Analisi semantica}
-% TODO spiegare il senso delle passate e come e quando vengono fatte
-
 \subsection{Symbol table}
 
-% TODO spiegare la struttura della stable e di una stentry
+La costruzione della symbol table avviene visitando l'ast e richiamando su un ogni nodo il metodo \textbf{checkSemantics()},
+che a partire dal primo nodo ProgNode (che rappresenta la start rule della grammatica) viene richiamata due volte.
+Le due visite successive servono per la gestione delle dichiarazioni di classi e di funzioni/metodi.
+Nel caso delle dichiarazioni di classi, la prima passata viene utilizzata per raccogliere tutte le dichiarazioni, mentre la seconda
+serve per gestire campi, metodi, oggetti e risolvere le relazioni di sottotipaggio tra classi.
+Nel caso di funzioni/metodi, la doppia visita consente di implementare il meccanismo di mutua ricorsione, ovvero consente
+che nel corpo di una funzione possa essere chiamata un'altra funzione non ancora definita. Lo stesso vale per i metodi.
+
 La tabella dei simboli viene gestita utilizzando la classe Environment (contenuta nella sottodirectory utils)
 e i metodi di supporto che contiene.\\
 La classe contiene i seguenti campi:\\
@@ -349,11 +361,12 @@ La classe contiene i seguenti campi:\\
 private ArrayList<HashMap<String, SymbolTableEntry>> symTable;
 private int nestingLevel;
 private int offset;
-private boolean secondCheck; // serve per...
-private boolean secondFunCheck; // serve per...
+private boolean secondCheck; // questa e la successiva gestiscono le passate della checkSemantic
+private boolean secondFunCheck;
+private String definingClass = null; // indica il nome della classe da cui stiamo aggiornando la st
 \end{lstlisting}
 
-In piu` contiene (oltre a getter e setter per i campi) anche i metodi:\\
+In più contiene (oltre a getter e setter per i campi) anche i metodi:\\
 % TODO scrivere come vengono dati questi id...
 \begin{itemize}
   \item \textbf{public int decreaseOffset()}
@@ -363,16 +376,32 @@ In piu` contiene (oltre a getter e setter per i campi) anche i metodi:\\
   \item \textbf{public void pushScope()} aggiunge una nuova tabella hash alla lista che rappresenta la symbol table, con nesting level incrementato.
   \item \textbf{public void popScope()} rimuove dalla symbol table la hash corrispondente al nesting level corrente, e poi lo decrementa.
   \item \textbf{public SymbolTableEntry getClassEntry(String classID)} cerca nella symbol table la entry della classe rappresentata da classID
-  \item \textbf{public void updateClassEntry(ClassType type)} % TODO la usiamo per aggiornare il tipo dinamico? non la stiamo usando
-
-
+  %\item \textbf{public void updateClassEntry(ClassType type)} % la usiamo per aggiornare il tipo dinamico? non la stiamo usando
 
 \end{itemize}
 
-% TODO metodi aggiunti, che si usano per gestire la symbol table
-% TODO cose interessanti relative all'object orientation
+La tabella dei simboli viene riempita utilizzando la classe SymbolTableEntry che possiede i seguenti campi:
+\begin{lstlisting}
+private int nestingLevel;
+private int offset;
+private Node type;  // nel caso degli oggetti, indica il tipo dinamico
+private String className; // usata nel caso di entry che rappresentano classi
+private Node staticType; // usata nel caso di classi
+\end{lstlisting}
+
 \subsection{Type check}
-% TODO spiegare quali sono i tipi base
+I tipi su cui si basa il sistema di tipaggio di FOOL sono i seguenti:
+
+\begin{itemize}
+  \item BoolType
+  \item ClassType
+  \item FunType
+  \item IntType
+  \item NullType
+  \item VoidType
+\end{itemize}
+
+
 % TODO inserire almeno l'albero del condizionale
 % come si sono implementate le nozioni di sottotipaggio per funzioni/metodi e classi
 
