@@ -1,51 +1,55 @@
-// THIS IS RIGHT (OK)
-/*
+// Decomment block of code to execute
+
 class A {
     bool overriddenMethod(int a, int b) return true;
 };
-
 class B extends A {
     int overridingMethod(bool x, bool y) return 1;
 };
-
 let
     A a = new A();
     B b = new B();
 in
     b = a;
+
+/*
+    Risultato atteso: Execution completed. No output shown.
 */
 
-// THIS IS WRONG (???)
+// -----------------------------------
 /*
 class A {
     bool overriddenMethod(int a, int b) return true;
 };
-
 class B {
     int overridingMethod(bool x, bool y) return 1;
 };
-
 let
     A a = new A();
     B b = new B();
 in
     b = a;
 */
-// il sottotipaggio vale SOLO su classi e sottoclassi?
+/*
+    Risultato atteso: Type check error: wrong type in Assignment (non c'è relazione di sottotipaggio tra A e B)
+*/
 
-// THIS IS WRONG AGAIN (OK)
-
+// -----------------------------------
+/*
 class A {
     bool overriddenMethod(bool a, bool b) return true;
 };
-
-class B extends A { // con 'extends' A il test passa
+class B extends A {
     int overriddenMethod(int x, int y) return 1;
 };
-
 let
     A a = new A();
     B b = new B();
 in
-    //b = a;
     a = b;
+*/
+/*
+    Risultato atteso: Type check error: wrong type in Method Dec (return type overloading not allowed)
+
+    In tipo di ritorno del metodo che fa overriding deve essere sopratipo del tipo di ritorno del metodo overridden
+*/

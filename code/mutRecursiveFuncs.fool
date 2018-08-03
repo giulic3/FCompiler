@@ -1,13 +1,15 @@
 let
+    int f()
+        g();
 
- int f()
+    int g()
+        h();
+
+    int h()
+        f();
+in
     g();
 
- int g()
-    h();
-
- int h()
-    f();
-
-in
-   g();
+/*
+    Risultato atteso: -1
+*/

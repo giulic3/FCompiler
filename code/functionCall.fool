@@ -1,40 +1,54 @@
-// (OK)
-
+// Decomment block of code to execute
 /*
 let
-    void f() return 1; // errore di tipo, un intero (1) non è sottotipo di void
-    //int x = 0;
+    void f() return 1;
+    int x = 1;
 in
-    //x = f(); // questo dà errore, giusto
-    f();
+    x = f();
+*/
+/*
+    Risultato atteso: Type check error: wrong type in Function Return
+
+    Essendo f una funzione che ritorna void non può fare return di un intero e,
+    di conseguenza, non può essere assegnata ad una variabile
 */
 
-// (OK)
-
+// -----------------------------------
+/*
 let
     int stampa = 0;
     void f() print(1);
 in
     stampa = f();
+*/
+/*
+    Risultato atteso: Type check error: wrong type in Assignment
+*/
 
-
-// (OK)
-
+// -----------------------------------
 /*
 let
     int f() return 1;
     bool x = false;
 in
-    x = f(); // errore di tipo, non posso assegnare un int a un bool (ma posso assegnare un bool a un int)
+    x = f();
+*/
+/*
+    Risultato atteso: Type check error: wrong type in Assignment
+
+    Non posso assegnare un intero ad un booleano ma vale il viceversa, in quando bool è sottotipo di int
 */
 
-
-// (OK)
-
+// -----------------------------------
 /*
 let
     bool f() return false;
     int x = 1;
 in
-    x = f(); // ok, posso assegnare un bool a un intero
+    print(x)
+    x = f()
+    print(x);
+*/
+/*
+    Risultato atteso: 1, 0
 */

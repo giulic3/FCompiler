@@ -1,20 +1,22 @@
 class Bellissima {
-    void saluta() print(ciao); /*  ciao è un id */
-    void nonSaluta() print(silenzio); /* è un id */
+    void saluta() print(ciao);
+    void nonSaluta() print(silenzio);
 };
-
 let
     Bellissima Giulia = new Bellissima();
 in
     print(
         Giulia.saluta(),
-        Giulia.nonSaluta(ciaone),   // usare il parametro causa un NullPointerException
+        Giulia.nonSaluta(ciaone),
         Giulia.sorride()
     );
 
-/* Method sorride is not defined in class Bellissima at line 12:8
- Variable ciao not declared at line: 2:24
- Variable silenzio not declared at line: 3:27
-*/
+7*
+    Risultato atteso:
 
-/*é NOT WORKING */
+    Variable ciao not declared
+    Variable silenzio not declared
+    Method nonSaluta call with wrong number of parameters is not allowed
+    Variable ciaone not declared
+    Method sorride is not defined in class Bellissima
+*/

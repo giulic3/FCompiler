@@ -1,0 +1,44 @@
+class A (int x = 3, bool y = true) {
+    void m(int x)
+        print(x + 4 * y);
+    int f(bool x, int y) let
+        int b = 4;
+        int c = 6;
+    in
+        b = b * 2
+        c = if (x) then { b * c } else { c * c }
+        return c;
+    void seq(int x)
+        if(x >= 0) then { seq(x-1) } print(x);
+};
+class B extends A (int g = 0, A a = new A()) {
+    void m(int x) print(x);
+};
+class C (int x = 4, A a = new A()){
+    void g() print(a.f(true, 5));
+};
+
+let
+    A a = new A();
+    B b = new B();
+    C c = new C();
+    A a1 = new B();
+    void h(int x)
+        if(x >= 0) then { g(x-1) } print(x);
+    void g(int x)
+        if(x >= 0) then { h(x-1) } print(x);
+in
+    h(4)
+    a.m(3)
+    b.m(true)
+    c.g()
+    b.seq(6);
+
+/*
+    Risultato atteso:
+    -1, 0, 1, 2, 3, 4           dato da h(4)
+    7                           dato da a.m(3)
+    1                           dato da b.m(true)
+    48                          dato da c.g()
+    -1, 0, 1, 2, 3, 4, 5, 6     dato da b.seq(6)
+*/

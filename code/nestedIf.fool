@@ -1,20 +1,24 @@
-let int x = 1; in
-if (true) then {
-    if (true) then {
-        print(7)
-    }
-} else {
-    if (true) then {
-        if (false) then {
-            if (false) then {
-                print(false)
-            } else {
-                x = 100
-            }
+let
+    int x = 1;
+in
+    if (false) then {
+        if (true) then {
+            print(7)
         }
     } else {
-        print(90)
-    }
-};
+        if (false) then {
+            if (false) then {
+                if (false) then {
+                    print(false)
+                } else {
+                    x = 100
+                }
+            }
+        } else {
+            print(90)
+        }
+    };
 
-// le condizioni devono essere booleane altrimenti ottengo errore di tipo.
+/*
+    Risultato atteso: 90
+*/

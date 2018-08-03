@@ -1,5 +1,9 @@
 let
     int y = true;
-    bool x = 1;
+    bool x = false;
 in
-    x = if ( true ) then { 1 } else { 2 };
+    x = if (true) then { 1 } else { 2 };
+
+/*
+    Risultato atteso: Type check error: wrong type in Assignment
+*/
