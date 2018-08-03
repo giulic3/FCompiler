@@ -69,3 +69,4 @@ out/
 #LaTeX
 docs/report/FOOLreport.*
 !docs/report/FOOLreport.tex
+!docs/report/FOOLreport.pdf
