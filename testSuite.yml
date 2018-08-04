@@ -1,4 +1,8 @@
-# BASIC TESTS
+# FCompiler Test Suite
+#
+# Each test shows a particular behaviour of our implementation
+# of FOOL Language; the string after each test represent the
+# expected result
 
 test1 - Int Variable Declaration and Initialization:
 -   let
@@ -610,4 +614,35 @@ test54 - Function Definition Inside Function:
         print(f(5));
 -   "Syntax not allowed by FOOL Language at line 1:26"
 
-# NEW TESTS SHOULD BE ADDED HERE
+test55 - Subclass Method Call Inside Superclass Method:
+-   class A {
+        int f() return 1;
+        int g(B x) return x.f();
+    };
+    class B extends A {
+        int f() return 2;
+    };
+    let
+        A a = new A();
+        B b = new B();
+    in
+        print(a.g(b));
+-   "2"
+
+test56 - Overriding Method Declaration After Usage in a Class:
+-   class SUPER {
+        int g() return 200;
+    };
+    class A extends SUPER (int z = 50) {
+        int f(bool cond) let
+            int x = if (cond) then { g() - z } else { 3 };
+            int y = x * 2;
+        in
+            return y;
+        int g() return 99;
+    };
+    let
+        A a = new A();
+    in
+        print(a.f(true));
+-   "98"

@@ -46,16 +46,16 @@ public class ProgNode  implements Node {
 		
 		env.pushScope();
 		
-		for(Node b:blocks)
+		for (Node b:blocks)
 			if (b instanceof BlockClassDecNode)
 				tmp.addAll(b.checkSemantics(env));
 		
 		env.settingSecondCheck();
 		
-		if (tmp.size() > 0)
+		if (Helpers.detectSuperclassErrors(tmp))
 			return tmp;
 		
-		for(Node b:blocks)
+		for (Node b:blocks)
 			errors.addAll(b.checkSemantics(env));
 		
 		return errors;

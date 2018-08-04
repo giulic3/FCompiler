@@ -123,70 +123,69 @@ public class BlockClassDecNode implements Node {
 			}
 		}
 		
-		if(env.getSecondCheck()) {
-			env.pushScope();
+		env.pushScope();
+		
+		HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
+		ArrayList<Node> parTypes = new ArrayList<>();
+		//int parOffset=1;
+		env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
+		
+		env.setDefiningClass(id);
+		
+		for (Node f : fields) {
+			VarNode field = (VarNode) f;
+			res.addAll(field.checkSemantics(env));
 			
-			HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
-			ArrayList<Node> parTypes = new ArrayList<>();
-			//int parOffset=1;
-			env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
-			
-			env.setDefiningClass(id);
-			
-			for (Node f : fields) {
-				VarNode field = (VarNode) f;
-				res.addAll(field.checkSemantics(env));
-				
-				if (field.getType() instanceof ClassType) {
-					Node expNode = field.getExp();
-					if (expNode instanceof NewExpNode) {
-						SymbolTableEntry newEntry = ((NewExpNode) expNode).getSTEntry();
-						String newClassID = newEntry.getType().getID();
-						
-						if (id.equals(newClassID))
-							res.add("Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-					} else if (!(expNode instanceof NullNode))
-						res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-				}
+			if (field.getType() instanceof ClassType) {
+				Node expNode = field.getExp();
+				if (expNode instanceof NewExpNode) {
+					SymbolTableEntry newEntry = ((NewExpNode) expNode).getSTEntry();
+					String newClassID = newEntry.getType().getID();
+					
+					if (id.equals(newClassID))
+						res.add("Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+				} else if (!(expNode instanceof NullNode))
+					res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
-			
-			ArrayList<Node> inheritedMethods = classType.getMethodsList(true, true);
-			Set<String> uniqueIDs = new HashSet<>();
-			for (Node method : inheritedMethods)
-				if (!uniqueIDs.contains(method.getID())) uniqueIDs.add(method.getID());
-			
-			int methodBaseOffset = uniqueIDs.size();
-			
-			env.setOffset(methodBaseOffset);
-			for (Node dec : methods) {
-				tmp.addAll(dec.checkSemantics(env));
-			}
-			
-			env.settingFunSecondCheck(true);
-			
-			env.setOffset(methodBaseOffset);
-			for (Node dec : methods) {
-				res.addAll(dec.checkSemantics(env));
-			}
-			
-			HashSet<String> fin = new HashSet<>();
-			
-			for (String s : res) {
-				if (tmp.contains(s)) {
-					fin.add(s);
-				}
-			}
-			
-			res.removeAll(tmp);
-			
-			res.addAll(fin);
-			
-			env.settingFunSecondCheck(false);
-			
-			env.setDefiningClass(null);
-			
-			env.popScope();
 		}
+		
+		ArrayList<Node> inheritedMethods = classType.getMethodsList(true, true);
+		Set<String> uniqueIDs = new HashSet<>();
+		for (Node method : inheritedMethods)
+			if (!uniqueIDs.contains(method.getID())) uniqueIDs.add(method.getID());
+		
+		int methodBaseOffset = uniqueIDs.size();
+		
+		env.setOffset(methodBaseOffset);
+		for (Node dec : methods) {
+			tmp.addAll(dec.checkSemantics(env));
+		}
+		
+		env.settingFunSecondCheck(true);
+		
+		env.setOffset(methodBaseOffset);
+		for (Node dec : methods) {
+			res.addAll(dec.checkSemantics(env));
+		}
+		
+		HashSet<String> fin = new HashSet<>();
+		
+		for (String s : res) {
+			if (tmp.contains(s)) {
+				fin.add(s);
+			}
+		}
+		
+		res.removeAll(tmp);
+		
+		res.addAll(fin);
+		
+		env.settingFunSecondCheck(false);
+		
+		env.setDefiningClass(null);
+		
+		env.popScope();
+		
 		return res;
 	}
 	

@@ -128,6 +128,16 @@ public class Helpers {
 		
 		return errors;
 	}
+	
+	public static boolean detectSuperclassErrors(HashSet<String> set) {
+		
+		Pattern p = Pattern.compile("Superclass '[a-zA-Z0-9]+' not declared");
+		for (String s: set) {
+			Matcher m = p.matcher(s);
+			if (m.find()) return true;
+		}
+		return false;
+	}
 }
 
 class SemanticError {
