@@ -97,7 +97,18 @@ public class Environment {
 	}
 	
 	public SymbolTableEntry getClassEntry(String classID) {
-		return symTable.get(0).get("Class$"+classID);
+		if (symTable.get(0).get("Class$" + classID) != null) {
+			SymbolTableEntry entry = symTable.get(0).get("Class$" + classID);
+			
+			// TODO: sperimentale
+			ClassType c = (ClassType)entry.getType();
+			ClassType copy = ClassType.copyInstance(c);
+			
+			SymbolTableEntry entryCopy = new SymbolTableEntry(entry.getNestingLevel(), entry.getOffset(), copy);
+			return entryCopy;
+		}
+		
+		return null;
 	}
 	
 	public void updateClassEntry(ClassType type) {

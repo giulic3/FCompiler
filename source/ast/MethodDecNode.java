@@ -16,11 +16,25 @@ import java.util.HashSet;
 public class MethodDecNode extends FunDecNode {
 	
 	private String classID;
+	private FunDecNode funObj; // Necessary to copy instance of MethodDec
 	private ArrayList<Node> inheritedMethods;
 	
 	public MethodDecNode(FunDecNode funNode, String classID) {
 		super(funNode.name, funNode.type, funNode.decList, funNode.parList, funNode.body, funNode.ctx);
+		this.funObj = funNode;
 		this.classID = classID;
+	}
+	
+	public static MethodDecNode copyInstance(MethodDecNode m) {
+		FunDecNode funCopy = FunDecNode.copyInstance(m.funObj);
+		MethodDecNode copy = new MethodDecNode(funCopy, m.classID);
+		// TODO: sperimentale
+		//copy.inheritedMethods = new ArrayList<>(m.inheritedMethods);
+//		for (Node im: m.inheritedMethods) {
+//			MethodDecNode mCopy = (MethodDecNode)im;
+//			copy.inheritedMethods.add(MethodDecNode.copyInstance(mCopy));
+//		}
+		return copy;
 	}
 	
 	public String toPrint(String s) {

@@ -38,6 +38,16 @@ public class FunDecNode implements Node {
 
 		return this.funEntry;
 	}
+	
+	// TODO: sperimentale
+	public static FunDecNode copyInstance(FunDecNode f) {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(f.ctx);
+		FunDecNode copy = new FunDecNode(f.name, f.type, new ArrayList<>(f.decList), new ArrayList<>(f.parList), new ArrayList<>(f.body), ctx);
+		// TODO: manca la copia dei nodi contenuti in decList, parList e body
+		copy.funEntry = SymbolTableEntry.copyInstance(f.funEntry);
+		return copy;
+	}
 
 
 	@Override

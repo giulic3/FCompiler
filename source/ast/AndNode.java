@@ -36,7 +36,6 @@ public class AndNode implements Node {
 		HashSet<String> res = new HashSet<String>();
 
 		//check semantics in the left and in the right exp
-
 		res.addAll(left.checkSemantics(env));
 		res.addAll(right.checkSemantics(env));
 

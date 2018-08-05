@@ -17,6 +17,14 @@ public class SymbolTableEntry {
 		this.type = t;
 	}
 	
+	// TODO: sperimentale
+	public static SymbolTableEntry copyInstance(SymbolTableEntry s) {
+		SymbolTableEntry copy = new SymbolTableEntry(s.nestingLevel, s.offset, s.type);
+		copy.className = s.className;
+		copy.staticType = s.staticType; // TODO: non va bene l'assegnamento; servirevve un copyInstance anche qua ma che tipo sarà staticType?!
+		return copy;
+	}
+	
 	public int getOffset() {
 		return offset;
 	}

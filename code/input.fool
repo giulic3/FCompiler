@@ -1,10 +1,30 @@
- class A (B b = null) {
-        void initB() b = new B();
-    };
-    class B extends A (int x = 100) {
-        int getX() return x;
+
+class A (int x = 10) {
+    void f() print(x);
+};
+class B extends A (A a = new A(), int y = 20) {
+    void f() print(a.x);
+    void g() print(x);
+};
+let
+    B b = new B();
+    B b1 = new B();
+in
+    //b1.x = 200
+    //b1.f()
+    b.a = b1
+    //b.f()
+    //b.g()
+    b1.a = null
+    b1.a = new A()
+    b1.f();
+
+/*
+class A (A a = new A()) {
+        int f() return 1;
     };
     let
         A a = new A();
     in
-        a.initB();
+        print(a.f());
+*/

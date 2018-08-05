@@ -3,7 +3,10 @@ package ast.types;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import ast.MethodDecNode;
 import ast.Node;
+import ast.VarNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SymbolTableEntry;
@@ -39,17 +42,43 @@ public class ClassType implements Node {
 		this.ctx = ctx;
 	}
 	
+//	public ClassType(ClassType c) {
+//		this.classID = new String(c.classID);
+//		this.superType = (c.superType != null) ? new ClassType(c.superType) : null;
+//		this.fields = new ArrayList<>(c.fields);
+//		for (Node n: c.fields) {
+//			VarNode var = (VarNode)n;
+//			this.fields.add(VarNode.copyInstance(var));
+//		}
+//		this.methods = new ArrayList<>(c.methods);
+//		this.ctx = new ParserRuleContext();
+//		this.ctx.copyFrom(c.ctx);
+//	}
+	
+	// TODO: sperimentale
+	public static ClassType copyInstance(ClassType c) {
+		if (c == null) return null;
+		
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(c.ctx);
+		ClassType copy = new ClassType(c.classID, ctx);
+		copy.superType = ClassType.copyInstance(c.superType);
+		copy.fields = new ArrayList<>(c.fields);
+		for (Node n: c.fields) {
+			VarNode var = (VarNode)n;
+			copy.fields.add(VarNode.copyInstance(var));
+		}
+		copy.methods = new ArrayList<>(c.methods);
+//		for (Node m: c.methods) {
+//			MethodDecNode meth = (MethodDecNode)m;
+//			copy.methods.add(MethodDecNode.copyInstance(meth));
+//		}
+		return copy;
+	}
+	
 	// Getters
 	public String getClassID() {
 		return classID;
-	}
-	
-	public void setFields(ArrayList<Node> fields){
-		this.fields = fields;
-	}
-	
-	public void setMethods(ArrayList<Node> methods){
-		this.methods = methods;
 	}
 	
 	public ArrayList<Node> getFieldsList(boolean incInherited) {
@@ -98,7 +127,7 @@ public class ClassType implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		SymbolTableEntry entry = env.getClassEntry(classID);
 		if (entry == null)

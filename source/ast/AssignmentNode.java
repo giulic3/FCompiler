@@ -58,6 +58,8 @@ public class AssignmentNode implements Node {
 		else
 			res.addAll(idVariableNode.checkSemantics(env));
 		
+		// TODO: manca la gestione dell'assegnamento a oggetti come campi di una classe
+		
 		// Handles object type update after initialization
 		if (exp instanceof NewExpNode) {
 			NewExpNode newNode = (NewExpNode) exp;
@@ -74,11 +76,17 @@ public class AssignmentNode implements Node {
 		if (exp instanceof IdNode) {
 			IdNode expNode = (IdNode)exp;
 			SymbolTableEntry expEntry = expNode.getSTEntry();
-			if (expEntry != null && expEntry.getType() instanceof ClassType && idVariableNode != null) {
-				IdNode curNode = (IdNode)idVariableNode;
-				SymbolTableEntry varEntry = curNode.getSTEntry();
-				varEntry.setType(expEntry.getType());
-				curNode.setSTEntry(varEntry);
+			if (expEntry != null && expEntry.getType() instanceof ClassType) {
+				if (idVariableNode != null) {
+					IdNode curNode = (IdNode) idVariableNode;
+					SymbolTableEntry varEntry = curNode.getSTEntry();
+					varEntry.setType(expEntry.getType());
+					curNode.setSTEntry(varEntry);
+				}
+				else { // TODO: sperimentale
+					ClassFieldNode curNode = (ClassFieldNode)objFieldNode;
+					curNode.updateFieldType(expEntry);
+				}
 			}
 		}
 		

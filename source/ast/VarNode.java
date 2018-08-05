@@ -36,6 +36,15 @@ public class VarNode implements Node {
 		exp = v;
 	}
 	
+	// TODO: sperimentale
+	public static VarNode copyInstance(VarNode n) {
+		VarNode node = new VarNode(n.id, n.type, n.ctx, n.exp);
+		node.classID = n.classID;
+		node.entry = SymbolTableEntry.copyInstance(n.entry);
+		node.isParam = n.isParam;
+		return node;
+	}
+	
 	public SymbolTableEntry getSTEntry(){
 		return this.entry;
 	}

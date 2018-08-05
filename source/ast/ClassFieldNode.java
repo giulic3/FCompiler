@@ -104,4 +104,14 @@ public class ClassFieldNode implements Node {
 	public String getID() {
 		return null;
 	}
+	
+	// TODO: sperimentale, assegnamento oggetto come campo
+	public void updateFieldType(SymbolTableEntry newEntry) {
+		if (id != null) {
+			IdNode idNode = (IdNode)id;
+			SymbolTableEntry idEntry = idNode.getSTEntry();
+			idEntry.setType(newEntry.getType());
+			idNode.setSTEntry(idEntry);
+		}
+	}
 }

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import ast.Node;
 import utils.Environment;
 
-/* function type */
+
 public class FunType implements Node {
 	
 	private ArrayList<Node> parTypesList;
