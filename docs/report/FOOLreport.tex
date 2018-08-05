@@ -412,45 +412,63 @@ Il sottotipaggio tra funzioni/metodi viene gestito all'interno delle typeCheck()
 su tipo di ritorno e tipi e numero dei parametri per verificare che i tipi delle funzioni siano compatibili.\\
 \newline
 Si sono implementate le regole di tipaggio per tutti i costrutti:
+% riporto solo quelle effettivamente necessarie a fare type inference ( i costrutti che danno void non contribuiscono al tipo dell'albero)
 
-%TODO controllare che siano giuste
-% TODO mancano i tipi base
 \begin{itemize}
   \item costanti intere
-  $$ \frac{\text{x \ \ is \ \ an} \ \ Int \ \ \text{token}}{\vdash x : Int}[Int] $$\
+  $$ \frac{\text{x \ \ is \ \ an} \ \ int \ \ \text{token}}{\vdash x : int}[IntVal] $$
   \item costanti booleane
-$$ \frac{}{\vdash true : Bool}[BoolVal_1] \qquad \frac{}{\vdash false : Bool}[BoolVal_2] $$
-  \item gli operatori logici e relazionali
-  $$ \frac{\Gamma\vdash e : Bool}{\vdash ! e : Bool}[Not] $$
+  $$ \frac{}{\vdash true : bool}[BoolVal_1] \qquad \frac{}{\vdash false : bool}[BoolVal_2] $$
+  \item operatori logici e relazionali
+  % not
+  $$ \frac{\Gamma\vdash e : bool}{\vdash ! e : bool}[Not] $$
+  % and, or
+  $$ \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ && \ e_2 : bool}[And] \qquad \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ || \ e_2 : bool}[Or] $$
+  % equal
+  $$ \frac{\Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T \qquad T_2<:T}{\Gamma \vdash e_1 \ == \ e_2 : bool}[Equal] $$
+  % lessequal, greaterequal
+  $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ <= \ e_2 : bool}[LessEqual] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ >= \ e_2 : bool}[GreaterEqual] $$
 
-  $$ \frac{\Gamma \vdash e_1 : Bool \qquad \Gamma \vdash e_2 : Bool}{\Gamma \vdash e_1 \ && \ e_2 : Bool}[And] \qquad \frac{\Gamma \vdash e_1 : Bool \qquad \Gamma \vdash e_2 : Bool}{\Gamma \vdash e_1 \ || \ e_2 : Bool}[Or] $$
-
-  $$ \frac{\Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T \qquad T_2<:T}{\Gamma \vdash e_1 \ == \ e_2 : Bool}[Equal] $$
-
-  $$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ <= \ e_2 : Bool}[LessEqual] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ >= \ e_2 : Bool}[GreaterEqual] $$
-
-  \item gli operatori aritmetici
-  $$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ + \ e_2 : Int}[Plus] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ - \ e_2 : Int}[Sub] $$
-  $$ \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ + \ e_2 : Int}[Times] \qquad \frac{\Gamma \vdash e_1 : Int \qquad \Gamma \vdash e_2 : Int}{\Gamma \vdash e_1 \ - \ e_2 : Int}[Div] $$
-  $$ \frac{\Gamma \vdash e_1 : Int}{\Gamma \vdash (- e_1) : Int}[UnaryMinus] $$
-  \item il condizionale
+  \item operatori aritmetici
+  % plus, sub
+  $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ + \ e_2 : int}[Plus] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ - \ e_2 : int}[Sub] $$
+  % times, div
+  $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ + \ e_2 : int}[Times] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ - \ e_2 : int}[Div] $$
+  % unary minus
+  $$ \frac{\Gamma \vdash e_1 : int}{\Gamma \vdash (- e_1) : int}[UnaryMinus] $$
+  \item condizionale
   % ifexp1
-  $$ \frac{\Gamma \vdash c : Bool \qquad \Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_2 <: T_1}{\Gamma \vdash if \ \ (c) \ \ then \ \ {e_1} \ \ else \ \ {e_2} : T1}[IfExp_1] $$
+  $$ \frac{\Gamma \vdash c : bool \qquad \Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_2 <: T_1}{\Gamma \vdash if \ \ (c) \ \ then \ \ {e_1} \ \ else \ \ {e_2} : T1}[IfExp_1] $$
   % ifexp2
-  $$ \frac{\Gamma \vdash c : Bool \qquad \Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T_2}{\Gamma \vdash if \ \ (c) \ \ then \ \ {e_1} \ \ else \ \ {e_2} : T2}[IfExp_2] $$
+  $$ \frac{\Gamma \vdash c : bool \qquad \Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T_2}{\Gamma \vdash if \ \ (c) \ \ then \ \ {e_1} \ \ else \ \ {e_2} : T2}[IfExp_2] $$
   % ifstm
-  $$ \frac{\Gamma \vdash c : Bool \qquad \Gamma \vdash s_1 : T_1 \qquad \Gamma \vdash s_2 : T_2 \qquad T_1 <: Void \qquad T_2 <: Void}{\Gamma \vdash if \ \ (c) \ \ then \ \ {s_1} \ \ else \ \ {s_2} : Void}[IfStm] $$
+  $$ \frac{\Gamma \vdash c : bool \qquad \Gamma \vdash s_1 : T_1 \qquad \Gamma \vdash s_2 : T_2 \qquad T_1 <: void \qquad T_2 <: void}{\Gamma \vdash if \ \ (c) \ \ then \ \ {s_1} \ \ else \ \ {s_2} : void}[IfStm] $$
 
-  \item le variabili %TODO check
+  \item variabili %TODO check
   $$ \frac{}{\Gamma [x \rightarrow T] \vdash x : T}[Var] $$
-  \item la chiamata di funzione
 
-  $$ \frac{\Gamma \vdash f : (T_1, ..., T_n) \rightarrow T \qquad a_1 : S_1 <: T_1 \ \ldots \ a_n : S_n <: T_n}{\Gamma \vdash f(S_1 \ a_1,...,S_n \ a_n) : T}[FunExp] $$
+  \item print % TODO check
+  $$ \frac{\Gamma \vdash e_1 : T_1, ..., e_n : T_n \qquad T_1,...,T_n != void}{\Gamma \vdash print(e_1,...,e_n) : void }[Print]$$
 
-  \item la chiamata di metodo
+  \item chiamata di funzione (con subtyping)
+  $$ \frac{\Gamma \vdash f : (T_1, ..., T_n) \rightarrow T \qquad (\Gamma \vdash e_1 : <: T_1' \ \ldots \ e_n : T_n' \ \ \ T_i' <: T_i )\textsuperscript{i \in 1,...n}}{\Gamma \vdash f(e_1,...,e_n) : T}[SbtFunCall] $$
 
-  \item l'istanziazione di un oggetto (new)
+  \item chiamata di metodo (con subtyping)
+  $$ \frac{\Gamma(o) = C \qquad \Gamma(c)(m) = T_1, ... , T_n \rightarrow T \qquad (\Gamma \vdash e_i : T_i' \ \ \ T_i' <: T_i)\textsuperscript{i \in 1..n}}{\Gamma \vdash o.m(e_1,...,e_n) : T}[SbtMethodCall] $$
 
+  \item accesso ad un campo
+  $$ \frac{\Gamma \vdash o : C \qquad C \vdash x : T}{\Gamma \vdash o.x : T}[Field] $$
+
+  \item istanziazione di un oggetto (new) % TODO check
+
+  $$ \frac{\Gamma \vdash new \ C : () \rightarrow C}{\Gamma \vdash new \ C() : C}[New] $$
+
+  \item assegnamento % è uno statement
+  $$ \frac{\Gamma(x) = T_1 \qquad \Gamma \vdash e : T_2 \qquad T_2 <: T_1}{\Gamma \vdash x = e : void}[Assignment] $$
+
+  \item comandi
+  $$ \frac{\Gamma \vdash stm : void \qquad \Gamma \vdash stms : void}{\Gamma \vdash stm ; stms : void}[SeqStms] $$
+\end{itemize}
 \section{Generazione del codice}
 
 \subsection{Gestione degli offset, stack, heap}
