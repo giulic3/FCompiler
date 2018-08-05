@@ -20,6 +20,14 @@ public class ProgNode  implements Node {
 		this.blocks=d;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ArrayList<Node> blocksCopy = new ArrayList<>(this.blocks);
+		for (Node n: this.blocks)
+			blocksCopy.add(n.copyInstance());
+		return new ProgNode(blocksCopy);
+	}
+	
 	/**
 	 *
 	 * Dà inizio alla generazione della stringa per la stampa del <em>ast</em>

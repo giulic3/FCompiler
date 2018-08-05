@@ -19,9 +19,10 @@ public class SymbolTableEntry {
 	
 	// TODO: sperimentale
 	public static SymbolTableEntry copyInstance(SymbolTableEntry s) {
-		SymbolTableEntry copy = new SymbolTableEntry(s.nestingLevel, s.offset, s.type);
+		if (s == null) return null;
+		SymbolTableEntry copy = new SymbolTableEntry(s.nestingLevel, s.offset, s.type.copyInstance());
 		copy.className = s.className;
-		copy.staticType = s.staticType; // TODO: non va bene l'assegnamento; servirevve un copyInstance anche qua ma che tipo sarà staticType?!
+		copy.staticType = (s.staticType != null) ? s.staticType.copyInstance() : null;
 		return copy;
 	}
 	

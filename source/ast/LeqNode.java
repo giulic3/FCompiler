@@ -27,6 +27,13 @@ public class LeqNode implements Node {
 		right = r;
 		this.ctx = ctx;
 	}
+	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new LeqNode(this.left.copyInstance(), this.right.copyInstance(), ctx);
+	}
 
 	public String toPrint(String s) {
 		return s + "Less/Equal Node:\n" + left.toPrint(s+"\t") + "\n"

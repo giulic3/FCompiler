@@ -25,15 +25,14 @@ public class MethodDecNode extends FunDecNode {
 		this.classID = classID;
 	}
 	
-	public static MethodDecNode copyInstance(MethodDecNode m) {
-		FunDecNode funCopy = FunDecNode.copyInstance(m.funObj);
-		MethodDecNode copy = new MethodDecNode(funCopy, m.classID);
-		// TODO: sperimentale
-		//copy.inheritedMethods = new ArrayList<>(m.inheritedMethods);
-//		for (Node im: m.inheritedMethods) {
-//			MethodDecNode mCopy = (MethodDecNode)im;
-//			copy.inheritedMethods.add(MethodDecNode.copyInstance(mCopy));
-//		}
+	// TODO: prova
+	public Node copyInstance() {
+		MethodDecNode copy = new MethodDecNode((FunDecNode)this.funObj.copyInstance(), this.classID);
+		if (this.inheritedMethods != null) {
+			copy.inheritedMethods = new ArrayList<>(this.inheritedMethods);
+			for (Node n : this.inheritedMethods)
+				copy.inheritedMethods.add(n.copyInstance());
+		}
 		return copy;
 	}
 	

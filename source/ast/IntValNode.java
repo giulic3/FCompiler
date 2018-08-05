@@ -20,6 +20,13 @@ public class IntValNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new IntValNode(this.value, ctx);
+	}
+	
 	public String toPrint(String s) {
 		return s + "Integer value: " + value;
 	}

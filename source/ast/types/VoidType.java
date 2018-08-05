@@ -14,6 +14,11 @@ public class VoidType implements Node {
 	public VoidType() {
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		return new VoidType();
+	}
+	
 	public String toPrint(String indent) {
 		return indent + " VoidType";
 	}

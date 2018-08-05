@@ -14,6 +14,11 @@ public class IntType implements Node {
 	public IntType() {
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		return new IntType();
+	}
+	
 	public String toPrint(String indent) {
 		return "IntType";
 	}

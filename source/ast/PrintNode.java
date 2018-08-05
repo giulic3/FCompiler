@@ -18,6 +18,16 @@ public class PrintNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ArrayList<Node> expsCopy = new ArrayList<>(this.exps);
+		for (Node n: this.exps)
+			expsCopy.add(n.copyInstance());
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new PrintNode(expsCopy, ctx);
+	}
+	
 	public String toPrint(String indent) {
 		String printMsg = indent + "Print Node:";
 		

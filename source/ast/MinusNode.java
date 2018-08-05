@@ -17,6 +17,13 @@ public class MinusNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new MinusNode(this.value.copyInstance(), ctx);
+	}
+	
 	public String toPrint(String indent) {
 		return indent + "Minus Node:\n" + value.toPrint(indent+"\t");
 	}

@@ -32,6 +32,21 @@ public class BlockClassDecNode implements Node {
 		this.ctx=ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		ArrayList<Node> fieldsCopy = new ArrayList<>(this.fields);
+		for (Node n: this.fields)
+			fieldsCopy.add(n.copyInstance());
+		ArrayList<Node> methCopy = new ArrayList<>(this.methods);
+		for (Node n: this.methods)
+			methCopy.add(n.copyInstance());
+		BlockClassDecNode copy = new BlockClassDecNode(this.id, this.superClassID, fieldsCopy, methCopy, ctx);
+		copy.type = (ClassType)this.type.copyInstance();
+		return copy;
+	}
+	
 	public String toPrint(String s){
 		String msg = "\n"+s+"Class Dec Node: " + this.id;
 		if(superClassID !=null){

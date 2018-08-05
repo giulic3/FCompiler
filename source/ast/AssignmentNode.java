@@ -34,6 +34,18 @@ public class AssignmentNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		boolean isClassField = this.objFieldNode != null;
+		Node var = (isClassField) ? this.objFieldNode.copyInstance() : this.idVariableNode.copyInstance();
+		AssignmentNode copy = new AssignmentNode(var, this.exp.copyInstance(), isClassField, ctx);
+		copy.nestingLevel = this.nestingLevel;
+		copy.classID = this.classID;
+		return copy;
+	}
+	
 	public void setClassID(String classID) {
 		this.classID = classID;
 	}
@@ -58,17 +70,23 @@ public class AssignmentNode implements Node {
 		else
 			res.addAll(idVariableNode.checkSemantics(env));
 		
-		// TODO: manca la gestione dell'assegnamento a oggetti come campi di una classe
+		// TODO: gestione assegnamenti campi sperimentale (rami else)
 		
 		// Handles object type update after initialization
 		if (exp instanceof NewExpNode) {
 			NewExpNode newNode = (NewExpNode) exp;
 			SymbolTableEntry newEntry = newNode.getSTEntry();
-			if (newEntry != null && idVariableNode != null) {
-				IdNode curNode = (IdNode)idVariableNode;
-				SymbolTableEntry varEntry = curNode.getSTEntry();
-				varEntry.setType(newEntry.getType());
-				curNode.setSTEntry(varEntry);
+			if (newEntry != null) {
+				if (idVariableNode != null) {
+					IdNode curNode = (IdNode) idVariableNode;
+					SymbolTableEntry varEntry = curNode.getSTEntry();
+					varEntry.setType(newEntry.getType());
+					curNode.setSTEntry(varEntry);
+				}
+				else {
+					ClassFieldNode curNode = (ClassFieldNode)objFieldNode;
+					curNode.updateFieldType(newEntry, false);
+				}
 			}
 		}
 		
@@ -83,9 +101,9 @@ public class AssignmentNode implements Node {
 					varEntry.setType(expEntry.getType());
 					curNode.setSTEntry(varEntry);
 				}
-				else { // TODO: sperimentale
+				else {
 					ClassFieldNode curNode = (ClassFieldNode)objFieldNode;
-					curNode.updateFieldType(expEntry);
+					curNode.updateFieldType(expEntry, false);
 				}
 			}
 		}
@@ -94,12 +112,18 @@ public class AssignmentNode implements Node {
 		if (exp instanceof FunExpNode) {
 			FunExpNode funNode = (FunExpNode)exp;
 			SymbolTableEntry funEntry = funNode.getSTEntry();
-			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType && idVariableNode != null) {
-				IdNode curNode = (IdNode)idVariableNode;
-				SymbolTableEntry varEntry = curNode.getSTEntry();
-				FunType funType = (FunType)funEntry.getType();
-				varEntry.setType(funType.getReturnType());
-				curNode.setSTEntry(varEntry);
+			if (funEntry != null && funEntry.getType() instanceof FunType && ((FunType)funEntry.getType()).getReturnType() instanceof ClassType) {
+				if (idVariableNode != null) {
+					IdNode curNode = (IdNode) idVariableNode;
+					SymbolTableEntry varEntry = curNode.getSTEntry();
+					FunType funType = (FunType) funEntry.getType();
+					varEntry.setType(funType.getReturnType());
+					curNode.setSTEntry(varEntry);
+				}
+				else {
+					ClassFieldNode curNode = (ClassFieldNode)objFieldNode;
+					curNode.updateFieldType(funEntry, true);
+				}
 			}
 		}
 		

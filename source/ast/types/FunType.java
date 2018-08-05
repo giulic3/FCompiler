@@ -23,6 +23,14 @@ public class FunType implements Node {
 		returnType = r;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ArrayList<Node> par = new ArrayList<>(this.parTypesList);
+		for (Node n: this.parTypesList)
+			par.add(n.copyInstance());
+		return new FunType(par, this.returnType.copyInstance());
+	}
+	
 	public Node getReturnType() {
 		return returnType;
 	}

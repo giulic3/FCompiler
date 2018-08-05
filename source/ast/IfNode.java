@@ -50,6 +50,27 @@ public class IfNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		
+		// IfExp
+		if (this.th != null) {
+			return new IfNode(this.cond.copyInstance(), this.th.copyInstance(), this.el.copyInstance(), ctx);
+		}
+		// IfStms
+		else {
+			ArrayList<Node> thStmsCopy = new ArrayList<>(this.thStms);
+			for (Node n: this.thStms)
+				thStmsCopy.add(n.copyInstance());
+			ArrayList<Node> elStmsCopy = new ArrayList<>(this.elStms);
+			for (Node n: this.elStms)
+				elStmsCopy.add(n.copyInstance());
+			return new IfNode(this.cond.copyInstance(), thStmsCopy, elStmsCopy, ctx);
+		}
+	}
+	
 	@Override
 	public String toPrint(String s) {
 

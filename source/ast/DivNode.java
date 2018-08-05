@@ -23,6 +23,13 @@ public class DivNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new DivNode(this.leftOperand.copyInstance(), this.rightOperand.copyInstance(), ctx);
+	}
+	
 	public String toPrint(String s) {
 		return s+"Div Node\n" + leftOperand.toPrint(s+"\t")
 				+ "\n"

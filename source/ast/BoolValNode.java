@@ -17,6 +17,11 @@ public class BoolValNode implements Node {
 		value = n;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		return new BoolValNode(this.value);
+	}
+	
 	public String toPrint(String s) {
 		return s + "Boolean value: " + value;
 	}

@@ -25,6 +25,11 @@ public class ClassMethodNode extends FunExpNode {
 		this.funNode = funNode;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		return new ClassMethodNode(this.objectNode.copyInstance(), (FunExpNode)this.funNode.copyInstance());
+	}
+	
 	public String toPrint(String s) {
 		return s+"Method Call Node:\n" + s + "\t\tObject:\n" + this.objectNode.toPrint(s+"\t\t\t") + "\n" + s
 				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");

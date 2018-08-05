@@ -18,6 +18,13 @@ public class NotNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new NotNode(this.value.copyInstance(), ctx);
+	}
+	
 	public String toPrint(String indent) {
 		return indent + "Not Node:\n" + value.toPrint(indent+"\t");
 	}

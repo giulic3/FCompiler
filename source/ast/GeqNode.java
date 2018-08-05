@@ -25,6 +25,13 @@ public class GeqNode implements Node {
 		right = r;
 		this.ctx = ctx;
 	}
+	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new GeqNode(this.left.copyInstance(), this.right.copyInstance(), ctx);
+	}
 
 	public String toPrint(String s) {
 		return s + "Greater/Equal Node:\n" + left.toPrint(s+"\t") + "\n"

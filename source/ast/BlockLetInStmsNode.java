@@ -20,6 +20,18 @@ public class BlockLetInStmsNode implements Node {
 		stms=s;
 		decs=d;
 	}
+	
+	// TODO: prova
+	public Node copyInstance() {
+		ArrayList<Node> sCopy = new ArrayList<>(this.stms);
+		for (Node n: this.stms)
+			sCopy.add(n.copyInstance());
+		ArrayList<Node> dCopy = new ArrayList<>(this.decs);
+		for (Node n: this.decs)
+			dCopy.add(n.copyInstance());
+		return new BlockLetInStmsNode(dCopy, sCopy);
+	}
+	
 	public String toPrint(String s){
 		
 		String msg = "\n" + s + "BlockLetInStms:\n" + s + "\tDecs:";

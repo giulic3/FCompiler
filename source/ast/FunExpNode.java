@@ -31,6 +31,20 @@ public class FunExpNode implements Node {
 		this.isExp = isExp;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		ArrayList<Node> argsCopy = new ArrayList<>(this.args);
+		for (Node n: this.args)
+			argsCopy.add(n.copyInstance());
+		FunExpNode copy = new FunExpNode(this.id, argsCopy, this.isExp, ctx);
+		copy.entry = SymbolTableEntry.copyInstance(this.entry);
+		copy.callNestingLevel = this.callNestingLevel;
+		copy.classID = this.classID;
+		return copy;
+	}
+	
 	public void setClassID(String classID){
 		this.classID=classID;
 	}

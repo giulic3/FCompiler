@@ -42,37 +42,19 @@ public class ClassType implements Node {
 		this.ctx = ctx;
 	}
 	
-//	public ClassType(ClassType c) {
-//		this.classID = new String(c.classID);
-//		this.superType = (c.superType != null) ? new ClassType(c.superType) : null;
-//		this.fields = new ArrayList<>(c.fields);
-//		for (Node n: c.fields) {
-//			VarNode var = (VarNode)n;
-//			this.fields.add(VarNode.copyInstance(var));
-//		}
-//		this.methods = new ArrayList<>(c.methods);
-//		this.ctx = new ParserRuleContext();
-//		this.ctx.copyFrom(c.ctx);
-//	}
-	
-	// TODO: sperimentale
-	public static ClassType copyInstance(ClassType c) {
-		if (c == null) return null;
-		
+	// TODO: prova
+	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
-		ctx.copyFrom(c.ctx);
-		ClassType copy = new ClassType(c.classID, ctx);
-		copy.superType = ClassType.copyInstance(c.superType);
-		copy.fields = new ArrayList<>(c.fields);
-		for (Node n: c.fields) {
-			VarNode var = (VarNode)n;
-			copy.fields.add(VarNode.copyInstance(var));
-		}
-		copy.methods = new ArrayList<>(c.methods);
-//		for (Node m: c.methods) {
-//			MethodDecNode meth = (MethodDecNode)m;
-//			copy.methods.add(MethodDecNode.copyInstance(meth));
-//		}
+		ctx.copyFrom(this.ctx);
+		
+		ClassType copy = new ClassType(this.classID, ctx);
+		copy.superType = (this.superType != null) ? (ClassType)this.superType.copyInstance() : null;
+		copy.fields = new ArrayList<>(this.fields);
+		for (Node n: this.fields)
+			copy.fields.add(n.copyInstance());
+		copy.methods = new ArrayList<>(this.methods);
+		for (Node n: this.methods)
+			copy.methods.add(n.copyInstance());
 		return copy;
 	}
 	

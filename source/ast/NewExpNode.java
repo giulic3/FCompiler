@@ -19,6 +19,15 @@ public class NewExpNode implements Node {
 		this.ctx = ctx;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		NewExpNode copy = new NewExpNode(this.id, ctx);
+		copy.entry = SymbolTableEntry.copyInstance(this.entry);
+		return copy;
+	}
+	
 	public String toPrint(String s) {
 		return s + "New Instance Node: " + this.id + "()";
 	}

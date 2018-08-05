@@ -24,6 +24,13 @@ public class EqNode implements Node {
 		right = r;
 		this.ctx = ctx;
 	}
+	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		return new EqNode(this.left.copyInstance(), this.right.copyInstance(), ctx);
+	}
 
 	public String toPrint(String s) {
 		return s + "Equal Node:\n" + left.toPrint(s+"\t") + "\n"

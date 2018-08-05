@@ -1,6 +1,7 @@
 package ast;
 
 import ast.types.ClassType;
+import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.Helpers;
@@ -28,6 +29,16 @@ public class ClassFieldNode implements Node {
 		this.obj = obj;
 		this.id = ID;
 		this.isExp = isExp;
+	}
+	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		ClassFieldNode copy = new ClassFieldNode(this.obj.copyInstance(), this.id.copyInstance(), this.isExp, ctx);
+		copy.callNestingLevel = this.callNestingLevel;
+		copy.entry = SymbolTableEntry.copyInstance(this.entry);
+		return copy;
 	}
 	
 	public String toPrint(String s) {
@@ -106,12 +117,19 @@ public class ClassFieldNode implements Node {
 	}
 	
 	// TODO: sperimentale, assegnamento oggetto come campo
-	public void updateFieldType(SymbolTableEntry newEntry) {
+	public void updateFieldType(SymbolTableEntry newEntry, boolean fromFunc) {
 		if (id != null) {
-			IdNode idNode = (IdNode)id;
+			Node copy = id.copyInstance();
+			IdNode idNode = (IdNode)copy;
 			SymbolTableEntry idEntry = idNode.getSTEntry();
-			idEntry.setType(newEntry.getType());
+			if (fromFunc) {
+				FunType funType = (FunType)newEntry.getType();
+				idEntry.setType(funType.getReturnType());
+			}
+			else
+				idEntry.setType(newEntry.getType());
 			idNode.setSTEntry(idEntry);
+			this.id = copy;
 		}
 	}
 }

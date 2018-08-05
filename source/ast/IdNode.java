@@ -24,6 +24,17 @@ public class IdNode implements Node {
 		classID = null;
 	}
 	
+	// TODO: prova
+	public Node copyInstance() {
+		ParserRuleContext ctx = new ParserRuleContext();
+		ctx.copyFrom(this.ctx);
+		IdNode copy = new IdNode(this.id, ctx);
+		copy.classID = this.classID;
+		copy.entry = SymbolTableEntry.copyInstance(this.entry);
+		copy.nestinglevel = this.nestinglevel;
+		return copy;
+	}
+	
 	public String getID() {
 		return id;
 	}
