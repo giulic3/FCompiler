@@ -1,8 +1,10 @@
+%!TEX encoding = UTF-8 Unicode
 \documentclass[a4paper]{article}   % list options between brackets
 \usepackage[italian]{babel}              % list packages between braces
 \usepackage[utf8]{inputenc}
 \usepackage{listings} % needed for code styling
 \usepackage{color}
+\usepackage{amsmath}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -11,7 +13,7 @@
 % TODO change accordingly to desired style
 \lstset{
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
-  basicstyle=\footnotesize \color{black},        % the size of the fonts that are used for the code
+  basicstyle=\footnotesize \color{black} \ttfamily,        % the size of the fonts that are used for the code
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
   breaklines=true,                 % sets automatic line breaking
   captionpos=b,                    % sets the caption-position to bottom
@@ -19,6 +21,7 @@
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  columns=flexible,
   frame=single,	                   % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
@@ -75,7 +78,7 @@ stms :  ( stm )+
 
 \subsubsection{Object orientation}
 
-È possibile dichiarare classi e sottoclassi  al top level.\\
+E' possibile dichiarare classi e sottoclassi al top level.\\
 Le classi contengono
   \begin{itemize}
     \item campi (dichiarati nella classe o ereditati dalla super-classe)
@@ -98,13 +101,13 @@ Quindi, significa che occorre estendere\\
 
 \textbf{espressioni}\\
 
-   x.m(..)          // x e` un oggetto, m e` un metodo\\
+   x.m(..)          // x è un oggetto, m è un metodo\\
 
-   new C(..)				// C e` un identificatore di classe\\
+   new C(..)				// C è un identificatore di classe\\
 
    null\\
 
-\textbf{comandi} con x.m(..), se il metodo ritorna void.
+\textbf{comandi} con x.m(..), se il metodo ritorna void.\\
 
 In particolare
 
@@ -115,7 +118,7 @@ In particolare
   \item Il linguaggio ha il comando di assegnamento
   \item Non è possibile dichiarare funzioni annidate. Le funzioni non possono
     essere passate come parametri
-  \item È possibile avere funzioni/metodi mutuamente ricorsivi.
+  \item E' possibile avere funzioni/metodi mutuamente ricorsivi.
 
 \end{itemize}
 
@@ -149,7 +152,7 @@ locazione successiva alla prossima locazione libera per lo stack (se la memoria 
 indirizzi da 0 a MEMSIZE-1, lo stack pointer inizialmente punta a MEMSIZE).
 In questo modo, quando lo stack non è vuoto, lo stack pointer punta al top dello stack.\\
 
-Il programma è collocato in una memoria separata puntata dall’instruction pointer
+Il programma è collocato in una memoria separata puntata dall'instruction pointer
 (che punta alla prossima istruzione da eseguire). Gli altri registri della macchina
 virtuale sono: HP (heap pointer), RA (return address), RV (return value) e FP
 (frame pointer).\\
@@ -172,72 +175,66 @@ La deallocazione degli oggetti nello heap (garbage collection) non è obbligator
 
 \section{Struttura del progetto}
 
-Il codice sorgente del progetto è contenuto nella sottodirectory source/ che è così divisa:
+Il codice sorgente del progetto è contenuto nella sottodirectory \lstinline|source/| che è così divisa:
 
 \begin{itemize}
-  \item \textbf{ast/} contiene i nodi dell'albero di sintassi astratta generati dal parser
+  \item \textbf{ast/} contiene i nodi dell'albero di sintassi astratta utilizzati nell'implementazione della relativa visita
   \begin{itemize}
     \item \textbf{ast/types/}
     in particolare, contiene quei nodi che rappresentano dei tipi all'interno della grammatica
   \end{itemize}
   \item \textbf{grammars/}
-    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'ast e del bytecode
+    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'AST e del bytecode
   \item \textbf{lib/}
     contiene i jar delle libreria di ANTLRv4, di commons-cli per eseguire il progetto da riga di comando
     e la libreria YAML di supporto al testing
   \item \textbf{testMain/}
     contiene le classi principali per l'esecuzione del progetto, ovvero le
-    due configurazioni di run, Main.java per l'esecuzione standard
-    e TestSuite.java per l'esecuzione dei test contenuti nel file testSuite.yml in formato YAML e il CommandLineMain
-    per l'esecuzione da riga di comando.
+    due configurazioni di run, \lstinline|Main.java| per l'esecuzione standard con debug di un singolo programma FOOL, \lstinline|TestSuite.java| per l'esecuzione dei test contenuti nel file testSuite.yml in formato YAML e \lstinline|CommandLineMain.java| per l'esecuzione e la creazione del file JAR eseguibile da riga di comando.
   \item \textbf{utils/}
-    contiene le classi di supporto per la symbol table, il type checking e altre funzioni ausiliarie.
-    % TODO scrivere di più in questo ultimo punto?
+    contiene le classi di supporto per la symbol table, il type checking, eccezioni personalizzate e altre funzioni ausiliarie (come quella per ordinare gli errori semantici secondo il numero di riga e colonna).
 
 \end{itemize}
 
-Il progetto è stato sviluppato usando IntelliJ IDEA, si consulti il file README.md per le istruzioni
-su come aprire ed eseguire il progetto con il suddetto IDE oppure utilizzando Eclipse o il terminale.
+Il progetto è stato sviluppato usando \textbf{IntelliJ IDEA}; si consulti il file \lstinline|README.md| per le istruzioni su come aprire ed eseguire il progetto con il suddetto IDE oppure utilizzando Eclipse o il terminale.
 
 \section{Caratteristiche del linguaggio e grammatica}
 
-Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocchi: ogni blocco può essere una dichiarazione di classe (al top level)
-oppure una sequenza di dichiarazioni introdotte dalla keyword \textit{let}, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta
-dalla keyword \textit{in}.\\
-
+Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocchi: ogni blocco può essere una dichiarazione di classe (al top level) oppure una sequenza di dichiarazioni introdotte dalla keyword \textit{let}, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta dalla keyword \textit{in}.\\
 
 \begin{lstlisting}
 class A (int x = 1, int y = 2) {
   void m() print(0);
 }
+let
+	A a = new A();
+in
+	a.m();
 \end{lstlisting}
-
-Le espressioni sono state estese a comprendere gli operatori $<=, >=, ||, \&\&, /, - $
+Le espressioni sono state estese per comprendere gli operatori $<=,\ >=,\ ||,\ \&\&,\ /,\ - $
    e not nella seguente maniera:\\
 
 \begin{lstlisting}
-exp   : left=operand (operator=(EQ | LEQ | GEQ ) right=exp)? ;
+exp		: left=operand (operator=(EQ | LEQ | GEQ) right=exp)? ;
 
-operand:  left=term (operator=(PLUS | MINUS) right=operand)? ;
+operand	: left=term (operator=(PLUS | MINUS) right=operand)? ;
 
-term  : left=factor (operator=(TIMES | DIV) right=term)? ;
+term	: left=factor (operator=(TIMES | DIV) right=term)? ;
 
-factor : left=atom (operator=( OR | AND) right=factor)? ;
+factor	: left=atom (operator=(OR | AND) right=factor)? ;
 
-atom : (NOT)? (MINUS)? val=value ;
+atom	: (NOT)? (MINUS)? val=value ;
 
-value  :
-        INTEGER                            #intVal
-      | BOOLVAL                            #boolVal
-      | NULL                               #nullVal
-      | LPAR exp RPAR                      #baseExp
-      | IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
-      | var     #varExp
-      | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funExp
-      | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodExp
-      | NEW className=ID (LPAR RPAR)       #newExp
-      ;
-
+value	: INTEGER					#intVal
+		| BOOLVAL					#boolVal
+		| NULL						#nullVal
+		| LPAR exp RPAR				#baseExp
+		| var     					#varExp
+		| IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
+		| ID (LPAR (exp (COMMA exp)* )? RPAR)								#funExp
+		| object=var DOT memberName=ID (LPAR (exp (COMMA exp)* )? RPAR)?  #methodExp
+		| NEW className=ID (LPAR RPAR)										#newExp
+		;
 \end{lstlisting}
 
 Sono stati aggiunti gli statement\\
@@ -253,9 +250,7 @@ stm : (var | object=var DOT fieldName=ID) ASM exp #varStmAssignment
 stms : ( stm )+  ;
 
 \end{lstlisting}
-
-uno statement può essere un assegnamento (semplice o a campo di un oggetto), un condizionale, una print
-o una chiamata di funzione/metodo.\\
+Uno statement può essere un assegnamento (semplice o a campo di un oggetto), un condizionale, una \lstinline|print| o una chiamata di funzione/metodo.\\
 \newpage
 Una dichiarazione di classe viene fatta nel modo seguente:\\
 
@@ -270,49 +265,40 @@ class super extends hero(int x = 0, bool cond = true) {
 };
 \end{lstlisting}
 
-dove le parentesi tonde delimitano i campi e le parentesi graffe i metodi. Una classe può contenere nessun campo
-ma deve contenere sempre almeno un metodo. Una classe puo` estenderne un'altra (di cui diventera' una sottoclasse)
-ereditandone campi e metodi, utilizzando la keyword \textit{extends}.\\
+dove le parentesi tonde delimitano i campi e le parentesi graffe i metodi. Una classe può contenere nessun campo ma deve contenere sempre almeno un metodo. Una classe può estenderne un'altra (di cui diventera' una sottoclasse), ereditandone campi e metodi, utilizzando la keyword \textit{extends}.\\
 
 \begin{lstlisting}
 classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR varasm (COMMA varasm)* RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
-
 \end{lstlisting}
 
 % TODO caratteristica da cambiare?
-Un oggetto può essere istanziato utilizzando la keyword \textit{new}. Il costruttore deve essere richiamato senza argomenti, mentre i valori dei campi
-sono stati già inizializzati durante la dichiarazione della classe e potranno essere modificati successivamente
+Un oggetto può essere istanziato utilizzando la keyword \textit{new}. Il costruttore deve essere richiamato senza argomenti, mentre i valori dei campi sono stati già inizializzati durante la dichiarazione della classe e potranno essere modificati successivamente
 tramite assegnamento.\\
 
 %TODO completare...
-Ulteriori caratteristiche del linguaggio sono le seguenti:\\
+Ulteriori caratteristiche del linguaggio sono le seguenti:
 \begin{itemize}
   \item Tutte le variabili devono essere inizializzate al momento della dichiarazione (così come vale
  per i campi di una classe).
   \item Una variabile può avere tipo intero, booleano o classe (se è un oggetto).
   \item Una funzione può avere tipo di ritorno void
-  \item È stato inserito il tipo null che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
-  \item Una funzione può opzionalmente avere un blocco \textit{let in} all'interno del suo body, che è formato da
-  statement oppure statement ed eventualmente un'espressione preceduta dalla keyword \textit{return} nel caso in
+  \item E' stato inserito il tipo \lstinline|null| che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
+  \item Una funzione può opzionalmente avere un blocco \textit{let in} all'interno del suo body, che è formato da soli statement, 0 o più statement seguiti da un'espressione di ritorno oppure  un'espressione preceduta dalla keyword \textit{return} nel caso in
   cui il suo tipo di ritorno sia diverso da void.
   %TODO completare...
 \end{itemize}
 
 \section{Analisi lessicale e sintattica (AST)}
-L'interfaccia Node, implementata da tutti i nodi dell'ast è stata modificata nel seguente modo:\\
+L'interfaccia Node, implementata da tutti i nodi dell'AST è stata modificata nel seguente modo:\\
 \begin{itemize}
-  \item il metodo \textbf{checkSemantics()} ha come tipo di ritorno HashSet$<$String$>$ invece di ArrayList$<$Semantic Error$>$;
-  l'oggetto di tipo String rappresenta la stringa che contiene l'errore semantico e si è
-  optato per una gestione degli errori con HashSet per facilitare il controllo sull'inserimento
-  di duplicati.
-  \item il metodo \textbf{typeCheck()} adesso solleva un'eccezione quando viene rilevato un errore di tipo
-  (vedi file source/utils/TypeCheckException.java).
-  \item è stato aggiunto il metodo \textbf{getID()} che restituisce l'identificatore di un oggetto sotto forma di stringa.
+  \item il metodo \textbf{checkSemantics()} ha come tipo di ritorno HashSet$<$String$>$ invece di ArrayList$<$Semantic Error$>$; l'oggetto di tipo String rappresenta la stringa che contiene l'errore semantico e si è optato per una gestione degli errori con HashSet per facilitare il controllo sull'inserimento di duplicati.
+  \item il metodo \textbf{typeCheck()} adesso solleva un'eccezione quando viene rilevato un errore di tipo (vedi file \lstinline|source/utils/TypeCheckException.java|).
+  \item E' stato aggiunto il metodo \textbf{getID()} che restituisce l'identificatore di un oggetto, o di un generico nodo, sotto forma di stringa.
 \end{itemize}
 
 
 %\subsection{Nodi degli operatori}
-%La grammatica iniziale è stata estesa a comprendere gli operatori:
+%La grammatica iniziale Ãš stata estesa a comprendere gli operatori:
 
 %\begin{itemize}
 %  \item relazionali ($==, <=, >=$)
@@ -325,36 +311,26 @@ L'interfaccia Node, implementata da tutti i nodi dell'ast è stata modificata ne
   \item \textbf{FunDecNode} rappresenta la dichiarazione di una funzione, in esso sono memorizzati
   il nome della funzione, il suo tipo di ritorno, la lista dei parametri, la lista delle dichiarazioni e il corpo della funzione.\\
   Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
-  \item \textbf{FunExpNode} rappresenta la chiamata di una funzione, in esso sono memorizzati l'id della funzione,
-  gli argomenti, il nesting level e una variabile di supporto classID per gestire la chiamata di metodo che avviene senza dot notation.
-  Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
-
-
+  \item \textbf{FunExpNode} rappresenta l'invocazione di una funzione, in esso sono memorizzati l'ID della funzione, gli argomenti, il nesting level e una variabile di supporto \lstinline|classID| per gestire la chiamata di metodo che avviene senza dot notation (all'interno di un altro metodo). Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
 \end{itemize}
 
 \subsection{Nodi per la gestione delle classi}
 \begin{itemize}
-  \item \textbf{BlockClassDecNode} rappresenta la dichiarazione di una classe, e contiene oltre ai metodi implementati dell'
-  interfaccia Node, le utility getMethods() e getFields()
-  \item \textbf{ClassMethodNode} rappresenta la chiamata di metodo (o.m()), è sottoclasse di FunExpNode
+  \item \textbf{BlockClassDecNode} rappresenta la dichiarazione di una classe; contiene, oltre ai metodi implementati dell'interfaccia \lstinline|Node|, le funzioni ausiliarie \lstinline|getMethods()| e \lstinline|getFields()|
+  \item \textbf{ClassMethodNode} rappresenta la chiamata di metodo (\lstinline|o.m()|); è sottoclasse di FunExpNode
   \item \textbf{ClassFieldNode} rappresenta il campo di una classe
   \item \textbf{MethodDecNode} rappresenta la dichiarazione di metodo
-  \item \textbf{ClassType} rappresenta il tipo classe, memorizza l'id, l'id dell'eventuale superclasse, la lista dei campi e dei metodi.
-  Contiene getter e setter per gestire questi campi.
+  \item \textbf{ClassType} rappresenta il tipo classe, memorizza l'ID, l'ID dell'eventuale superclasse, la lista dei campi e dei metodi. Contiene getter e setter per gestire questi campi.
 \end{itemize}
+
 \section{Analisi semantica}
 \subsection{Symbol table}
 
-La costruzione della symbol table avviene visitando l'ast e richiamando su un ogni nodo il metodo \textbf{checkSemantics()},
-che a partire dal primo nodo ProgNode (che rappresenta la start rule della grammatica) viene richiamata due volte.
-Le due visite successive servono per la gestione delle dichiarazioni di classi e di funzioni/metodi.
-Nel caso delle dichiarazioni di classi, la prima passata viene utilizzata per raccogliere tutte le dichiarazioni, mentre la seconda
-serve per gestire campi, metodi, oggetti e risolvere le relazioni di sottotipaggio tra classi.
-Nel caso di funzioni/metodi, la doppia visita consente di implementare il meccanismo di mutua ricorsione, ovvero consente
-che nel corpo di una funzione possa essere chiamata un'altra funzione non ancora definita. Lo stesso vale per i metodi.
+La costruzione della symbol table avviene visitando l'AST e richiamando su un ogni nodo il metodo \textbf{checkSemantics()} che, a partire dal primo nodo \lstinline|ProgNode| (rappresentante la start rule della grammatica \lstinline|FOOL.g4|) viene richiamata due volte. Le due visite successive servono per la gestione delle dichiarazioni di classi e di funzioni/metodi.
+Nel caso delle dichiarazioni di classi, la prima passata viene utilizzata per raccogliere tutte le dichiarazioni, mentre la seconda serve per gestire campi, metodi, oggetti e risolvere le relazioni di sottotipaggio tra classi.\\
+Nel caso di funzioni/metodi, la doppia visita consente di implementare il meccanismo di mutua ricorsione, ovvero consente che nel corpo di una funzione possa essere chiamata un'altra funzione non ancora definita. Lo stesso vale per i metodi.\\
 
-La tabella dei simboli viene gestita utilizzando la classe Environment (contenuta nella sottodirectory utils)
-e i metodi di supporto che contiene.\\
+La tabella dei simboli viene gestita utilizzando la classe \lstinline|Environment| (contenuta nella sottodirectory \lstinline|utils|) e i metodi di supporto che essa contiene.\\
 La classe contiene i seguenti campi:\\
 
 \begin{lstlisting}
@@ -369,13 +345,13 @@ private String definingClass = null; // indica il nome della classe da cui stiam
 In più contiene (oltre a getter e setter per i campi) anche i metodi:\\
 % TODO scrivere come vengono dati questi id...
 \begin{itemize}
-  \item \textbf{public int decreaseOffset()}
-  \item \textbf{public int increaseOffset()}
-  \item \textbf{public SymbolTableEntry getActiveDec(String id)} scorre la symbol table
-  alla ricerca della entry corrispondente alla dichiarazione al momento attiva nell'ambiente per l'oggetto rappresentato da id.
-  \item \textbf{public void pushScope()} aggiunge una nuova tabella hash alla lista che rappresenta la symbol table, con nesting level incrementato.
-  \item \textbf{public void popScope()} rimuove dalla symbol table la hash corrispondente al nesting level corrente, e poi lo decrementa.
-  \item \textbf{public SymbolTableEntry getClassEntry(String classID)} cerca nella symbol table la entry della classe rappresentata da classID
+  \item \textbf{\lstinline|public int decreaseOffset()|}
+  \item \textbf{\lstinline|public int increaseOffset()|}
+  \item \textbf{\lstinline|public SymbolTableEntry getActiveDec(String id)|}\newline Scorre la symbol table
+  alla ricerca della entry corrispondente alla dichiarazione al momento attiva nell'ambiente, per l'oggetto rappresentato da ID.
+  \item \textbf{\lstinline|public void pushScope()|}\newline Aggiunge una nuova tabella hash alla lista che rappresenta la symbol table, con nesting level incrementato. In altre parole ciò avviene quando si entra in un nuovo scope.
+  \item \textbf{\lstinline|public void popScope()|}\newline Rimuove dalla symbol table la hash corrispondente al nesting level corrente, e poi lo decrementa.
+  \item \textbf{\lstinline|public SymbolTableEntry getClassEntry(String classID)|}\newline Cerca nella symbol table la entry della classe rappresentata da \lstinline|classID|
   %\item \textbf{public void updateClassEntry(ClassType type)} % la usiamo per aggiornare il tipo dinamico? non la stiamo usando
 
 \end{itemize}
@@ -403,12 +379,11 @@ I tipi su cui si basa il sistema di tipaggio di FOOL sono i seguenti:
 
 Il sottotipaggio viene controllato utilizzando la funzione
 \begin{itemize}
-\item public static boolean subtypeOf(Node a, Node b)
+\item \lstinline|public static boolean subtypeOf(Node a, Node b)|
 \end{itemize}
-che restituisce \textit{true} se il nodo a è sottotipo del nodo b (in Helpers).
-In particolare, bool è sottotipo di int, void è sottotipo di classe, mentre una classe è sottoclasse di un'altra se
-intersecando la lista delle superclassi della prima con la lista delle superclassi della seconda si ottiene un insieme non vuoto.\\
-Il sottotipaggio tra funzioni/metodi viene gestito all'interno delle typeCheck() di FunDecNode e MethodDecNode, come da specifica, il controllo viene eseguito
+che restituisce \lstinline|true| se il nodo \lstinline|a| è sottotipo del nodo \lstinline|b| (in \lstinline|Helpers|).
+In particolare, \lstinline|bool| è sottotipo di \lstinline|int|, \lstinline|void| è sottotipo di classe, mentre una classe è sottoclasse di un'altra se intersecando la lista delle superclassi della prima con la lista delle superclassi della seconda si ottiene un insieme non vuoto.\\
+Il sottotipaggio tra funzioni/metodi viene gestito all'interno delle \lstinline|typeCheck()| di \lstinline|FunDecNode| e \lstinline|MethodDecNode|: come da specifica, il controllo viene eseguito
 su tipo di ritorno e tipi e numero dei parametri per verificare che i tipi delle funzioni siano compatibili.\\
 \newline
 Si sono implementate le regole di tipaggio per tutti i costrutti:
@@ -421,9 +396,9 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
   $$ \frac{}{\vdash true : bool}[BoolVal_1] \qquad \frac{}{\vdash false : bool}[BoolVal_2] $$
   \item operatori logici e relazionali
   % not
-  $$ \frac{\Gamma\vdash e : bool}{\vdash ! e : bool}[Not] $$
+  $$ \frac{\Gamma\vdash e : bool}{\vdash\ not\ e : bool}[Not] $$
   % and, or
-  $$ \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ && \ e_2 : bool}[And] \qquad \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ || \ e_2 : bool}[Or] $$
+  $$ \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ \&\& \ e_2 : bool}[And] \qquad \frac{\Gamma \vdash e_1 : bool \qquad \Gamma \vdash e_2 : bool}{\Gamma \vdash e_1 \ || \ e_2 : bool}[Or] $$
   % equal
   $$ \frac{\Gamma \vdash e_1 : T_1 \qquad \Gamma \vdash e_2 : T_2 \qquad T_1 <: T \qquad T_2<:T}{\Gamma \vdash e_1 \ == \ e_2 : bool}[Equal] $$
   % lessequal, greaterequal
@@ -433,7 +408,7 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
   % plus, sub
   $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ + \ e_2 : int}[Plus] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ - \ e_2 : int}[Sub] $$
   % times, div
-  $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ + \ e_2 : int}[Times] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ - \ e_2 : int}[Div] $$
+  $$ \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ \times \ e_2 : int}[Times] \qquad \frac{\Gamma \vdash e_1 : int \qquad \Gamma \vdash e_2 : int}{\Gamma \vdash e_1 \ / \ e_2 : int}[Div] $$
   % unary minus
   $$ \frac{\Gamma \vdash e_1 : int}{\Gamma \vdash (- e_1) : int}[UnaryMinus] $$
   \item condizionale
@@ -448,13 +423,13 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
   $$ \frac{}{\Gamma [x \rightarrow T] \vdash x : T}[Var] $$
 
   \item print % TODO check
-  $$ \frac{\Gamma \vdash e_1 : T_1, ..., e_n : T_n \qquad T_1,...,T_n != void}{\Gamma \vdash print(e_1,...,e_n) : void }[Print]$$
+  $$ \frac{\Gamma \vdash e_1 : T_1, ..., e_n : T_n \qquad T_1,...,T_n\ != void}{\Gamma \vdash print(e_1,...,e_n) : void }[Print]$$
 
   \item chiamata di funzione (con subtyping)
-  $$ \frac{\Gamma \vdash f : (T_1, ..., T_n) \rightarrow T \qquad (\Gamma \vdash e_1 : <: T_1' \ \ldots \ e_n : T_n' \ \ \ T_i' <: T_i )\textsuperscript{i \in 1,...n}}{\Gamma \vdash f(e_1,...,e_n) : T}[SbtFunCall] $$
+ % $$ \frac{\Gamma \vdash f : (T_1, ..., T_n) \rightarrow T \qquad (\Gamma \vdash e_1 : <: T_1' \ \ldots \ e_n : T_n' \ \ \ T_i' <: T_i )\textsuperscript{i \in 1,...n}}{\Gamma \vdash f(e_1,...,e_n) : T}[SbtFunCall] $$
 
-  \item chiamata di metodo (con subtyping)
-  $$ \frac{\Gamma(o) = C \qquad \Gamma(c)(m) = T_1, ... , T_n \rightarrow T \qquad (\Gamma \vdash e_i : T_i' \ \ \ T_i' <: T_i)\textsuperscript{i \in 1..n}}{\Gamma \vdash o.m(e_1,...,e_n) : T}[SbtMethodCall] $$
+ % \item chiamata di metodo (con subtyping)
+ % $$ \frac{\Gamma(o) = C \qquad \Gamma(c)(m) = T_1, ... , T_n \rightarrow T \qquad (\Gamma \vdash e_i : T_i' \ \ \ T_i' <: T_i)\textsuperscript{i \in 1..n}}{\Gamma \vdash o.m(e_1,...,e_n) : T}[SbtMethodCall] $$
 
   \item accesso ad un campo
   $$ \frac{\Gamma \vdash o : C \qquad C \vdash x : T}{\Gamma \vdash o.x : T}[Field] $$
@@ -463,7 +438,7 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
 
   $$ \frac{\Gamma \vdash new \ C : () \rightarrow C}{\Gamma \vdash new \ C() : C}[New] $$
 
-  \item assegnamento % è uno statement
+  \item assegnamento % Ãš uno statement
   $$ \frac{\Gamma(x) = T_1 \qquad \Gamma \vdash e : T_2 \qquad T_2 <: T_1}{\Gamma \vdash x = e : void}[Assignment] $$
 
   \item comandi
@@ -472,8 +447,88 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
 \section{Generazione del codice}
 
 \subsection{Gestione degli offset, stack, heap}
+\subsubsection{Implementazione del \lstinline|null|}
 \subsection{Layout di un oggetto}
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
+Il progetto di base forniva una grammatica, \lstinline|SVM.g4|, già implementata per la generazione del codice oggetto. Essa però conteneva attributi, ovvero particolare azioni in Java da effettuare nel momento in cui un determinato token sarebbe stato matchato con l'input.\\
+Come richiesto dalle specifiche del progetto, è stata implementata una visita per la generazione del codice, trasformando la grammatica fornita in una senza attributi. Sebbene quella iniziale fosse semplice, è stato ritenuto opportuno modificarla in modo radicale per favorire una migliore gestione della visita sull'AST generato.
+Il risultato è il seguente:
+\begin{lstlisting}
+assembly: ( simpleCmd )* ;
+
+simpleCmd: ( composedCmd | POP | ADD | SUB | MULT | DIV | STOREW
+			| LOADW | JS | LOADRA | STORERA | LOADRV | STORERV
+			| LOADFP | STOREFP | COPYFP | LOADHP | STOREHP | PRINT
+			| HALT | NEW | LABEL | CPHEAD | JSMETH ) ;
+
+composedCmd: ( PUSH num=NUMBER | PUSH label=LABEL | label=LABEL COL
+            | BRANCH label=LABEL | BRANCHEQ label=LABEL
+            | BRANCHLESSEQ label=LABEL ) ;
+\end{lstlisting}
+Rispetto alla grammatica di partenza, sono state introdotte le seguenti istruzioni assembly che hanno quindi richiesto la modifica del file \lstinline|ExecuteVM.java|:
+\begin{itemize}
+\item NEW\newline
+Si occupa dell'istanziazione di un oggetto nell'heap. L'istruzione assume di avere sulla testa dello stack l'indirizzo della Dispatch Table relativa al tipo dell'oggetto in questione, il numero di campi ed i relativi valori. Il risultato consiste nella creazione dell'oggetto nell'heap e nella restituzione, sulla testa dello stack, dell'indirizzo di tale oggetto.
+\item CPHEAD\newline
+Semplice istruzione che si occupa di duplicare il valore presente sulla testa dello stack. Viene utilizzato durante la code generation dei metodi di un oggetto.
+\item JSMETH\newline
+Pusha sullo stack l'indirizzo della prima istruzione del metodo invocato, in modo da usare successivamente l'istruzione \lstinline|JS| per l'esecuzione dello stesso.
+\end{itemize}
+
+Inoltre, sono stati aggiunti i seguenti campi al Parser SVM:
+\begin{lstlisting}
+public static int[] code = new int[ExecuteVM.CODESIZE];
+static int i = 0;
+static HashMap<String,Integer> labelAdd = new HashMap<String,Integer>();
+static HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
+static void resetSVM() {
+    code = new int[ExecuteVM.CODESIZE];
+    i = 0;
+    labelAdd = new HashMap<String,Integer>();
+    labelRef = new HashMap<Integer,String>();
+}
+\end{lstlisting}
+L'implementazione della visita è presente nel file \lstinline|SVMVisitorImpl.java| e, per poter accedere alle suddette variabili del parser, sono state dichiarate in modo statico. Per questo motivo però, è stato necessario creare il metodo \lstinline|resetSVM()|, in modo da azzerare il contenuto della macchina virtuale ogni qual volta venga eseguito un programma (come ad esempio nel caso dei test, i quali sono valutati automaticamente uno dopo l'altro).\\\\
+L'idea alla base della nostra implementazione della visita è costituita dall'uso di tre regole per il parser e dei relativi metodi di visita:
+\begin{lstlisting}
+public Void visitAssembly(AssemblyContext ctx);
+public Void visitSimpleCmd(SimpleCmdContext ctx);
+public Void visitComposedCmd(ComposedCmdContext ctx);
+\end{lstlisting}
+
+\lstinline|visitAssembly()| rappresenta il punto d'inizio della visita dell'intero AST, gestisce il reset della macchina virtuale e la trasformazione delle label in opportuni interi; inoltre, utilizzando questo approccio, ci è stato facile ricavare il numero totale di nodi su cui ciclare per riempire l'array contenente il codice.\\
+\lstinline|visitSimpleCmd()| gestisce tutte le istruzioni assembly semplici, che non hanno parametri, in quanto la loro semantica consiste solo nell'aggiunta dell'opportuno codice istruzione nell'array \lstinline|code|.\\
+Infine, \lstinline|visitComposedCmd()| gestisce le istruzioni assembly che necessitano di più operazioni oltre alla semplice memorizzazione del codice istruzione; in particolare, si tratta di operazioni relative alla creazione/associazione delle label nel codice.\\\\
+La visita e la generazione del codice da far eseguire alla macchina virtuale avviene con il seguente codice:
+\begin{lstlisting}
+// si assume che input sia un CharStream contenente il testo da parsare
+SVMLexer asmLexer = new SVMLexer(input);
+CommonTokenStream asmTokens = new CommonTokenStream(asmLexer);
+SVMParser asmParser = new SVMParser(asmTokens);
+SVMVisitorImpl asmVisitor = new SVMVisitorImpl();
+
+asmVisitor.visit(asmParser.assembly());
+\end{lstlisting}
+Per migliorare il risultato dell'esecuzione della macchina virtuale, il file \lstinline|ExecuteVM.java| è stato ulteriormente modificato in modo da individuare la divisione per zero e l'accesso ad un oggetto nullo (tramite le eccezioni custom \lstinline|DivisionByZeroException| e \lstinline|NullObjectException|).\\
+Attraverso due \lstinline|ArrayList| di stringhe, \lstinline|outputBuffer| e \lstinline|errorBuffer|, la macchina virtuale restituisce il proprio output, come mostrato nel codice seguente (continuazione di quello precedente):
+\begin{lstlisting}
+ExecuteVM vm = new ExecuteVM(SVMParser.code);
+vm.cpu();
+
+if (!vm.errorBuffer.isEmpty()) {
+	if (verbose) result.append("Some errors occurred during execution:\n");
+	for (String e: vm.errorBuffer)
+		result.append(e).append("\n");
+}
+else {
+	if (verbose) result.append("Virtual Machine execution result:\n");
+	if (vm.outputBuffer.size() == 0)
+		result.append("Execution completed. No output shown.\n");
+	else
+		for (String res: vm.outputBuffer)
+			result.append(res).append("\n");
+}
+\end{lstlisting}
 \subsection{Dynamic dispatch}
 
 \section{Conclusioni}
