@@ -24,7 +24,7 @@ public class AssignmentNode implements Node {
 	private Node exp;
 	private Node objFieldNode = null;
 	private int nestingLevel = 0;
-	private String classID=null;
+	private String classID = null;
 	private ParserRuleContext ctx;
 	
 	public AssignmentNode(Node var, Node exp, boolean isClassField, ParserRuleContext ctx){
@@ -34,7 +34,6 @@ public class AssignmentNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -51,7 +50,9 @@ public class AssignmentNode implements Node {
 	}
 	
 	public String toPrint(String s){
-		return s + "Assignment Node:\n" + (objFieldNode != null ? objFieldNode.toPrint(s+"\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n" ) + exp.toPrint(s+"\t\t");
+		return  s + "Assignment Node:\n" +
+				(objFieldNode != null ? objFieldNode.toPrint(s + "\t\t") + "\n" : idVariableNode.toPrint(s+"\t") + "\n") +
+				exp.toPrint(s + "\t\t");
 	}
 	
 	/**
@@ -61,7 +62,7 @@ public class AssignmentNode implements Node {
 	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		res.addAll(exp.checkSemantics(env));
 		
@@ -69,8 +70,6 @@ public class AssignmentNode implements Node {
 			res.addAll(objFieldNode.checkSemantics(env));
 		else
 			res.addAll(idVariableNode.checkSemantics(env));
-		
-		// TODO: gestione assegnamenti campi sperimentale (rami else)
 		
 		// Handles object type update after initialization
 		if (exp instanceof NewExpNode) {
@@ -141,7 +140,7 @@ public class AssignmentNode implements Node {
 	 * */
 	public Node typeCheck() throws Exception{
 		
-		if(idVariableNode!=null) {
+		if (idVariableNode!=null) {
 			IdNode var = (IdNode)idVariableNode;
 			SymbolTableEntry entry = var.getSTEntry();
 			
@@ -189,12 +188,12 @@ public class AssignmentNode implements Node {
 			IdNode var = (IdNode) idVariableNode;
 			SymbolTableEntry entry = var.getSTEntry();
 			
-			return exp.codeGeneration() +
-					"push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+			return  exp.codeGeneration() +
+					"push " + entry.getOffset() + "\n" +    // pushes variable offset on the stack
 					"lfp\n" +
-					Helpers.getActivationRecordCode(nestingLevel, entry.getNestingLevel()) +     //risalgo la catena statica
+					Helpers.getActivationRecordCode(nestingLevel, entry.getNestingLevel()) +    // climbs static chain (eventually)
 					"add\n" +
-					"sw\n";     //carico sullo stack il valore all'indirizzo ottenuto
+					"sw\n";
 		}
 	}
 	

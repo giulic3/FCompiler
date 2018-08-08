@@ -21,7 +21,6 @@ public class SubNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -29,11 +28,13 @@ public class SubNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Sub Node:\n" + leftOperand.toPrint(s+"\t") + "\n" + rightOperand.toPrint(s+"\t");
+		return  s + "Sub Node:\n" +
+				leftOperand.toPrint(s + "\t") + "\n" +
+				rightOperand.toPrint(s + "\t");
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		//check semantics in the left and in the right exp
 		res.addAll(leftOperand.checkSemantics(env));
@@ -43,10 +44,9 @@ public class SubNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
-				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
+		if (! (Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) && Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ))
 			throw new TypeCheckException("Sub", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new IntType();
 	}
 	

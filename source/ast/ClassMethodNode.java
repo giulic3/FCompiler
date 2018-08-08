@@ -8,7 +8,6 @@ import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/* method call */
 public class ClassMethodNode extends FunExpNode {
 	
 	private Node objectNode;
@@ -25,14 +24,16 @@ public class ClassMethodNode extends FunExpNode {
 		this.funNode = funNode;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new ClassMethodNode(this.objectNode.copyInstance(), (FunExpNode)this.funNode.copyInstance());
 	}
 	
 	public String toPrint(String s) {
-		return s+"Method Call Node:\n" + s + "\t\tObject:\n" + this.objectNode.toPrint(s+"\t\t\t") + "\n" + s
-				+ "\t\tMethod:\n" + this.funNode.toPrint(s+"\t\t\t");
+		return  s + "Method Call Node:\n" +
+				s + "\t\tObject:\n" +
+				this.objectNode.toPrint(s + "\t\t\t") + "\n" +
+				s + "\t\tMethod:\n" +
+				this.funNode.toPrint(s+"\t\t\t");
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class ClassMethodNode extends FunExpNode {
 				this.entry = foundMethod.getSTEntry();
 				
 				if (((FunType) entry.getType()).getParList().size() != args.size())
-					res.add("Method " + this.id + " call with wrong number of parameters is not allowed at line "
+					res.add("Method call " + this.id + "() with wrong number of parameters is not allowed at line "
 							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				this.callNestingLevel = env.getNestingLevel();
 			}
@@ -107,16 +108,15 @@ public class ClassMethodNode extends FunExpNode {
 	 *
 	 * */
 	public String codeGeneration() {
-		String parAssembly = "";
+		StringBuilder parAssembly = new StringBuilder();
 		for (int i = args.size()-1; i >= 0; i--)
-			parAssembly += args.get(i).codeGeneration();
+			parAssembly.append(args.get(i).codeGeneration());
 		
 		IdNode obj = (IdNode)objectNode;
 		SymbolTableEntry objectEntry = obj.getSTEntry();
 		
 		return  "lfp\n" +
-				parAssembly +
-				//objectNode.codeGeneration() +
+				parAssembly.toString() +
 				"push " + objectEntry.getOffset() + "\n" +
 				"lfp\n" +
 				Helpers.getActivationRecordCode(callNestingLevel, objectEntry.getNestingLevel()) +

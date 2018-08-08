@@ -1,8 +1,6 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
 import utils.*;
 
 public interface Node {
@@ -18,7 +16,7 @@ public interface Node {
 	/**
 	 *
 	 * La funzione <strong >toPrint</strong> gestisce la creazione della stringa formattata
-	 * per la stampa tabulata del ast.
+	 * per la stampa tabulata dell'AST.
 	 *
 	 * */
 	String toPrint(String indent);
@@ -48,9 +46,22 @@ public interface Node {
 	 * */
 	String codeGeneration();
 	
-	// Method to retrieve string identifier of an object
-	// In nodes where identifier is not significant, null is returned
+	/**
+	 *
+	 * La funzione <strong >getID()</strong> ritorna la stringa identificativa di un nodo.
+	 * Nei nodi in cui tale ID non è significativo, viene restituito null.
+	 *
+	 * */
 	String getID();
 	
+	/**
+	 *
+	 * La funzione <strong >copyInstance()</strong> serve per implementare un meccanismo di
+	 * deep copy per gli oggetti dell'AST in Java. In generale non viene utilizzato, se non
+	 * in alcuni casi speciali come la modifica di un oggetto che è campo di una classe,
+	 * in seguito ad un assegnamento. Ciò si è reso necessario per evitare che anche altri
+	 * oggetti della stessa classe subissero gli effetti dell'assegnamento.
+	 *
+	 * */
 	Node copyInstance();
 }

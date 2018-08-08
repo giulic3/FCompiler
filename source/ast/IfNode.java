@@ -1,6 +1,5 @@
 package ast;
 
-
 import ast.types.BoolType;
 import ast.types.VoidType;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -11,7 +10,7 @@ import utils.TypeCheckException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/* used both for ifExp and ifStm*/
+
 public class IfNode implements Node {
 
 	private Node cond;
@@ -31,7 +30,7 @@ public class IfNode implements Node {
 		this.ctx = ctx;
 	}
 
-	/* ifStm */
+	// ifStm
 	public IfNode(Node cond, ArrayList<Node> thStms, ParserRuleContext ctx) {
 		this.cond = cond;
 		this.th = null;
@@ -41,6 +40,7 @@ public class IfNode implements Node {
 		this.ctx = ctx;
 	}
 
+	// IfStm with else branch
 	public IfNode(Node cond, ArrayList<Node> thStms, ArrayList<Node> elStms, ParserRuleContext ctx) {
 		this.cond = cond;
 		this.th = null;
@@ -50,15 +50,13 @@ public class IfNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
 		
 		// IfExp
-		if (this.th != null) {
+		if (this.th != null)
 			return new IfNode(this.cond.copyInstance(), this.th.copyInstance(), this.el.copyInstance(), ctx);
-		}
 		// IfStms
 		else {
 			ArrayList<Node> thStmsCopy = new ArrayList<>(this.thStms);
@@ -71,42 +69,47 @@ public class IfNode implements Node {
 		}
 	}
 	
-	@Override
 	public String toPrint(String s) {
 
 		/* ifExp */
 		if (th != null) {
-			String ifExp = s + "If Exp Node:\n" + s + "\tCond:\n" +
-					cond.toPrint(s + "\t\t") + "\n" +
-					s + "\tThen Branch:\n" + th.toPrint(s + "\t\t");
-			ifExp += "\n" + s + "\tElse Branch:\n" + el.toPrint(s + "\t\t");
+			String ifExp =  s + "If Exp Node:\n" +
+							s + "\tCond:\n" +
+							cond.toPrint(s + "\t\t") + "\n" +
+							s + "\tThen Branch:\n" +
+							th.toPrint(s + "\t\t");
+			ifExp += "\n" +
+					s + "\tElse Branch:\n" +
+					el.toPrint(s + "\t\t");
 
 			return ifExp;
 		}
 		/* ifStm */
 		else {
-			String thStmsString = "";
-			String elStmsString = "";
+			StringBuilder thStmsString = new StringBuilder();
+			StringBuilder elStmsString = new StringBuilder();
 
 			for (Node stm : thStms)
-				thStmsString += "\n" + stm.toPrint(s+"\t\t");
+				thStmsString.append("\n").append(stm.toPrint(s + "\t\t"));
 
-			String ifStm = s + "If Stms Node:\n" + s + "\tCond:\n" +
-					cond.toPrint(s+"\t\t") + "\n" +
-					s + "\tThen Branch:" + thStmsString;
+			String ifStm =  s + "If Stms Node:\n" +
+							s + "\tCond:\n" +
+							cond.toPrint(s+"\t\t") + "\n" +
+							s + "\tThen Branch:" +
+							thStmsString.toString();
 			
 			for (Node stm : elStms)
-				elStmsString += "\n" + stm.toPrint(s + "\t\t");
-			if (!elStms.isEmpty()) ifStm += "\n" + s + "\tElse Branch:" + elStmsString;
+				elStmsString.append("\n").append(stm.toPrint(s + "\t\t"));
+			
+			if (!elStms.isEmpty()) ifStm += "\n" + s + "\tElse Branch:" + elStmsString.toString();
 
 			return ifStm;
 		}
 	}
 	
-	@Override
 	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		res.addAll(cond.checkSemantics(env));
 		
@@ -127,21 +130,18 @@ public class IfNode implements Node {
 		return res;
 	}
 	
-	@Override
 	public Node typeCheck() throws Exception {
-		
-		if(!Helpers.subtypeOf(cond.typeCheck(), new BoolType())){
+		if(!Helpers.subtypeOf(cond.typeCheck(), new BoolType()))
 			throw new TypeCheckException("If (condition)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
 		
 		// IfExp
 		if (th != null) {
-			if(Helpers.subtypeOf(th.typeCheck(),el.typeCheck())){
+			if(Helpers.subtypeOf(th.typeCheck(),el.typeCheck()))
 				return el.typeCheck();
-			}
-			if(Helpers.subtypeOf(el.typeCheck(),th.typeCheck())){
+			
+			if(Helpers.subtypeOf(el.typeCheck(),th.typeCheck()))
 				return th.typeCheck();
-			}
+			
 			throw new TypeCheckException("If (then/else type)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		}
 		// IfStms
@@ -158,35 +158,34 @@ public class IfNode implements Node {
 		}
 	}
 	
-	@Override
 	public String codeGeneration() {
 		String trueBranch = Helpers.newLabel();
 		String exitBranch = Helpers.newLabel();
 		
-		String thenCode = "";
-		String elseCode = "";
+		StringBuilder thenCode = new StringBuilder();
+		StringBuilder elseCode = new StringBuilder();
 		
 		// Exp
 		if (this.th != null) {
-			thenCode += this.th.codeGeneration();
-			elseCode += (this.el != null) ? this.el.codeGeneration() : "";
+			thenCode.append(this.th.codeGeneration());
+			elseCode.append((this.el != null) ? this.el.codeGeneration() : "");
 		}
 		// Stms
 		else {
 			for (Node thStm: this.thStms)
-				thenCode += thStm.codeGeneration();
+				thenCode.append(thStm.codeGeneration());
 			
 			for (Node elStm: this.elStms)
-				elseCode += elStm.codeGeneration();
+				elseCode.append(elStm.codeGeneration());
 		}
 		
 		return  cond.codeGeneration() +
 				"push 1\n" +
 				"beq " + trueBranch + "\n" +
-				elseCode +
+				elseCode.toString() +
 				"b " + exitBranch + "\n" +
 				trueBranch + ":\n" +
-				thenCode +
+				thenCode.toString() +
 				exitBranch + ":\n";
 	}
 	

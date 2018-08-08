@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import utils.*;
 import java.util.HashSet;
 
-/* integer division */
 public class DivNode implements Node {
 
 	private Node leftOperand;
@@ -23,7 +22,6 @@ public class DivNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -31,14 +29,14 @@ public class DivNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s+"Div Node\n" + leftOperand.toPrint(s+"\t")
-				+ "\n"
-				+ rightOperand.toPrint(s+"\t") ;
+		return  s + "Div Node\n" +
+				leftOperand.toPrint(s + "\t") + "\n" +
+				rightOperand.toPrint(s + "\t") ;
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
 
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 
 		res.addAll(leftOperand.checkSemantics(env));
 		res.addAll(rightOperand.checkSemantics(env));
@@ -51,12 +49,10 @@ public class DivNode implements Node {
 	 * La divisione viene effettuata solo su tipi interi e suoi sottotipi, ad esempio i booleani.
 	 *
 	 * */
-	public Node typeCheck()throws Exception {
-		
-		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(),new IntType()) &&
-				Helpers.subtypeOf(rightOperand.typeCheck(),new IntType()) ) ) {
+	public Node typeCheck() throws Exception {
+		if (!(Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) && Helpers.subtypeOf(rightOperand.typeCheck(),new IntType())))
 			throw new TypeCheckException("Division", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new IntType();
 	}
 

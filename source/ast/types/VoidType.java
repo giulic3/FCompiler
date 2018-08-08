@@ -14,7 +14,6 @@ public class VoidType implements Node {
 	public VoidType() {
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new VoidType();
 	}

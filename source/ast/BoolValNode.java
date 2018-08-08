@@ -17,7 +17,6 @@ public class BoolValNode implements Node {
 		value = n;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new BoolValNode(this.value);
 	}
@@ -35,7 +34,7 @@ public class BoolValNode implements Node {
 	}
 	
 	public String codeGeneration() {
-		return "push "+(value ? 1 : 0)+"\n";
+		return "push " + (value ? 1 : 0) + "\n";
 	}
 	
 	// Method to retrieve string identifier of an object

@@ -25,7 +25,6 @@ public class EqNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -33,16 +32,16 @@ public class EqNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s + "Equal Node:\n" + left.toPrint(s+"\t") + "\n"
-				+ right.toPrint(s+"\t") ;
+		return  s + "Equal Node:\n" +
+				left.toPrint(s + "\t") + "\n" +
+				right.toPrint(s + "\t");
 	}
 
 	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 
 		//check semantics in the left and in the right exp
-
 		res.addAll(left.checkSemantics(env));
 		res.addAll(right.checkSemantics(env));
 
@@ -55,28 +54,27 @@ public class EqNode implements Node {
 	 *
 	 * */
 	public Node typeCheck() throws Exception {
-		
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
-		if (! ( Helpers.subtypeOf(l,r) || Helpers.subtypeOf(r,l))) {
+		
+		if (! (Helpers.subtypeOf(l,r) || Helpers.subtypeOf(r,l)) )
 			throw new TypeCheckException("Equal Check", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new BoolType();
 	}
 
 	public String codeGeneration() {
-		
-		String l1 = Helpers.newLabel();
-		String l2 = Helpers.newLabel();
+		String equalLabel = Helpers.newLabel();
+		String notEqLabel = Helpers.newLabel();
 		
 		return  left.codeGeneration() +
 				right.codeGeneration() +
-				"beq "+ l1 +"\n"+
-				"push 0\n"+
-				"b " + l2 + "\n" +
-				l1 + ":\n"+
+				"beq " + equalLabel + "\n" +
+				"push 0\n" +
+				"b " + notEqLabel + "\n" +
+				equalLabel + ":\n" +
 				"push 1\n" +
-				l2 + ":\n";
+				notEqLabel + ":\n";
 	}
 	
 	// Method to retrieve string identifier of an object

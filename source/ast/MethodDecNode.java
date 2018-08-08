@@ -25,7 +25,6 @@ public class MethodDecNode extends FunDecNode {
 		this.classID = classID;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		MethodDecNode copy = new MethodDecNode((FunDecNode)this.funObj.copyInstance(), this.classID);
 		if (this.inheritedMethods != null) {
@@ -38,31 +37,32 @@ public class MethodDecNode extends FunDecNode {
 	
 	public String toPrint(String s) {
 		
-		String parlstr = "";
-		String declstr = "";
+		StringBuilder parlstr = new StringBuilder();
+		StringBuilder declstr = new StringBuilder();
 		
 		if (parList != null && !parList.isEmpty()) {
 			for (Node par : parList)
-				parlstr += "\n" + par.toPrint(s + "\t\t");
-			parlstr+="\n"+s+"\t";
+				parlstr.append("\n").append(par.toPrint(s + "\t\t"));
+			
+			parlstr.append("\n").append(s).append("\t");
 		}
 		
 		if (decList != null && !decList.isEmpty()) {
-			declstr = "\n"+s+"\tFun Decs:";
+			declstr.append("\n").append(s).append("\tFun Decs:");
+			
 			for (Node dec : decList)
-				declstr += "\n" + dec.toPrint(s + "\t\t");
+				declstr.append("\n").append(dec.toPrint(s + "\t\t"));
 		}
 		
-		return s+"Method Dec Node (in class " + classID + "): " +type.toPrint("") + " " + name +"("
-				+parlstr+")"
-				+declstr;
-		//+body.toPrint(s+"  ") ;
+		return  s + "Method Dec Node (in class " + classID + "): " +
+				type.toPrint("") + " " + name + "(" +
+				parlstr.toString() + ")" +
+				declstr.toString();
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		
 		//create result list
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		
@@ -73,7 +73,7 @@ public class MethodDecNode extends FunDecNode {
 			((FunType)type).updateReturnType(classEntry.getType());
 		}
 		
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.increaseOffset(),type); //separo introducendo "entry"
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(),env.increaseOffset(),type);
 		entry.setClassName(classID);
 		
 		String methodID = "Class$" + classID +"$m$"+ name;
@@ -88,11 +88,11 @@ public class MethodDecNode extends FunDecNode {
 				MethodDecNode method = (MethodDecNode)m;
 				// if current method has same name of one inherited, overriding should be checked; if is overriding (same parameters and return type) is ok otherwise error
 				if (method.getID().equals(this.name)) {
-
 					if (method.parList.size() != this.parList.size())
 						res.add("Method overloading (wrong number of parameters) '" + this.name + "' is not allowed at line "
 								+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-					else { // current method is overriding a superclass method, so we set the offset of the superclass
+					else {
+						// current method is overriding a superclass method, so we set the offset of the superclass
 						entry.setOffset(method.getSTEntry().getOffset());
 						env.decreaseOffset();
 					}
@@ -100,21 +100,17 @@ public class MethodDecNode extends FunDecNode {
 			}
 		}
 		
-		if(!env.getFunSecondCheck()) {
+		if (!env.getFunSecondCheck()) {
 			if (hm.put(methodID, entry) != null)
 				res.add("Method name " + name + " already declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 		}
 		
 		env.pushScope();
-		
-		ArrayList<Node> parTypes = new ArrayList<>();
-		
 		int currentOffset = env.getOffset();
 		
 		env.setOffset(1);
 		for (Node par : parList) {
 			VarNode arg = (VarNode)par;
-			parTypes.add(arg.getType());
 			res.addAll(arg.checkSemantics(env));
 		}
 		env.setOffset(currentOffset);
@@ -123,20 +119,19 @@ public class MethodDecNode extends FunDecNode {
 		
 		int currOffset = env.getOffset();
 
-		if (!decList.isEmpty())
-			env.setOffset(-2);
+		if (!decList.isEmpty()) env.setOffset(-2);
 		
 		if (env.getFunSecondCheck())
-			for (Node dec : decList) {
+			for (Node dec : decList)
 				res.addAll(dec.checkSemantics(env));
-			}
 		
 		env.setOffset(currOffset);
 		
 		if (env.getFunSecondCheck())
-			for (Node b : body){
+			for (Node b : body) {
 				if(b instanceof FunExpNode)
 					((FunExpNode)b).setClassID(classID);
+				
 				res.addAll(b.checkSemantics(env));
 			}
 		
@@ -146,8 +141,7 @@ public class MethodDecNode extends FunDecNode {
 	}
 	
 	public Node typeCheck () throws Exception {
-		
-		for (Node m:inheritedMethods) {
+		for (Node m: inheritedMethods) {
 			MethodDecNode method = (MethodDecNode) m;
 			if (method.getID().equals(this.name)) {
 				FunType currentType = (FunType)this.type;
@@ -162,12 +156,8 @@ public class MethodDecNode extends FunDecNode {
 			}
 		}
 		
-		for(Node d : decList){
-			d.typeCheck();
-		}
-		for(Node b : body){
-			b.typeCheck();
-		}
+		for (Node d : decList) d.typeCheck();
+		for (Node b : body) b.typeCheck();
 		
 		// check if the type of the last stms or exp in body is subtype of the function return type
 		if (!Helpers.subtypeOf(body.get(body.size()-1).typeCheck(), ((FunType)type).getReturnType()))
@@ -177,10 +167,10 @@ public class MethodDecNode extends FunDecNode {
 	}
 	
 	public String codeGeneration() {
-		String decAssembly = "";
-		String decPopAssembly = "";
-		String parPopAssembly = "";
-		String bodyAssembly = "";
+		StringBuilder decAssembly = new StringBuilder();
+		StringBuilder decPopAssembly = new StringBuilder();
+		StringBuilder parPopAssembly = new StringBuilder();
+		StringBuilder bodyAssembly = new StringBuilder();
 		String funLabel = Helpers.getDispatchTable(classID).get(funEntry.getOffset());
 		
 		FunType funcType = (FunType)type;
@@ -188,26 +178,26 @@ public class MethodDecNode extends FunDecNode {
 		String loadRetVal = funcType.getReturnType() instanceof VoidType ? "" : "lrv\n";
 		
 		for (Node dec: decList) {
-			decAssembly += dec.codeGeneration();
-			decPopAssembly += "pop\n";
+			decAssembly.append(dec.codeGeneration());
+			decPopAssembly.append("pop\n");
 		}
 		
 		for (Node par: parList)
-			parPopAssembly += "pop\n";
+			parPopAssembly.append("pop\n");
 		
 		for (Node n: body)
-			bodyAssembly += n.codeGeneration();
+			bodyAssembly.append(n.codeGeneration());
 		
 		String funcCode = funLabel + ":\n" +
 				"cfp\n" +
 				"lra\n" +
-				decAssembly +
-				bodyAssembly +
+				decAssembly.toString() +
+				bodyAssembly.toString() +
 				storeRetVal +
-				decPopAssembly +
+				decPopAssembly.toString() +
 				"sra\n" +
 				"pop\n" +
-				parPopAssembly +
+				parPopAssembly.toString() +
 				"sfp\n" +
 				loadRetVal +
 				"lra\n" +

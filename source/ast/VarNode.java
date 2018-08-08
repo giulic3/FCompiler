@@ -1,6 +1,5 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -14,6 +13,7 @@ import utils.SymbolTableEntry;
 import utils.TypeCheckException;
 
 public class VarNode implements Node {
+	
 	private ParserRuleContext ctx;
 	private String id;
 	private Node type;
@@ -22,6 +22,7 @@ public class VarNode implements Node {
 	private SymbolTableEntry entry;
 	private boolean isParam = false;
 	
+	// Constructor for vardec
 	public VarNode(String i, Node t, ParserRuleContext ctx) {
 		this.ctx=ctx;
 		id = i;
@@ -29,6 +30,7 @@ public class VarNode implements Node {
 		exp = null;
 	}
 	
+	// Constructor for varasm
 	public VarNode(String i, Node t, ParserRuleContext ctx , Node v) {
 		this.ctx=ctx;
 		id = i;
@@ -36,7 +38,6 @@ public class VarNode implements Node {
 		exp = v;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		Node expCopy = (this.exp != null) ? this.exp.copyInstance() : null;
 		ParserRuleContext ctx = new ParserRuleContext();
@@ -89,7 +90,7 @@ public class VarNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env){
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		if (exp!=null) res.addAll(exp.checkSemantics(env));
 		
@@ -101,18 +102,17 @@ public class VarNode implements Node {
 			if (classDef != null) type = classDef.getType();
 		}
 		
-		//env.offset = -2;
 		HashMap<String, SymbolTableEntry> hm = env.getSymTable().get(env.getNestingLevel());
 		int FieldOrVarOffset = (classID != null || isParam) ? env.increaseOffset() : env.decreaseOffset();
-		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), FieldOrVarOffset, type); //separo introducendo "entry"
+		
+		SymbolTableEntry entry = new SymbolTableEntry(env.getNestingLevel(), FieldOrVarOffset, type);
 		entry.setStaticType(type);
 		
 		String ID = id;
-		if(this.classID != null){
+		if (this.classID != null){
 			entry.setClassName(classID);
 			ID = "Class$" + this.classID + "$" + ID;
 		}
-		
 		
 		if (exp instanceof NewExpNode) {
 			NewExpNode newNode = (NewExpNode) exp;
@@ -151,15 +151,14 @@ public class VarNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if(exp!=null) {
+		if (exp != null) {
 			Node expTypeCheck = exp.typeCheck();
 			
-			if (exp instanceof ClassType && !Helpers.subtypeOf(expTypeCheck, this.entry.getStaticType())) {
+			if (exp instanceof ClassType && !Helpers.subtypeOf(expTypeCheck, this.entry.getStaticType()))
 				throw new TypeCheckException("Object Initialization", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-			}
-			if (!Helpers.subtypeOf(expTypeCheck, type)) {
+			
+			if (!Helpers.subtypeOf(expTypeCheck, type))
 				throw new TypeCheckException("Var", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-			}
 		}
 		
 		return new VoidType();

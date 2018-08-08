@@ -20,7 +20,6 @@ public class ProgNode  implements Node {
 		this.blocks=d;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ArrayList<Node> blocksCopy = new ArrayList<>(this.blocks);
 		for (Node n: this.blocks)
@@ -34,12 +33,13 @@ public class ProgNode  implements Node {
 	 *
 	 * */
 	public String toPrint(String indent){
-		String msg = "Prog Node:";
+		StringBuilder msg = new StringBuilder();
+		msg.append("Prog Node:");
 		
-		for (Node b:this.blocks) {
-			msg += b.toPrint("\t");
-		}
-		return  msg;
+		for (Node b: this.blocks)
+			msg.append(b.toPrint("\t"));
+		
+		return  msg.toString();
 	}
 	
 	/**
@@ -75,22 +75,25 @@ public class ProgNode  implements Node {
 	 *
 	 * */
 	public Node typeCheck() throws Exception{
-		Node res=null;
-		for(Node b:blocks)
-			res=b.typeCheck();
+		Node res = null;
+		for (Node b: blocks)
+			res = b.typeCheck();
 		return res;
 	}
 	
 	/**
 	 *
-	 * Dà inizio ai controlli sui tipi
+	 * Dà inizio alla generazione del codice assembly
 	 *
 	 * */
 	public String codeGeneration(){
-		String res="";
-		for(Node b:blocks)
-			res += b.codeGeneration();
-		return res +"halt\n" + Helpers.getFuncAssembly() + "\n" + Helpers.generateDispatchTablesCode();
+		StringBuilder res = new StringBuilder();
+		for (Node b: blocks)
+			res.append(b.codeGeneration());
+		
+		return  res.toString() + "halt\n" +
+				Helpers.getFuncAssembly() + "\n" +
+				Helpers.generateDispatchTablesCode();
 	}
 	
 	// Method to retrieve string identifier of an object

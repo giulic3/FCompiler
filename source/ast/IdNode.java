@@ -9,7 +9,7 @@ import utils.Environment;
 import utils.Helpers;
 import utils.SymbolTableEntry;
 
-/* corresponds to var */
+
 public class IdNode implements Node {
 
 	private String id;
@@ -24,7 +24,6 @@ public class IdNode implements Node {
 		classID = null;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -40,7 +39,6 @@ public class IdNode implements Node {
 	}
 
 	public String toPrint(String s) {
-
 		return s + "ID Node: " + id + ", cur nestinglevel: " + nestinglevel + (entry != null ? entry.toPrint(", ") : "");
 	}
 	
@@ -49,7 +47,7 @@ public class IdNode implements Node {
 	}
 	
 	public void setSTEntry(SymbolTableEntry entry) {
-		this.entry=entry;
+		this.entry = entry;
 	}
 
 	@Override
@@ -57,10 +55,8 @@ public class IdNode implements Node {
 
 		if (env.getDefiningClass() != null) classID = env.getDefiningClass();
 		
-		//discriminare se l'id node non appartiene ad una classe controllo classname != null
-		
 		//create result list
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		nestinglevel = env.getNestingLevel();
 		
@@ -73,7 +69,8 @@ public class IdNode implements Node {
 			String classID = fieldEntry.getClassName();
 			Node found = null;
 			
-			if (classID!=null) {
+			// checking if var belongs to a class
+			if (classID != null) {
 				SymbolTableEntry classEntry = env.getClassEntry(classID);
 				ClassType classType = (ClassType)classEntry.getType();
 				ArrayList<Node> fields = classType.getFieldsList(true);
@@ -82,13 +79,10 @@ public class IdNode implements Node {
 					if (f.getID().equals(id)) found = f;
 			}
 			
-			// vanno salvate le informazioni della entry nell'oggetto
-			
 			if (found == null)
 				res.add("Variable " + id + " not declared at line: " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-			else {
+			else
 				this.entry = ((VarNode)found).getSTEntry();
-			}
 		}
 		else
 			this.entry = fieldEntry;
@@ -101,10 +95,10 @@ public class IdNode implements Node {
 	}
 
 	public String codeGeneration() {
-		return  "push " + entry.getOffset() + "\n" +     //metto offset sullo stack
+		return  "push " + entry.getOffset() + "\n" +     // pushes var offset on the stack
 				"lfp\n" +
-				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +     //risalgo la catena statica
+				Helpers.getActivationRecordCode(nestinglevel, entry.getNestingLevel()) +    // climbs static chain (eventually)
 				"add\n" +
-				"lw\n";     //carico sullo stack il valore all'indirizzo ottenuto
+				"lw\n";
 	}
 }

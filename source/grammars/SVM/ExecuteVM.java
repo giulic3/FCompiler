@@ -31,7 +31,7 @@ public class ExecuteVM {
 	public void cpu() {
 		try {
 			while (true) {
-				int bytecode = code[ip++]; // fetch
+				int bytecode = code[ip++];
 				int v1, v2;
 				int address;
 				switch (bytecode) {
@@ -65,18 +65,18 @@ public class ExecuteVM {
 						v2 = pop();
 						push(v2 - v1);
 						break;
-					case SVMParser.STOREW: //
+					case SVMParser.STOREW:
 						address = pop();
 						memory[address] = pop();
 						break;
-					case SVMParser.LOADW: //
+					case SVMParser.LOADW:
 						push(checkMemory(pop()));
 						break;
 					case SVMParser.BRANCH:
 						address = code[ip];
 						ip = address;
 						break;
-					case SVMParser.BRANCHEQ: //
+					case SVMParser.BRANCHEQ:
 						address = code[ip++];
 						v1 = pop();
 						v2 = pop();
@@ -88,36 +88,36 @@ public class ExecuteVM {
 						v2 = pop();
 						if (v2 <= v1) ip = address;
 						break;
-					case SVMParser.JS: //
+					case SVMParser.JS:
 						address = pop();
 						ra = ip;
 						ip = address;
 						break;
-					case SVMParser.STORERA: //
+					case SVMParser.STORERA:
 						ra = pop();
 						break;
-					case SVMParser.LOADRA: //
+					case SVMParser.LOADRA:
 						push(ra);
 						break;
-					case SVMParser.STORERV: //
+					case SVMParser.STORERV:
 						rv = pop();
 						break;
-					case SVMParser.LOADRV: //
+					case SVMParser.LOADRV:
 						push(rv);
 						break;
-					case SVMParser.LOADFP: //
+					case SVMParser.LOADFP:
 						push(fp);
 						break;
-					case SVMParser.STOREFP: //
+					case SVMParser.STOREFP:
 						fp = pop();
 						break;
-					case SVMParser.COPYFP: //
+					case SVMParser.COPYFP:
 						fp = sp;
 						break;
-					case SVMParser.STOREHP: //
+					case SVMParser.STOREHP:
 						hp = pop();
 						break;
-					case SVMParser.LOADHP: //
+					case SVMParser.LOADHP:
 						push(hp);
 						break;
 					case SVMParser.PRINT:
@@ -130,14 +130,12 @@ public class ExecuteVM {
 					case SVMParser.HALT:
 						return;
 					case SVMParser.NEW:
-						// mi prendo l'heap pointer attuale per sapere dove inizia il nuovo oggetto
 						int startPointer = hp;
 						int dispTB = pop();
 						int nargs = pop();
 						pushHeap(dispTB);
-						for (int i = 0; i < nargs; i++) {
+						for (int i = 0; i < nargs; i++)
 							pushHeap(pop());
-						}
 						push(startPointer);
 						break;
 					case SVMParser.CPHEAD:

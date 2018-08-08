@@ -32,7 +32,6 @@ public class BlockClassDecNode implements Node {
 		this.ctx=ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -48,23 +47,25 @@ public class BlockClassDecNode implements Node {
 	}
 	
 	public String toPrint(String s){
-		String msg = "\n"+s+"Class Dec Node: " + this.id;
-		if(superClassID !=null){
-			msg+=" extends " + superClassID;
+		StringBuilder msg = new StringBuilder();
+		msg.append("\n").append(s).append("Class Dec Node: ").append(this.id);
+		
+		if (superClassID != null) msg.append(" extends ").append(superClassID);
+		
+		msg.append(" {");
+		
+		if (fields != null) {
+			msg.append("\n").append(s).append("\tFields:");
+			for (Node b : fields)
+				msg.append("\n").append(s).append(b.toPrint("\t\t"));
 		}
-		msg+=" {";
-		if(fields!=null) {
-			msg+="\n"+s+"\tParams:";
-			for (Node b : fields) {
-				msg += "\n " + s + b.toPrint("\t\t");
-			}
-		}
-		msg += "\n"+s+"\tMethods:";
-		for (Node b : methods) {
-			msg += "\n " + s + b.toPrint("\t\t");
-		}
-		msg+="\n"+s+"}";
-		return msg;
+		
+		msg.append("\n").append(s).append("\tMethods:");
+		for (Node b : methods)
+			msg.append("\n").append(s).append(b.toPrint("\t\t"));
+		
+		msg.append("\n").append(s).append("}");
+		return msg.toString();
 	}
 	
 	/**
@@ -100,8 +101,8 @@ public class BlockClassDecNode implements Node {
 	public HashSet<String> checkSemantics(Environment env) {
 		
 		//create result list
-		HashSet<String> res = new HashSet<String>();
-		HashSet<String> tmp = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
+		HashSet<String> tmp = new HashSet<>();
 		
 		HashMap<String, SymbolTableEntry> classDecHM = env.getSymTable().get(env.getNestingLevel());
 		
@@ -139,10 +140,6 @@ public class BlockClassDecNode implements Node {
 		}
 		
 		env.pushScope();
-		
-		HashMap<String, SymbolTableEntry> classContentHM = env.getSymTable().get(env.getNestingLevel());
-		ArrayList<Node> parTypes = new ArrayList<>();
-		//int parOffset=1;
 		env.setOffset(1 + classType.getFieldsList(true).size() - fields.size());
 		
 		env.setDefiningClass(id);
@@ -158,7 +155,7 @@ public class BlockClassDecNode implements Node {
 					String newClassID = newEntry.getType().getID();
 					
 					if (id.equals(newClassID))
-						res.add("Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
+						res.add("Object initialization can't have same type of defining class (use NULL or a subtype instead) at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 				} else if (!(expNode instanceof NullNode))
 					res.add("Object as class field must be either initialized using NULL or a subtype at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
@@ -184,19 +181,15 @@ public class BlockClassDecNode implements Node {
 		}
 		
 		HashSet<String> fin = new HashSet<>();
-		
 		for (String s : res) {
 			if (tmp.contains(s)) {
 				fin.add(s);
 			}
 		}
-		
 		res.removeAll(tmp);
-		
 		res.addAll(fin);
 		
 		env.settingFunSecondCheck(false);
-		
 		env.setDefiningClass(null);
 		
 		env.popScope();
@@ -209,18 +202,15 @@ public class BlockClassDecNode implements Node {
 	 * La funzione <strong>typeChecking</strong> avvia il controllo su campi e metodi della classe
 	 *
 	 * */
-	public Node typeCheck() throws Exception{
+	public Node typeCheck() throws Exception {
 		
-		for(Node f : fields){
-			f.typeCheck();
-		}
-		for(Node m : methods){
-			m.typeCheck();
-		}
+		for(Node f : fields) f.typeCheck();
+		for(Node m : methods) m.typeCheck();
+		
 		return type;
 	}
 	
-	public String codeGeneration(){
+	public String codeGeneration() {
 		ArrayList<Node> methodsList = type.getMethodsList(false, false);
 		ArrayList<String> dt = (superClassID != null) ? new ArrayList<>(Helpers.getDispatchTable(superClassID)) : new ArrayList<>();
 		Helpers.addDispatchTable(id, dt);

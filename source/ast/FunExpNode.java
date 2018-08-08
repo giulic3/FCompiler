@@ -11,8 +11,6 @@ import utils.TypeCheckException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/* function invocation */
-
 public class FunExpNode implements Node {
 	
 	protected String id;
@@ -31,7 +29,6 @@ public class FunExpNode implements Node {
 		this.isExp = isExp;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -51,35 +48,33 @@ public class FunExpNode implements Node {
 	
 	
 	public String toPrint(String s) {
-		String msg = s+"Function Call Node: " + this.id + "(";
+		StringBuilder msg = new StringBuilder();
+		msg.append(s).append("Function Call Node: ").append(this.id).append("(");
 		
 		if (this.args != null && !this.args.isEmpty()) {
-			for (Node b : this.args) {
-				msg += "\n " + s + b.toPrint("\t");
-			}
-			msg += "\n" + s + ")";
-		} else
-			msg += ")";
+			for (Node b : this.args)
+				msg.append("\n").append(s).append(b.toPrint("\t"));
+			msg.append("\n").append(s).append(")");
+		}
+		else
+			msg.append(")");
 		
-		return msg;
+		return msg.toString();
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		if (env.getDefiningClass() != null) classID = env.getDefiningClass();
 		
-		ArrayList<Node> methods = new ArrayList<>();
-		
-		if(classID != null){
+		if (classID != null) {
 			SymbolTableEntry classEntry = env.getClassEntry(classID);
 			ClassType  classType= (ClassType) classEntry.getType() ;
-			methods = classType.getMethodsList(true, false);
+			ArrayList<Node> methods = classType.getMethodsList(true, false);
 			Node found = null;
 			
-			for(Node m : methods){
-				if(m.getID().equals(id)) found=m;
-			}
+			for (Node m : methods)
+				if (m.getID().equals(id)) found = m;
 			
 			if (found != null) {
 				this.entry = ((MethodDecNode) found).getSTEntry();
@@ -110,7 +105,7 @@ public class FunExpNode implements Node {
 				
 				FunType funType = (FunType) this.entry.getType();
 				if (funType.getParList().size() != args.size())
-					res.add("Function " + this.id + " call with wrong number of parameters is not allowed at line "
+					res.add("Function call " + this.id + "() with wrong number of parameters is not allowed at line "
 							+ ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
 			}
 		}
@@ -118,25 +113,24 @@ public class FunExpNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception{
-		
 		FunType funType = (FunType)entry.getType();
 		ArrayList<Node> parlisttype = funType.getParList();
 		
-		for(int i=0; i<parlisttype.size(); i++) {
+		for (int i=0; i<parlisttype.size(); i++)
 			if(!Helpers.subtypeOf(args.get(i).typeCheck(), parlisttype.get(i)))
 				throw new TypeCheckException("Fun Call (par: " + args.get(i).toPrint(""), ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return funType.getReturnType();
 	}
 	
 	public String codeGeneration() {
-		String parAssembly = "";
+		StringBuilder parAssembly = new StringBuilder();
 		for (int i = args.size()-1; i >= 0; i--)
-			parAssembly += args.get(i).codeGeneration();
+			parAssembly.append(args.get(i).codeGeneration());
 		
 		if (classID != null) {
 			return  "lfp\n" +
-					parAssembly +
+					parAssembly.toString() +
 					"lfp\n" +
 					"lw\n" +
 					"cp\n" +
@@ -148,7 +142,7 @@ public class FunExpNode implements Node {
 		}
 		
 		return  "lfp\n" +
-				parAssembly +
+				parAssembly.toString() +
 				"lfp\n" +
 				Helpers.getActivationRecordCode(callNestingLevel, entry.getNestingLevel()) +
 				"push " + entry.getOffset() + "\n" +

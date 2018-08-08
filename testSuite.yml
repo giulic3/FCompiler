@@ -364,7 +364,7 @@ test34 - "Recursive" Class Declaration:
         A a = new A();
     in
         print(a.f());
--   "Object inizialization can't have same type of defining class (use NULL or a subtype instead) at line 1:0"
+-   "Object initialization can't have same type of defining class (use NULL or a subtype instead) at line 1:0"
 
 test35 - Assignment Between Objects:
 -   class A (int x = 2) {
@@ -439,7 +439,7 @@ test41 - Function Call with Wrong Number of Parameters:
             return x == y;
     in
         print(equal(10));
--   "Function equal call with wrong number of parameters is not allowed at line 1:53"
+-   "Function call equal() with wrong number of parameters is not allowed at line 1:53"
 
 test42 - Ridiculous Naming:
 -   class A (int A = 50) {

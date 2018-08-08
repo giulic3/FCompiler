@@ -1,7 +1,6 @@
 package utils;
 
 import ast.Node;
-import ast.types.*;
 
 public class SymbolTableEntry {
 	
@@ -17,7 +16,6 @@ public class SymbolTableEntry {
 		this.type = t;
 	}
 	
-	// TODO: sperimentale
 	public static SymbolTableEntry copyInstance(SymbolTableEntry s) {
 		if (s == null) return null;
 		SymbolTableEntry copy = new SymbolTableEntry(s.nestingLevel, s.offset, s.type.copyInstance());
@@ -26,32 +24,42 @@ public class SymbolTableEntry {
 		return copy;
 	}
 	
-	public int getOffset() {
-		return offset;
-	}
-	
+	// Getters
 	public int getNestingLevel() {
 		return nestingLevel;
+	}
+	
+	public int getOffset() {
+		return offset;
 	}
 	
 	public Node getType() {
 		return type;
 	}
 	
-	public void setType(Node type) {
-		this.type = type;
+	public String getClassName() {
+		return className;
 	}
 	
 	public Node getStaticType() {
 		return staticType;
 	}
 	
-	public void setStaticType(Node type) {
-		this.staticType = type;
-	}
-	
+	// Setters
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+	
+	public void setType(Node type) {
+		this.type = type;
+	}
+	
+	public void setClassName(String className) {
+		this.className = className;
+	}
+	
+	public void setStaticType(Node type) {
+		this.staticType = type;
 	}
 	
 	public String toPrint(String s) {
@@ -60,13 +68,5 @@ public class SymbolTableEntry {
 	
 	public String toString() {
 		return toPrint("");
-	}
-	
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	
-	public String getClassName() {
-		return className;
 	}
 }

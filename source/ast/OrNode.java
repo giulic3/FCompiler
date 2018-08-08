@@ -20,7 +20,6 @@ public class OrNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -28,16 +27,16 @@ public class OrNode implements Node {
 	}
 
 	public String toPrint(String s) {
-		return s + "OR Node:\n" + left.toPrint(s+"\t") + "\n"
-				+ right.toPrint(s+"\t") ;
+		return  s + "OR Node:\n" +
+				left.toPrint(s + "\t") + "\n" +
+				right.toPrint(s + "\t");
 	}
 
 	public HashSet<String> checkSemantics(Environment env) {
 		//create the result
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 
 		//check semantics in the left and in the right exp
-
 		res.addAll(left.checkSemantics(env));
 		res.addAll(right.checkSemantics(env));
 

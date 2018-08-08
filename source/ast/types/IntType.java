@@ -14,7 +14,6 @@ public class IntType implements Node {
 	public IntType() {
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new IntType();
 	}

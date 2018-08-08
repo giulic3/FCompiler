@@ -31,12 +31,9 @@ public class Main {
 		FOOLParser parser = new FOOLParser(tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errorListener);
-		
 		FOOLVisitorImpl visitor = new FOOLVisitorImpl();
 		
-		FOOLParser.ProgContext res = parser.prog();
-		
-		return visitor.visit(res); //generazione AST
+		return visitor.visit(parser.prog());
 	}
 	
 	private static Node semanticAnalysis(Node ast, boolean visualizeAST) throws Exception {
@@ -51,11 +48,11 @@ public class Main {
 			throw new Exception(errors.toString());
 		}
 		
-		if(visualizeAST) {
+		if (visualizeAST) {
 			System.out.println("Abstract Syntax Tree:");
 			System.out.println(ast.toPrint(""));
 		}
-		return ast; //type-checking bottom-up
+		return ast;
 	}
 	
 	private static String codeGen(Node ast, boolean verbose) throws Exception {
@@ -113,7 +110,6 @@ public class Main {
 		StringBuilder output = new StringBuilder();
 		
 		String newLine = "";
-		
 		if (expectedResult.contains("\n"))
 			newLine = "\n";
 		
@@ -122,11 +118,10 @@ public class Main {
 				.append("- Got: ").append(newLine)
 				.append(actualResult).append("\n");
 		
-		if (actualResult.trim().equals(expectedResult.trim())) {
+		if (actualResult.trim().equals(expectedResult.trim()))
 			output.append(Helpers.ANSI_GREEN).append("Test PASSED!\n");
-		} else {
+		else
 			output.append(Helpers.ANSI_RED).append("Test FAILED!\n");
-		}
 
 		return output.toString();
 	}
@@ -155,18 +150,18 @@ public class Main {
 			
 			ast = semanticAnalysis(ast, astOnly || verbose);
 			if (ast != null && !astOnly) {
-				Node type = ast.typeCheck(); //type-checking bottom-up
+				Node type = ast.typeCheck();
 				
 				if (verbose) {
 					System.out.println(type.toPrint("\nType checking ok! Type of the program is: "));
 					System.out.println();
 				}
 				
-				// Code Generation
 				result = codeGen(ast, verbose);
 			}
 		}
 		catch (Exception e) {
+			if (verbose) e.printStackTrace();
 			result = e.getMessage();
 		}
 		

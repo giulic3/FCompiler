@@ -21,7 +21,6 @@ public class BlockLetInStmsNode implements Node {
 		decs=d;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ArrayList<Node> sCopy = new ArrayList<>(this.stms);
 		for (Node n: this.stms)
@@ -33,20 +32,17 @@ public class BlockLetInStmsNode implements Node {
 	}
 	
 	public String toPrint(String s){
+		StringBuilder msg = new StringBuilder();
+		msg.append("\n").append(s).append("BlockLetInStms:\n").append(s).append("\tDecs:");
 		
-		String msg = "\n" + s + "BlockLetInStms:\n" + s + "\tDecs:";
-		for (Node b:decs) {
-			msg += "\n" + s + b.toPrint("\t\t");
-		}
-		msg += "\n" + s + "\tIn:";
-		for (Node b:stms) {
-			msg += "\n" + s + b.toPrint("\t\t");
-		}
-		//msg += "\n" + s + "\tIn:\n" + stms.toPrint(s+"\t\t");
-		return msg;
+		for (Node b:decs)
+			msg.append("\n").append(s).append(b.toPrint("\t\t"));
 		
+		msg.append("\n").append(s).append("\tIn:");
+		for (Node b:stms)
+			msg.append("\n").append(s).append(b.toPrint("\t\t"));
 		
-		//return "\n" + s +"  BlockLetInStms: \n"  + dec.toPrint(s+"   ") + "\n" /*+ stms.toPrint(s+"    ") */;
+		return msg.toString();
 	}
 	
 	/**
@@ -57,24 +53,22 @@ public class BlockLetInStmsNode implements Node {
 	 * */
 	public HashSet<String> checkSemantics(Environment env){
 		
-		HashSet<String> res = new HashSet<String>();
-		HashSet<String> tmp = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
+		HashSet<String> tmp = new HashSet<>();
 		
 		env.pushScope();
 		
 		if (decs.size() > 0) env.setOffset(-1);
 		
-		for(Node dec : decs){
+		for(Node dec : decs)
 			res.addAll(dec.checkSemantics(env));
-		}
 		
 		env.settingFunSecondCheck(true);
 		
 		if (decs.size() > 0) env.setOffset(-1);
 		
-		//if (tmp.size() > 0)
-		for(Node dec : decs){
-			HashSet<String> funErrors = new HashSet<>();
+		for(Node dec : decs) {
+			HashSet<String> funErrors;
 			if (dec instanceof FunDecNode) {
 				funErrors = dec.checkSemantics(env);
 				res.addAll(funErrors);
@@ -85,20 +79,16 @@ public class BlockLetInStmsNode implements Node {
 		
 		env.settingFunSecondCheck(false);
 		
-		for(Node stm : stms){
+		for(Node stm : stms)
 			res.addAll(stm.checkSemantics(env));
-		}
 		
 		HashSet<String> fin = new HashSet<>();
-		
 		for(String s : res){
 			if (tmp.contains(s)){
 				fin.add(s);
 			}
 		}
-		
 		res.removeAll(tmp);
-		
 		res.addAll(fin);
 		
 		env.popScope();
@@ -108,25 +98,19 @@ public class BlockLetInStmsNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		for(Node d : decs){
-			d.typeCheck();
-		}
-		for(Node s : stms){
-			s.typeCheck();
-		}
+		for (Node d : decs) d.typeCheck();
+		for (Node s : stms) s.typeCheck();
 		return new VoidType();
 	}
 	
 	public String codeGeneration(){
-		String res="";
-		for (Node d : decs){
-			res += d.codeGeneration();
-		}
-		for (Node s : stms){
-			res += s.codeGeneration();
-		}
-		res += "cfp\n";
-		return res;
+		StringBuilder res = new StringBuilder();
+		
+		for (Node d : decs) res.append(d.codeGeneration());
+		for (Node s : stms) res.append(s.codeGeneration());
+		
+		res.append("cfp\n");
+		return res.toString();
 	}
 	
 	// Method to retrieve string identifier of an object

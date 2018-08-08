@@ -23,7 +23,6 @@ public class FunType implements Node {
 		returnType = r;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ArrayList<Node> par = new ArrayList<>(this.parTypesList);
 		for (Node n: this.parTypesList)
@@ -40,14 +39,15 @@ public class FunType implements Node {
 	}
 	
 	public String toPrint(String indent) {
-		String parlstr = "(";
+		StringBuilder parlstr = new StringBuilder();
+		parlstr.append("(");
 		
 		for (Node par:parTypesList)
-			parlstr += par.toPrint(" ");
+			parlstr.append(par.toPrint(" "));
 
-		parlstr += ")";
+		parlstr.append(")").append(" -> ").append(returnType.toPrint(""));
 
-		return parlstr + " -> " + returnType.toPrint("") ;
+		return parlstr.toString();
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

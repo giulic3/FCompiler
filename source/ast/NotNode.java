@@ -18,7 +18,6 @@ public class NotNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -26,7 +25,8 @@ public class NotNode implements Node {
 	}
 	
 	public String toPrint(String indent) {
-		return indent + "Not Node:\n" + value.toPrint(indent+"\t");
+		return  indent + "Not Node:\n" +
+				value.toPrint(indent + "\t");
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {

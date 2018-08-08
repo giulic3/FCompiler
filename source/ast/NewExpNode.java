@@ -19,7 +19,6 @@ public class NewExpNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -37,7 +36,7 @@ public class NewExpNode implements Node {
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		SymbolTableEntry entry = env.getClassEntry(id);
 		if (entry == null)
@@ -55,9 +54,10 @@ public class NewExpNode implements Node {
 	public String codeGeneration() {
 		ClassType classContent = (ClassType) entry.getType();
 		ArrayList<Node> fields = classContent.getFieldsList(true);
-		int i=fields.size()-1;
+		int i = fields.size()-1;
+		
 		StringBuilder argsCode = new StringBuilder();
-		while(i>=0){
+		while (i >= 0) {
 			argsCode.append(fields.get(i).codeGeneration());
 			i--;
 		}

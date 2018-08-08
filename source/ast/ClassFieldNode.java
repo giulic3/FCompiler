@@ -4,7 +4,6 @@ import ast.types.ClassType;
 import ast.types.FunType;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
-import utils.Helpers;
 import utils.SymbolTableEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +30,6 @@ public class ClassFieldNode implements Node {
 		this.isExp = isExp;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -42,7 +40,9 @@ public class ClassFieldNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s+"Class Field Node:\n" + s + "\tObject: " + this.obj.toPrint("") + "\n" + s + "\tField: " + this.id.toPrint("");
+		return  s + "Class Field Node:\n" +
+				s + "\tObject: " + this.obj.toPrint("") + "\n" +
+				s + "\tField: " + this.id.toPrint("");
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class ClassFieldNode implements Node {
 	 * */
 	public HashSet<String> checkSemantics(Environment env) {
 		
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 		
 		HashSet<String> objectErrors = obj.checkSemantics(env);
 		if (objectErrors.size() > 0) {
@@ -84,9 +84,8 @@ public class ClassFieldNode implements Node {
 			this.entry = objEntry;
 			this.callNestingLevel = env.getNestingLevel();
 		}
-		else {
+		else
 			res.add("Wrong usage of class field on object at line " + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine() + "\n");
-		}
 		
 		return res;
 	}
@@ -103,7 +102,6 @@ public class ClassFieldNode implements Node {
 	public String codeGeneration() {
 		SymbolTableEntry fieldEntry = ((IdNode)id).getSTEntry();
 		
-		// gli offset dei campi partono da 0
 		return  obj.codeGeneration() +
 				"push " + fieldEntry.getOffset() + "\n" +
 				"add\n" +
@@ -116,7 +114,6 @@ public class ClassFieldNode implements Node {
 		return null;
 	}
 	
-	// TODO: sperimentale, assegnamento oggetto come campo
 	public void updateFieldType(SymbolTableEntry newEntry, boolean fromFunc) {
 		if (id != null) {
 			Node copy = id.copyInstance();

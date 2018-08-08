@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import ast.MethodDecNode;
 import ast.Node;
-import ast.VarNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.Environment;
 import utils.SymbolTableEntry;
@@ -42,7 +40,6 @@ public class ClassType implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);

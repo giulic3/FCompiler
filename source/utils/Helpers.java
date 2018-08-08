@@ -11,14 +11,9 @@ import java.util.stream.Collectors;
 public class Helpers {
 	
 	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
 	public static final String ANSI_GREEN = "\u001B[32m";
 	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
 	
 	private static int labelCount = 0;
 	private static int funLabelCount = 0;
@@ -29,26 +24,17 @@ public class Helpers {
 		A <: B!!!!!
 	 */
 	public static boolean subtypeOf(Node a, Node b) {
-		
-		if ((a instanceof BoolType) && (b instanceof IntType)) {
-			return true;
-		} else if ((a instanceof IntType) && (b instanceof IntType)) {
-			return true;
-		} else if ((a instanceof VoidType) && (b instanceof VoidType)) {
-			return true;
-		} else if ((a instanceof BoolType) && (b instanceof BoolType)) {
-			return true;
-		} else if ((a instanceof NullType) && (b instanceof ClassType)) {
-			return true;
-		}
+		if ((a instanceof BoolType) && (b instanceof IntType))          return true;
+		else if ((a instanceof IntType) && (b instanceof IntType))      return true;
+		else if ((a instanceof VoidType) && (b instanceof VoidType))    return true;
+		else if ((a instanceof BoolType) && (b instanceof BoolType))    return true;
+		else if ((a instanceof NullType) && (b instanceof ClassType))   return true;
 		else if ((a instanceof ClassType) && (b instanceof ClassType)) {
 			Set<String> SuperA = ((ClassType) a).getSuperList(true);
 			Set<String> SuperB = ((ClassType) b).getSuperList(true);
-			Set<String> intersection = new HashSet<String>(SuperA);
+			Set<String> intersection = new HashSet<>(SuperA);
 			intersection.retainAll(SuperB);
-			if(!intersection.isEmpty()){
-				return true;
-			}
+			if (!intersection.isEmpty()) return true;
 		}
 		return false;
 	}
@@ -70,10 +56,10 @@ public class Helpers {
 	}
 	
 	public static String getActivationRecordCode(int callNestingLevel, int decNestingLevel) {
-		String code = "";
+		StringBuilder lwCode = new StringBuilder();
 		for (int i = 0; i < callNestingLevel - decNestingLevel; i++)
-			code += "lw\n";
-		return code;
+			lwCode.append("lw\n");
+		return lwCode.toString();
 	}
 	
 	public static String getDispatchTableLabelForClass(String classID) {
@@ -89,17 +75,17 @@ public class Helpers {
 	}
 	
 	public static String generateDispatchTablesCode() {
-		String code = "";
+		StringBuilder code = new StringBuilder();
 		
 		for (Map.Entry<String, ArrayList<String>> dt : dispatchTables.entrySet()) {
-			code += dt.getKey() + ":\n";
-			for (String metLabel: dt.getValue()) {
-				code += metLabel;
-			}
-			code += "\n";
+			code.append(dt.getKey()).append(":\n");
+			
+			for (String metLabel: dt.getValue())
+				code.append(metLabel);
+			
+			code.append("\n");
 		}
-		
-		return code;
+		return code.toString();
 	}
 	
 	public static List<String> getOrderedListOfErrors(HashSet<String> set) {

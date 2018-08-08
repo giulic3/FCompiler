@@ -8,7 +8,6 @@ public class NullNode implements Node {
 	
 	public NullNode() {}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new NullNode();
 	}

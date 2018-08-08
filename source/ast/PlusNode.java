@@ -19,7 +19,6 @@ public class PlusNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -27,7 +26,9 @@ public class PlusNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s + "Plus Node:\n" + leftOperand.toPrint(s+"\t") + "\n" + rightOperand.toPrint(s+"\t");
+		return  s + "Plus Node:\n" +
+				leftOperand.toPrint(s + "\t") + "\n" +
+				rightOperand.toPrint(s + "\t");
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -41,10 +42,9 @@ public class PlusNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
-				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
+		if (! (Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) && Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ))
 			throw new TypeCheckException("Plus", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new IntType();
 	}
 	

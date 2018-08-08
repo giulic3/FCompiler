@@ -17,7 +17,6 @@ public class NullType extends ClassType {
 		super(null, null, null,null, null);
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new NullType();
 	}

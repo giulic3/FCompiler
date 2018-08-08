@@ -2,10 +2,6 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ListIterator;
-
-import ast.types.ClassType;
-import utils.SymbolTableEntry;
 
 
 public class Environment {
@@ -29,16 +25,8 @@ public class Environment {
 		return symTable;
 	}
 
-	public void setSymTable(ArrayList<HashMap<String, SymbolTableEntry>> symTable) {
-		this.symTable = symTable;
-	}
-
 	public int getNestingLevel() {
 		return nestingLevel;
-	}
-
-	public void setNestingLevel(int nestingLevel) {
-		this.nestingLevel = nestingLevel;
 	}
 
 	public int getOffset() {
@@ -100,12 +88,6 @@ public class Environment {
 		return symTable.get(0).get("Class$" + classID);
 	}
 	
-	public void updateClassEntry(ClassType type) {
-		SymbolTableEntry curEntry = getClassEntry(type.getID());
-		curEntry.setType(type);
-		symTable.get(0).put(type.getID(), curEntry);
-	}
-	
 	public void setDefiningClass(String classID) {
 		this.definingClass = classID;
 	}
@@ -113,6 +95,4 @@ public class Environment {
 	public String getDefiningClass() {
 		return this.definingClass;
 	}
-	
-
 }

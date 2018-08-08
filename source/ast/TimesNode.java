@@ -18,7 +18,6 @@ public class TimesNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -26,15 +25,13 @@ public class TimesNode implements Node {
 	}
 	
 	public String toPrint(String s) {
-		return s+"Times Node\n"
-				+ leftOperand.toPrint(s+"\t")
-				+ "\n"
-				+ rightOperand.toPrint(s+"\t") ;
+		return  s + "Times Node\n" +
+				leftOperand.toPrint(s + "\t") + "\n" +
+				rightOperand.toPrint(s + "\t");
 	}
 
 	public HashSet<String> checkSemantics(Environment env) {
-
-		HashSet<String> res = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
 
 		res.addAll(leftOperand.checkSemantics(env));
 		res.addAll(rightOperand.checkSemantics(env));
@@ -43,10 +40,9 @@ public class TimesNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if (! ( Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) &&
-				Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ) ) {
+		if (! (Helpers.subtypeOf(leftOperand.typeCheck(), new IntType()) && Helpers.subtypeOf(rightOperand.typeCheck(), new IntType()) ))
 			throw new TypeCheckException("Times", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new IntType();
 	}
 

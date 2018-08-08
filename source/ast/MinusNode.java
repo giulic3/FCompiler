@@ -17,7 +17,6 @@ public class MinusNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ParserRuleContext ctx = new ParserRuleContext();
 		ctx.copyFrom(this.ctx);
@@ -25,7 +24,8 @@ public class MinusNode implements Node {
 	}
 	
 	public String toPrint(String indent) {
-		return indent + "Minus Node:\n" + value.toPrint(indent+"\t");
+		return  indent + "Minus Node:\n" +
+				value.toPrint(indent + "\t");
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -33,17 +33,15 @@ public class MinusNode implements Node {
 	}
 	
 	public Node typeCheck() throws Exception {
-		if(!Helpers.subtypeOf(new IntType(), value.typeCheck())){
+		if (!Helpers.subtypeOf(new IntType(), value.typeCheck()))
 			throw new TypeCheckException("Unary Minus", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
+		
 		return new IntType();
 	}
 	
 	public String codeGeneration() {
-		// push(-pop), si assume che value.codegen lasci il risultato sulla cima dello
-		// stack, prendiamo questo valore, facciamo pop, mettiamo il meno davanti e
-		// rifacciamo push. (il codice generato da value.codegen() deve essere eseguito prima
-		// di quello di minus, quindi deve comparire prima nella stringa. Il risultato sarà codestring + minus.codegen).
+		// first: code gen for value is executed
+		// second: result of value evaluation is put on the stack and then multiplied by -1
 		String valCodeGen = value.codeGeneration();
 		return "push -1\n" + valCodeGen + "mult\n";
 	}

@@ -15,7 +15,6 @@ public class BoolType implements Node {
 	public BoolType() {
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		return new BoolType();
 	}

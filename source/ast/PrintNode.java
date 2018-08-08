@@ -18,7 +18,6 @@ public class PrintNode implements Node {
 		this.ctx = ctx;
 	}
 	
-	// TODO: prova
 	public Node copyInstance() {
 		ArrayList<Node> expsCopy = new ArrayList<>(this.exps);
 		for (Node n: this.exps)
@@ -29,31 +28,13 @@ public class PrintNode implements Node {
 	}
 	
 	public String toPrint(String indent) {
-		String printMsg = indent + "Print Node:";
+		StringBuilder printMsg = new StringBuilder();
+		printMsg.append(indent).append("Print Node:");
 		
-		for (Node e:this.exps) {
-			printMsg += "\n" + e.toPrint(indent + "\t\t");
-		}
+		for (Node e: this.exps)
+			printMsg.append("\n").append(e.toPrint(indent + "\t\t"));
 		
-		return printMsg;
-	}
-	
-	public Node typeCheck() throws Exception {
-		for (Node n: exps) {
-			if (n.typeCheck() instanceof VoidType)
-				throw new TypeCheckException("Print (void exp not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		}
-		
-		return new VoidType();
-	}
-	
-	public String codeGeneration() {
-		String res = "";
-		
-		for (Node e: exps)
-			res += e.codeGeneration() + "print\n";
-		
-		return res;
+		return printMsg.toString();
 	}
 	
 	public HashSet<String> checkSemantics(Environment env) {
@@ -63,6 +44,23 @@ public class PrintNode implements Node {
 			res.addAll(exp.checkSemantics(env));
 		
 		return res;
+	}
+	
+	public Node typeCheck() throws Exception {
+		for (Node n: exps)
+			if (n.typeCheck() instanceof VoidType)
+				throw new TypeCheckException("Print (void exp not allowed)", ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		
+		return new VoidType();
+	}
+	
+	public String codeGeneration() {
+		StringBuilder res = new StringBuilder();
+		
+		for (Node e: exps)
+			res.append(e.codeGeneration()).append("print\n");
+		
+		return res.toString();
 	}
 	
 	// Method to retrieve string identifier of an object
