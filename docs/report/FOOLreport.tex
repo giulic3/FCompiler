@@ -9,11 +9,16 @@
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\definecolor{lexerRule}{rgb}{0.47, 0.32, 0.55}
+\definecolor{parserRule}{rgb}{1, 0.6, 0.2}
+\definecolor{antlrlabels}{rgb}{0.45, 0.45, 0.45}
+
 % listings package options
 % TODO change accordingly to desired style
 \lstset{
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
-  basicstyle=\footnotesize \color{black} \ttfamily,        % the size of the fonts that are used for the code
+  basicstyle=\small \color{black} \ttfamily,        % the size of the fonts that are used for the code
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
   breaklines=true,                 % sets automatic line breaking
   captionpos=b,                    % sets the caption-position to bottom
@@ -36,8 +41,21 @@
   showtabs=false,                  % show tabs within strings adding particular underscores
   stepnumber=0,                    % the step between two line-numbers. If it's 1, each line will be numbered
   stringstyle=\color{mymauve},     % string literal style
-  tabsize=2,	                   % sets default tabsize to 2 spaces
+  tabsize=4,	                   % sets default tabsize to 2 spaces
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\lstdefinelanguage{ANTLR}
+{
+	keywords={SEMIC, COLON, COMMA, EQ, LEQ, GEQ, OR, AND, NOT, ASM, PLUS, MINUS, TIMES, DIV, BOOLVAL, TRUE, FALSE, LPAR, RPAR, CLPAR, CRPAR, IF, THEN, ELSE, PRINT, LET, IN, INT, BOOL, VOID, CLASS, EXTENDS, NULL, NEW, DOT, RETURN, DIGIT  , INTEGER, CHAR, ID, WS, LINECOMENTS, BLOCKCOMENTS, PUSH, POP, ADD, SUB, MULT, DIV, STOREW, LOADW, BRANCH, BRANCHEQ, BRANCHLESSEQ, JS, LOADRA, STORERA, LOADRV, STORERV, LOADFP, STOREFP, COPYFP, LOADHP, STOREHP, PRINT, HALT, NEW, CPHEAD, JSMETH, COL, LABEL, NUMBER, WHITESP, in, extends, new, return},
+	morekeywords=[2]{prog, block, classdec, let, vardec, varasm, fundec, dec, type, exp, operand, term, factor, atom, value, var, stm, stms, assembly, simpleCmd, composedCmd},
+	morekeywords=[3]{\#letInStms, \#classDecBlock, className, superName, \#varDecAssignment, \#funDeclaration, left, operator, right, val, \#intVal, \#boolVal, \#nullVal, \#baseExp, cond, thenBranch, elseBranch, \#ifExp, \#varExp, \#funExp, object, memberName, \#methodExp, className, \#newExp, fieldName, \#varStmAssignment, \#ifStm, \#methodStm, \#printStm, \#funStm, num, label},
+	keywordstyle=\color{lexerRule},
+	keywordstyle=[2]\color{parserRule},
+	keywordstyle=[3]\color{antlrlabels},
+	commentstyle=\color{antlrlabels},
+	morecomment=[l]{\#},
+	tabsize=4
 }
 
 % type user-defined commands here
@@ -184,10 +202,10 @@ Il codice sorgente del progetto è contenuto nella sottodirectory \lstinline|sou
     in particolare, contiene quei nodi che rappresentano dei tipi all'interno della grammatica
   \end{itemize}
   \item \textbf{grammars/}
-    contiene i file .g4 per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'AST e del bytecode
+    contiene i file \lstinline|.g4| per le grammatiche FOOL e SVM con i rispettivi parser e le implementazioni dei visitor per la visita dell'AST e del bytecode
   \item \textbf{lib/}
-    contiene i jar delle libreria di ANTLRv4, di commons-cli per eseguire il progetto da riga di comando
-    e la libreria YAML di supporto al testing
+    contiene i JAR delle libreria di \lstinline|ANTLRv4|, di \lstinline|commons-cli| per eseguire il progetto da riga di comando
+    e la libreria \lstinline|YAML| di supporto al testing
   \item \textbf{testMain/}
     contiene le classi principali per l'esecuzione del progetto, ovvero le
     due configurazioni di run, \lstinline|Main.java| per l'esecuzione standard con debug di un singolo programma FOOL, \lstinline|TestSuite.java| per l'esecuzione dei test contenuti nel file testSuite.yml in formato YAML e \lstinline|CommandLineMain.java| per l'esecuzione e la creazione del file JAR eseguibile da riga di comando.
@@ -200,11 +218,11 @@ Il progetto è stato sviluppato usando \textbf{IntelliJ IDEA}; si consulti il fi
 
 \section{Caratteristiche del linguaggio e grammatica}
 
-Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocchi: ogni blocco può essere una dichiarazione di classe (al top level) oppure una sequenza di dichiarazioni introdotte dalla keyword \textit{let}, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta dalla keyword \textit{in}.\\
+Un tipico programma scritto in linguaggio FOOL è formato da un insieme di blocchi: ogni blocco può essere una dichiarazione di classe (al top level) oppure una sequenza di dichiarazioni introdotte dalla keyword \lstinline[language=ANTLR]|let|, seguite da un'altra sequenza di statement in cui le variabili dichiarate vengono usate, introdotta dalla keyword \lstinline[language=ANTLR]|in|.\\
 
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 class A (int x = 1, int y = 2) {
-  void m() print(0);
+	void m() print(0);
 }
 let
 	A a = new A();
@@ -214,7 +232,7 @@ in
 Le espressioni sono state estese per comprendere gli operatori $<=,\ >=,\ ||,\ \&\&,\ /,\ - $
    e not nella seguente maniera:\\
 
-\begin{lstlisting}
+\begin{lstlisting}[language=ANTLR,basicstyle=\footnotesize\ttfamily]
 exp		: left=operand (operator=(EQ | LEQ | GEQ) right=exp)? ;
 
 operand	: left=term (operator=(PLUS | MINUS) right=operand)? ;
@@ -230,22 +248,22 @@ value	: INTEGER					#intVal
 		| NULL						#nullVal
 		| LPAR exp RPAR				#baseExp
 		| var     					#varExp
-		| IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  #ifExp
-		| ID (LPAR (exp (COMMA exp)* )? RPAR)								#funExp
-		| object=var DOT memberName=ID (LPAR (exp (COMMA exp)* )? RPAR)?  #methodExp
-		| NEW className=ID (LPAR RPAR)										#newExp
+		| IF LPAR cond=exp RPAR THEN CLPAR thenBranch=exp CRPAR ELSE CLPAR elseBranch=exp CRPAR  	#ifExp
+		| ID (LPAR (exp (COMMA exp)* )? RPAR)	#funExp
+		| object=var DOT memberName=ID (LPAR (exp (COMMA exp)* )? RPAR)?	#methodExp
+		| NEW className=ID (LPAR RPAR)	#newExp
 		;
 \end{lstlisting}
 
 Sono stati aggiunti gli statement\\
 
-\begin{lstlisting}
-stm : (var | object=var DOT fieldName=ID) ASM exp #varStmAssignment
-  | IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?  #ifStm
-  | object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?  #methodStm
-  | PRINT LPAR exp (COMMA exp)* RPAR  #printStm
-  | ID (LPAR (exp (COMMA exp)* )? RPAR )         #funStm
-  ;
+\begin{lstlisting}[language=ANTLR,basicstyle=\footnotesize\ttfamily]
+stm	: (var | object=var DOT fieldName=ID) ASM exp	#varStmAssignment
+	| IF cond=exp THEN CLPAR thenBranch=stms CRPAR (ELSE CLPAR elseBranch=stms CRPAR)?	#ifStm
+	| object=var DOT memberName=ID ( LPAR (exp (COMMA exp)* )? RPAR )?	#methodStm
+	| PRINT LPAR exp (COMMA exp)* RPAR	#printStm
+	| ID (LPAR (exp (COMMA exp)* )? RPAR )	#funStm
+	;
 
 stms : ( stm )+  ;
 
@@ -254,7 +272,7 @@ Uno statement può essere un assegnamento (semplice o a campo di un oggetto), un
 \newpage
 Una dichiarazione di classe viene fatta nel modo seguente:\\
 
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 class hero {
     bool iAmBatman() return true;
 };
@@ -265,37 +283,34 @@ class super extends hero(int x = 0, bool cond = true) {
 };
 \end{lstlisting}
 
-dove le parentesi tonde delimitano i campi e le parentesi graffe i metodi. Una classe può contenere nessun campo ma deve contenere sempre almeno un metodo. Una classe può estenderne un'altra (di cui diventera' una sottoclasse), ereditandone campi e metodi, utilizzando la keyword \textit{extends}.\\
+dove le parentesi tonde delimitano i campi e le parentesi graffe i metodi. Una classe può contenere nessun campo ma deve contenere sempre almeno un metodo. Una classe può estenderne un'altra (di cui diventerà una sottoclasse), ereditandone campi e metodi, utilizzando la keyword \lstinline[language=ANTLR]|extends|.\\
 
-\begin{lstlisting}
+\begin{lstlisting}[language=ANTLR,basicstyle=\footnotesize\ttfamily]
 classdec : CLASS className=ID ( EXTENDS superName=ID )? (LPAR varasm (COMMA varasm)* RPAR)? CLPAR (fundec SEMIC)+ CRPAR ;
 \end{lstlisting}
 
 % TODO caratteristica da cambiare?
-Un oggetto può essere istanziato utilizzando la keyword \textit{new}. Il costruttore deve essere richiamato senza argomenti, mentre i valori dei campi sono stati già inizializzati durante la dichiarazione della classe e potranno essere modificati successivamente
+Un oggetto può essere istanziato utilizzando la keyword \lstinline[language=ANTLR]|new|. Il costruttore deve essere richiamato senza argomenti, mentre i valori dei campi sono stati già inizializzati durante la dichiarazione della classe e potranno essere modificati successivamente
 tramite assegnamento.\\
 
 %TODO completare...
 Ulteriori caratteristiche del linguaggio sono le seguenti:
 \begin{itemize}
-  \item Tutte le variabili devono essere inizializzate al momento della dichiarazione (così come vale
- per i campi di una classe).
+  \item Tutte le variabili devono essere inizializzate al momento della dichiarazione (così come vale per i campi di una classe).
   \item Una variabile può avere tipo intero, booleano o classe (se è un oggetto).
-  \item Una funzione può avere tipo di ritorno void
+  \item Una funzione può avere tipo di ritorno \lstinline|void|
   \item E' stato inserito il tipo \lstinline|null| che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
-  \item Una funzione può opzionalmente avere un blocco \textit{let in} all'interno del suo body, che è formato da soli statement, 0 o più statement seguiti da un'espressione di ritorno oppure  un'espressione preceduta dalla keyword \textit{return} nel caso in
-  cui il suo tipo di ritorno sia diverso da void.
+  \item Una funzione può opzionalmente avere un blocco \lstinline[language=ANTLR]|let in| all'interno del suo body, che è formato da soli statement, 0 o più statement seguiti da un'espressione di ritorno oppure un'espressione preceduta dalla keyword \lstinline[language=ANTLR]|return| nel caso in cui il suo tipo di ritorno sia diverso da \lstinline|void|.
   %TODO completare...
 \end{itemize}
 
 \section{Analisi lessicale e sintattica (AST)}
-L'interfaccia Node, implementata da tutti i nodi dell'AST è stata modificata nel seguente modo:\\
+L'interfaccia \lstinline|Node|, implementata da tutti i nodi dell'AST è stata modificata nel seguente modo:\\
 \begin{itemize}
-  \item il metodo \textbf{checkSemantics()} ha come tipo di ritorno HashSet$<$String$>$ invece di ArrayList$<$Semantic Error$>$; l'oggetto di tipo String rappresenta la stringa che contiene l'errore semantico e si è optato per una gestione degli errori con HashSet per facilitare il controllo sull'inserimento di duplicati.
-  \item il metodo \textbf{typeCheck()} adesso solleva un'eccezione quando viene rilevato un errore di tipo (vedi file \lstinline|source/utils/TypeCheckException.java|).
-  \item E' stato aggiunto il metodo \textbf{getID()} che restituisce l'identificatore di un oggetto, o di un generico nodo, sotto forma di stringa.
+  \item il metodo \textbf{\lstinline|checkSemantics()|} ha come tipo di ritorno \lstinline|HashSet<String>| invece di \lstinline|ArrayList<Semantic Error>|; l'oggetto di tipo \lstinline|String| rappresenta la stringa che contiene l'errore semantico e si è optato per una gestione degli errori con \lstinline|HashSet| per facilitare il controllo sull'inserimento di duplicati.
+  \item il metodo \textbf{\lstinline|typeCheck()|} adesso solleva un'eccezione quando viene rilevato un errore di tipo (vedi file \lstinline|source/utils/TypeCheckException.java|).
+  \item E' stato aggiunto il metodo \textbf{\lstinline|getID()|} che restituisce l'identificatore di un oggetto, o di un generico nodo, sotto forma di stringa.
 \end{itemize}
-
 
 %\subsection{Nodi degli operatori}
 %La grammatica iniziale Ãš stata estesa a comprendere gli operatori:
@@ -326,20 +341,22 @@ L'interfaccia Node, implementata da tutti i nodi dell'AST è stata modificata ne
 \section{Analisi semantica}
 \subsection{Symbol table}
 
-La costruzione della symbol table avviene visitando l'AST e richiamando su un ogni nodo il metodo \textbf{checkSemantics()} che, a partire dal primo nodo \lstinline|ProgNode| (rappresentante la start rule della grammatica \lstinline|FOOL.g4|) viene richiamata due volte. Le due visite successive servono per la gestione delle dichiarazioni di classi e di funzioni/metodi.
+La costruzione della symbol table avviene visitando l'AST e richiamando su un ogni nodo il metodo \textbf{\lstinline|checkSemantics()|} che, a partire dal primo nodo \lstinline|ProgNode| (rappresentante la start rule della grammatica \lstinline|FOOL.g4|) viene richiamata due volte. Le due visite successive servono per la gestione delle dichiarazioni di classi e di funzioni/metodi.\\
 Nel caso delle dichiarazioni di classi, la prima passata viene utilizzata per raccogliere tutte le dichiarazioni, mentre la seconda serve per gestire campi, metodi, oggetti e risolvere le relazioni di sottotipaggio tra classi.\\
 Nel caso di funzioni/metodi, la doppia visita consente di implementare il meccanismo di mutua ricorsione, ovvero consente che nel corpo di una funzione possa essere chiamata un'altra funzione non ancora definita. Lo stesso vale per i metodi.\\
 
 La tabella dei simboli viene gestita utilizzando la classe \lstinline|Environment| (contenuta nella sottodirectory \lstinline|utils|) e i metodi di supporto che essa contiene.\\
 La classe contiene i seguenti campi:\\
 
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 private ArrayList<HashMap<String, SymbolTableEntry>> symTable;
 private int nestingLevel;
 private int offset;
-private boolean secondCheck; // questa e la successiva gestiscono le passate della checkSemantic
+// questa variabile e la successiva gestiscono le passate della checkSemantics
+private boolean secondCheck; 
 private boolean secondFunCheck;
-private String definingClass = null; // indica il nome della classe da cui stiamo aggiornando la st
+// indica il nome della classe attualmente in definizione per aggiornare correttamente le entry della symbol table
+private String definingClass = null; 
 \end{lstlisting}
 
 In più contiene (oltre a getter e setter per i campi) anche i metodi:\\
@@ -356,8 +373,8 @@ In più contiene (oltre a getter e setter per i campi) anche i metodi:\\
 
 \end{itemize}
 
-La tabella dei simboli viene riempita utilizzando la classe SymbolTableEntry che possiede i seguenti campi:
-\begin{lstlisting}
+La tabella dei simboli viene riempita utilizzando la classe \lstinline|SymbolTableEntry| che possiede i seguenti campi:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 private int nestingLevel;
 private int offset;
 private Node type;  // nel caso degli oggetti, indica il tipo dinamico
@@ -369,12 +386,12 @@ private Node staticType; // usata nel caso di classi
 I tipi su cui si basa il sistema di tipaggio di FOOL sono i seguenti:
 
 \begin{itemize}
-  \item BoolType
-  \item ClassType
-  \item FunType
-  \item IntType
-  \item NullType
-  \item VoidType
+  \item \lstinline|BoolType|
+  \item \lstinline|ClassType|
+  \item \lstinline|FunType|
+  \item \lstinline|IntType|
+  \item \lstinline|NullType|
+  \item \lstinline|VoidType|
 \end{itemize}
 
 Il sottotipaggio viene controllato utilizzando la funzione
@@ -451,9 +468,9 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
 \subsection{Layout di un oggetto}
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
 Il progetto di base forniva una grammatica, \lstinline|SVM.g4|, già implementata per la generazione del codice oggetto. Essa però conteneva attributi, ovvero particolare azioni in Java da effettuare nel momento in cui un determinato token sarebbe stato matchato con l'input.\\
-Come richiesto dalle specifiche del progetto, è stata implementata una visita per la generazione del codice, trasformando la grammatica fornita in una senza attributi. Sebbene quella iniziale fosse semplice, è stato ritenuto opportuno modificarla in modo radicale per favorire una migliore gestione della visita sull'AST generato.
+Come richiesto dalle specifiche del progetto, è stata implementata una visita per la generazione del codice, trasformando la grammatica fornita in una senza attributi. Sebbene quella iniziale fosse semplice, è stato ritenuto opportuno modificarla in modo radicale per favorire una migliore gestione della visita sull'AST generato.\\
 Il risultato è il seguente:
-\begin{lstlisting}
+\begin{lstlisting}[language=ANTLR,basicstyle=\footnotesize\ttfamily]
 assembly: ( simpleCmd )* ;
 
 simpleCmd: ( composedCmd | POP | ADD | SUB | MULT | DIV | STOREW
@@ -472,11 +489,10 @@ Si occupa dell'istanziazione di un oggetto nell'heap. L'istruzione assume di ave
 \item CPHEAD\newline
 Semplice istruzione che si occupa di duplicare il valore presente sulla testa dello stack. Viene utilizzato durante la code generation dei metodi di un oggetto.
 \item JSMETH\newline
-Pusha sullo stack l'indirizzo della prima istruzione del metodo invocato, in modo da usare successivamente l'istruzione \lstinline|JS| per l'esecuzione dello stesso.
+Pusha sullo stack l'indirizzo della prima istruzione del metodo invocato, in modo da usare successivamente l'istruzione \lstinline|JS| per l'esecuzione dello stesso.\\\\
 \end{itemize}
-
 Inoltre, sono stati aggiunti i seguenti campi al Parser SVM:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 public static int[] code = new int[ExecuteVM.CODESIZE];
 static int i = 0;
 static HashMap<String,Integer> labelAdd = new HashMap<String,Integer>();
@@ -490,7 +506,7 @@ static void resetSVM() {
 \end{lstlisting}
 L'implementazione della visita è presente nel file \lstinline|SVMVisitorImpl.java| e, per poter accedere alle suddette variabili del parser, sono state dichiarate in modo statico. Per questo motivo però, è stato necessario creare il metodo \lstinline|resetSVM()|, in modo da azzerare il contenuto della macchina virtuale ogni qual volta venga eseguito un programma (come ad esempio nel caso dei test, i quali sono valutati automaticamente uno dopo l'altro).\\\\
 L'idea alla base della nostra implementazione della visita è costituita dall'uso di tre regole per il parser e dei relativi metodi di visita:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 public Void visitAssembly(AssemblyContext ctx);
 public Void visitSimpleCmd(SimpleCmdContext ctx);
 public Void visitComposedCmd(ComposedCmdContext ctx);
@@ -500,7 +516,7 @@ public Void visitComposedCmd(ComposedCmdContext ctx);
 \lstinline|visitSimpleCmd()| gestisce tutte le istruzioni assembly semplici, che non hanno parametri, in quanto la loro semantica consiste solo nell'aggiunta dell'opportuno codice istruzione nell'array \lstinline|code|.\\
 Infine, \lstinline|visitComposedCmd()| gestisce le istruzioni assembly che necessitano di più operazioni oltre alla semplice memorizzazione del codice istruzione; in particolare, si tratta di operazioni relative alla creazione/associazione delle label nel codice.\\\\
 La visita e la generazione del codice da far eseguire alla macchina virtuale avviene con il seguente codice:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 // si assume che input sia un CharStream contenente il testo da parsare
 SVMLexer asmLexer = new SVMLexer(input);
 CommonTokenStream asmTokens = new CommonTokenStream(asmLexer);
@@ -511,7 +527,7 @@ asmVisitor.visit(asmParser.assembly());
 \end{lstlisting}
 Per migliorare il risultato dell'esecuzione della macchina virtuale, il file \lstinline|ExecuteVM.java| è stato ulteriormente modificato in modo da individuare la divisione per zero e l'accesso ad un oggetto nullo (tramite le eccezioni custom \lstinline|DivisionByZeroException| e \lstinline|NullObjectException|).\\
 Attraverso due \lstinline|ArrayList| di stringhe, \lstinline|outputBuffer| e \lstinline|errorBuffer|, la macchina virtuale restituisce il proprio output, come mostrato nel codice seguente (continuazione di quello precedente):
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 ExecuteVM vm = new ExecuteVM(SVMParser.code);
 vm.cpu();
 
