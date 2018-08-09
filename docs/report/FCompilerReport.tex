@@ -595,9 +595,9 @@ else {
 }
 \end{lstlisting}
 \subsection{Dynamic dispatch}
-Le dispatch table per le classi sono gestite attraverso la creazione di una HashMap e una ArrayList di metodi per ogni entry, dove come chiave viene utilizzata una concatenazione tra il nome della classe e la stringa "DTClass".
+Le dispatch table per le classi sono gestite attraverso la creazione di una \lstinline|HashMap| e una \lstinline|ArrayList| di metodi per ogni entry, dove come chiave viene utilizzata una concatenazione tra il nome della classe e la stringa "\lstinline|DTClass|".
 \\
-La label del metodo viene inserita alla posizione dell'ArrayList corrispondente all'offset nella codegeneration.
+La label del metodo viene inserita alla posizione dell'\lstinline|ArrayList| corrispondente all'offset nella code generation.
 \\
 Se un metodo viene sovrascritto da uno nuovo, questo prenderà l'offset del metodo originario e verrà modificata soltanto la Label corrispondente all'interno della Dispatch Table.
 \section{Testing}

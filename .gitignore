@@ -67,6 +67,6 @@ out/
 .idea/httpRequests
 
 #LaTeX
-docs/report/FOOLreport.*
-!docs/report/FOOLreport.tex
-!docs/report/FOOLreport.pdf
+docs/report/FCompilerReport.*
+!docs/report/FCompilerReport.tex
+!docs/report/FCompilerReport.pdf
