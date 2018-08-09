@@ -26,7 +26,6 @@
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  columns=flexible,
   frame=single,	                   % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
@@ -301,6 +300,7 @@ Ulteriori caratteristiche del linguaggio sono le seguenti:
   \item Una funzione può avere tipo di ritorno \lstinline|void|
   \item E' stato inserito il tipo \lstinline|null| che è sottotipo di classe, per consentirne l'assegnamento ad un oggetto.
   \item Una funzione può opzionalmente avere un blocco \lstinline[language=ANTLR]|let in| all'interno del suo body, che è formato da soli statement, 0 o più statement seguiti da un'espressione di ritorno oppure un'espressione preceduta dalla keyword \lstinline[language=ANTLR]|return| nel caso in cui il suo tipo di ritorno sia diverso da \lstinline|void|.
+  \item La gestione degli errori sintattici nelle grammatiche non sfrutta più la regola \textit{catch-all} ERR, la quale mostrava in output nella console tali errori, bensì è stato implementato un error listener (\lstinline|LexerParserErrorListener.java|), come consigliato dalla documentazione di ANTLR v4. In caso di errore, il risultato sarà un messaggio del tipo \textit{Syntax not allowed by FOOL Language at line x:y}.
   %TODO completare...
 \end{itemize}
 
@@ -465,6 +465,9 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
 
 \subsection{Gestione degli offset, stack, heap}
 \subsubsection{Implementazione del \lstinline|null|}
+Per poter gestire in modo appropriato gli oggetti nulli, bisognava scegliere il modo in cui implementarli per la macchina virtuale. La scelta era ovviamente ristretta all'uso di numeri interi ma è stata subito esclusa la possibilità di utilizzare lo zero, in quanto ritenuto un valore troppo significativo (soprattutto relativamente agli offset e agli indirizzi).\\
+La scelta è quindi ricaduta sul valore intero massimo rappresentabile in Java (\lstinline|Integer.MAX_VALUE|, ovvero 2147483647). Considerando che la macchina virtuale ha una memoria massima di 10000, non è possibile che esista un indirizzo avente tale valore; inoltre, si è aggiunto un controllo semantico che impedisce l'uso di tale valore come un semplice numero intero. Di conseguenza, incontrare il valore 2147483647 nell'assembly potrà essere solamente attribuito ad un oggetto nullo.\\
+Nel momento in cui si cerca di caricare o accedere ad un campo/metodo di un oggetto nullo (tramite una \lstinline[language=ANTLR]|ADD| o una \lstinline[language=ANTLR]|LOADW|), la macchina virtuale solleva un'eccezione \lstinline|NullObjectException|, implementata appositamente per tale scopo.
 \subsection{Layout di un oggetto}
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
 Il progetto di base forniva una grammatica, \lstinline|SVM.g4|, già implementata per la generazione del codice oggetto. Essa però conteneva attributi, ovvero particolare azioni in Java da effettuare nel momento in cui un determinato token sarebbe stato matchato con l'input.\\
@@ -547,7 +550,20 @@ else {
 \end{lstlisting}
 \subsection{Dynamic dispatch}
 
+\section{Testing}
+Il testing dell'intero progetto è avvenuto secondo due modalità diverse: la scrittura di file .fool contemporaneamente allo sviluppo progressivo del progetto (i file sono presenti nella directory \lstinline|code/|) e l'implementazione di una suite di test YAML a conclusione del progetto.\\
+Quest'ultima modalità è totalmente automatica e si basa sulla scrittura di test secondo la seguente sintassi:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+testNUM - Nome test:
+- codice FOOL da eseguire
+- "risultato atteso"
+\end{lstlisting}
+La scrittura di un test personalizzato consiste quindi nello scegliere un nome ed un numero identificato per il test, nello scrivere il codice da testare e nell'indicare la stringa rappresentante il valore, o l'errore, atteso.\\
+E' fondamentale seguire la sintassi al fine di evitare errori di parsing.\\
+Tali test vanno quindi scritti nel file \lstinline|testSuite.yml| oppure in un nuovo file, da poter poi testare con \lstinline|FCompiler.jar|, seguendo le istruzioni fornite nel file \lstinline|README.md|.
 \section{Conclusioni}
+In conclusione, sono state soddisfatte tutte le richieste fondamentali delle specifiche, dando particolare attenzione alla gestione delle situazioni d'errore, al testing e all'implementazione del Visitor per la grammatica \lstinline|SVM.g4|.\\
+Inoltre, nel file \lstinline|testSuite.yml| sono presenti 56 piccoli test, ognuno dei quali si occupa di mostrare una particolare caratteristica del linguaggio FOOL da noi realizzato.
 
 %\begin{thebibliography}{9}
   % type bibliography here
