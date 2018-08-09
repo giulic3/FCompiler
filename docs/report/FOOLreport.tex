@@ -7,6 +7,7 @@
 \usepackage{version}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{multirow}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -494,15 +495,15 @@ Gli oggetti, come già anticipato, vengono istanziati sulla parte di memoria che
 La struttura si compone di due aree:
 \begin{itemize}
 \item \textbf{Dispatch Table}\newline
-Nella Dispatch Table sono salvati i riferimenti a tutti i metodi della classe ed a quelli ereditati oltre a quelli eventualmente sovrascritti.\\
+Nella Dispatch Table sono salvati i riferimenti a tutte le implementazioni dei metodi della classe, di quelli ereditati e di quelli eventualmente sovrascritti.\\
 La DT si trova ad offset zero rispetto all'inizio in memoria dell'area di memoria dedicata all'oggetto.
 \item \textbf{Campi}\newline
-I campi sono tutte le variabili ed oggetti che compongono caratteristici della classe tipo dell'oggetto e quindi anche in questo caso è riservato dello spazio in memoria per quelli della classe in questione ed eventuali campi ereditati, non è possibile avere overriding di campi da specifica e quindi non è stato necessario gestire questa eventualità.
+I campi sono tutte le variabili e gli oggetti caratteristici che compongono il tipo classe dell'oggetto e quindi, anche in questo caso, è riservato dello spazio in memoria per quelli della classe in questione ed eventuali campi ereditati; non essendo possibile avere overriding di campi da specifica, non è stato necessario gestire questa eventualità.
 Per ogni campo viene riservato lo spazio necessario a contenere il valore o l'indirizzo di riferimento nel caso in cui il campo in questione sia istanza a sua volta di un oggetto.
 Come esempio prendiamo la dichiarazione di una classe e l'istanza di un oggetto di questa classe:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 class A (int k = 2){
-  void m() print(k);
+	void m() print(k);
 }
 class ciao (int x = true, bool z = 9, A a = new A()){
     bool f(int g, int h) let int x=1; in x=1;
@@ -511,19 +512,22 @@ class ciao (int x = true, bool z = 9, A a = new A()){
 let
     ciao x = new ciao();
 in
-    x=1;
+    x.z();
 \end{lstlisting}
 Il risultato sullo heap sarà circa il seguente:
 \end{itemize}
 \begin{center}
-\begin{tabular}{ | l | l | l |}
-    3 & 10 & Object address in the HEAP\\\hline
-    2 & 9 & Integer field\\\hline
-    1 & 1 & Boolean field\\\hline
-    0 & 56 & Dispatch Table\\\hline
-  \end{tabular}
+\begin{tabular}{|c|c|l|cl}
+\multicolumn{3}{|c|}{\vdots}      &  & \multicolumn{1}{c}{}            \\ \cline{1-3} \cline{5-5} 
+5 & 0  & a object address in Heap &  & \multirow{4}{*}{Oggetto x}      \\ \cline{1-3}
+4 & 9  & Integer field            &  &                                 \\ \cline{1-3}
+3 & 1  & Boolean field            &  &                                 \\ \cline{1-3}
+2 & 62 & Dispatch Table ciao      &  &                                 \\ \cline{1-3} \cline{5-5} 
+1 & 2  & Integer field            &  & \multirow{2}{*}{Oggetto a di x} \\ \cline{1-3}
+0 & 56 & Dispatch Table A         &  &                                 \\ \cline{1-3} \cline{5-5} 
+\end{tabular}
 \end{center}
-L'indirizzo dell'oggetto di classe A è fittizio, ma sarebbe l'indirizzo in cui quest'ultimo risiede sullo HEAP.
+Gli indirizzi delle due Dispatch Table per \lstinline|A| e \lstinline|ciao| sono fittizi.
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
 Il progetto di base forniva una grammatica, \lstinline|SVM.g4|, già implementata per la generazione del codice oggetto. Essa però conteneva attributi, ovvero particolare azioni in Java da effettuare nel momento in cui un determinato token sarebbe stato matchato con l'input.\\
 Come richiesto dalle specifiche del progetto, è stata implementata una visita per la generazione del codice, trasformando la grammatica fornita in una senza attributi. Sebbene quella iniziale fosse semplice, è stato ritenuto opportuno modificarla in modo radicale per favorire una migliore gestione della visita sull'AST generato.\\
