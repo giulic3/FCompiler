@@ -4,7 +4,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings} % needed for code styling
 \usepackage{color}
+\usepackage{version}
 \usepackage{amsmath}
+\usepackage{amssymb}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -26,6 +28,7 @@
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  columns=flexible,
   frame=single,	                   % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
@@ -328,7 +331,6 @@ L'interfaccia \lstinline|Node|, implementata da tutti i nodi dell'AST è stata m
   Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
   \item \textbf{FunExpNode} rappresenta l'invocazione di una funzione, in esso sono memorizzati l'ID della funzione, gli argomenti, il nesting level e una variabile di supporto \lstinline|classID| per gestire la chiamata di metodo che avviene senza dot notation (all'interno di un altro metodo). Inoltre il nodo memorizza l'entry della symbol table associata alla funzione stessa.
 \end{itemize}
-
 \subsection{Nodi per la gestione delle classi}
 \begin{itemize}
   \item \textbf{BlockClassDecNode} rappresenta la dichiarazione di una classe; contiene, oltre ai metodi implementati dell'interfaccia \lstinline|Node|, le funzioni ausiliarie \lstinline|getMethods()| e \lstinline|getFields()|
@@ -353,10 +355,10 @@ private ArrayList<HashMap<String, SymbolTableEntry>> symTable;
 private int nestingLevel;
 private int offset;
 // questa variabile e la successiva gestiscono le passate della checkSemantics
-private boolean secondCheck; 
+private boolean secondCheck;
 private boolean secondFunCheck;
 // indica il nome della classe attualmente in definizione per aggiornare correttamente le entry della symbol table
-private String definingClass = null; 
+private String definingClass = null;
 \end{lstlisting}
 
 In più contiene (oltre a getter e setter per i campi) anche i metodi:\\
@@ -440,14 +442,14 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
   $$ \frac{}{\Gamma [x \rightarrow T] \vdash x : T}[Var] $$
 
   \item print % TODO check
-  $$ \frac{\Gamma \vdash e_1 : T_1, ..., e_n : T_n \qquad T_1,...,T_n\ != void}{\Gamma \vdash print(e_1,...,e_n) : void }[Print]$$
-
+  $$ \frac{\Gamma \vdash e_1 : T_1, ..., e_n : T_n \qquad T_1,...,T_n != void}{\Gamma \vdash print(e_1,...,e_n) : void }[Print]$$
+\begin{comment}
   \item chiamata di funzione (con subtyping)
  % $$ \frac{\Gamma \vdash f : (T_1, ..., T_n) \rightarrow T \qquad (\Gamma \vdash e_1 : <: T_1' \ \ldots \ e_n : T_n' \ \ \ T_i' <: T_i )\textsuperscript{i \in 1,...n}}{\Gamma \vdash f(e_1,...,e_n) : T}[SbtFunCall] $$
 
- % \item chiamata di metodo (con subtyping)
- % $$ \frac{\Gamma(o) = C \qquad \Gamma(c)(m) = T_1, ... , T_n \rightarrow T \qquad (\Gamma \vdash e_i : T_i' \ \ \ T_i' <: T_i)\textsuperscript{i \in 1..n}}{\Gamma \vdash o.m(e_1,...,e_n) : T}[SbtMethodCall] $$
-
+  \item chiamata di metodo (con subtyping)
+  $$ \frac{\Gamma(o) = C \qquad \Gamma(c)(m) = T_1, ... , T_n \rightarrow T \qquad (\Gamma \vdash e_i : T_i' \ \ \ T_i' <: T_i)\textsuperscript{i \in 1..n}}{\Gamma \vdash o.m(e_1,...,e_n) : T}[SbtMethodCall] $$
+\end{comment}
   \item accesso ad un campo
   $$ \frac{\Gamma \vdash o : C \qquad C \vdash x : T}{\Gamma \vdash o.x : T}[Field] $$
 
@@ -464,11 +466,64 @@ Si sono implementate le regole di tipaggio per tutti i costrutti:
 \section{Generazione del codice}
 
 \subsection{Gestione degli offset, stack, heap}
+All'interno della SVM utilizzata, la memoria viene rappresentata come un Array di interi ed al suo interno salvate le informazioni utili all'esecuzione di un programma scritto in \lstinline|FOOL|.\\
+Lo Stack della memoria è il luogo in cui sono conservate, finchè necessario, le informazioni relative al calcolo in esecuzione. Questa parte di memoria per convenzione cresce verso il basso
+pertanto il suo indirizzo di partenza sarà l'ultimo della memoria (il più grande).\\
+Lo Heap invece viene usato per lo storage delle informazioni degli oggetti istanziati e cresce verso l'alto pertanto il suo indirizzo di partenza sarà zero.\\
+L'Array di interi utilizzato per Stack e Heap, com'è facilmente intuibile, è lo stesso:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+public static final int MEMSIZE = 10000;
+private int[] memory = new int[MEMSIZE];
+\end{lstlisting}
+\begin{tabular}{ l | l | l | l | l | l | l | l | l | l | l | l | l | l | l     }
+    \hline
+    STACK & 12 & 11 & 10 & 9 & 8 & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 & HEAP\\ \hline
+    $\dashrightarrow$ &  &  &  &  &  &  &  &  &  &  &  &  & &  $\dashleftarrow$\\ \hline
+  \end{tabular}
+\\\\\\
+I riferimenti agli oggetti istanziati nello heap sono contenuti nello Stack sotto forma di indirizzo, quando ad un certo punto del nostro codice verrà eseguita l'istruzione \lstinline|NEW| verrà allocato nello heap uno spazio di memoria sufficiente a contenere l'oggetto che si sta creando e come valore di ritorno verrà restituito l'indirizzo di inizio di questa area di memoria.
+\\\\
+La gestione degli offest è molto semplice. Ogni volta che viene dichiarata una nuova variabile l'offset di questa verrà decrementato perchè essendo rappresentata sullo Stack abbiamo gli indirizzi crescenti verso il basso, mentre se si tratta della dichiarazione del campo di una classe l'offest verrà incrementato perchè i campi vengono istanziati sullo Heap che ha gli indirizzi crescenti verso l'alto.
+
 \subsubsection{Implementazione del \lstinline|null|}
 Per poter gestire in modo appropriato gli oggetti nulli, bisognava scegliere il modo in cui implementarli per la macchina virtuale. La scelta era ovviamente ristretta all'uso di numeri interi ma è stata subito esclusa la possibilità di utilizzare lo zero, in quanto ritenuto un valore troppo significativo (soprattutto relativamente agli offset e agli indirizzi).\\
 La scelta è quindi ricaduta sul valore intero massimo rappresentabile in Java (\lstinline|Integer.MAX_VALUE|, ovvero 2147483647). Considerando che la macchina virtuale ha una memoria massima di 10000, non è possibile che esista un indirizzo avente tale valore; inoltre, si è aggiunto un controllo semantico che impedisce l'uso di tale valore come un semplice numero intero. Di conseguenza, incontrare il valore 2147483647 nell'assembly potrà essere solamente attribuito ad un oggetto nullo.\\
 Nel momento in cui si cerca di caricare o accedere ad un campo/metodo di un oggetto nullo (tramite una \lstinline[language=ANTLR]|ADD| o una \lstinline[language=ANTLR]|LOADW|), la macchina virtuale solleva un'eccezione \lstinline|NullObjectException|, implementata appositamente per tale scopo.
 \subsection{Layout di un oggetto}
+Gli oggetti, come già anticipato, vengono istanziati sulla parte di memoria che rappresenta lo HEAP pertanto la loro dimensione cresce verso l'alto.\\
+La struttura si compone di due aree:
+\begin{itemize}
+\item \textbf{Dispatch Table}\newline
+Nella Dispatch Table sono salvati i riferimenti a tutti i metodi della classe ed a quelli ereditati oltre a quelli eventualmente sovrascritti.\\
+La DT si trova ad offset zero rispetto all'inizio in memoria dell'area di memoria dedicata all'oggetto.
+\item \textbf{Campi}\newline
+I campi sono tutte le variabili ed oggetti che compongono caratteristici della classe tipo dell'oggetto e quindi anche in questo caso è riservato dello spazio in memoria per quelli della classe in questione ed eventuali campi ereditati, non è possibile avere overriding di campi da specifica e quindi non è stato necessario gestire questa eventualità.
+Per ogni campo viene riservato lo spazio necessario a contenere il valore o l'indirizzo di riferimento nel caso in cui il campo in questione sia istanza a sua volta di un oggetto.
+Come esempio prendiamo la dichiarazione di una classe e l'istanza di un oggetto di questa classe:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+class A (int k = 2){
+  void m() print(k);
+}
+class ciao (int x = true, bool z = 9, A a = new A()){
+    bool f(int g, int h) let int x=1; in x=1;
+    void z() return 0;
+};
+let
+    ciao x = new ciao();
+in
+    x=1;
+\end{lstlisting}
+Il risultato sullo heap sarà circa il seguente:
+\end{itemize}
+\begin{center}
+\begin{tabular}{ | l | l | l |}
+    3 & 10 & Object address in the HEAP\\\hline
+    2 & 9 & Integer field\\\hline
+    1 & 1 & Boolean field\\\hline
+    0 & 56 & Dispatch Table\\\hline
+  \end{tabular}
+\end{center}
+L'indirizzo dell'oggetto di classe A è fittizio, ma sarebbe l'indirizzo in cui quest'ultimo risiede sullo HEAP.
 \subsection{Grammatica SVM senza attributi e SVMVisitor}
 Il progetto di base forniva una grammatica, \lstinline|SVM.g4|, già implementata per la generazione del codice oggetto. Essa però conteneva attributi, ovvero particolare azioni in Java da effettuare nel momento in cui un determinato token sarebbe stato matchato con l'input.\\
 Come richiesto dalle specifiche del progetto, è stata implementata una visita per la generazione del codice, trasformando la grammatica fornita in una senza attributi. Sebbene quella iniziale fosse semplice, è stato ritenuto opportuno modificarla in modo radicale per favorire una migliore gestione della visita sull'AST generato.\\
